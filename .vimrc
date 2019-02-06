@@ -9,6 +9,7 @@ set fileencodings=utf-8
 "### display settings ###
 set ambiwidth=double
 set cursorline
+set cursorcolumn
 set laststatus=2
 set number
 set showmatch
@@ -56,6 +57,7 @@ nnoremap <down> gj
 nnoremap <up> gk
 nnoremap j gj
 nnoremap k gk
+inoremap <silent> jj <ESC>
 set backspace=indent,eol,start
 set virtualedit=onemore
 source $VIMRUNTIME/macros/matchit.vim
@@ -82,3 +84,6 @@ if &term =~ "xterm"
   inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
 endif
 
+"### function settings ###
+set clipboard=unnamed,autoselect
+autocmd BufWritePre * :%s/\s\+$//ge
