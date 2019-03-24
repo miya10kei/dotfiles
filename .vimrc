@@ -88,29 +88,26 @@ endif
 set clipboard=unnamed,autoselect
 autocmd BufWritePre * :%s/\s\+$//ge
 
+"### color settings ###
+colorscheme molokai
+
 "### Plugin ###
 call plug#begin('~/.vim/plugged')
-
-Plug 'Shougo/neocomplcache.vim'
-Plug 'Shougo/neocomplcache-rsense.vim'
 Plug 'https://github.com/tpope/vim-endwise.git'
-
+Plug 'othree/yajs.vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'cohama/lexima.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 call plug#end()
 
-"### neocomplcache settings ###
-let g:acp_enableAtStartup = 0 "Disable AutoComplePop
-let g:neocomplcache_enable_at_startup = 1 "Use rneocomplcache
-let g:neocomplcache_enable_smart_case = 1 " Use smartcase
-let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*' " Don't cache Japanese
-let g:neocomplcache_enable_camel_case_completion = 1 "Use camel case completion
-let g:neocomplcache_enable_underbar_completion = 1 " Use underbar completion.
-if !exists('g:neocomplcache_omni_patterns')
-    let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:mapleader=' '
+nmap <Leader> [Fzf]
+nnoremap [Fzf]<Space> :<C-u>Files<CR>
 
-"### Rsense settings ###
-let g:rsenseHome = expand("/home/miya10kei/.rbenv/shims/rsense")
-let g:rsenseUseOmniFunc = 1
+augroup MyXML
+  autocmd!
+  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
+augroup END
