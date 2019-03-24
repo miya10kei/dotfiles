@@ -1,0 +1,25 @@
+[user]
+	email = miya10kei@gmail.com
+	name = miya10kei
+[core]
+	editor = vim -c \"set fenc=utf-8\"
+	ignorecase = false
+	quotepath = false
+	excludesfile = ~/.gitignore_global
+[push]
+	default = simple
+[color]
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+[alias]
+	cm = commit
+	ch = checkout
+	br = branch
+	df = diff
+	st = status
+	cf = config
+	ps = push
+	pl = pl
+  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
