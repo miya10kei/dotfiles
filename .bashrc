@@ -71,7 +71,12 @@ bashrc_shopt() {
 }
 
 bashrc_aliases() {
-  alias ls='ls --color=auto'
+  if [ "$(uname)" = 'Darwin' ]; then
+    export LSCOLORS=gxfxcxdxbxegedabagacad
+    alias ls='ls -G'
+  else
+    alias ls='ls --color=auto'
+  fi
   alias ll='ls -lv'
   alias lla='ls -lAv'
   alias grep='grep --color=auto'
@@ -81,6 +86,7 @@ bashrc_aliases() {
   alias g='git'
   alias v='vim'
   alias r='ruby'
+  [ -e ~/.bash_aliases ] && source ~/.bash_aliases
 }
 
 bashrc_pkg_set() {
@@ -89,14 +95,18 @@ bashrc_pkg_set() {
   # gcc
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
   # nvm
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  if [ -e $HOME/.nvm ]; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  fi
   # rbenv
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
+  if [ -e $HOME/.rbenv ]; then
+    export PATH="$HOME/.rbenv/bin:$PATH"
+    eval "$(rbenv init -)"
+  fi
   # yarn
-  export PATH="$PATH:`yarn global bin`"
+  [ -n `which yarn` ] && export PATH="$PATH:`yarn global bin`"
 }
 
 bashrc_load_module() {
@@ -116,7 +126,7 @@ bashrc_ps1() {
     PS1="$PS1\[\e[00m\](\[\e[1;35m\]\D{%Y/%m/%d} \t\[\e[00m\])"
     PS1="$PS1: "
     PS1="$PS1\[\e[1;34m\]\w"
-    PS1="$PS1\[\e[00m\](\[\e[1;33m\]$(__git_ps1 "%s")\[\e[00m\])"
+    PS1="$PS1\[\e[00m\] (\[\e[1;33m\]$(__git_ps1 "%s")\[\e[00m\])"
     PS1="$PS1\[\e[00m\]\n╰─○ "
   else
     PS1="╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w$(__git_ps1 " (%s)")\n╰─○ "
