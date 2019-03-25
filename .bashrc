@@ -9,7 +9,10 @@
 
 main() {
   # path
-  export PATH=~/bin:"$PATH"
+  export PATH=$HOME/bin:"$PATH"
+
+  # mailcheck
+  unset MAILCHECK
 
   export EDITOR=vim
 
@@ -86,7 +89,7 @@ bashrc_aliases() {
   alias g='git'
   alias v='vim'
   alias r='ruby'
-  [ -e ~/.bash_aliases ] && source ~/.bash_aliases
+  [ -e $HOME/.bash_aliases ] && source $HOME/.bash_aliases
 }
 
 bashrc_pkg_set() {
@@ -94,6 +97,8 @@ bashrc_pkg_set() {
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
   # gcc
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+  # nodebrew
+  [ -e $HOME/.nodebrew ] && export PATH=$HOME/.nodebrew/current/bin:$PATH
   # nvm
   if [ -e $HOME/.nvm ]; then
     export NVM_DIR="$HOME/.nvm"
@@ -106,7 +111,9 @@ bashrc_pkg_set() {
     eval "$(rbenv init -)"
   fi
   # yarn
-  [ -n `which yarn` ] && export PATH="$PATH:`yarn global bin`"
+  if type yarn > /dev/null 2>&1; then
+    export PATH="$PATH:`yarn global bin`"
+  fi
 }
 
 bashrc_load_module() {
