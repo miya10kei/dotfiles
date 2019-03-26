@@ -14,12 +14,13 @@ main() {
   # mailcheck
   unset MAILCHECK
 
+  # editor
   export EDITOR=vim
 
   # pager
   export PAGER=less
 
-  # les
+  # less
   export LESS='-I -R -M -W -x2'
   export LESSCHARSET='utf-8'
 
@@ -125,25 +126,25 @@ bashrc_load_module() {
 bashrc_ps1() {
   [[ $TERM =~ xterm-color|.*-256color ]] && color_prompt=yes
 
+  GIT_PS1_SHOWCOLORHINTS=true
   GIT_PS1_SHOWDIRTYSTATE=true
   GIT_PS1_SHOWSTASHSTATE=true
   GIT_PS1_SHOWUNTRACKEDFILES=true
   GIT_PS1_SHOWUPSTREAM="auto"
-  GIT_PS1_SHOWCOLORHINTS=true
 
   if [ "$color_prompt" = yes ]; then
-    PS1="\[\e[00m\]╭─○ "
-    PS1="$PS1\[\e[1;32m\]${USER}\[\e[00m\]@\[\e[1;36m\]\h"
-    PS1="$PS1\[\e[00m\](\[\e[1;35m\]\D{%Y/%m/%d} \t\[\e[00m\])"
-    PS1="$PS1: "
-    PS1="$PS1\[\e[1;34m\]\w"
-    PS1="$PS1\[\e[00m\] (\[\e[1;33m\]$(__git_ps1 "%s")\[\e[00m\])"
-    PS1="$PS1\[\e[00m\]\n╰─○ "
+    PS1='\[\e[00m\]╭─○ '
+    PS1=$PS1'\[\e[1;32m\]${USER}\[\e[00m\]@\[\e[1;36m\]\h'
+    PS1=$PS1'\[\e[00m\](\[\e[1;35m\]\D{%Y/%m/%d} \t\[\e[00m\])'
+    PS1=$PS1': '
+    PS1=$PS1'\[\e[1;34m\]\w'
+    PS1=$PS1'\[\e[00m\] (\[\e[1;33m\]$(__git_ps1 "%s")\[\e[00m\])'
+    PS1=$PS1'\[\e[00m\]\n╰─○ '
   else
-    PS1="╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w $(__git_ps1 "(%s)")\n╰─○ "
+    PS1="╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w $(__git_ps1 '(%s)')\n╰─○ "
   fi
 
-  unset color_prompt
+#  unset color_prompt
 }
 
 main
