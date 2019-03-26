@@ -88,9 +88,6 @@ endif
 set clipboard=unnamed,autoselect
 autocmd BufWritePre * :%s/\s\+$//ge
 
-"### color settings ###
-colorscheme molokai
-
 "### Plugin ###
 call plug#begin('~/.vim/plugged')
 Plug 'https://github.com/tpope/vim-endwise.git'
@@ -99,8 +96,22 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'cohama/lexima.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'kaicataldo/material.vim'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
+"### material.vim ###
+set background=dark
+colorscheme material
+let g:airline_theme = 'material'
+if (has("nvim"))
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+if (has("termguicolors"))
+  set termguicolors
+endif
+
+"### fzf.vim ###
 let g:mapleader=' '
 nmap <Leader> [Fzf]
 nnoremap [Fzf]<Space> :<C-u>Files<CR>
