@@ -141,7 +141,7 @@ bashrc_ps1() {
     PS1=$PS1'\[\e[00m\] (\[\e[1;33m\]$(__git_ps1 "%s")\[\e[00m\])'
     PS1=$PS1'\[\e[00m\]\n╰─○ '
   else
-    PS1="╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w $(__git_ps1 '(%s)')\n╰─○ "
+    PS1='╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w $(__git_ps1 (%s)")\n╰─○ '
   fi
 
 #  unset color_prompt
