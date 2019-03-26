@@ -1,25 +1,26 @@
+[alias]
+  ad = add
+	br = branch
+	cf = config
+	ch = checkout
+	cm = commit
+	df = diff
+  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+	pl = pl
+	ps = push
+	st = status
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+	ui = auto
+[core]
+	editor = vim -c \"set fenc=utf-8\"
+	excludesfile = ~/.gitignore_global
+	quotepath = false
+	ignorecase = false
+[push]
+	default = simple
 [user]
 	email = miya10kei@gmail.com
 	name = miya10kei
-[core]
-	editor = vim -c \"set fenc=utf-8\"
-	ignorecase = false
-	quotepath = false
-	excludesfile = ~/.gitignore_global
-[push]
-	default = simple
-[color]
-	ui = auto
-	diff = auto
-	status = auto
-	branch = auto
-[alias]
-	cm = commit
-	ch = checkout
-	br = branch
-	df = diff
-	st = status
-	cf = config
-	ps = push
-	pl = pl
-  graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short

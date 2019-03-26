@@ -143,8 +143,6 @@ bashrc_ps1() {
   else
     PS1='╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w $(__git_ps1 (%s)")\n╰─○ '
   fi
-
-#  unset color_prompt
 }
 
 main
