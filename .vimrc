@@ -6,6 +6,12 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 
 
+"### color settings ###
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+
 "### display settings ###
 set ambiwidth=double
 set cursorline
