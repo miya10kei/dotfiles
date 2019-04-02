@@ -7,6 +7,7 @@ set fileencodings=utf-8
 
 
 "### color settings ###
+colorscheme monokai
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -102,20 +103,9 @@ Plug 'maxmellon/vim-jsx-pretty'
 Plug 'cohama/lexima.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'kaicataldo/material.vim'
 Plug 'vim-airline/vim-airline'
 call plug#end()
 
-"### material.vim ###
-set background=dark
-colorscheme material
-let g:airline_theme = 'material'
-if (has("nvim"))
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-if (has("termguicolors"))
-  set termguicolors
-endif
 
 "### fzf.vim ###
 let g:mapleader=' '
