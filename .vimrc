@@ -7,10 +7,12 @@ set fileencodings=utf-8
 
 
 "### color settings ###
-colorscheme monokai
-set termguicolors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+colorscheme molokai
+if has('mac')
+  set termguicolors
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
 
 
 "### display settings ###
@@ -91,9 +93,11 @@ if &term =~ "xterm"
   inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
 endif
 
+
 "### function settings ###
 set clipboard=unnamed,autoselect
 autocmd BufWritePre * :%s/\s\+$//ge
+
 
 "### Plugin ###
 call plug#begin('~/.vim/plugged')
