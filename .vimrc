@@ -76,7 +76,7 @@ if has('mouse')
   elseif v:version > 703 || v:version is 703 && has('patch632')
     set ttymouse=sgr
   else
-   set ttymouse=xterm2
+    set ttymouse=xterm2
   endif
 endif
 
@@ -104,8 +104,29 @@ Plug 'cohama/lexima.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
+Plug 'Shougo/neocomplete.vim'
+Plug 'nathanaelkane/vim-indent-guides'
 call plug#end()
 
+"### neocomplete.vim ###
+if has('lua') && v:version > 703
+  " Disable AutoComplPop.
+  let g:acp_enableAtStartup = 0
+  " Use neocomplete.
+  let g:neocomplete#enable_at_startup = 1
+  " Use smartcase.
+  let g:neocomplete#enable_smart_case = 1
+  if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+  endif
+  let g:neocomplete#force_omni_input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+endif
+
+"### vim-indent-guides.vim
+let g:indent_guides_enable_on_vim_startup = 1
 
 "### fzf.vim ###
 let g:mapleader=' '
@@ -121,5 +142,5 @@ augroup END
 
 augroup vimrcEx
   au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
-  \ exe "normal g`\"" | endif
+        \ exe "normal g`\"" | endif
 augroup END
