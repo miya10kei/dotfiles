@@ -30,10 +30,16 @@ syntax on
 set autoindent
 set expandtab
 set shiftwidth=2
-set smartindent
+set cindent
 set softtabstop=2
 set tabstop=2
 set fileformats=unix,dos,mac
+set binary noeol
+set list
+set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
+hi NonText    ctermbg=NONE ctermfg=59 guibg=NONE guifg=NONE
+hi SpecialKey ctermbg=NONE ctermfg=59 guibg=NONE guifg=NONE
+
 
 "### search settings ###
 set hlsearch
@@ -110,6 +116,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'Shougo/neocomplete.vim'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'szw/vim-tags'
+Plug 'ngmy/vim-rubocop'
+Plug 'scrooloose/syntastic'
+Plug 'othree/html5.vim'
+Plug 'gorodinskiy/vim-coloresque'
 call plug#end()
 
 "### neocomplete.vim ###
@@ -136,6 +147,25 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:mapleader=' '
 nmap <Leader> [Fzf]
 nnoremap [Fzf]<Space> :<C-u>Files<CR>
+
+"### syntastic ###
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = { 'mode': 'passive', 'passive_filetypes': ['ruby']  }
+let g:syntastic_ruby_checkers=['rubocop']
+nnoremap <C-l> :w<CR>:SyntasticCheck<CR>
+
+
+"### html5.vim ###
+let g:html5_event_handler_attributes_complete = 1
+let g:html5_rdfa_attributes_complete = 1
+let g:html5_microdata_attributes_complete = 1
+let g:html5_aria_attributes_complete = 1
 
 augroup MyXML
   autocmd!

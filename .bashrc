@@ -78,10 +78,10 @@ bashrc_aliases() {
   if [ "$(uname)" = 'Darwin' ]; then
     export LSCOLORS=gxfxcxdxbxegedabagacad
     alias ls='ls -G'
-    alias pbcopy='xsel --clipboard --input'
-    alias pbpaste='xsel --clipboard --output'
   else
     alias ls='ls --color=auto'
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
   fi
   alias ll='ls -lv'
   alias lla='ls -lAv'
