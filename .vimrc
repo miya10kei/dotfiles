@@ -34,7 +34,6 @@ set cindent
 set softtabstop=2
 set tabstop=2
 set fileformats=unix,dos,mac
-set binary noeol
 set list
 set listchars=tab:»-,trail:-,eol:↲,extends:»,precedes:«,nbsp:%
 hi NonText    ctermbg=NONE ctermfg=59 guibg=NONE guifg=NONE
