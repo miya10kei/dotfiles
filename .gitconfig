@@ -1,26 +1,29 @@
 [alias]
   ad = add
-	br = branch
-	cf = config
-	ch = checkout
-	cm = commit
-	df = diff
+  br = branch
+  cf = config
+  ch = checkout
+  cm = commit
+  df = diff
   graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
-	pl = pl
-	ps = push
-	st = status
+  pl = pull
+  ps = push
+  st = status
 [color]
-	branch = auto
-	diff = auto
-	status = auto
-	ui = auto
+  branch = auto
+  diff = auto
+  status = auto
+  ui = auto
 [core]
-	editor = vim -c \"set fenc=utf-8\"
-	excludesfile = ~/.gitignore_global
-	quotepath = false
-	ignorecase = false
+  editor = vim -c \"set fenc=utf-8\"
+  excludesfile = ~/.gitignore_global
+  quotepath = false
+  ignorecase = false
 [push]
-	default = simple
-[user]
-	email = miya10kei@gmail.com
-	name = miya10kei
+  default = simple
+[includeIf "gitdir:~/dev/work/"]
+  path = ~/.gitconfig-work
+[includeIf "gitdir:~/dev/private/"]
+  path = ~/.gitconfig-private
+[includeIf "gitdir:~/dotfiles"]
+  path = ~/.gitconfig-private
