@@ -10,12 +10,13 @@
 main() {
   # path
   export PATH=$HOME/bin:"$PATH"
+  export NVIM_HOME=$HOME/.config/nvim
 
   # mailcheck
   unset MAILCHECK
 
   # editor
-  export EDITOR=vim
+  export EDITOR=nvim
 
   # pager
   export PAGER=less
@@ -44,6 +45,7 @@ main() {
   bashrc_pkg_set
   bashrc_load_module
   bashrc_ps1
+  print_hello_art
 }
 
 # shopt
@@ -83,8 +85,8 @@ bashrc_aliases() {
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
   fi
-  alias ll='ls -lv'
-  alias lla='ls -lAv'
+  alias ll='ls -lhv'
+  alias lla='ls -lhAv'
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
@@ -92,6 +94,14 @@ bashrc_aliases() {
   alias g='git'
   alias v='vim'
   alias r='ruby'
+  alias jp='ruby $HOME/.bin/json_parser.rb'
+  alias url='ruby ~/.bin/url_encoder.rb'
+  alias d='docker'
+  alias dcon='docker container'
+  alias dexec='docker container exec'
+  alias drun='docker container run'
+  alias dbuild='docker image build'
+  alias vim='nvim'
   [ -e $HOME/.bash_aliases ] && source $HOME/.bash_aliases
 }
 
@@ -100,8 +110,6 @@ bashrc_pkg_set() {
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
   # gcc
   export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-  # nodebrew
-  [ -e $HOME/.nodebrew ] && export PATH=$HOME/.nodebrew/current/bin:$PATH
   # nvm
   if [ -e $HOME/.nvm ]; then
     export NVM_DIR="$HOME/.nvm"
@@ -115,7 +123,12 @@ bashrc_pkg_set() {
   fi
   # yarn
   if type yarn > /dev/null 2>&1; then
-    export PATH="$PATH:`yarn global bin`"
+    export path="$path:`yarn global bin`"
+  fi
+  # java
+  if [ -e ${HOME}/.java_version ]; then
+    export PATH="$JAVA_HOME/bin:$PATH"
+    source ${HOME}/.java_version
   fi
 }
 
@@ -144,6 +157,15 @@ bashrc_ps1() {
     PS1=$PS1'\[\e[00m\]\n╰─○ '
   else
     PS1='╭─○ ${USER}@\h(\D{%Y/%m/%d} \t): \w $(__git_ps1 (%s)")\n╰─○ '
+  fi
+}
+
+print_hello_art() {
+  if [ -n $TMUX ]; then
+    tmux_pane_num=`tmux list-pane 2>/dev/null | wc -l`
+    if [ $tmux_pane_num -eq 1 ]; then
+      cat $HOME/.hello_art.txt
+    fi
   fi
 }
 

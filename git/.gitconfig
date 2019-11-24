@@ -22,11 +22,11 @@
 [push]
   default = simple
 [includeIf "gitdir:~/dev/work/"]
-  path = ~/.gitconfig-work
+  path = ~/.gitconfig_work
 [includeIf "gitdir:~/dev/private/"]
-  path = ~/.gitconfig-private
+  path = ~/.gitconfig_private
 [includeIf "gitdir:~/dotfiles"]
-  path = ~/.gitconfig-private
+  path = ~/.gitconfig_private
 [commit]
   template = ~/.gitmessage
 [pager]
