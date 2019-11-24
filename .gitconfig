@@ -27,3 +27,7 @@
   path = ~/.gitconfig-private
 [includeIf "gitdir:~/dotfiles"]
   path = ~/.gitconfig-private
+[commit]
+  template = ~/.gitmessage
+[pager]
+  branch = false
