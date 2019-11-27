@@ -55,6 +55,21 @@ call plug#end()
 
 " --- color settings ---
 let g:lightline = { 'colorscheme': 'jellybeans' }
+let g:lightline.active = {
+    \ 'left': [ [ 'mode', 'paste' ],
+    \           [ 'readonly', 'filepath', 'modified' ] ],
+    \ 'right': [ [ 'lineinfo' ],
+    \            [ 'percent' ],
+    \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
+let g:lightline.inactive = {
+    \ 'left': [ [ 'filepath' ] ],
+    \ 'right': [ [ 'lineinfo' ],
+    \            [ 'percent' ] ] }
+let g:lightline.component_function = { 'filepath': 'LightLineFilepath' }
+
+function! LightLineFilepath()
+  return expand('%')
+endfunction
 
 " -------------------------------
 " ------ NERDTree settings ------
@@ -240,6 +255,9 @@ set signcolumn=yes
 set updatetime=300
 " --- load file in real time
 set autoread
+" --- recognize full width
+set ambiwidth=double
+
 
 " -----------------------------
 " --- tab & indent settings ---
