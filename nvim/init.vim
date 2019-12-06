@@ -6,7 +6,7 @@ set fileencoding=utf-8
 set fileencodings=utf-8,ucs-boms,euc-jp,cp932
 set termencoding=utf-8
 scriptencoding utf-8
-
+let mapleader = "\<C-w>"
 
 " ------------------------
 " --- Install vim-plug ---
@@ -33,6 +33,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'https://github.com/nicwest/vim-camelsnek.git'
 Plug 'Yggdroot/indentLine'
 Plug 'tmux-plugins/vim-tmux'
+Plug 'glidenote/memolist.vim'
 " --- markdown
 Plug 'godlygeek/tabular', { 'for': 'markdown' }
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
@@ -111,6 +112,14 @@ nnoremap <silent> <C-p> :<C-u>:Buffers<CR>
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
 
+" ----------------
+" --- memolist ---
+" ----------------
+let g:memolist_path = "~/Documents/memo"
+nnoremap <Leader>mn  :MemoNew<CR>
+nnoremap <Leader>ml  :MemoList<CR>
+nnoremap <Leader>mg  :MemoGrep<CR>
+
 " --------------------------------
 " --- coc(Language Server Procotol) ---
 " --------------------------------
@@ -175,6 +184,17 @@ nnoremap <silent> <C-l> :<C-u>:Format<CR>
 " Remap for rename current word
 nnoremap <silent> <C-1> <Plug>(coc-rename)
 
+" -------------------------
+" --- Function settings ---
+" -------------------------
+if executable('jq')
+  function! s:jq(...)
+    execute '%!jq' (a:0 == 0 ? '.' : a:1)
+  endfunction
+  command! -bar -nargs=? Jq  call s:jq(<f-args>)
+endif
+
+
 " ----------------------------
 " --- Key mapping settings ---
 " ----------------------------
@@ -191,8 +211,8 @@ nnoremap <silent> gk k
 nnoremap <silent> $ $l
 
 " --- split window
-nnoremap <silent> <C-w>- :<C-u>:split<CR>
-nnoremap <silent> <C-w>\| :<C-u>:vsplit<CR>
+nnoremap <silent> <C-w>- :<C-u>:split<CR><C-w>j
+nnoremap <silent> <C-w>\| :<C-u>:vsplit<CR><C-w>l
 " --- split window size
 nnoremap <silent> < <C-w><<C-w><<C-w><
 nnoremap <silent> > <C-w>><C-w>><C-w>>
@@ -207,8 +227,12 @@ nnoremap <F5> :<C-u>edit $NVIM_HOME/init.vim<CR>
 " --- reload init.vim
 nnoremap <F6> :<C-u>source $NVIM_HOME/init.vim<CR>
 " --- turn off search highlighst
-nnoremap <ESC><ESC> :<C-u>nohlsearch<CR>"
-
+nnoremap <ESC><ESC> :<C-u>noh<CR>
+" --- highlighst by cursol word
+nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearch<CR>
+" --- to block hole register
+nnoremap x "_x
+nnoremap s "_s
 
 " ----------------------
 " --- Color settings ---

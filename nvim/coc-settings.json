@@ -12,5 +12,6 @@
       "command": "/Users/kmiyaush/.config/coc/extensions/kotlin-language-server/server/build/scripts/server",
       "filetypes": ["kotlin"]
     }
-  }
+  },
+  "vetur.format.defaultFormatter.js": "prettier-eslint"
 }
