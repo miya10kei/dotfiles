@@ -34,6 +34,7 @@ Plug 'https://github.com/nicwest/vim-camelsnek.git'
 Plug 'Yggdroot/indentLine'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'glidenote/memolist.vim'
+Plug 'tpope/vim-surround'
 " --- markdown
 Plug 'godlygeek/tabular', { 'for': 'markdown' }
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
