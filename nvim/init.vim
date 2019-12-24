@@ -107,11 +107,23 @@ let g:previm_open_cmd = 'open -a Google\ Chrome'
 " --- fzf ---
 " -----------
 nnoremap <silent> <C-e> :<C-u>:GFiles<CR>
-nnoremap <silent> <C-E> :<C-u>:Files<CR>
+nnoremap <silent> <Leader><C-e> :<C-u>:Files<CR>
 nnoremap <silent> <C-p> :<C-u>:Buffers<CR>
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
+"
+" ripgrepで検索中、?を押すとプレビュー:
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+" Filesコマンドにもプレビューを出す
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " ----------------
 " --- memolist ---
@@ -211,6 +223,12 @@ nnoremap <silent> gj j
 nnoremap <silent> gk k
 nnoremap <silent> $ $l
 
+inoremap <silent> <C-j> <Down>
+inoremap <silent> <C-h> <Left>
+inoremap <silent> <C-k> <Up>
+inoremap <silent> <C-l> <Right>
+inoremap <silent> <C-x> <C-h>
+
 " --- split window
 nnoremap <silent> <C-w>- :<C-u>:split<CR><C-w>j
 nnoremap <silent> <C-w>\| :<C-u>:vsplit<CR><C-w>l
@@ -234,6 +252,9 @@ nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearc
 " --- to block hole register
 nnoremap x "_x
 nnoremap s "_s
+" --- move cursol in insert mode
+inoremap <silent> <C-e> <C-o>$
+inoremap <silent> <C-i> <C-o>^
 
 " ----------------------
 " --- Color settings ---

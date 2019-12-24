@@ -1,0 +1,20 @@
+" --- load my settings for nvim
+source ~/.config/nvim/init.vim
+
+set surround
+
+" --- disable to fold code
+nnoremap <silent> zM <Nop>
+nnoremap <silent> zc <Nop>
+nnoremap <silent> zC <Nop>
+nnoremap <silent> zR <Nop>
+nnoremap <silent> zo <Nop>
+nnoremap <silent> zO <Nop>
+
+nnoremap <C-p> :action SearchEverywhere<CR>
+
+" --- split window
+" nnoremap <silent> <C-w>| :<C-u>action SplitVertically<CR>
+" nnoremap <silent> <C-w>- :<C-u>action SplitHorizontally<CR>
+
+" nnoremap <silent> <C-l> :<C-u>action ReformatCode<CR>

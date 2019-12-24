@@ -102,6 +102,7 @@ bashrc_aliases() {
   alias drun='docker container run'
   alias dbuild='docker image build'
   alias vim='nvim'
+  alias tmuxkill='tmux kill-session -t '
   [ -e $HOME/.bash_aliases ] && source $HOME/.bash_aliases
 }
 
@@ -127,8 +128,8 @@ bashrc_pkg_set() {
   fi
   # java
   if [ -e ${HOME}/.java_version ]; then
-    export PATH="$JAVA_HOME/bin:$PATH"
     source ${HOME}/.java_version
+    # export PATH="$JAVA_HOME/bin:$PATH"
   fi
 }
 
