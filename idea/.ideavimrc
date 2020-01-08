@@ -1,7 +1,53 @@
-" --- load my settings for nvim
-source ~/.config/nvim/init.vim
+" .__    .___                 .__
+" |__| __| _/____ _____ ___  _|__| ____________   ____
+" |  |/ __ |/ __ \\__  \\  \/ /  |/     \_  __ \_/ ___\
+" |  / /_/ \  ___/ / __ \\   /|  |  Y Y  \  | \/\  \___
+" |__\____ |\___  >____  /\_/ |__|__|_|  /__|    \___  >
+"         \/    \/     \/              \/            \/
+"                   https://github.com/JetBrains/ideavim
 
+" ----------------------
+" --- Basic settings ---
+" ----------------------
+" --- enable surround
 set surround
+"--- share yank and clipboard
+set clipboard=unnamed
+" --- TODO
+set showmatch
+set matchtime=1
+
+
+" -----------------------
+" --- Search settings ---
+" -----------------------
+" --- enable search result highlighting
+set hlsearch
+" --- enable case insensitive
+set ignorecase
+" --- enable incremental search
+set incsearch
+" --- enable case sensitive, if the keywords contains uppercase character
+set smartcase
+
+
+" ----------------------------
+" --- Key mapping settings ---
+" ----------------------------
+" --- return normal mode from insert mode
+inoremap <silent> jj <ESC>
+" --- cursor movement settings
+nnoremap <silent> j gj
+nnoremap <silent> k gk
+nnoremap <silent> gj j
+nnoremap <silent> gk k
+nnoremap <silent> $ $l
+
+inoremap <silent> <C-j> <Down>
+inoremap <silent> <C-h> <Left>
+inoremap <silent> <C-k> <Up>
+inoremap <silent> <C-l> <Right>
+inoremap <silent> <C-x> <C-h>
 
 " --- disable to fold code
 nnoremap <silent> zM <Nop>
@@ -11,10 +57,15 @@ nnoremap <silent> zR <Nop>
 nnoremap <silent> zo <Nop>
 nnoremap <silent> zO <Nop>
 
-nnoremap <C-p> :action SearchEverywhere<CR>
-
-" --- split window
-" nnoremap <silent> <C-w>| :<C-u>action SplitVertically<CR>
-" nnoremap <silent> <C-w>- :<C-u>action SplitHorizontally<CR>
-
-" nnoremap <silent> <C-l> :<C-u>action ReformatCode<CR>
+" --- bind action
+nnoremap <silent> <C-l> :<C-u>action ReformatCode<CR>:<C-u>action OptimizeImports<CR>
+nnoremap <silent> <C-w><C-e> :<C-u>action SearchEverywhere<CR>
+nnoremap <silent> <C-w><C-p> :<C-u>action RecentFiles<CR>
+nnoremap <silent> <C-p> :<C-u>action Back<CR>
+nnoremap <silent> <C-n> :<C-u>action Forward<CR>
+nnoremap <silent> gd :<C-u>action GotoDeclaration<CR>
+nnoremap <silent> gy :<C-u>action GotoTypeDeclaration<CR>
+nnoremap <silent> gi :<C-u>action GotoImplementation<CR>
+nnoremap <silent> gr :<C-u>action CallHierarchy<CR>
+nnoremap <silent> <C-w>\| :<C-u>action SplitVertically<CR>
+nnoremap <silent> <C-w>\- :<C-u>action SplitHorizontally<CR>
