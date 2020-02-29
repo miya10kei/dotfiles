@@ -3,6 +3,18 @@ FROM openjdk:11 AS java-11
 FROM openjdk:13 AS java-13
 FROM maven:latest AS maven
 
+FROM golang:alpine AS go
+RUN apk update \
+    && apk upgrade \
+    && apk --update-cache add --no-cache \
+    && git
+
+RUN go get -v \
+      github.com/github/hub \
+      github.com/motemen/ghq \
+      github.com/peco/peco/cmd/peco
+
+
 
 FROM oracle/graalvm-ce:20.0.0-java11 AS graal
 RUN gu install native-image
