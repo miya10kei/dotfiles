@@ -6,18 +6,42 @@
         "-jar",
         "/Users/kmiyaush/.config/coc/extensions/groovy-language-server/build/libs/groovy-language-server-all.jar"
       ],
-      "filetypes": ["groovy"]
+      "filetypes": [
+        "groovy"
+      ]
     },
     "kotlin": {
       "command": "/Users/kmiyaush/.config/coc/extensions/kotlin-language-server/server/build/scripts/server",
-      "filetypes": ["kotlin"]
+      "filetypes": [
+        "kotlin"
+      ]
     },
     "bash": {
       "command": "bash-language-server",
-      "args": ["start"],
-      "filetypes": ["sh"],
-      "ignoredRootPaths": ["~"]
+      "args": [
+        "start"
+      ],
+      "filetypes": [
+        "sh"
+      ],
+      "ignoredRootPaths": [
+        "~"
+      ]
+    },
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": [
+        "dockerfile"
+      ],
+      "args": [
+        "--stdio"
+      ]
     }
   },
-  "vetur.format.defaultFormatter.js": "prettier-eslint"
+  "vetur.format.defaultFormatter.js": "prettier-eslint",
+  "eslint.autoFixOnSave": true,
+  "eslint.filetypes": [
+    "javascript",
+    "typescript"
+  ]
 }
