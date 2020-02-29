@@ -20,6 +20,7 @@ begin # docker
               -v $HOME/dev:/root/dev \
               -v $HOME/Downloads:/root/Downloads \
               -v $HOME/Documents:/root/Documents \
+              -v $HOME/.ssh:/root/.ssh \
               $ARGS"
     set cmd "docker run -dit $opts $image_name"
     echo $cmd | sed "s/\s\{2,\}/ /g"
