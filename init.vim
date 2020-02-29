@@ -8,9 +8,10 @@ set termencoding=utf-8
 scriptencoding utf-8
 let mapleader = "\<C-w>"
 
-" ------------------------
-" --- Install vim-plug ---
-" ------------------------
+
+" ----------------------
+" --- Install plugin ---
+" ----------------------
 if has('vim_starting')
   set runtimepath+=~/.config/nvim/plugged/vim-plug
   if !isdirectory(expand('$NVIM_HOME') . '/plugged/vim-plug')
@@ -19,11 +20,8 @@ if has('vim_starting')
   end
 endif
 
-
-" ----------------------
-" --- Install plugin ---
-" ----------------------
 call plug#begin('~/.vim/plugged')
+Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'posva/vim-vue'
@@ -53,6 +51,15 @@ call plug#end()
 " -----------------------
 " --- Plugin settings ---
 " -----------------------
+
+" ---------------------
+" ------ gruvbox ------
+" ---------------------
+
+if isdirectory(expand('$HOME') . '/.vim/plugged/gruvbox')
+  colorscheme gruvbox
+  set background=dark
+endif
 
 " --------------------------------
 " ------ lightline settings ------
@@ -328,10 +335,6 @@ nnoremap <silent> <Space><Space> "zyiw:let @/ = '\<' . @z . '\>'<CR>:set hlsearc
 nnoremap x "_x
 nnoremap s "_s
 
-" ----------------------
-" --- Color settings ---
-" ----------------------
-colorschem molokai
 
 " --------------------
 " Default settings
