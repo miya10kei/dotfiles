@@ -26,7 +26,7 @@
   path = ~/.gitconfig_work
 [includeIf "gitdir:~/dev/private/"]
   path = ~/.gitconfig_private
-[includeIf "gitdir:~/dotfiles"]
+[includeIf "gitdir:~/.dotfiles/"]
   path = ~/.gitconfig_private
 [commit]
   template = ~/.gitmessage

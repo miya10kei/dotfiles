@@ -1,7 +1,4 @@
 set -l OS (uname -s)
-if string match -qr ".*Microsoft" (uname -r)
-  set OS "wsl"
-end
 
 # --------------
 # --- fisher ---
@@ -15,17 +12,23 @@ end
 # --------------
 # --- docker ---
 # --------------
-if test $OS = "wsl"
-  set -x DOCKER_HOST tcp://localhost:2375
+begin
+  set image_name "devenv"
+  set container_name "miya10kei-devenv"
+  function startdev
+    set opts "\
+              --cap-add=ALL \
+              --name $container_name \
+              -v $HOME/.dotfiles:/root/.dotfiles \
+              $ARGS"
+    set cmd "docker run -dit $opts $image_name"
+    echo $cmd | sed "s/\s\{2,\}/ /g"
+    eval $cmd
+  end
+  alias stopdev "docker stop $container_name; docker rm $container_name"
+  alias attachdev "docker exec -it $container_name /usr/bin/fish"
 end
 
-# ---------------
-# --- Any env ---
-# ---------------
-if test -e $HOME/.anyenv
-  set -Ux fish_user_paths $HOME/.anyenv/bin $fish_user_paths
-  status --is-interactive; and source (anyenv init -|psub)
-end
 
 # ---------------
 # --- aliases ---
