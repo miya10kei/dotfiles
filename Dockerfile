@@ -1,7 +1,12 @@
-FROM openjdk:8 as java-8
-FROM openjdk:11 as java-11
-FROM openjdk:13 as java-13
-FROM maven:latest as maven
+FROM openjdk:8 AS java-8
+FROM openjdk:11 AS java-11
+FROM openjdk:13 AS java-13
+FROM maven:latest AS maven
+
+
+FROM oracle/graalvm-ce:20.0.0-java11 AS graal
+RUN gu install native-image
+
 
 FROM ubuntu:latest AS base
 
@@ -35,11 +40,13 @@ RUN apt-get update \
 ENV HOME /root
 ENV SHELL /usr/bin/fish
 ENV DOTFILES $HOME/.dotfiles
+ENV GRAAL_HOME /usr/lib/graalvm
 
 COPY --from=java-8 /usr/local/openjdk-8 /usr/lib/jvm/openjdk-8
 COPY --from=java-11 /usr/local/openjdk-11 /usr/lib/jvm/openjdk-11
 COPY --from=java-13 /usr/java/openjdk-13 /usr/lib/jvm/openjdk-13
 COPY --from=maven /usr/share/maven /usr/lib/maven
+COPY --from=graal /opt/graalvm-ce-java11-20.0.0 $GRAAL_HOME
 
 RUN mkdir $DOTFILES
 
