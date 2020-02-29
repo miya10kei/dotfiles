@@ -18,6 +18,8 @@ begin # docker
               -v /var/run/docker.sock:/var/run/docker.sock \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/dev:/root/dev \
+              -v $HOME/Downloads:/root/Downloads \
+              -v $HOME/Documents:/root/Documents \
               $ARGS"
     set cmd "docker run -dit $opts $image_name"
     echo $cmd | sed "s/\s\{2,\}/ /g"
