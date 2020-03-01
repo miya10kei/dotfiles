@@ -1,5 +1,10 @@
 set -l OS (uname -s)
 
+if test -z $SSH_AGENT_PID
+  eval (ssh-agent -c) > /dev/null
+  ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
+end
+
 begin # fisher
   if not functions -q fisher
     set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
@@ -20,7 +25,7 @@ begin # docker
               -v $HOME/dev:/root/dev \
               -v $HOME/Downloads:/root/Downloads \
               -v $HOME/Documents:/root/Documents \
-              -v $HOME/.ssh:/root/.ssh \
+              -v $HOME/.ssh:/tmp/.ssh:ro \
               $ARGS"
     set cmd "docker run -dit $opts $image_name"
     echo $cmd | sed "s/\s\{2,\}/ /g"
@@ -51,6 +56,9 @@ begin # alias
   alias vim "nvim"
 
   alias q "exit"
+
+  alias fishconf "nvim ~/.config/fish/config.fish"
+  alias fishload "source ~/.config/fish/config.fish"
 end
 
 

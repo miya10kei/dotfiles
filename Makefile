@@ -84,8 +84,13 @@ $(HOME)/.config/nvim/coc-settings.json:
 
 .PHONY: install-plugin
 install-plugin:
-	nvim +PlugInstall +q +q
+	nvim --headless +PlugInstall +qall
 
 .PHONY: build-devenv
 build-devenv:
 	docker build . -t devenv
+
+C := miya10kei@gmail.com
+.PHONY: create-sshkey
+create-sshkey:
+	ssh-keygen -t rsa -b 4096 -C ${C}
