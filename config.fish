@@ -55,10 +55,17 @@ begin # alias
   alias uuu "cd ../../../"
   alias uuuu "cd ../../../../"
   alias cdr "cd -"
-  alias ls "ls --color -hFX"
-  alias lsa "ls --color -ahFX"
-  alias ll "ls --color -hlFX"
-  alias lla "ls --color -ahlFX"
+  if ls --color > /dev/null 2>&1
+    alias ls "ls --color -hF"
+    alias lsa "ls --color -ahF"
+    alias ll "ls --color -hlF"
+    alias lla "ls --color -ahlF"
+  else
+    alias ls "ls -hFG"
+    alias lsa "ls -a"
+    alias ll "ls -l"
+    alias lla "ll -a"
+  end
   alias q "exit"
   alias fishconf "vim ~/.config/fish/config.fish"
   alias fishload "source ~/.config/fish/config.fish"
