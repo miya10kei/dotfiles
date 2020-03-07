@@ -21,6 +21,7 @@ if has('vim_starting')
 endif
 
 call plug#begin('~/.vim/plugged')
+Plug 'sillybun/vim-repl'
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
@@ -51,6 +52,12 @@ call plug#end()
 " -----------------------
 " --- Plugin settings ---
 " -----------------------
+
+
+let g:repl_program = {
+			\	'java': 'jshell',
+			\	'default': 'fish'
+			\	}
 
 " ---------------------
 " ------ gruvbox ------
