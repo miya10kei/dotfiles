@@ -1,28 +1,97 @@
 FROM openjdk:8    AS java-8
-FROM openjdk:11   AS java-11
-FROM openjdk:13   AS java-13
-FROM maven:latest AS maven
+RUN mkdir /out
+RUN cp -r /usr/local/openjdk-8/bin /out
+RUN cp -r /usr/local/openjdk-8/jre /out
+RUN cp -r /usr/local/openjdk-8/lib /out
 
-FROM oracle/graalvm-ce:20.0.0-java11 AS graal
-RUN gu install native-image
+
+FROM openjdk:11   AS java-11
+RUN mkdir /out
+RUN cp -r /usr/local/openjdk-11/bin     /out
+RUN cp -r /usr/local/openjdk-11/conf    /out
+RUN cp -r /usr/local/openjdk-11/include /out
+RUN cp -r /usr/local/openjdk-11/jmods   /out
+RUN cp -r /usr/local/openjdk-11/legal   /out
+RUN cp -r /usr/local/openjdk-11/lib     /out
+
+
+FROM openjdk:13   AS java-13
+RUN mkdir /out
+RUN cp -r /usr/java/openjdk-13/bin     /out
+RUN cp -r /usr/java/openjdk-13/conf    /out
+RUN cp -r /usr/java/openjdk-13/include /out
+RUN cp -r /usr/java/openjdk-13/jmods   /out
+RUN cp -r /usr/java/openjdk-13/legal   /out
+RUN cp -r /usr/java/openjdk-13/lib     /out
+
+
+FROM maven:latest AS maven
+RUN mkdir /out
+RUN cp -r /usr/share/maven/bin  /out
+RUN cp -r /usr/share/maven/boot /out
+RUN cp -r /usr/share/maven/conf /out
+RUN cp -r /usr/share/maven/lib  /out
+
 
 FROM golang:latest AS golang
 RUN go get -v \
       github.com/motemen/ghq \
       github.com/peco/peco/cmd/peco
+RUN mkdir -p /out/go /out/pkg
+RUN cp /go/bin/*           /out/pkg
+RUN cp /usr/local/go/bin/* /out/go
+
 
 FROM docker:latest AS docker
+RUN mkdir -p /out
+RUN cp /usr/local/bin/* /out
+
+
+FROM oracle/graalvm-ce:20.0.0-java11 AS graal
+RUN gu install native-image
+RUN mkdir -p /out
+RUN cp -r /opt/graalvm-ce-java11-20.0.0/* /out
+
+
+FROM alpine:edge AS packer
+RUN apk update \
+    && apk upgrade \
+    && apk --update-cache add --no-cache \
+    upx
+
+COPY --from=docker /out /out/docker
+RUN upx --lzma --best /out/docker/containerd
+RUN upx --lzma --best /out/docker/containerd-shim
+RUN upx --lzma --best /out/docker/ctr
+RUN upx --lzma --best /out/docker/docker
+RUN upx --lzma --best /out/docker/docker-init
+RUN upx --lzma --best /out/docker/docker-proxy
+RUN upx --lzma --best /out/docker/dockerd
+RUN upx --lzma --best /out/docker/runc
+
+COPY --from=golang /out/go  /out/go/go
+COPY --from=golang /out/pkg /out/go/pkg
+RUN upx --lzma --best /out/go/go/*
+RUN upx --lzma --best /out/go/pkg/*
+
+COPY --from=graal /out /out/graal
+RUN upx --lzma --best /out/graal/bin/polyglot
+RUN upx --lzma --best /out/graal/bin/unpack200
+RUN upx --lzma --best /out/graal/languages/js/bin/js
+RUN upx --lzma --best /out/graal/languages/js/bin/node
+RUN upx --lzma --best /out/graal/languages/llvm/bin/lli
+RUN upx --lzma --best /out/graal/lib/installer/bin/gu
 
 
 FROM ubuntu:latest AS base
 
 LABEL maintainer "Keisuke Miyaushiro <miya10kei@gmail.com>"
 
-ENV LANGUAGE        en_US.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
 ENV LANG            en_US.UTF-8
+ENV LANGUAGE        en_US.UTF-8
 ENV LC_ALL          en_US.UTF-8
 ENV TZ              Asia/Tokyo
-ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update \
     && apt-get install -y \
@@ -57,6 +126,7 @@ RUN apt-get update \
     ttf-mscorefonts-installer \
     tzdata \
     unzip \
+    upx \
     wget \
     zip \
     && rm -rf /var/lib/apt/lists/*
@@ -64,29 +134,27 @@ RUN apt-get update \
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
     && locale-gen --purge $LANG
 
-ENV ANYENV_HOME   $HOME/.anyenv
-ENV DOCKER_HOME   /usr/lib/docker
-ENV DOTFILES      $HOME/.dotfiles
-ENV FISH_HOME     $HOME/.config/fish
-ENV GOROOT        /usr/lib/go
-ENV GOPATH        $HOME/go
-ENV GRAAL_HOME    /usr/lib/graalvm
-ENV HOME          /root
-ENV IDEA_HOME     /usr/lib/idea
-ENV JAVA_ROOT     /usr/lib/jvm
-ENV IDEA_JDK      $JAVA_ROOT/openjdk-8
-ENV JAVA_HOME     $JAVA_ROOT/openjdk-11
-ENV MAVEN_HOME    /usr/lib/maven
-ENV PATH          $PATH:$ANYENV_HOME/bin:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:
+ENV HOME        /root
+ENV DOCKER_HOME /usr/lib/docker
+ENV DOTFILES    $HOME/.dotfiles
+ENV GOROOT      /usr/lib/go
+ENV GOPATH      $HOME/go
+ENV GRAAL_HOME  /usr/lib/graalvm
+ENV IDEA_HOME   /usr/lib/idea
+ENV JAVA_ROOT   /usr/lib/jvm
+ENV JAVA_HOME   $JAVA_ROOT/openjdk-11
+ENV IDEA_JDK    $JAVA_ROOT/openjdk-8
+ENV MAVEN_HOME  /usr/lib/maven
+ENV PATH        $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:
 
-COPY --from=java-8  --chown=root:root /usr/local/openjdk-8 $JAVA_ROOT/openjdk-8
-COPY --from=java-11 --chown=root:root /usr/local/openjdk-11 $JAVA_ROOT/openjdk-11
-COPY --from=java-13 --chown=root:root /usr/java/openjdk-13 $JAVA_ROOT/openjdk-13
-COPY --from=maven   --chown=root:root /usr/share/maven $MAVEN_HOME
-COPY --from=graal   --chown=root:root /opt/graalvm-ce-java11-20.0.0 $GRAAL_HOME
-COPY --from=golang  --chown=root:root /usr/local/go $GOROOT
-COPY --from=golang  --chown=root:root /go $GOPATH
-COPY --from=docker  --chown=root:root /usr/local/bin $DOCKER_HOME/bin
+COPY --from=java-8  /out        $JAVA_ROOT/openjdk-8
+COPY --from=java-11 /out        $JAVA_ROOT/openjdk-11
+COPY --from=java-13 /out        $JAVA_ROOT/openjdk-13
+COPY --from=maven   /out        $MAVEN_HOME
+COPY --from=packer  /out/graal  $GRAAL_HOME
+COPY --from=packer  /out/go/go  $GOROOT/bin
+COPY --from=packer  /out/go/pkg $GOPATH/bin
+COPY --from=packer  /out/docker $DOCKER_HOME/bin
 
 RUN mkdir $DOTFILES
 WORKDIR $DOTFILES
@@ -97,7 +165,6 @@ COPY coc-settings.json $DOTFILES/coc-settings.json
 COPY default-packages  $DOTFILES/default-packages
 
 RUN make deploy
-
 
 WORKDIR $DOCKER_HOME/bin
 RUN ["/bin/bash", "-c", "\
@@ -111,33 +178,15 @@ WORKDIR $HOME
 RUN pip3 install -U pip msgpack \
     && pip install -U neovim
 
-RUN git clone https://github.com/riywo/anyenv $ANYENV_HOME \
-    && git clone https://github.com/znz/anyenv-update $ANYENV_HOME/plugins/anyenv-update
-
-RUN ["/bin/bash", "-c", "\
-        eval \"$(anyenv init -)\" \
-        && anyenv install --force-init \
-        && anyenv install jenv \
-        && anyenv install nodenv \
-        && eval \"$(anyenv init -)\" \
-        && jenv add $JAVA_ROOT/openjdk-8 \
-        && jenv add $JAVA_ROOT/openjdk-11 \
-        && jenv add $JAVA_ROOT/openjdk-13 \
-        && jenv global 13 \
-        "]
-
-       # && ln -s $DOTFILES/default-packages $ANYENV_HOME/envs/nodenv/default-packages \
-       # && nodenv install 12.16.1 \
-       # && nodenv global 12.16.1 \
 WORKDIR /tmp
 
 ARG IDEA_VERSION=2019.3.3
 ARG IDEA_BUILD=193.6494.35
 
 RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.tar.gz -O idea.tar.gz \
-    && rm -rf $HOME/.wget-hsts
+    && rm -rf $HOME/.wget-hsts \
     && mkdir -p idea \
-    && tar -zxvf idea.tar.gz -C idea --strip-components 1 \
+    && tar -zxf idea.tar.gz -C idea --strip-components 1 \
     && mv idea /usr/lib/ \
     && rm -rf idea.tar.gz
 

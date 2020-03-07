@@ -15,8 +15,7 @@ deploy: \
 .PHONY: fish-deploy
 fish-deploy: \
 	config.fish \
-	fishfile \
-	install-fish-plugin
+	fishfile
 
 .PHONY: config.fish
 config.fish: $(HOME)/.config/fish/config.fish
@@ -29,10 +28,6 @@ fishfile: $(HOME)/.config/fish/fishfile
 $(HOME)/.config/fish/fishfile:
 	mkdir -p $(HOME)/.config/fish
 	ln -fs $(DOTDIR)/fishfile $(HOME)/.config/fish/fishfile
-
-.PHONY: install-fish-plugin
-install-fish-plugin:
-	/usr/bin/fish -c fisher
 
 
 # -----------
