@@ -4,14 +4,19 @@ DOTDIR := ~/.dotfiles
 deploy: \
 	fish-deploy \
 	git-deploy \
+	idea-deploy \
 	tmux-deploy \
 	vim-deploy
 
 
+# ------------
+# --- fish ---
+# ------------
 .PHONY: fish-deploy
 fish-deploy: \
 	config.fish \
-	fishfile
+	fishfile \
+	install-fish-plugin
 
 .PHONY: config.fish
 config.fish: $(HOME)/.config/fish/config.fish
@@ -25,17 +30,14 @@ $(HOME)/.config/fish/fishfile:
 	mkdir -p $(HOME)/.config/fish
 	ln -fs $(DOTDIR)/fishfile $(HOME)/.config/fish/fishfile
 
-
-.PHONY: tmux-deploy
-tmux-deploy: \
-	tmux.conf
-
-.PHONY: tmux.conf
-tmux.conf: $(HOME)/.tmux.conf
-$(HOME)/.tmux.conf:
-	ln -fs $(DOTDIR)/.tmux.conf $(HOME)/.tmux.conf
+.PHONY: install-fish-plugin
+install-fish-plugin:
+	/usr/bin/fish -c fisher
 
 
+# -----------
+# --- git ---
+# -----------
 .PHONY: git-deploy
 git-deploy: \
 	gitconfig \
@@ -64,11 +66,40 @@ $(HOME)/.gitmessage:
 	ln -fs $(DOTDIR)/.gitmessage $(HOME)/.gitmessage
 
 
+# ------------
+# --- idea ---
+# ------------
+.PHONY: idea-deploy
+idea-deploy: \
+	ideavimrc
+
+.PHONY: ideavimrc
+ideavimrc: $(HOME)/.ideavimrc
+$(HOME)/.ideavimrc:
+	ln -fs $(DOTDIR)/.ideavimrc $(HOME)/.ideavimrc
+
+
+# ------------
+# --- tmux ---
+# ------------
+.PHONY: tmux-deploy
+tmux-deploy: \
+	tmux.conf
+
+.PHONY: tmux.conf
+tmux.conf: $(HOME)/.tmux.conf
+$(HOME)/.tmux.conf:
+	ln -fs $(DOTDIR)/.tmux.conf $(HOME)/.tmux.conf
+
+
+# -----------
+# --- vim ---
+# -----------
 .PHONY: vim-deploy
 vim-deploy: \
 	init.vim \
 	coc-settings.json \
-	install-plugin
+	install-vim-plugin
 
 .PHONY: init.vim
 init.vim: $(HOME)/.config/nvim/init.vim
@@ -82,10 +113,13 @@ $(HOME)/.config/nvim/coc-settings.json:
 	mkdir -p $(HOME)/.config/nvim
 	ln -fs $(DOTDIR)/coc-settings.json $(HOME)/.config/nvim/coc-settings.json
 
-.PHONY: install-plugin
-install-plugin:
+.PHONY: install-vim-plugin
+install-vim-plugin:
 	nvim --headless +PlugInstall +qall
 
+# ------------
+# --- util ---
+# ------------
 .PHONY: build-devenv
 build-devenv:
 	docker build . -t devenv
