@@ -33,9 +33,11 @@ Plug 'https://github.com/nicwest/vim-camelsnek.git'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'glidenote/memolist.vim'
 Plug 'tpope/vim-surround'
-" --- fish
+" --- fish shell
 Plug 'dag/vim-fish'
-" --- markdown
+" --- Docker
+Plug 'ekalinin/dockerfile.vim'
+" --- Markdown
 Plug 'godlygeek/tabular', { 'for': 'markdown' }
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'kannokanno/previm', {'for': 'markdown'}
@@ -155,6 +157,16 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 " --------------------------------
 " --- coc(Language Server Procotol) ---
 " --------------------------------
+" extentions
+let g:coc_global_extensions = [
+      \ 'coc-docker',
+      \ 'coc-json',
+      \ 'coc-java',
+      \ 'coc-tsserver',
+      \ 'coc-xml',
+      \ 'coc-yaml'
+      \]
+
 " if hidden is not set, TextEdit might fail.
 set hidden
 

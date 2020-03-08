@@ -9,13 +9,13 @@ if test -z $SSH_AGENT_PID
   ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
 end
 
-begin # fisher
-  if not functions -q fisher
-    set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
-    curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
-    fish -c fisher
-  end
-end
+#begin # fisher
+#  if not functions -q fisher
+#    set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
+#    curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
+#    fish -c fisher
+#  end
+#end
 
 begin # docker
   set image_name "devenv"

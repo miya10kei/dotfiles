@@ -134,18 +134,20 @@ RUN apt-get update \
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
     && locale-gen --purge $LANG
 
-ENV HOME        /root
-ENV DOCKER_HOME /usr/lib/docker
-ENV DOTFILES    $HOME/.dotfiles
-ENV GOROOT      /usr/lib/go
-ENV GOPATH      $HOME/go
-ENV GRAAL_HOME  /usr/lib/graalvm
-ENV IDEA_HOME   /usr/lib/idea
-ENV JAVA_ROOT   /usr/lib/jvm
-ENV JAVA_HOME   $JAVA_ROOT/openjdk-11
-ENV IDEA_JDK    $JAVA_ROOT/openjdk-8
-ENV MAVEN_HOME  /usr/lib/maven
-ENV PATH        $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:
+ENV HOME          /root
+ENV DOCKER_HOME   /usr/lib/docker
+ENV DOTFILES      $HOME/.dotfiles
+ENV GOROOT        /usr/lib/go
+ENV GOPATH        $HOME/go
+ENV GRAAL_HOME    /usr/lib/graalvm
+ENV IDEA_HOME     /usr/lib/idea
+ENV JAVA_ROOT     /usr/lib/jvm
+ENV JAVA_HOME     $JAVA_ROOT/openjdk-11
+ENV IDEA_JDK      $JAVA_ROOT/openjdk-8
+ENV MAVEN_HOME    /usr/lib/maven
+ENV NODE_PKG_HOME $GRAAL_HOME/languages/js
+ENV NVIM_HOME     $HOME/.config/coc
+ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$NODE_PKG_HOME/bin:
 
 COPY --from=java-8  /out        $JAVA_ROOT/openjdk-8
 COPY --from=java-11 /out        $JAVA_ROOT/openjdk-11
@@ -156,16 +158,7 @@ COPY --from=packer  /out/go/go  $GOROOT/bin
 COPY --from=packer  /out/go/pkg $GOPATH/bin
 COPY --from=packer  /out/docker $DOCKER_HOME/bin
 
-RUN mkdir $DOTFILES
-WORKDIR $DOTFILES
-
-COPY Makefile          $DOTFILES/Makefile
-COPY init.vim          $DOTFILES/init.vim
-COPY coc-settings.json $DOTFILES/coc-settings.json
-COPY default-packages  $DOTFILES/default-packages
-
-RUN make deploy
-
+# .ssh
 WORKDIR $DOCKER_HOME/bin
 RUN ["/bin/bash", "-c", "\
         tac ./docker-entrypoint.sh | sed '2i cp -r /tmp/.ssh /root/' | tac > ./_docker-entrypoint.sh \
@@ -173,16 +166,11 @@ RUN ["/bin/bash", "-c", "\
         && mv ./_docker-entrypoint.sh ./docker-entrypoint.sh \
         && chmod a+x ./docker-entrypoint.sh"]
 
-WORKDIR $HOME
-
-RUN pip3 install -U pip msgpack \
-    && pip install -U neovim
-
 WORKDIR /tmp
 
+# IntelliJ IDEA
 ARG IDEA_VERSION=2019.3.3
 ARG IDEA_BUILD=193.6494.35
-
 RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.tar.gz -O idea.tar.gz \
     && rm -rf $HOME/.wget-hsts \
     && mkdir -p idea \
@@ -190,9 +178,32 @@ RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.ta
     && mv idea /usr/lib/ \
     && rm -rf idea.tar.gz
 
-ENV SHELL /usr/bin/fish
-
 WORKDIR $HOME
+
+# neovim
+RUN pip3 install -U pip msgpack \
+    && pip install -U neovim
+
+RUN npm install -g \
+      bash-language-server \
+      dockerfile-language-server-nodejs
+
+# fisher
+RUN curl https://git.io/fisher --create-dirs -sLo $HOME/.config/fish/functions/fisher.fish
+
+# make
+RUN mkdir $DOTFILES
+WORKDIR $DOTFILES
+
+COPY Makefile          $DOTFILES/Makefile
+COPY init.vim          $DOTFILES/init.vim
+COPY coc-settings.json $DOTFILES/coc-settings.json
+COPY default-packages  $DOTFILES/default-packages
+COPY fishfile          $DOTFILES/fishfile
+
+RUN make deploy
+
+ENV SHELL /usr/bin/fish
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["fish"]
