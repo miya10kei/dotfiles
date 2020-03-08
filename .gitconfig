@@ -32,3 +32,5 @@
   template = ~/.gitmessage
 [pager]
   branch = false
+[include]
+  path = .gitconfig_ghq

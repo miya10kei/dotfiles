@@ -17,13 +17,6 @@ begin # fisher
   end
 end
 
-
-begin # vim
-  if type -q neovim
-     nvim --headless +PlugInstall +qall
-  end
-end
-
 begin # docker
   set image_name "devenv"
   set container_name "miya10kei-devenv"
@@ -56,11 +49,6 @@ begin # docker
   alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
 end
 
-begin # anyenv
-  if test -e $HOME/.anyenv
-    status --is-interactive; and source (anyenv init -|psub)
-  end
-end
 
 begin # golang
   if type -q go
@@ -103,11 +91,11 @@ begin # alias
   alias fishconf "vim ~/.config/fish/config.fish"
   alias fishload "source ~/.config/fish/config.fish"
   alias ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
-  alias pghq "git config --global ghq.root ~/dev/private/; $GOPATH/bin/ghq"
-  alias wghq "git config --global ghq.root ~/dev/work; $GOPATH/bin/ghq"
+  alias pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
+  alias wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
   alias cdp "cd (pghq root)/(pghq list | peco)"
   alias cdw "cd (wghq root)/(wghq list | peco)"
-  alias gch "git branch -a --sort=-authordate | grep -v -E '\*|->' | awk '{print $1}' | peco | read b; if test -n $b; git checkout $b; end"
+  alias gch 'git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco | read b; if test !!$b; git checkout $b; end'
 end
 
 
