@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . -t devenv
+    - name: Login to DockerHub
+      run: echo ${DOCKERHUB_TOKEN} | docker login -u ${DOCKERHUB_USER} --password-stdin
+      env:
+        DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
+        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Push to DockerHub
+      run: |
+        docker tag devenv ${DOCKERHUB_USER}/devenv:latest
+        docker push ${DOCKERHUB_USER}/devenv:latest
+      env:
+        DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
