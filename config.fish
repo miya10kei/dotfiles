@@ -120,6 +120,10 @@ begin # util
       echo "🙅 $argv[1] is not a compressed file"
     end
   end
+
+  function idea
+    idea.sh $argv > /var/log/idea.log 2>&1 &
+  end
 end
 
 
