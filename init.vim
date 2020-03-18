@@ -414,7 +414,7 @@ set tabstop=2
 " -----------------------
 
 " --- link clipboard
-set clipboard^=unnamed
+set clipboard+=unnamedplus
 " --- enable search highlights
 set hlsearch
 " --- enable incremental search

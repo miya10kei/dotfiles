@@ -69,3 +69,4 @@ nnoremap <silent> gi :<C-u>action GotoImplementation<CR>
 nnoremap <silent> gr :<C-u>action CallHierarchy<CR>
 nnoremap <silent> <C-w>\| :<C-u>action SplitVertically<CR>
 nnoremap <silent> <C-w>\- :<C-u>action SplitHorizontally<CR>
+nnoremap <silent> <C-e> :<C-u>action RecentFiles<CR>
