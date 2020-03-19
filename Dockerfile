@@ -15,14 +15,14 @@ RUN cp -r /usr/local/openjdk-11/legal   /out
 RUN cp -r /usr/local/openjdk-11/lib     /out
 
 
-FROM openjdk:13   AS java-13
+FROM openjdk:14   AS java-14
 RUN mkdir /out
-RUN cp -r /usr/java/openjdk-13/bin     /out
-RUN cp -r /usr/java/openjdk-13/conf    /out
-RUN cp -r /usr/java/openjdk-13/include /out
-RUN cp -r /usr/java/openjdk-13/jmods   /out
-RUN cp -r /usr/java/openjdk-13/legal   /out
-RUN cp -r /usr/java/openjdk-13/lib     /out
+RUN cp -r /usr/java/openjdk-14/bin     /out
+RUN cp -r /usr/java/openjdk-14/conf    /out
+RUN cp -r /usr/java/openjdk-14/include /out
+RUN cp -r /usr/java/openjdk-14/jmods   /out
+RUN cp -r /usr/java/openjdk-14/legal   /out
+RUN cp -r /usr/java/openjdk-14/lib     /out
 
 
 FROM maven:latest AS maven
@@ -102,6 +102,7 @@ RUN apt-get update \
     curl \
     fish \
     fontconfig \
+    fonts-takao-pgothic \
     gcc \
     git \
     jq \
@@ -115,7 +116,9 @@ RUN apt-get update \
     libxtst-dev \
     libxxf86vm1 \
     locales \
+    lsof \
     make \
+    mysql-client \
     neovim \
     openssh-client \
     openssl \
@@ -146,12 +149,12 @@ ENV JAVA_HOME     $JAVA_ROOT/openjdk-11
 ENV IDEA_JDK      $JAVA_ROOT/openjdk-8
 ENV MAVEN_HOME    /usr/lib/maven
 ENV NODE_PKG_HOME $GRAAL_HOME/languages/js
-ENV NVIM_HOME     $HOME/.config/coc
+ENV NVIM_HOME     $HOME/.config/nvim
 ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$NODE_PKG_HOME/bin:
 
 COPY --from=java-8  /out        $JAVA_ROOT/openjdk-8
 COPY --from=java-11 /out        $JAVA_ROOT/openjdk-11
-COPY --from=java-13 /out        $JAVA_ROOT/openjdk-13
+COPY --from=java-14 /out        $JAVA_ROOT/openjdk-14
 COPY --from=maven   /out        $MAVEN_HOME
 COPY --from=packer  /out/graal  $GRAAL_HOME
 COPY --from=packer  /out/go/go  $GOROOT/bin
