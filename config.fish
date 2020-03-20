@@ -1,4 +1,5 @@
 set -l OS (uname -s)
+set -g fish_emoji_width 2
 
 if test $OS = Darwin
   set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
