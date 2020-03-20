@@ -79,9 +79,9 @@ begin # alias
     alias ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
     alias pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
     alias wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
-    alias cdp 'pghq list | peco | read b; if test !!$b; cd (pghq root)/$b; end'
-    alias cdw 'wghq list | peco | read b; if test !!$b; cd (wghq root)/$b; end'
-    alias gch 'git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco | read b; if test !!$b; git checkout $b; end'
+    alias cdp 'pghq list | peco | read b; if test !!$b; cd (pghq root)/$b; end;'
+    alias cdw 'wghq list | peco | read b; if test !!$b; cd (wghq root)/$b; end;'
+    alias gch 'git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco | read b; if test !!$b; git checkout $b; end;'
   end
   alias wklog "nvim ~/Documents/memo/2020-03-09-work-log.md"
   if type -q xsel

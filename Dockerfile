@@ -97,6 +97,7 @@ RUN apt-get update \
     && apt-get install -y \
     software-properties-common \
     && add-apt-repository ppa:neovim-ppa/stable \
+    && add-apt-repository ppa:fish-shell/release-3 \
     && apt update \
     && apt-get install -y \
     curl \
