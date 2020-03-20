@@ -11,12 +11,22 @@
       "ignoredRootPaths": [
         "~"
       ]
+    },
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": [
+        "dockerfile"
+      ],
+      "args": [
+        "--stdio"
+      ]
     }
   },
-  "vetur.format.defaultFormatter.js": "prettier-eslint",
   "eslint.autoFixOnSave": true,
   "eslint.filetypes": [
     "javascript",
     "typescript"
-  ]
+  ],
+  "vetur.format.defaultFormatter.js": "prettier-eslint",
+  "yank.highlight.duration": 400
 }

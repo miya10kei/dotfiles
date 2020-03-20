@@ -159,12 +159,17 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 " --------------------------------
 " extentions
 let g:coc_global_extensions = [
-      \ 'coc-docker',
-      \ 'coc-json',
+      \ 'coc-eslint',
+      \ 'coc-highlight',
+      \ 'coc-html',
       \ 'coc-java',
+      \ 'coc-json',
+      \ 'coc-spell-checker',
       \ 'coc-tsserver',
+      \ 'coc-vetur',
       \ 'coc-xml',
-      \ 'coc-yaml'
+      \ 'coc-yaml',
+      \ 'coc-yank'
       \]
 
 " if hidden is not set, TextEdit might fail.
@@ -297,6 +302,7 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
+nnoremap <silent> <Leader>y  :<C-u>CocList -A --normal yank<cr>
 
 " -------------------------
 " --- Function settings ---
