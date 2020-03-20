@@ -9,61 +9,46 @@ if test -z $SSH_AGENT_PID
   ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
 end
 
-#begin # fisher
-#  if not functions -q fisher
-#    set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
-#    curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
-#    fish -c fisher
-#  end
-#end
+begin # bobthefish
+  set -g theme_color_scheme gruvbox
+  set -g theme_show_exit_status yes
+end
 
 begin # docker
-  set image_name "devenv"
-  set container_name "miya10kei-devenv"
-  function startdev
-    set opts "\
-              --cap-add=ALL \
-              --name $container_name \
-              -v $HOME/.dotfiles:/root/.dotfiles \
-              -v $HOME/.gradle:/root/.gradle \
-              -v $HOME/.idea:/root/.IntelliJIdea2019.3 \
-              -v $HOME/.java:/root/.java \
-              -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
-              -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
-              -v $HOME/.m2:/root/.m2 \
-              -v $HOME/Documents:/root/Documents \
-              -v $HOME/Downloads:/root/Downloads \
-              -v $HOME/dev:/root/dev \
-              -v $HOME/.ssh:/tmp/.ssh:ro \
-              -v /var/run/docker.sock:/var/run/docker.sock \
-              -e DISPLAY=$IP:0 \
-              -v /tmp/.X11-unix/:/tmp/.X11-unix \
-              $ARGS"
-    set cmd "docker run -dit $opts $image_name"
-    echo $cmd | sed "s/ \{2,\}/ /g"
-    eval $cmd
-  end
-  alias stopdev "docker stop $container_name; docker rm $container_name"
-  alias attachdev "docker exec -it $container_name /usr/bin/fish"
-  alias dk "docker"
-  alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
-end
-
-
-begin # golang
-  if type -q go
-    set -x GOPATH "$HOME/go"
-    set -U fish_user_paths "$GOPATH/bin" $fish_user_paths
+  if type -q docker
+    set image_name "miya10kei/devenv"
+    set container_name "miya10kei-devenv"
+    set tag "latest"
+    function startdev
+      set opts "\
+                --cap-add=ALL \
+                --name $container_name \
+                -v $HOME/.dotfiles:/root/.dotfiles \
+                -v $HOME/.gradle:/root/.gradle \
+                -v $HOME/.idea:/root/.IntelliJIdea2019.3 \
+                -v $HOME/.java:/root/.java \
+                -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
+                -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
+                -v $HOME/.m2:/root/.m2 \
+                -v $HOME/Documents:/root/Documents \
+                -v $HOME/Downloads:/root/Downloads \
+                -v $HOME/dev:/root/dev \
+                -v $HOME/.ssh:/tmp/.ssh:ro \
+                -v /var/run/docker.sock:/var/run/docker.sock \
+                -e DISPLAY=$IP:0 \
+                -v /tmp/.X11-unix/:/tmp/.X11-unix \
+                $ARGS"
+      set cmd "docker run -dit $opts $image_name:$tag"
+      echo $cmd | sed "s/ \{2,\}/ /g"
+      eval $cmd
+    end
+    alias stopdev "docker stop $container_name; docker rm $container_name"
+    alias attachdev "docker exec -it $container_name /usr/bin/fish"
+    alias dk "docker"
+    alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
   end
 end
 
-begin # GraalVM
-  switch $OS
-    case Darwin
-      set -x GRAAL_HOME "/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.0.0/Contents/Home"
-    case *
-  end
-end
 
 begin # alias
   alias rm "rm -i"
@@ -90,14 +75,19 @@ begin # alias
   alias q "exit"
   alias fishconf "vim ~/.config/fish/config.fish"
   alias fishload "source ~/.config/fish/config.fish"
-  alias ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
-  alias pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
-  alias wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
-  alias cdp 'pghq list | peco | read b; if test !!$b; cd (pghq root)/$b; end'
-  alias cdw 'wghq list | peco | read b; if test !!$b; cd (wghq root)/$b; end'
-  alias gch 'git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco | read b; if test !!$b; git checkout $b; end'
+  if type -q ghq; and type -q peco
+    alias ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
+    alias pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
+    alias wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
+    alias cdp 'pghq list | peco | read b; if test !!$b; cd (pghq root)/$b; end'
+    alias cdw 'wghq list | peco | read b; if test !!$b; cd (wghq root)/$b; end'
+    alias gch 'git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco | read b; if test !!$b; git checkout $b; end'
+  end
   alias wklog "nvim ~/Documents/memo/2020-03-09-work-log.md"
-  alias xsel "xsel -b"
+  if type -q xsel
+    alias xsel "xsel -b"
+  end
+  alias editdev "nvim ~/.dotfiles/Dockerfile"
 end
 
 

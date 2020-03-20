@@ -181,6 +181,12 @@ RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.ta
     && mv idea /usr/lib/ \
     && rm -rf idea.tar.gz
 
+# powerline fonts
+RUN ["/bin/bash", "-c", "\
+      git clone https://github.com/powerline/fonts.git --depth=1 \
+      && ./fonts/install.sh \
+      && rm -rf fonts"],
+
 WORKDIR $HOME
 
 # neovim
