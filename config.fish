@@ -1,13 +1,22 @@
 set -l OS (uname -s)
 set -g fish_emoji_width 2
 set -x TERM screen-256color
+
 if test $OS = Darwin
   set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
 end
 
-if test -z $SSH_AGENT_PID
-  eval (ssh-agent -c) > /dev/null
-  ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
+begin # SSH Agent
+  if test -z $SSH_AGENT_PID
+    eval (ssh-agent -c) > /dev/null
+    ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
+  end
+end
+
+begin # X Window System
+  if type -q xhost
+    xhost localhost > /dev/null 2>&1
+  end
 end
 
 begin # bobthefish
