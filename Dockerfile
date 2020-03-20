@@ -201,6 +201,9 @@ RUN npm install -g \
 # fisher
 RUN curl https://git.io/fisher --create-dirs -sLo $HOME/.config/fish/functions/fisher.fish
 
+# tmux
+RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+
 # make
 RUN mkdir $DOTFILES
 WORKDIR $DOTFILES
