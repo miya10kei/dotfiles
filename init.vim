@@ -164,7 +164,6 @@ let g:coc_global_extensions = [
       \ 'coc-html',
       \ 'coc-java',
       \ 'coc-json',
-      \ 'coc-spell-checker',
       \ 'coc-tsserver',
       \ 'coc-vetur',
       \ 'coc-xml',
