@@ -15,7 +15,7 @@ end
 
 begin # X Window System
   if type -q xhost
-    xhost localhost > /dev/null 2>&1
+    xhost + > /dev/null 2>&1
   end
 end
 
@@ -47,6 +47,7 @@ begin # docker
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 -e DISPLAY=$IP:0 \
                 -v /tmp/.X11-unix/:/tmp/.X11-unix \
+                -p 8080:8080 \
                 $ARGS"
       set cmd "docker run -dit $opts $image_name:$tag"
       echo $cmd | sed "s/ \{2,\}/ /g"
