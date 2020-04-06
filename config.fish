@@ -133,6 +133,7 @@ else
 end
 alias q "exit"
 alias wklog "nvim ~/Documents/memo/2020-03-09-work-log.md"
+alias cdot "cd ~/.dotfiles"
 if type -q xsel
   alias xsel "xsel -b"
 end
