@@ -162,7 +162,6 @@ let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-highlight',
       \ 'coc-html',
-      \ 'coc-java',
       \ 'coc-json',
       \ 'coc-tsserver',
       \ 'coc-vetur',
