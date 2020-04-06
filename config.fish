@@ -1,14 +1,17 @@
-set -l OS (uname -s)
+set -x OS (uname -s)
 
 # OS dependency
 if test $OS = Darwin
   set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
-  set -x TERM screen-256color
+else if test $OS = Linux
+  if test $HOST_OS = Darwin
+    set -x TERM screen-256color
+  end
 end
 
 
 # fish
-set -g fish_emoji_width 2
+set -g $fish_emoji_width 3
 alias fishconf "vim ~/.config/fish/config.fish"
 alias fishload "source ~/.config/fish/config.fish"
 
@@ -27,7 +30,7 @@ end
 
 # X Window System
 if type -q xhost
-  xhost + > /dev/null 2>&1
+  xhost $IP: > /dev/null 2>&1
 end
 
 
@@ -53,6 +56,7 @@ if type -q docker
               -v $HOME/.ssh:/tmp/.ssh:ro \
               -v /var/run/docker.sock:/var/run/docker.sock \
               -e DISPLAY=$IP:0 \
+              -e HOST_OS=$OS \
               -v /tmp/.X11-unix/:/tmp/.X11-unix \
               -p 8080:8080 \
               -p 8081:8081 \
@@ -107,7 +111,9 @@ end
 
 
 # IntelliJ IDEA
-alias idea "idea.sh $argv > /var/log/idea.log 2>&1 &"
+function idea -d "start IntelliJ IDEA"
+  idea.sh $argv > /var/log/idea.log 2>&1 &
+end
 
 
 # Alias
