@@ -66,7 +66,7 @@ if type -q docker
     echo $cmd | sed "s/ \{2,\}/ /g"
     eval $cmd
   end
-  alias startdev "docker run miya10kei-devenv"
+  alias startdev "docker start miya10kei-devenv"
   alias stopdev "docker stop $container_name; docker rm $container_name"
   alias attachdev "docker exec -it $container_name /usr/bin/fish"
   alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
