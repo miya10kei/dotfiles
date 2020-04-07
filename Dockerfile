@@ -216,6 +216,8 @@ COPY fishfile          $DOTFILES/fishfile
 
 RUN make deploy
 
+WORKDIR $HOME
+
 ENV SHELL /usr/bin/fish
 
 ENTRYPOINT ["docker-entrypoint.sh"]
