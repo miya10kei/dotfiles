@@ -30,7 +30,7 @@ end
 
 # X Window System
 if type -q xhost
-  xhost $IP: > /dev/null 2>&1
+  xhost $IP > /dev/null 2>&1
 end
 
 
