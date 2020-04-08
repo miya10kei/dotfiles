@@ -157,6 +157,7 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 " --------------------------------
 " --- coc(Language Server Procotol) ---
 " --------------------------------
+let g:coc_node_path = expand('$GRAAL_HOME') . '/bin/node'
 " extentions
 let g:coc_global_extensions = [
       \ 'coc-eslint',
