@@ -48,6 +48,7 @@ inoremap <silent> <C-h> <Left>
 inoremap <silent> <C-k> <Up>
 inoremap <silent> <C-l> <Right>
 inoremap <silent> <C-x> <C-h>
+nnoremap x "_x
 
 " --- disable to fold code
 nnoremap <silent> zM <Nop>

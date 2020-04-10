@@ -11,7 +11,7 @@ end
 
 
 # fish
-set -g $fish_emoji_width 3
+set -g $fish_emoji_width 2
 alias fishconf "vim ~/.config/fish/config.fish"
 alias fishload "source ~/.config/fish/config.fish"
 

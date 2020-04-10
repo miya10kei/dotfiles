@@ -177,8 +177,8 @@ RUN ["/bin/bash", "-c", "\
 WORKDIR /tmp
 
 # IntelliJ IDEA
-ARG IDEA_VERSION=2019.3.4
-ARG IDEA_BUILD=193.6911.18
+ARG IDEA_VERSION=2020.1
+ARG IDEA_BUILD=201.6668.121
 RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.tar.gz -O idea.tar.gz \
     && rm -rf $HOME/.wget-hsts \
     && mkdir -p idea \
