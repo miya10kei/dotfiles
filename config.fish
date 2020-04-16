@@ -40,7 +40,7 @@ if type -q docker
   set container_name "miya10kei-devenv"
   set tag "latest"
   function rundev -d "Run docker container of dev.."
-    set opts "\
+    set -l opts "\
               --cap-add=ALL \
               --name $container_name \
               -v $HOME/.dotfiles:/root/.dotfiles \
@@ -60,13 +60,14 @@ if type -q docker
               -v /tmp/.X11-unix/:/tmp/.X11-unix \
               -p 8080:8080 \
               -p 8081:8081 \
-              -p 3000:3000\
+              -p 3000:3000 \
               $argv"
-    set cmd "docker run -dit $opts $image_name:$tag"
+    set -l cmd "docker run -dit $opts $image_name:$tag"
+    echo $argv
     echo $cmd | sed "s/ \{2,\}/ /g"
     eval $cmd
   end
-  alias startdev "docker start miya10kei-devenv"
+  alias startdev "docker start $container_name"
   alias stopdev "docker stop $container_name; docker rm $container_name"
   alias attachdev "docker exec -it $container_name /usr/bin/fish"
   alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
@@ -157,7 +158,7 @@ function decompress -d "Decompress the compressed file."
         tar -Jxvf $argv[1]
       case "*.tar"
         tar -xvf $argv[1]
-      case "*.zip"
+      case "*.zip" "*.jar"
         unzip $argv[1]
       case "*"
         echo "😰 I don't know how to decompress $argv[1] ..."
@@ -165,6 +166,19 @@ function decompress -d "Decompress the compressed file."
   else
     echo "🙅 $argv[1] is not a compressed file"
   end
+end
+
+function loadenv -d "load .env file and run command passed as arguments"
+  set cmd "env"
+  for line in (cat $argv[1])
+    if string match -qr "^#.*" $line
+    else
+      set cmd "$cmd $line"
+    end
+  end
+  set cmd "$cmd $argv[2..-1]"
+  echo $cmd
+  eval $cmd
 end
 
 
