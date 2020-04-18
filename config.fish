@@ -63,7 +63,6 @@ if type -q docker
               -p 3000:3000 \
               $argv"
     set -l cmd "docker run -dit $opts $image_name:$tag"
-    echo $argv
     echo $cmd | sed "s/ \{2,\}/ /g"
     eval $cmd
   end
