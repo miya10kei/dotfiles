@@ -99,8 +99,7 @@ RUN apt-get update \
     wget \
     && wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add - \
     && echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list \
-    && add-apt-repository ppa:neovim-ppa/stable \
-    && add-apt-repository ppa:fish-shell/release-3 \
+    && add-apt-repository -y ppa:fish-shell/release-3 \
     && apt update \
     && apt-get install -y \
     cf-cli \
@@ -197,10 +196,6 @@ WORKDIR $HOME
 # neovim
 RUN pip3 install -U pip msgpack \
     && pip install -U neovim
-
-RUN npm install -g \
-      bash-language-server \
-      dockerfile-language-server-nodejs
 
 # fisher
 RUN curl https://git.io/fisher --create-dirs -sLo $HOME/.config/fish/functions/fisher.fish

@@ -70,7 +70,7 @@ if type -q docker
   alias stopdev "docker stop $container_name; docker rm $container_name"
   alias attachdev "docker exec -it $container_name /usr/bin/fish"
   alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
-  alias editdev "nvim ~/.dotfiles/Dockerfile"
+  alias editdev "vim ~/.dotfiles/Dockerfile"
   alias dk "docker"
 end
 
@@ -138,7 +138,7 @@ else
   alias lla "ll -a"
 end
 alias q "exit"
-alias wklog "nvim ~/Documents/memo/2020-03-09-work-log.md"
+alias wklog "vim ~/Documents/memo/2020-03-09-work-log.md"
 alias cdot "cd ~/.dotfiles"
 if type -q xsel
   alias xsel "xsel -b"
