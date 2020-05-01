@@ -97,7 +97,9 @@ RUN apt-get update \
     && apt-get install -y \
     software-properties-common \
     wget \
-    && wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add - \
+    && wget -q -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add - \
+    && echo "deb https://dl.bintray.com/sbt/debian /" | tee /etc/apt/sources.list.d/sbt.list \
+    && wget -q -O - "https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key" | apt-key add - \
     && echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list \
     && add-apt-repository -y ppa:fish-shell/release-3 \
     && apt update \
@@ -128,6 +130,7 @@ RUN apt-get update \
     openssl \
     python3-dev \
     python3-pip \
+    sbt \
     tmux \
     tree \
     ttf-mscorefonts-installer \
