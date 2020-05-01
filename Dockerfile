@@ -131,6 +131,7 @@ RUN apt-get update \
     python3-dev \
     python3-pip \
     sbt \
+    telnet \
     tmux \
     tree \
     ttf-mscorefonts-installer \
