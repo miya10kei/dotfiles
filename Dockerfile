@@ -101,9 +101,12 @@ RUN apt-get update \
     && echo "deb https://dl.bintray.com/sbt/debian /" | tee /etc/apt/sources.list.d/sbt.list \
     && wget -q -O - "https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key" | apt-key add - \
     && echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list \
+    && wget -q -O - "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key add - \
+    && echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list \
     && add-apt-repository -y ppa:fish-shell/release-3 \
     && apt update \
     && apt-get install -y \
+    apt-transport-https \
     cf-cli \
     curl \
     fish \
@@ -111,7 +114,9 @@ RUN apt-get update \
     fonts-takao-pgothic \
     gcc \
     git \
+    gnupg2 \
     jq \
+    kubectl \
     less \
     libfontconfig1 \
     libfreetype6-dev \
@@ -207,6 +212,10 @@ RUN curl https://git.io/fisher --create-dirs -sLo $HOME/.config/fish/functions/f
 
 # tmux
 RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+
+# azure-cli
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sed s/\${CLI_REPO}/disco/g | bash \
+    && rm -rf /var/lib/apt/lists/*
 
 # make
 RUN mkdir $DOTFILES
