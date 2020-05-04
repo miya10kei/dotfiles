@@ -144,6 +144,9 @@ alias cdot "cd ~/.dotfiles"
 if type -q xsel
   alias xsel "xsel -b"
 end
+if type -q kubectl
+  alias kube "kubectl"
+end
 
 
 # Util function
