@@ -45,6 +45,7 @@ if type -q docker
               --name $container_name \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
+              -v $HOME/.kube:/root/.kube \
               -v $HOME/.idea:/root/.IntelliJIdea2019.3 \
               -v $HOME/.java:/root/.java \
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
