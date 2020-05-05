@@ -104,6 +104,7 @@ RUN apt-get update \
     && wget -q -O - "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key add - \
     && echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list \
     && add-apt-repository -y ppa:fish-shell/release-3 \
+    && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt update \
     && apt-get install -y \
     apt-transport-https \
@@ -131,6 +132,7 @@ RUN apt-get update \
     make \
     mysql-client \
     neovim \
+    nodejs \
     openssh-client \
     openssl \
     python3-dev \
@@ -205,7 +207,9 @@ WORKDIR $HOME
 
 # neovim
 RUN pip3 install -U pip msgpack \
-    && pip install -U neovim
+    && pip install -U neovim \
+    && npm config set root \
+    && npm install -g neovim
 
 # fisher
 RUN curl https://git.io/fisher --create-dirs -sLo $HOME/.config/fish/functions/fisher.fish

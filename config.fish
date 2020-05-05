@@ -42,11 +42,13 @@ if type -q docker
   function rundev -d "Run docker container of dev.."
     set -l opts "\
               --cap-add=ALL \
+              --net=host \
               --name $container_name \
+              -v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
               -v $HOME/.kube:/root/.kube \
-              -v $HOME/.idea:/root/.IntelliJIdea2019.3 \
+              -v $HOME/.idea:/root/.Idea \
               -v $HOME/.java:/root/.java \
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
@@ -59,9 +61,6 @@ if type -q docker
               -e DISPLAY=$IP:0 \
               -e HOST_OS=$OS \
               -v /tmp/.X11-unix/:/tmp/.X11-unix \
-              -p 8080:8080 \
-              -p 8081:8081 \
-              -p 3000:3000 \
               $argv"
     set -l cmd "docker run -dit $opts $image_name:$tag"
     echo $cmd | sed "s/ \{2,\}/ /g"
