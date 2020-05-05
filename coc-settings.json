@@ -1,11 +1,13 @@
 {
-  "languageserver": {
-  },
+  "languageserver": {},
   "eslint.autoFixOnSave": true,
   "eslint.filetypes": [
     "javascript",
     "typescript"
   ],
   "vetur.format.defaultFormatter.js": "prettier-eslint",
+  "yaml.schemas": {
+    "kubernetes": "/*.yaml"
+  },
   "yank.highlight.duration": 400
 }
