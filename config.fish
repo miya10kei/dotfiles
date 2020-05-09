@@ -1,10 +1,14 @@
 set -x OS (uname -s)
 
 # OS dependency
-if test $OS = Darwin
+if test "$OS" = Darwin
   set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
-else if test $OS = Linux
-  if test $HOST_OS = Darwin
+else if test "$OS" = Linux
+  set -l RELEASE (uname -r | string match -ir microsoft)
+  if test -z "$HOST_OS" -a "$RELEASE" = microsoft
+    set -x OS wsl
+    set -x IP (ip route | head -n1 | awk '{print $3}')
+  else if test "$HOST_OS" = Darwin
     set -x TERM screen-256color
   end
 end
@@ -48,7 +52,6 @@ if type -q docker
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
               -v $HOME/.kube:/root/.kube \
-              -v $HOME/.idea:/root/.Idea \
               -v $HOME/.java:/root/.java \
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \

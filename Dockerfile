@@ -208,7 +208,7 @@ WORKDIR $HOME
 # neovim
 RUN pip3 install -U pip msgpack \
     && pip install -U neovim \
-    && npm config set root \
+    && npm config set user root \
     && npm install -g neovim
 
 # fisher
