@@ -44,12 +44,11 @@ if type -q docker
               --cap-add=ALL \
               --net=host \
               --name $container_name \
-              -v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
+              -v $HOME/.config/JetBrains:/root/.config/JetBrains \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
-              -v $HOME/.kube:/root/.kube \
-              -v $HOME/.idea:/root/.Idea \
               -v $HOME/.java:/root/.java \
+              -v $HOME/.kube:/root/.kube \
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
               -v $HOME/.m2:/root/.m2 \
