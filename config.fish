@@ -43,16 +43,16 @@ if type -q docker
   set image_name "miya10kei/devenv"
   set container_name "miya10kei-devenv"
   set tag "latest"
-  function rundev -d "Run docker container of dev.."
+  function rundev -d "Run docker container of dev..."
     set -l opts "\
               --cap-add=ALL \
               --net=host \
               --name $container_name \
-              -v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
+              -v $HOME/.config/JetBrains:/root/.config/JetBrains \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
-              -v $HOME/.kube:/root/.kube \
               -v $HOME/.java:/root/.java \
+              -v $HOME/.kube:/root/.kube \
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
               -v $HOME/.m2:/root/.m2 \
