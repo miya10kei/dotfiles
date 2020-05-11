@@ -128,3 +128,14 @@ C := miya10kei@gmail.com
 .PHONY: create-sshkey
 create-sshkey:
 	ssh-keygen -t rsa -b 4096 -C ${C}
+
+.PHONY: create-dir
+create-dir:
+	mkdir -p $(HOME)/.config/JetBrains \
+		$(HOME)/.gradle \
+		$(HOME)/.java \
+		$(HOME)/.kube \
+		$(HOME)/.local/share/JetBrains \
+		$(HOME)/.m2 \
+		$(HOME)/dev \
+	 	$(HOME)/.dotfiles

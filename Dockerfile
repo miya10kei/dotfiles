@@ -161,7 +161,7 @@ ENV GRAAL_HOME    /usr/lib/graalvm
 ENV IDEA_HOME     /usr/lib/idea
 ENV JAVA_ROOT     /usr/lib/jvm
 ENV JAVA_HOME     $JAVA_ROOT/openjdk-11
-ENV IDEA_JDK      $JAVA_ROOT/openjdk-8
+ENV IDEA_JDK      $JAVA_ROOT/openjdk-11
 ENV MAVEN_HOME    /usr/lib/maven
 ENV NODE_PKG_HOME $GRAAL_HOME/languages/js
 ENV NVIM_HOME     $HOME/.config/nvim
@@ -208,7 +208,7 @@ WORKDIR $HOME
 # neovim
 RUN pip3 install -U pip msgpack \
     && pip install -U neovim \
-    && npm config set root \
+    && npm config set user root \
     && npm install -g neovim
 
 # fisher
