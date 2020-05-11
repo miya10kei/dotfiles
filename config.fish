@@ -33,6 +33,22 @@ if type -q xhost
   xhost $IP > /dev/null 2>&1
 end
 
+# cf
+if type -q cf; and type -q jq; and type -q peco
+  function cflogin
+    set -l endpoint (cat $HOME/.cf/endpoints.json | jq .[].endpoint | string trim -c "\"" | peco)
+    set -l org (cat .cf/endpoints.json | jq ".[] | select(.endpoint == \"$endpoint\").org")
+    if test !!$endpoint
+      set -l passcode  (echo (echo $endpoint | string replace "api" "login")/passcode)
+      if type -q xsel
+        echo $passcode | xsel
+      else if type -q pbcopy
+        echo $passcode | pbcopy
+      end
+      cf login -a $endpoint --sso --skip-ssl-validation -o $org
+    end
+  end
+end
 
 # docker
 if type -q docker
@@ -44,6 +60,8 @@ if type -q docker
               --cap-add=ALL \
               --net=host \
               --name $container_name \
+              -v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
+              -v $HOME/.cf:/root/.cf \
               -v $HOME/.config/JetBrains:/root/.config/JetBrains \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
@@ -52,10 +70,10 @@ if type -q docker
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
               -v $HOME/.m2:/root/.m2 \
+              -v $HOME/.ssh:/tmp/.ssh:ro \
               -v $HOME/Documents:/root/Documents \
               -v $HOME/Downloads:/root/Downloads \
               -v $HOME/dev:/root/dev \
-              -v $HOME/.ssh:/tmp/.ssh:ro \
               -v /var/run/docker.sock:/var/run/docker.sock \
               -e DISPLAY=$IP:0 \
               -e HOST_OS=$OS \
