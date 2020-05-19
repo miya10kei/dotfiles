@@ -110,6 +110,7 @@ RUN apt-get update \
     apt-transport-https \
     cf-cli \
     curl \
+    dnsutils \
     fish \
     fontconfig \
     fonts-takao-pgothic \
