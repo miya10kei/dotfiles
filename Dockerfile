@@ -188,8 +188,8 @@ RUN ["/bin/bash", "-c", "\
 WORKDIR /tmp
 
 # IntelliJ IDEA
-ARG IDEA_VERSION=2020.1.1
-ARG IDEA_BUILD=201.7223.91
+ARG IDEA_VERSION=2020.1.2
+ARG IDEA_BUILD=201.7846.76
 
 RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.tar.gz -O idea.tar.gz \
     && rm -rf $HOME/.wget-hsts \

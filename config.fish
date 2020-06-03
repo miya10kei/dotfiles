@@ -69,6 +69,7 @@ if type -q docker
               -v $HOME/.config/JetBrains:/root/.config/JetBrains \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
+              -v $HOME/.sbt:/root/.sbt \
               -v $HOME/.java:/root/.java \
               -v $HOME/.kube:/root/.kube \
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \

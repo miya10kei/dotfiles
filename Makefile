@@ -141,4 +141,5 @@ create-dir:
 		$(HOME)/.kube \
 		$(HOME)/.local/share/JetBrains \
 		$(HOME)/.m2 \
+		$(HOME)/.sbt \
 		$(HOME)/dev
