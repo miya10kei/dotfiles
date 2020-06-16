@@ -75,7 +75,7 @@ if type -q docker
               -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
               -v $HOME/.m2:/root/.m2 \
-              -v $HOME/.ssh:/tmp/.ssh:ro \
+              -v $HOME/.ssh:/tmp/.ssh \
               -v $HOME/Documents:/root/Documents \
               -v $HOME/Downloads:/root/Downloads \
               -v $HOME/dev:/root/dev \

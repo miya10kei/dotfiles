@@ -36,7 +36,8 @@ RUN cp -r /usr/share/maven/lib  /out
 FROM golang:latest AS golang
 RUN go get -v \
       github.com/motemen/ghq \
-      github.com/peco/peco/cmd/peco
+      github.com/peco/peco/cmd/peco \
+      github.com/wagoodman/dive
 RUN mkdir -p /out/go /out/pkg
 RUN cp /go/bin/*           /out/pkg
 RUN cp /usr/local/go/bin/* /out/go
