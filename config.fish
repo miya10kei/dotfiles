@@ -8,6 +8,7 @@ else if test "$OS" = Linux
   if test -z "$HOST_OS" -a "$RELEASE" = microsoft
     set -x OS wsl
     set -x IP (ip route | head -n1 | awk '{print $3}')
+    set -x JAVA_HOME /Library/Java/JavaVirtualMachines/liberica-jdk-11.jdk/Contents/Home
   else if test "$HOST_OS" = Darwin
     set -x TERM screen-256color
   end
@@ -175,7 +176,7 @@ end
 function decompress -d "Decompress the compressed file."
   if test -f $argv[1]
     switch $argv[1]
-      case "*.tar.gz"
+      case "*.tar.gz" "*.tgz"
         tar -zxvf $argv[1]
       case "*.tar.bz2"
         tar -jxvf $argv[1]

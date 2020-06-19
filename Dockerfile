@@ -205,6 +205,15 @@ RUN ["/bin/bash", "-c", "\
       && ./fonts/install.sh \
       && rm -rf fonts"],
 
+ARG PACK_VERSION=v0.11.2
+
+RUN wget https://github.com/buildpacks/pack/releases/download/${PACK_VERSION}/pack-${PACK_VERSION}-linux.tgz \
+    && tar xvf pack-${PACK_VERSION}-linux.tgz \
+    && mkdir -p /usr/lib/pack \
+    && mv pack /usr/lib/pack/ \
+    && rm -rf pack-${PACK_VERSION}-linux.tgz
+
+
 WORKDIR $HOME
 
 # neovim
