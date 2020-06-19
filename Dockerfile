@@ -167,7 +167,8 @@ ENV IDEA_JDK      $JAVA_ROOT/openjdk-11
 ENV MAVEN_HOME    /usr/lib/maven
 ENV NODE_PKG_HOME $GRAAL_HOME/languages/js
 ENV NVIM_HOME     $HOME/.config/nvim
-ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$NODE_PKG_HOME/bin:
+ENV PACK_HOME     /usr/lib/pack
+ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$NODE_PKG_HOME/bin:$PACK_HOME/bin:
 
 COPY --from=java-8  /out        $JAVA_ROOT/openjdk-8
 COPY --from=java-11 /out        $JAVA_ROOT/openjdk-11
@@ -209,8 +210,8 @@ ARG PACK_VERSION=v0.11.2
 
 RUN wget https://github.com/buildpacks/pack/releases/download/${PACK_VERSION}/pack-${PACK_VERSION}-linux.tgz \
     && tar xvf pack-${PACK_VERSION}-linux.tgz \
-    && mkdir -p /usr/lib/pack \
-    && mv pack /usr/lib/pack/ \
+    && mkdir -p $PACK_HOME/bin \
+    && mv pack $PACK_HOME/bin/ \
     && rm -rf pack-${PACK_VERSION}-linux.tgz
 
 
