@@ -121,9 +121,11 @@ RUN apt-get update \
     jq \
     kubectl \
     less \
+    libaio1 \
     libfontconfig1 \
     libfreetype6-dev \
     libgtk2.0-0 \
+    libnuma1 \
     libxext-dev \
     libxrender-dev \
     libxslt1.1 \
@@ -165,10 +167,9 @@ ENV JAVA_ROOT     /usr/lib/jvm
 ENV JAVA_HOME     $JAVA_ROOT/openjdk-11
 ENV IDEA_JDK      $JAVA_ROOT/openjdk-11
 ENV MAVEN_HOME    /usr/lib/maven
-ENV NODE_PKG_HOME $GRAAL_HOME/languages/js
 ENV NVIM_HOME     $HOME/.config/nvim
 ENV PACK_HOME     /usr/lib/pack
-ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$NODE_PKG_HOME/bin:$PACK_HOME/bin:
+ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$PACK_HOME/bin:
 
 COPY --from=java-8  /out        $JAVA_ROOT/openjdk-8
 COPY --from=java-11 /out        $JAVA_ROOT/openjdk-11
