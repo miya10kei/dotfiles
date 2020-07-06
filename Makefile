@@ -113,9 +113,17 @@ $(HOME)/.config/nvim/coc-settings.json:
 	mkdir -p $(HOME)/.config/nvim
 	ln -fs $(DOTDIR)/coc-settings.json $(HOME)/.config/nvim/coc-settings.json
 
+# .PHONY: package.json
+# package.json: $(HOME)/.config/coc/extensions/package.json
+# $(HOME)/.config/coc/extensions/package.json:
+# 	mkdir -p $(HOME)/.config/coc/extensions
+# 	ln -fs $(DOTDIR)/coc-package.json $(HOME)/.config/coc/extensions/package.json
+
 .PHONY: install-vim-plugin
 install-vim-plugin:
-	nvim --headless +PlugInstall +qall
+	nvim -u $(HOME)/.config/nvim/init.vim --headless +PlugInstall +qa
+#	cd $(HOME)/.config/coc/extensions
+#	npm install
 
 # ------------
 # --- util ---

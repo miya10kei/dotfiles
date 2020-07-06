@@ -83,7 +83,7 @@ if type -q docker
               -v /var/run/docker.sock:/var/run/docker.sock \
               -e DISPLAY=$IP:0 \
               -e HOST_OS=$OS \
-              -p 8000-9000:8000-9000 \
+              -p 8000-8100:8000-8100 \
               -v /tmp/.X11-unix/:/tmp/.X11-unix \
               $argv"
     set -l cmd "docker run -dit $opts $image_name:$tag"

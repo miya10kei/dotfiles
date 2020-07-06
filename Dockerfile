@@ -137,6 +137,7 @@ RUN apt-get update \
     mysql-client \
     neovim \
     nodejs \
+    npm \
     openssh-client \
     openssl \
     python3-dev \
