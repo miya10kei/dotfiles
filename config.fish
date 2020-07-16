@@ -171,6 +171,12 @@ if type -q kubectl
   alias kube "kubectl"
 end
 
+# Darwin aliases
+if test "$OS" = Darwin
+  alias edge "open -a Microsoft\ Edge"
+  alias excel "open -a Microsoft\ Excel"
+end
+
 
 # Util function
 function decompress -d "Decompress the compressed file."
