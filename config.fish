@@ -137,13 +137,6 @@ if type -q git; and type -q ghq; and type -q peco
   alias delbr "git branch | grep -vE '\*|master|develop' | xargs git branch -D"
 end
 
-
-# IntelliJ IDEA
-function idea -d "start IntelliJ IDEA"
-  idea.sh $argv > /var/log/idea.log 2>&1 &
-end
-
-
 # Alias
 alias rm "rm -i"
 alias mv "mv -i"
