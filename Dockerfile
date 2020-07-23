@@ -122,15 +122,15 @@ RUN apt-get update \
     kubectl \
     less \
     libaio1 \
-    libfontconfig1 \
-    libfreetype6-dev \
-    libgtk2.0-0 \
+    # libfontconfig1 \
+    # libfreetype6-dev \
+    # libgtk2.0-0 \
     libnuma1 \
-    libxext-dev \
-    libxrender-dev \
-    libxslt1.1 \
-    libxtst-dev \
-    libxxf86vm1 \
+    # libxext-dev \
+    # libxrender-dev \
+    # libxslt1.1 \
+    # libxtst-dev \
+    # libxxf86vm1 \
     locales \
     lsof \
     make \
@@ -163,14 +163,15 @@ ENV DOTFILES      $HOME/.dotfiles
 ENV GOROOT        /usr/lib/go
 ENV GOPATH        $HOME/go
 ENV GRAAL_HOME    /usr/lib/graalvm
-ENV IDEA_HOME     /usr/lib/idea
+#ENV IDEA_HOME     /usr/lib/idea
 ENV JAVA_ROOT     /usr/lib/jvm
 ENV JAVA_HOME     $JAVA_ROOT/openjdk-11
-ENV IDEA_JDK      $JAVA_ROOT/openjdk-11
+#ENV IDEA_JDK      $JAVA_ROOT/openjdk-11
 ENV MAVEN_HOME    /usr/lib/maven
 ENV NVIM_HOME     $HOME/.config/nvim
 ENV PACK_HOME     /usr/lib/pack
-ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$PACK_HOME/bin:
+#ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$IDEA_HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$PACK_HOME/bin:
+ENV PATH          $PATH:$DOCKER_HOME/bin:$GOROOT/bin:$GOPATH/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin:$GRAAL_HOME/bin:$PACK_HOME/bin:
 
 COPY --from=java-8  /out        $JAVA_ROOT/openjdk-8
 COPY --from=java-11 /out        $JAVA_ROOT/openjdk-11
@@ -192,15 +193,15 @@ RUN ["/bin/bash", "-c", "\
 WORKDIR /tmp
 
 # IntelliJ IDEA
-ARG IDEA_VERSION=2020.1.3
-ARG IDEA_BUILD=201.8538.31
+# ARG IDEA_VERSION=2020.1.3
+# ARG IDEA_BUILD=201.8538.31
 
-RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.tar.gz -O idea.tar.gz \
-    && rm -rf $HOME/.wget-hsts \
-    && mkdir -p idea \
-    && tar -zxf idea.tar.gz -C idea --strip-components 1 \
-    && mv idea /usr/lib/ \
-    && rm -rf idea.tar.gz
+# RUN wget -q https://download.jetbrains.com/idea/ideaIU-${IDEA_VERSION}-no-jbr.tar.gz -O idea.tar.gz \
+#     && rm -rf $HOME/.wget-hsts \
+#     && mkdir -p idea \
+#     && tar -zxf idea.tar.gz -C idea --strip-components 1 \
+#     && mv idea /usr/lib/ \
+#     && rm -rf idea.tar.gz
 
 # powerline fonts
 RUN ["/bin/bash", "-c", "\

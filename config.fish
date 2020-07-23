@@ -14,6 +14,10 @@ else if test "$OS" = Linux
   end
 end
 
+# java
+if type -q java
+  set -x JAVA_HOME (dirname (dirname (readlink -f (which java))))
+end
 
 # fish
 set -g $fish_emoji_width 2
