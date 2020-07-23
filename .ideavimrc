@@ -16,6 +16,7 @@ set clipboard=unnamed
 " --- TODO
 set showmatch
 set matchtime=1
+set visualbell
 
 
 " -----------------------
@@ -71,3 +72,4 @@ nnoremap <silent> gr :<C-u>action CallHierarchy<CR>
 nnoremap <silent> <C-w>\| :<C-u>action SplitVertically<CR>
 nnoremap <silent> <C-w>\- :<C-u>action SplitHorizontally<CR>
 nnoremap <silent> <C-e> :<C-u>action RecentFiles<CR>
+set clipboard+=ideaput

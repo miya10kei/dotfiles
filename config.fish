@@ -167,6 +167,9 @@ end
 if type -q kubectl
   alias kube "kubectl"
 end
+if type -q intellij-idea-ultimate
+  alias idea "intellij-idea-ultimate"
+end
 
 # Darwin aliases
 if test "$OS" = Darwin

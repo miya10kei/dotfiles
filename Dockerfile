@@ -48,10 +48,10 @@ RUN mkdir -p /out
 RUN cp /usr/local/bin/* /out
 
 
-FROM oracle/graalvm-ce:20.0.0-java11 AS graal
+FROM oracle/graalvm-ce:20.1.0-java11 AS graal
 RUN gu install native-image
 RUN mkdir -p /out
-RUN cp -r /opt/graalvm-ce-java11-20.0.0/* /out
+RUN cp -r /opt/graalvm-ce-java11-20.1.0/* /out
 
 
 FROM alpine:edge AS packer
