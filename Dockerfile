@@ -76,7 +76,7 @@ RUN upx --lzma --best /out/go/go/*
 RUN upx --lzma --best /out/go/pkg/*
 
 COPY --from=graal /out /out/graal
-RUN upx --lzma --best /out/graal/bin/polyglot
+#RUN upx --lzma --best /out/graal/bin/polyglot
 RUN upx --lzma --best /out/graal/bin/unpack200
 RUN upx --lzma --best /out/graal/languages/js/bin/js
 RUN upx --lzma --best /out/graal/languages/js/bin/node
@@ -125,6 +125,7 @@ RUN apt-get update \
     libfontconfig1 \
     libfreetype6-dev \
     libgtk2.0-0 \
+    libnss3-dev \
     libnuma1 \
     libxext-dev \
     libxrender-dev \

@@ -58,23 +58,19 @@ end
 # docker
 if type -q docker
   set image_name "miya10kei/devenv"
-  set container_name "miya10kei-devenv"
+  set -x container_name "miya10kei-devenv"
   set tag "latest"
   function rundev -d "Run docker container of dev..."
     set -l opts "\
               --cap-add=ALL \
               --name $container_name \
               --privileged=true \
-              -v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
               -v $HOME/.cf:/root/.cf \
-              -v $HOME/.config/JetBrains:/root/.config/JetBrains \
               -v $HOME/.dotfiles:/root/.dotfiles \
               -v $HOME/.gradle:/root/.gradle \
               -v $HOME/.sbt:/root/.sbt \
               -v $HOME/.java:/root/.java \
               -v $HOME/.kube:/root/.kube \
-              -v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
-              -v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
               -v $HOME/.m2:/root/.m2 \
               -v $HOME/.ssh:/tmp/.ssh \
               -v $HOME/Documents:/root/Documents \
@@ -84,15 +80,27 @@ if type -q docker
               -e DISPLAY=$IP:0 \
               -e HOST_OS=$OS \
               -p 8000-8100:8000-8100 \
-              -v /tmp/.X11-unix/:/tmp/.X11-unix \
               $argv"
+
+              #-v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
+              #-v $HOME/.config/JetBrains:/root/.config/JetBrains \
+              #-v $HOME/.Xauthority:/root/.Xauthority \
+              #-v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
+              #-v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
+              #-v /tmp/.X11-unix/:/tmp/.X11-unix \
     set -l cmd "docker run -dit $opts $image_name:$tag"
     echo $cmd | sed "s/ \{2,\}/ /g"
     eval $cmd
   end
+  function attachdev
+      if string match -qr "/dev/work|/dev/private" $PWD
+        docker exec -it -w (string replace $HOME "/root" $PWD) $container_name /usr/bin/fish
+      else
+        docker exec -it $container_name /usr/bin/fish
+      end
+  end
   alias startdev "docker start $container_name"
   alias stopdev "docker stop $container_name; docker rm $container_name"
-  alias attachdev "docker exec -it $container_name /usr/bin/fish"
   alias rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
   alias editdev "vim ~/.dotfiles/Dockerfile"
   alias dk "docker"
@@ -162,8 +170,9 @@ else
   alias lla "ll -a"
 end
 alias q "exit"
-alias wklog "vim ~/Documents/memo/2020-03-09-work-log.md"
-alias cdot "cd ~/.dotfiles"
+alias cdot  "cd $HOME/.dotfiles"
+alias cdevw "cd $HOME/dev/work"
+alias cdevp "cd $HOME/dev/private"
 if type -q xsel
   alias xsel "xsel -b"
 end
