@@ -140,14 +140,11 @@ create-sshkey:
 .PHONY: create-dir
 create-dir:
 	mkdir -p \
-		$(HOME)/.cache/JetBrains \
 		$(HOME)/.cf \
-		$(HOME)/.config/JetBrains \
 		$(HOME)/.dotfiles \
 		$(HOME)/.gradle \
 		$(HOME)/.java \
 		$(HOME)/.kube \
-		$(HOME)/.local/share/JetBrains \
 		$(HOME)/.m2 \
 		$(HOME)/.sbt \
 		$(HOME)/dev
