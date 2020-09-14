@@ -3,20 +3,22 @@ set -x OS (uname -s)
 # OS dependency
 if test "$OS" = Darwin
   set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
+  set -x JAVA_HOME /Library/Java/JavaVirtualMachines/liberica-jdk-11.jdk/Contents/Home
 else if test "$OS" = Linux
   set -l RELEASE (uname -r | string match -ir microsoft)
   if test -z "$HOST_OS" -a "$RELEASE" = microsoft
     set -x OS wsl
     set -x IP (ip route | head -n1 | awk '{print $3}')
-    set -x JAVA_HOME /Library/Java/JavaVirtualMachines/liberica-jdk-11.jdk/Contents/Home
   else if test "$HOST_OS" = Darwin
     set -x TERM screen-256color
   end
 end
 
-# java
-if type -q java
-  set -x JAVA_HOME (dirname (dirname (readlink -f (which java))))
+# Darwin aliases
+if test "$OS" = Darwin
+  alias edge "open -a Microsoft\ Edge"
+  alias excel "open -a Microsoft\ Excel"
+  alias readlink "greadlink"
 end
 
 # fish
@@ -34,12 +36,6 @@ set -g theme_show_exit_status yes
 if test -z $SSH_AGENT_PID
   eval (ssh-agent -c) > /dev/null
   ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
-end
-
-
-# X Window System
-if type -q xhost
-  xhost $IP > /dev/null 2>&1
 end
 
 # cf
@@ -83,7 +79,6 @@ if type -q docker
               -v /var/run/docker.sock:/var/run/docker.sock \
               -e DISPLAY=$IP:0 \
               -e HOST_OS=$OS \
-              -p 8000-8100:8000-8100 \
               $argv"
 
               #-v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
@@ -179,11 +174,11 @@ end
 if type -q intellij-idea-ultimate
   alias idea "intellij-idea-ultimate"
 end
-
-# Darwin aliases
-if test "$OS" = Darwin
-  alias edge "open -a Microsoft\ Edge"
-  alias excel "open -a Microsoft\ Excel"
+if type -q nvim
+  alias vim "nvim"
+end
+if type -q mvn
+  alias genmvn "mvn -N io.takari:maven:wrapper"
 end
 
 
