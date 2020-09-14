@@ -100,8 +100,9 @@ RUN apt-get update \
     wget \
     && wget -q -O - "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add - \
     && echo "deb https://dl.bintray.com/sbt/debian /" | tee /etc/apt/sources.list.d/sbt.list \
-    && wget -q -O - "https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key" | apt-key add - \
-    && echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list \
+    # expired GPG key (ref: https://github.com/cloudfoundry/cli/issues/2046)
+    # && wget -q -O - "https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key" | apt-key add - \
+    # && echo "deb https://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list \
     && wget -q -O - "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key add - \
     && echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list \
     && add-apt-repository -y ppa:fish-shell/release-3 \
@@ -109,7 +110,7 @@ RUN apt-get update \
     && apt update \
     && apt-get install -y \
     apt-transport-https \
-    cf-cli \
+    # cf-cli \
     curl \
     dnsutils \
     fish \
@@ -123,15 +124,7 @@ RUN apt-get update \
     less \
     libaio1 \
     libnss3-dev \
-    # libfontconfig1 \
-    # libfreetype6-dev \
-    # libgtk2.0-0 \
     libnuma1 \
-    # libxext-dev \
-    # libxrender-dev \
-    # libxslt1.1 \
-    # libxtst-dev \
-    # libxxf86vm1 \
     locales \
     lsof \
     make \
