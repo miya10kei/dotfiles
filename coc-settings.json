@@ -5,6 +5,16 @@
     "javascript",
     "typescript"
   ],
+  "metals": {
+    "command": "metals-vim",
+    "rootPatterns": [
+      "build.sbt"
+    ],
+    "filetypes": [
+      "scala",
+      "sbt"
+    ]
+  },
   "vetur.format.defaultFormatter.js": "prettier-eslint",
   "yaml.schemas": {
     "kubernetes": "/*.yaml"
