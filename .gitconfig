@@ -35,4 +35,4 @@
 [pager]
   branch = false
 [include]
-  path = .gitconfig_ghq
+  path = ~/.gitconfig_ghq

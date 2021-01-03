@@ -1,9 +1,20 @@
 set -x OS (uname -s)
 
+function addPath -d "Add value into PATH variable"
+  if not contains $argv[1] $PATH
+    set -x PATH $argv[1] $PATH
+  end
+end
+
 # OS dependency
 if test "$OS" = Darwin
   set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
   set -x JAVA_HOME /Library/Java/JavaVirtualMachines/liberica-jdk-11.jdk/Contents/Home
+  set -x GOPATH $HOME/go
+  addPath $GOPATH/bin
+  set -x NODE_HOME $HOME/.nodebrew/current
+  addPath $NODE_HOME/bin
+  addPath /usr/local/opt/mysql-client/bin
 else if test "$OS" = Linux
   set -l RELEASE (uname -r | string match -ir microsoft)
   if test -z "$HOST_OS" -a "$RELEASE" = microsoft
@@ -42,7 +53,7 @@ end
 if type -q cf; and type -q jq; and type -q peco
   function cflogin
     set -l endpoint (cat $HOME/.cf/endpoints.json | jq .[].endpoint | string trim -c "\"" | peco)
-    set -l org (cat .cf/endpoints.json | jq ".[] | select(.endpoint == \"$endpoint\").org")
+    set -l org (cat $HOME/.cf/endpoints.json | jq ".[] | select(.endpoint == \"$endpoint\").org")
     if test !!$endpoint
       set -l passcode  (echo (echo $endpoint | string replace "api" "login")/passcode)
       if type -q xsel
@@ -216,7 +227,6 @@ function loadenv -d "load .env file and run command passed as arguments"
   echo $cmd
   eval $cmd
 end
-
 
 # Key binding
 if type -q peco
