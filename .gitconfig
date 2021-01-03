@@ -6,7 +6,7 @@
   cm = commit
   df = diff
   graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
-  pl = pull
+  pl = pull -p
   ps = push
   st = status
   lg = log --name-status
