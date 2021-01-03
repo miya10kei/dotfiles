@@ -164,6 +164,7 @@ let g:coc_global_extensions = [
       \ 'coc-highlight',
       \ 'coc-html',
       \ 'coc-json',
+      \ 'coc-metals',
       \ 'coc-tsserver',
       \ 'coc-vetur',
       \ 'coc-xml',

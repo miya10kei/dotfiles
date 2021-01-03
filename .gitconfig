@@ -5,11 +5,13 @@
   ch = checkout
   cm = commit
   df = diff
+  fetch = fetch -p
   graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+  lg = log --name-status
   pl = pull -p
   ps = push
+  pull = pull -p
   st = status
-  lg = log --name-status
 [color]
   branch = auto
   diff = auto
@@ -33,4 +35,4 @@
 [pager]
   branch = false
 [include]
-  path = .gitconfig_ghq
+  path = ~/.gitconfig_ghq
