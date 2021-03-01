@@ -62,6 +62,7 @@ nnoremap <silent> zO <Nop>
 " --- bind action
 nnoremap <silent> <C-l> :<C-u>action ReformatCode<CR>
 nnoremap <silent> <C-o> :<C-u>action OptimizeImports<CR>
+nnoremap <silent> <C-d> :<C-u>action QuickJavaDoc<CR>
 nnoremap <silent> <C-w><C-e> :<C-u>action SearchEverywhere<CR>
 nnoremap <silent> <C-w><C-p> :<C-u>action RecentFiles<CR>
 nnoremap <silent> <C-p> :<C-u>action Back<CR>

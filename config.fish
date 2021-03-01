@@ -188,6 +188,9 @@ if type -q intellij-idea-ultimate
 end
 if type -q nvim
   alias vim "nvim"
+  if type -q fzf
+    alias vims "vim (fzf)"
+  end
 end
 if type -q mvn
   alias genmvn "mvn -N io.takari:maven:wrapper"
