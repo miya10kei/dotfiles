@@ -30,6 +30,7 @@ if test "$OS" = Darwin
   alias edge "open -a Microsoft\ Edge"
   alias excel "open -a Microsoft\ Excel"
   alias readlink "greadlink"
+  alias epochtime "date -u +%s"
 end
 
 # fish
