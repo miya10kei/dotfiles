@@ -1,4 +1,9 @@
 set -x OS (uname -s)
+set -x LANG en_US.utf8
+
+#
+set -g theme_date_timezone Asia/Tokyo
+set -g theme_date_format "+%Y-%m-%d% %H:%M:%S(%a)"
 
 function addPath -d "Add value into PATH variable"
   if not contains $argv[1] $PATH
