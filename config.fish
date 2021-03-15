@@ -333,10 +333,10 @@ if type -q git; and type -q ghq; and type -q peco
 
   # completion
   set -l gittCompletion \
-        "complete -f -c gitt -n '__fish_use_subcommand' -a 'cd'       -d 'Change directory of git'" \
-        "complete -f -c gitt -n '__fish_use_subcommand' -a 'checkout' -d 'Checkout branch'" \
-        "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'private' -d 'Change directory of private git'" \
-        "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'work'    -d 'Change directory of work git'"
+        "complete -f -c gitt -n '__fish_use_subcommand'          -a 'cd'       -d 'Change directory of git'" \
+        "complete -f -c gitt -n '__fish_use_subcommand'          -a 'checkout' -d 'Checkout branch'" \
+        "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'private'  -d 'Change directory of private git'" \
+        "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'work'     -d 'Change directory of work git'"
   apply-completion "gitt" $gittCompletion
 end
 
@@ -344,31 +344,31 @@ end
 # --------------------------------------------------
 # alias
 # --------------------------------------------------
-alias-if-needed cdevp "cd $HOME/dev/private"
-alias-if-needed cdevw "cd $HOME/dev/work"
-alias-if-needed cdot  "cd $HOME/.dotfiles"
-alias-if-needed cdr "cd -"
-alias-if-needed epochtime "date -u +%s"
-alias-if-needed fishconf "vim ~/.config/fish/config.fish"
-alias-if-needed fishload "source ~/.config/fish/config.fish"
-alias-if-needed idea "intellij-idea-ultimate" "intellij-idea-ultimate"
-alias-if-needed ll "ls --color -hlF"
-alias-if-needed lla "ls --color -ahlF"
-alias-if-needed ls "ls --color -hF"
-alias-if-needed lsa "ls --color -ahF"
-alias-if-needed mv "mv -i"
+alias-if-needed cdevp      "cd $HOME/dev/private"
+alias-if-needed cdevw      "cd $HOME/dev/work"
+alias-if-needed cdot       "cd $HOME/.dotfiles"
+alias-if-needed cdr        "cd -"
+alias-if-needed epochtime  "date -u +%s"
+alias-if-needed fishconf   "vim ~/.config/fish/config.fish"
+alias-if-needed fishload   "source ~/.config/fish/config.fish"
+alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
+alias-if-needed ll         "ls -hlF"
+alias-if-needed lla        "ls -ahlF"
+alias-if-needed ls         "ls -hF"
+alias-if-needed lsa        "ls -ahF"
+alias-if-needed mv         "mv -i"
 alias-if-needed mvnwrapper "mvn -N io.takari:maven:wrapper" "mvn"
-alias-if-needed q "exit"
-alias-if-needed rm "rm -i"
-alias-if-needed rr "rm -ri"
-alias-if-needed rrf "rm -rf"
-alias-if-needed u "cd ../"
-alias-if-needed uu "cd ../../"
-alias-if-needed uuu "cd ../../../"
-alias-if-needed uuuu "cd ../../../../"
-alias-if-needed vim "nvim" "nvim"
-alias-if-needed vims "vim (fzf)" "nvim" "fzf"
-alias-if-needed xsel "xsel -b" "xsel"
+alias-if-needed q          "exit"
+alias-if-needed rm         "rm -i"
+alias-if-needed rr         "rm -ri"
+alias-if-needed rrf        "rm -rf"
+alias-if-needed u          "cd ../"
+alias-if-needed uu         "cd ../../"
+alias-if-needed uuu        "cd ../../../"
+alias-if-needed uuuu       "cd ../../../../"
+alias-if-needed vim        "nvim"
+alias-if-needed vims       "vim (fzf)"
+alias-if-needed xsel       "xsel -b"
 
 
 # --------------------------------------------------
