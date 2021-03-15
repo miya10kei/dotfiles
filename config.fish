@@ -1,4 +1,10 @@
 # --------------------------------------------------
+# initial
+# --------------------------------------------------
+not status is-interactive; and exit
+
+
+# --------------------------------------------------
 # general
 # --------------------------------------------------
 set -x LANG en_US.utf8
@@ -12,13 +18,26 @@ set -g $fish_emoji_width 2
 
 
 # --------------------------------------------------
+# fisher
+# --------------------------------------------------
+if not type -q fisher
+  echo "🚧 Installing fisher and plugins..."
+  curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher > /dev/null
+  if [ -e $HOME/.config/fish/fishfile ]
+    fisher install < $HOME/.config/fish/fishfile > /dev/null
+  end
+  echo "👍 Complete to install fisher and plugins"
+end
+
+
+# --------------------------------------------------
 # oh-my-fish theme-bobthefish
 # --------------------------------------------------
 set -g theme_color_scheme gruvbox
 set -g theme_date_format "+%Y-%m-%d %H:%M:%S(%a)"
 set -g theme_date_timezone Asia/Tokyo
+set -g theme_display_docker_machine yes
 set -g theme_show_exit_status yes
-
 
 # --------------------------------------------------
 # utility
@@ -157,32 +176,35 @@ end
 if type -q docker
 
   # $set $variableName $image $tag $containerName
-  set baseDev "miya10kei/base-dev" "latest" "base-dev"
-  set k8sDev  "miya10kei/k8s-dev"  "latest" "k8s-dev"
-  set devEnv  "miya10kei/devenv"   "latest" "devenv"
-  set -l targets $baseDev[3] $k8sDev[3] $devEnv[3]
+  set baseDev    "miya10kei/base-dev"    "latest" "base-dev"
+  set k8sDev     "miya10kei/k8s-dev"     "latest" "k8s-dev"
+  set ansibleDev "miya10kei/ansible-dev" "latest" "ansible-dev"
+  set devEnv     "miya10kei/devenv"      "latest" "devenv"
+  set -l targets $baseDev[3] $k8sDev[3] $ansibleDev[3] $devEnv[3]
 
   function ctnr -d "Manipulate container"
 
-    argparse -n ctnr "t/target=" -- $argv
-    or return 1
+    argparse -i -n ctnr "t/target=" -- $argv; or return 1
 
     switch $_flag_target
       case $baseDev[3]
         set image         $baseDev[1]
         set tag           $baseDev[2]
         set containerName $baseDev[3]
-
       case $k8sDev[3]
         set image         $k8sDev[1]
         set tag           $k8sDev[2]
         set containerName $k8sDev[3]
-
+      case $ansibleDev[3]
+        set image         $ansibleDev[1]
+        set tag           $ansibleDev[2]
+        set containerName $ansibleDev[3]
+        set remoteUser    "ansible"
       case $devEnv[3]
         set image         $devEnv[1]
         set tag           $devEnv[2]
         set containerName $devEnv[3]
-        set opts "\
+        set runOpts "\
               --cap-add=ALL \
               --privileged=true \
               -v $HOME/.cf:/root/.cf \
@@ -205,24 +227,40 @@ if type -q docker
               #-v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
               #-v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
               #-v /tmp/.X11-unix/:/tmp/.X11-unix \
-
       case "*"
         echo "🙅 Not support container: $_flag_target"
         return 1
     end
 
+    not set -q remoteUser; and set -l remoteUser $USER
+    set remoteHome "/home/$remoteUser"
     set subCommand $argv[1]
+
     switch $subCommand
       case "run"
-        set opts "--name $containerName \
-                  -e HOST_UID=$uid \
-                  -e HOST_GID=$gid \
-                  -e HOST_USER=$USER \
-                  $opts \
-                  $argv[4..-1]"
-        set cmd "docker run -dit $opts $image:$tag"
+        set -l uid (id -u)
+        set -l gid (id -g)
+        set runOpts "\
+              --name $containerName \
+              -e REMOTE_GID=$gid \
+              -e REMOTE_UID=$uid \
+              -e REMOTE_USER=$remoteUser \
+              -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish:ro \
+              -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
+              -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
+              -v $HOME/.ssh:$remoteHome/.ssh \
+              $runOpts \
+              $argv[2..-1] \
+              "
+        set cmd "docker run -dit $runOpts $image:$tag"
       case "attach"
-        set cmd "docker exec -it $containerName"
+        set attachOpts "\
+              -u $remoteUser \
+              -w $remoteHome \
+              $attachOpts \
+              $argv[2..-1] \
+              "
+        set cmd "docker exec -it $attachOpts $containerName /usr/bin/fish"
       case "start"
         set cmd "docker start $containerName"
       case "stop"
