@@ -8,7 +8,13 @@ not status is-interactive; and exit
 # general
 # --------------------------------------------------
 set -x LANG en_US.utf8
-set -x OS (uname -s)
+set -x OS   (uname -s)
+switch $TERM
+  case "xterm"
+    set -x TERM "xterm-256color"
+  case "screen"
+    set -x TERM "screen-256color"
+end
 
 
 # --------------------------------------------------
@@ -33,11 +39,13 @@ end
 # --------------------------------------------------
 # oh-my-fish theme-bobthefish
 # --------------------------------------------------
-set -g theme_color_scheme gruvbox
-set -g theme_date_format "+%Y-%m-%d %H:%M:%S(%a)"
-set -g theme_date_timezone Asia/Tokyo
+set -g theme_color_scheme           gruvbox
+set -g theme_date_format            "+%Y-%m-%d %H:%M:%S(%a)"
+set -g theme_date_timezone          Asia/Tokyo
 set -g theme_display_docker_machine yes
-set -g theme_show_exit_status yes
+set -g theme_display_user           yes
+set -g theme_show_exit_status       yes
+
 
 # --------------------------------------------------
 # utility
@@ -238,13 +246,26 @@ if type -q docker
 
     switch $subCommand
       case "run"
+        set -l isExist (docker container ls -q -f name="$containerName")
+        if [ -n "$isExist" ]
+          echo "🌀 Recreate $containerName container?: [y/N]";
+          read -l isRecreate
+          if string match -qi -r '^\s*(y|yes)\s*$' "$isRecreate"
+            eval "ctnr stop -t $containerName"
+          else
+            echo "🙅 $containerName contaner already exists..."
+            return
+          end
+        end
         set -l uid (id -u)
         set -l gid (id -g)
         set runOpts "\
               --name $containerName \
+              -e DOCKER_MACHINE_NAME='🐳 $containerName' \
               -e REMOTE_GID=$gid \
               -e REMOTE_UID=$uid \
               -e REMOTE_USER=$remoteUser \
+              -h $containerName \
               -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish:ro \
               -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
               -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
@@ -270,7 +291,7 @@ if type -q docker
         return 1
     end
 
-    echo $cmd | sed "s/ \{2,\}/ /g"
+    set_color green; echo "💲 $cmd" | sed "s/ \{2,\}/ /g"; set_color normal
     eval $cmd
   end
 
@@ -352,10 +373,17 @@ alias-if-needed epochtime  "date -u +%s"
 alias-if-needed fishconf   "vim ~/.config/fish/config.fish"
 alias-if-needed fishload   "source ~/.config/fish/config.fish"
 alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
-alias-if-needed ll         "ls -hlFG"
-alias-if-needed lla        "ls -ahlFG"
-alias-if-needed ls         "ls -hFG"
-alias-if-needed lsa        "ls -ahFG"
+if ls --color > /dev/null
+  alias-if-needed ll       "ls --color -hlFG"
+  alias-if-needed lla      "ls --color -ahlFG"
+  alias-if-needed ls       "ls --color -hFG"
+  alias-if-needed lsa      "ls --color -ahFG"
+else
+  alias-if-needed ll       "ls -hlFG"
+  alias-if-needed lla      "ls -ahlFG"
+  alias-if-needed ls       "ls -hFG"
+  alias-if-needed lsa      "ls -ahFG"
+end
 alias-if-needed mv         "mv -i"
 alias-if-needed mvnwrapper "mvn -N io.takari:maven:wrapper" "mvn"
 alias-if-needed q          "exit"
