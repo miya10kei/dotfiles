@@ -1,14 +1,15 @@
 # --------------------------------------------------
 # initial
 # --------------------------------------------------
-not status is-interactive; and exit
+status is-interactive; or exit
 
 
 # --------------------------------------------------
 # general
 # --------------------------------------------------
-set -x LANG en_US.utf8
-set -x OS   (uname -s)
+set -x LANG  en_US.utf8
+set -x OS    (uname -s)
+set -q SHELL; or set -x SHELL /usr/bin/fish
 switch $TERM
   case "xterm"
     set -x TERM "xterm-256color"
@@ -151,8 +152,11 @@ end
 # ssh agent
 # --------------------------------------------------
 if test -z $SSH_AGENT_PID
-  eval (ssh-agent -c) > /dev/null
-  ssh-add $HOME/.ssh/id_rsa > /dev/null 2>&1
+  exec ssh-agent $SHELL
+end
+
+if not ssh-add -l > /dev/null
+  ssh-add (ls .ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
 end
 
 
@@ -192,7 +196,7 @@ if type -q docker
 
   function ctnr -d "Manipulate container"
 
-    argparse -i -n ctnr "t/target=" -- $argv; or return 1
+    argparse -i -n ctnr "t/target=" "a/attach" "r/recreate" -- $argv; or return 1
 
     switch $_flag_target
       case $baseDev[3]
@@ -208,6 +212,9 @@ if type -q docker
         set tag           $ansibleDev[2]
         set containerName $ansibleDev[3]
         set remoteUser    "ansible"
+        set runOpts "\
+              -v $HOME/.ansible.cfg:/home/$remoteUser/.ansible.cfg \
+              "
       case $devEnv[3]
         set image         $devEnv[1]
         set tag           $devEnv[2]
@@ -240,23 +247,12 @@ if type -q docker
         return 1
     end
 
-    not set -q remoteUser; and set -l remoteUser $USER
+    set -q remoteUser; or set -l remoteUser $USER
     set remoteHome "/home/$remoteUser"
     set subCommand $argv[1]
 
     switch $subCommand
       case "run"
-        set -l isExist (docker container ls -q -f name="$containerName")
-        if [ -n "$isExist" ]
-          echo "🌀 Recreate $containerName container?: [y/N]";
-          read -l isRecreate
-          if string match -qi -r '^\s*(y|yes)\s*$' "$isRecreate"
-            eval "ctnr stop -t $containerName"
-          else
-            echo "🙅 $containerName contaner already exists..."
-            return
-          end
-        end
         set -l uid (id -u)
         set -l gid (id -g)
         set runOpts "\
@@ -270,10 +266,15 @@ if type -q docker
               -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
               -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
               -v $HOME/.ssh:$remoteHome/.ssh \
+              -v $HOME/dev:$remoteHome/dev \
               $runOpts \
               $argv[2..-1] \
               "
-        set cmd "docker run -dit $runOpts $image:$tag"
+        set cmd "docker run -dit $runOpts $image:$tag /usr/bin/bash"
+        test -n "$_flag_recreate"
+          and test (docker container ls -qa -f name="$containerName")
+          and set beforeCmd "ctnr stop -t $containerName"
+        test -n "$_flag_attach"; and set afterCmd "ctnr attach -t $containerName"
       case "attach"
         set attachOpts "\
               -u $remoteUser \
@@ -291,18 +292,22 @@ if type -q docker
         return 1
     end
 
+    test -n $beforeCmd; eval $beforeCmd
     set_color green; echo "💲 $cmd" | sed "s/ \{2,\}/ /g"; set_color normal
     eval $cmd
+    test -n $afterCmd; sleep 0.5; and eval $afterCmd
   end
 
   # completion
   set -l targetAlias (string join ' ' $targets)
   set -l cntrCompletion \
-        "complete -f -c ctnr -n '__fish_use_subcommand' -a 'run'    -d 'Run container'" \
-        "complete -f -c ctnr -n '__fish_use_subcommand' -a 'attach' -d 'Attach to container'" \
-        "complete -f -c ctnr -n '__fish_use_subcommand' -a 'start'  -d 'Start container'" \
-        "complete -f -c ctnr -n '__fish_use_subcommand' -a 'stop'   -d 'Stop and remove container'" \
-        "complete -x -c ctnr -s t -l target -a '$targetAlias' -d 'Target container'"
+    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'run'    -d 'Run container'" \
+    "complete -f -c ctnr -n '__fish_seen_subcommand_from run' -s a -l attach   -d 'execute attach after run'" \
+    "complete -f -c ctnr -n '__fish_seen_subcommand_from run' -s r -l recreate -d 'recreate container if already exists'" \
+    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'attach' -d 'Attach to container'" \
+    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'start'  -d 'Start container'" \
+    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'stop'   -d 'Stop and remove container'" \
+    "complete -x -c ctnr -s t -l target -a '$targetAlias' -d 'Target container'"
   apply-completion "ctnr" $cntrCompletion
 
   alias-if-needed rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
