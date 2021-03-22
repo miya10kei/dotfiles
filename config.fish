@@ -7,9 +7,10 @@ status is-interactive; or exit
 # --------------------------------------------------
 # general
 # --------------------------------------------------
-set -x LANG  en_US.utf8
-set -x OS    (uname -s)
 set -q SHELL; or set -x SHELL /usr/bin/fish
+set -x LANG  en_US.utf8
+set -x NVIM_HOME $HOME/.config/nvim
+set -x OS    (uname -s)
 switch $TERM
   case "xterm"
     set -x TERM "xterm-256color"
@@ -293,9 +294,9 @@ if type -q docker
     end
 
     test -n $beforeCmd; eval $beforeCmd
-    set_color green; echo "💲 $cmd" | sed "s/ \{2,\}/ /g"; set_color normal
+    set_color green && echo "🐟 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
     eval $cmd
-    test -n $afterCmd; sleep 0.5; and eval $afterCmd
+    test -n $afterCmd && sleep 0.5 && eval $afterCmd
   end
 
   # completion
@@ -317,7 +318,6 @@ end
 # --------------------------------------------------
 # git
 # --------------------------------------------------
-#
 if type -q git; and type -q ghq; and type -q peco
 
   alias-if-needed ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
@@ -365,6 +365,34 @@ if type -q git; and type -q ghq; and type -q peco
         "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'work'     -d 'Change directory of work git'"
   apply-completion "gitt" $gittCompletion
 end
+
+
+# --------------------------------------------------
+# package manager
+# --------------------------------------------------
+function package -a subCommand -d "manage package"
+  switch $subCommand
+    case "update"
+      switch $OS
+        case "Darwin"
+          set -a cmds "brew update && brew upgrade"
+        case "Linux"
+          set -a cmds "sudo apt update && sudo apt upgrade && sudo apt autoremove"
+      end
+      set -a cmds "fisher update"
+      set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate + CocUpdateSync +qa"
+    case "*"
+      echo "🙅 Unsupported sub-command: $subCommand"
+      return 1
+  end
+
+  for cmd in $cmds
+    set_color green && echo "🐟 $cmd" && set_color normal
+    eval $cmd
+  end
+end
+set -l packageCompletion "complete -f -c package -n '__fish_use_subcommand' -a 'update' -d 'update some installed package'"
+apply-completion "package" $packageCompletion
 
 
 # --------------------------------------------------

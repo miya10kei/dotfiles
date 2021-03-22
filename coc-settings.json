@@ -1,23 +1,19 @@
 {
   "languageserver": {},
   "eslint.autoFixOnSave": true,
-  "eslint.filetypes": [
-    "javascript",
-    "typescript"
-  ],
-  "metals": {
-    "command": "metals-vim",
-    "rootPatterns": [
-      "build.sbt"
-    ],
-    "filetypes": [
-      "scala",
-      "sbt"
-    ]
-  },
   "vetur.format.defaultFormatter.js": "prettier-eslint",
+  "yaml.completion": true,
+  "yaml.customTags": [],
+  "yaml.format.bracketSpacing": true,
+  "yaml.format.enable": true,
+  "yaml.format.proseWrap": "preserve",
+  "yaml.format.singleQuote": false,
+  "yaml.hover": true,
+  "yaml.schemaStore.enable": true,
   "yaml.schemas": {
+    "https://json.schemastore.org/ansible-inventory": "/*inventory*.yaml",
+    "https://json.schemastore.org/ansible-playbook": "/*playbook*.yaml",
     "kubernetes": "/*.yaml"
   },
-  "yank.highlight.duration": 400
+  "yaml.validate": true
 }

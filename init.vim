@@ -162,6 +162,7 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-highlight',
+      \ 'coc-fish',
       \ 'coc-html',
       \ 'coc-json',
       \ 'coc-metals',
