@@ -160,9 +160,10 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 " let g:coc_node_path = expand('$GRAAL_HOME') . '/bin/node'
 " extentions
 let g:coc_global_extensions = [
+      \ 'coc-docker',
       \ 'coc-eslint',
-      \ 'coc-highlight',
       \ 'coc-fish',
+      \ 'coc-highlight',
       \ 'coc-html',
       \ 'coc-json',
       \ 'coc-metals',
