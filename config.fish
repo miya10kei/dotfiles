@@ -102,10 +102,19 @@ function apply-completion -a commandName -d 'Apply command completion'
   echo -e $content > $HOME/.config/fish/completions/$commandName.fish
 end
 
-function addPath -a additionPath -d "Add new path into PATH variable"
-  if not contains $additionPath $PATH
-    set -x PATH $additionPath $PATH
+function addPath -a target -d "Add new path into PATH variable"
+  if test -e $target; and not contains $target $PATH
+    set -x PATH $target $PATH
   end
+end
+
+function removePath -a target -d "Remove path from PATH variable"
+  for p in $PATH
+    if test "$p" != "$target"
+      set newPath $newPath $p
+    end
+  end
+  set -x PATH $newPath
 end
 
 
@@ -131,8 +140,6 @@ switch $OS
     alias-if-needed readlink "greadlink"
 
   case "Linux"
-    # java
-    set -x JAVA_HOME "/usr/lib/jvm/bellsoft-java11-amd64"
     # golang
     set -x GO_HOME "/usr/local/go"
     addPath "$GO_HOME/bin"
@@ -366,6 +373,52 @@ if type -q git; and type -q ghq; and type -q peco
   apply-completion "gitt" $gittCompletion
 end
 
+# --------------------------------------------------
+# language configuration
+# --------------------------------------------------
+# java
+# --------------------------------------------------
+function jenv -a subCommand
+  argparse -i -n jenv "q/quit" -- $argv; or return 1
+
+  switch $OS
+    case "Darwin"
+    case "Linux"
+      set jvmDir /usr/lib/jvm/*
+  end
+
+  switch $subCommand
+    case "current"
+      $JAVA_HOME/bin/java --version
+    case "latest" "set"
+      if [ $subCommand = "latest" ]
+        set newJavaHome (ls -f1d $jvmDir | tail -1 | string trim -r -c "/")
+      else
+        set newJavaHome (ls -fd $jvmDir | string trim -r -c "/" | peco)
+      end
+      if [ -n "$newJavaHome" ]
+        removePath $JAVA_HOME/bin
+        set -x JAVA_HOME "$newJavaHome"
+        addPath $JAVA_HOME/bin
+        if test -z "$_flag_quit"
+          set_color green && echo "☕ Applied: $JAVA_HOME" && set_color normal
+        end
+      end
+    case "*"
+      echo "🙅 Unsupported sub-command: $subCommand"
+      return 1
+  end
+end
+set -l jenvCompletion \
+      "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
+      "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
+      "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
+      "complete -f -c jenv -n '__fish_seen_subcommand_from latest' -s q -l quit -d 'Not display message'" \
+      "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
+apply-completion "jenv" $jenvCompletion
+
+jenv latest -q
+
 
 # --------------------------------------------------
 # package manager
@@ -380,7 +433,7 @@ function package -a subCommand -d "manage package"
           set -a cmds "sudo apt update && sudo apt upgrade && sudo apt autoremove"
       end
       set -a cmds "fisher update"
-      set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate + CocUpdateSync +qa"
+      set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate +CocUpdateSync +qa"
     case "*"
       echo "🙅 Unsupported sub-command: $subCommand"
       return 1
