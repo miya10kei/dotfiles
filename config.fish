@@ -459,7 +459,7 @@ alias-if-needed epochtime  "date -u +%s"
 alias-if-needed fishconf   "vim ~/.config/fish/config.fish"
 alias-if-needed fishload   "source ~/.config/fish/config.fish"
 alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
-if ls --color > /dev/null
+if ls --color > /dev/null 2>&1
   alias-if-needed ll       "ls --color -hlFG"
   alias-if-needed lla      "ls --color -ahlFG"
   alias-if-needed ls       "ls --color -hFG"
