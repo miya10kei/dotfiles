@@ -17,6 +17,7 @@ RUN apt-get update \
           git \
           gnupg2 \
           gosu \
+          jq \
           less \
           locales \
           neovim \
