@@ -28,6 +28,8 @@
   path = ~/.gitconfig_work
 [includeIf "gitdir:~/dev/private/"]
   path = ~/.gitconfig_private
+[includeIf "gitdir:~/.password-store/"]
+  path = ~/.gitconfig_private
 [includeIf "gitdir:~/.dotfiles/"]
   path = ~/.gitconfig_private
 [commit]
