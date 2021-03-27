@@ -199,8 +199,9 @@ if type -q docker
   set baseDev    "miya10kei/base-dev"    "latest" "base-dev"
   set k8sDev     "miya10kei/k8s-dev"     "latest" "k8s-dev"
   set ansibleDev "miya10kei/ansible-dev" "latest" "ansible-dev"
+  set vaultDev   "miya10kei/vault-dev"   "latest" "vault-dev"
   set devEnv     "miya10kei/devenv"      "latest" "devenv"
-  set -l targets $baseDev[3] $k8sDev[3] $ansibleDev[3] $devEnv[3]
+  set -l targets $baseDev[3] $k8sDev[3] $ansibleDev[3] $vaultDev[3] $devEnv[3]
 
   function ctnr -d "Manipulate container"
 
@@ -220,36 +221,45 @@ if type -q docker
         set tag           $ansibleDev[2]
         set containerName $ansibleDev[3]
         set remoteUser    "ansible"
-        set runOpts "\
-              -v $HOME/.ansible.cfg:/home/$remoteUser/.ansible.cfg \
-              "
+        set runOpts       "\
+                            -v $HOME/.ansible.cfg:/home/$remoteUser/.ansible.cfg \
+                          "
+      case $vaultDev[3]
+        set image         $vaultDev[1]
+        set tag           $vaultDev[2]
+        set containerName $vaultDev[3]
+        set runOpts       "\
+                            --cap-add=IPC_LOCK \
+                            -e VAULT_ADDR=http://vault1:8200 \
+                          "
       case $devEnv[3]
         set image         $devEnv[1]
         set tag           $devEnv[2]
         set containerName $devEnv[3]
-        set runOpts "\
-              --cap-add=ALL \
-              --privileged=true \
-              -v $HOME/.cf:/root/.cf \
-              -v $HOME/.dotfiles:/root/.dotfiles \
-              -v $HOME/.gradle:/root/.gradle \
-              -v $HOME/.sbt:/root/.sbt \
-              -v $HOME/.java:/root/.java \
-              -v $HOME/.kube:/root/.kube \
-              -v $HOME/.m2:/root/.m2 \
-              -v $HOME/.ssh:/tmp/.ssh \
-              -v $HOME/Documents:/root/Documents \
-              -v $HOME/Downloads:/root/Downloads \
-              -v $HOME/dev:/root/dev \
-              -v /var/run/docker.sock:/var/run/docker.sock \
-              -e DISPLAY=$IP:0 \
-              -e HOST_OS=$OS"
-              #-v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
-              #-v $HOME/.config/JetBrains:/root/.config/JetBrains \
-              #-v $HOME/.Xauthority:/root/.Xauthority \
-              #-v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
-              #-v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
-              #-v /tmp/.X11-unix/:/tmp/.X11-unix \
+        set runOpts       "\
+                            --cap-add=ALL \
+                            --privileged=true \
+                            -v $HOME/.cf:/root/.cf \
+                            -v $HOME/.dotfiles:/root/.dotfiles \
+                            -v $HOME/.gradle:/root/.gradle \
+                            -v $HOME/.sbt:/root/.sbt \
+                            -v $HOME/.java:/root/.java \
+                            -v $HOME/.kube:/root/.kube \
+                            -v $HOME/.m2:/root/.m2 \
+                            -v $HOME/.ssh:/tmp/.ssh \
+                            -v $HOME/Documents:/root/Documents \
+                            -v $HOME/Downloads:/root/Downloads \
+                            -v $HOME/dev:/root/dev \
+                            -v /var/run/docker.sock:/var/run/docker.sock \
+                            -e DISPLAY=$IP:0 \
+                            -e HOST_OS=$OS
+                          "
+                            #-v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
+                            #-v $HOME/.config/JetBrains:/root/.config/JetBrains \
+                            #-v $HOME/.Xauthority:/root/.Xauthority \
+                            #-v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
+                            #-v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
+                            #-v /tmp/.X11-unix/:/tmp/.X11-unix \
       case "*"
         echo "🙅 Not support container: $_flag_target"
         return 1
@@ -261,35 +271,35 @@ if type -q docker
 
     switch $subCommand
       case "run"
-        set -l uid (id -u)
-        set -l gid (id -g)
+        set -l uid  (id -u)
+        set -l gid  (id -g)
         set runOpts "\
-              --name $containerName \
-              -e DOCKER_MACHINE_NAME='🐳 $containerName' \
-              -e REMOTE_GID=$gid \
-              -e REMOTE_UID=$uid \
-              -e REMOTE_USER=$remoteUser \
-              -h $containerName \
-              -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish:ro \
-              -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
-              -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
-              -v $HOME/.ssh:$remoteHome/.ssh \
-              -v $HOME/dev:$remoteHome/dev \
-              $runOpts \
-              $argv[2..-1] \
-              "
-        set cmd "docker run -dit $runOpts $image:$tag /usr/bin/bash"
+                      --name $containerName \
+                      -e DOCKER_MACHINE_NAME='🐳 $containerName' \
+                      -e REMOTE_GID=$gid \
+                      -e REMOTE_UID=$uid \
+                      -e REMOTE_USER=$remoteUser \
+                      -h $containerName \
+                      -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish:ro \
+                      -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
+                      -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
+                      -v $HOME/.ssh:$remoteHome/.ssh \
+                      -v $HOME/dev:$remoteHome/dev \
+                      $runOpts \
+                      $argv[2..-1] \
+                    "
+        set cmd     "docker run -dit $runOpts $image:$tag /usr/bin/bash"
         test -n "$_flag_recreate"
           and test (docker container ls -qa -f name="$containerName")
           and set beforeCmd "ctnr stop -t $containerName"
         test -n "$_flag_attach"; and set afterCmd "ctnr attach -t $containerName"
       case "attach"
         set attachOpts "\
-              -u $remoteUser \
-              -w $remoteHome \
-              $attachOpts \
-              $argv[2..-1] \
-              "
+                         -u $remoteUser \
+                         -w $remoteHome \
+                         $attachOpts \
+                         $argv[2..-1] \
+                       "
         set cmd "docker exec -it $attachOpts $containerName /usr/bin/fish"
       case "start"
         set cmd "docker start $containerName"
@@ -456,8 +466,8 @@ alias-if-needed cdevw      "cd $HOME/dev/work"
 alias-if-needed cdot       "cd $HOME/.dotfiles"
 alias-if-needed cdr        "cd -"
 alias-if-needed epochtime  "date -u +%s"
-alias-if-needed fishconf   "vim ~/.config/fish/config.fish"
-alias-if-needed fishload   "source ~/.config/fish/config.fish"
+alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
+alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
 alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
 if ls --color > /dev/null 2>&1
   alias-if-needed ll       "ls --color -hlFG"
@@ -476,6 +486,7 @@ alias-if-needed q          "exit"
 alias-if-needed rm         "rm -i"
 alias-if-needed rr         "rm -ri"
 alias-if-needed rrf        "rm -rf"
+alias-if-needed tmuxconf   "vim $HOME/.tmux.conf"
 alias-if-needed u          "cd ../"
 alias-if-needed uu         "cd ../../"
 alias-if-needed uuu        "cd ../../../"
