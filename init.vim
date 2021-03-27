@@ -462,7 +462,7 @@ filetype plugin indent on
 " --- auto command ---
 " ---------------------
 autocmd BufWritePre * :%s/\s\+$//ge
-autocmd FileType vue syntax sync fromstart
+autocmd FileType * syntax sync fromstart
 " ------------------
 " --- auto group ---
 " ------------------
