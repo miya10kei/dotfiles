@@ -8,7 +8,7 @@ status is-interactive; or exit
 # general
 # --------------------------------------------------
 set -q SHELL; or set -x SHELL /usr/bin/fish
-set -x LANG  en_US.utf8
+set -x LANG ja_JP.UTF-8
 set -x NVIM_HOME $HOME/.config/nvim
 set -x OS    (uname -s)
 switch $TERM
@@ -124,11 +124,6 @@ end
 switch $OS
   case "Darwin"
     set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
-    # java
-    set -x JAVA_HOME /Library/Java/JavaVirtualMachines/liberica-jdk-11.jdk/Contents/Home
-    # golang
-    set -x GOPATH $HOME/go
-    addPath $GOPATH/bin
     # nodejs
     set -x NODE_HOME $HOME/.nodebrew/current
     addPath $NODE_HOME/bin
@@ -138,14 +133,7 @@ switch $OS
     alias-if-needed edge "open -a Microsoft\ Edge"
     alias-if-needed excel "open -a Microsoft\ Excel"
     alias-if-needed readlink "greadlink"
-
   case "Linux"
-    # golang
-    set -x GO_HOME "/usr/local/go"
-    addPath "$GO_HOME/bin"
-    set -x GOPATH "$HOME/go"
-    addPath "$GOPATH/bin"
-
     set -l RELEASE (uname -r | string match -ir microsoft)
     if test -z "$HOST_OS" -a "$RELEASE" = microsoft
       set -x OS wsl
@@ -393,6 +381,7 @@ function jenv -a subCommand
 
   switch $OS
     case "Darwin"
+      set jvmDir /Library/Java/JavaVirtualMachines/*
     case "Linux"
       set jvmDir /usr/lib/jvm/*
   end
@@ -407,6 +396,7 @@ function jenv -a subCommand
         set newJavaHome (ls -fd $jvmDir | string trim -r -c "/" | peco)
       end
       if [ -n "$newJavaHome" ]
+        test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
         removePath $JAVA_HOME/bin
         set -x JAVA_HOME "$newJavaHome"
         addPath $JAVA_HOME/bin
@@ -428,6 +418,21 @@ set -l jenvCompletion \
 apply-completion "jenv" $jenvCompletion
 
 jenv latest -q
+
+
+# --------------------------------------------------
+# golang
+# --------------------------------------------------
+switch $OS
+  case "Darwin"
+    set -x GOPATH $HOME/go
+    addPath $GOPATH/bin
+  case "Linux"
+    set -x GO_HOME "/usr/local/go"
+    addPath "$GO_HOME/bin"
+    set -x GOPATH "$HOME/go"
+    addPath "$GOPATH/bin"
+end
 
 
 # --------------------------------------------------
