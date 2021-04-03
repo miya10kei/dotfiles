@@ -27,7 +27,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'posva/vim-vue'
 Plug 'cohama/lexima.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'https://github.com/nicwest/vim-camelsnek.git'
 Plug 'tmux-plugins/vim-tmux'

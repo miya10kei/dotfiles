@@ -444,7 +444,7 @@ end
 if type -q node; and type -q npm
   set -x NODE_MODULE $HOME/node_modules
   addPath $NODE_MODULE/.bin
-  set -a backgroundCmds "pushd $HOME \
+  set -ag backgroundCmds "pushd $HOME \
                           && npm install --global-style \
                                          --ignore-scripts \
                                          --no-package-lock \
@@ -459,9 +459,9 @@ end
 # neovim
 # --------------------------------------------------
 if type -q nvim
-  set -x NVIM_HOME      $HOME/.config/nvim
-  set -a backgroundCmds "nvim --headless +PlugInstall +qa > /dev/null"
-  set -a backgroundCmds "pushd $HOME/.config/coc/extensions \
+  set -x  NVIM_HOME      $HOME/.config/nvim
+  set -ag backgroundCmds "nvim --headless +PlugInstall +qa > /dev/null 2>&1"
+  set -ag backgroundCmds "pushd $HOME/.config/coc/extensions \
                           && npm install --global-style \
                                          --ignore-scripts \
                                          --loglevel=error \
@@ -536,7 +536,6 @@ alias-if-needed uu         "cd ../../"
 alias-if-needed uuu        "cd ../../../"
 alias-if-needed uuuu       "cd ../../../../"
 alias-if-needed vim        "nvim"
-alias-if-needed vims       "vim (fzf)"
 alias-if-needed xsel       "xsel -b"
 
 
@@ -548,10 +547,9 @@ if not test -e $HOME/.lastinstalled
 
   for cmd in $backgroundCmds
     set_color green && echo "🐡 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
-    eval "fish -c '$cmd > /dev/null' &"
+    fish -c "$cmd" &
   end
 end
-
 
 # --------------------------------------------------
 # key binding
