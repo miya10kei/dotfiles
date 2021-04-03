@@ -9,7 +9,6 @@ status is-interactive; or exit
 # --------------------------------------------------
 set -q SHELL; or set -x SHELL /usr/bin/fish
 set -x LANG ja_JP.UTF-8
-set -x NVIM_HOME $HOME/.config/nvim
 set -x OS    (uname -s)
 switch $TERM
   case "xterm"
@@ -103,7 +102,7 @@ function apply-completion -a commandName -d 'Apply command completion'
 end
 
 function addPath -a target -d "Add new path into PATH variable"
-  if test -e $target; and not contains $target $PATH
+  if not contains $target $PATH
     set -x PATH $target $PATH
   end
 end
@@ -152,7 +151,7 @@ if test -z $SSH_AGENT_PID
 end
 
 if not ssh-add -l > /dev/null
-  ssh-add (ls .ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
+  ssh-add (ls $HOME/.ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
 end
 
 
@@ -160,7 +159,6 @@ end
 # cf
 # --------------------------------------------------
 if type -q cf; and type -q jq; and type -q peco
-
   function cflogin
     set -l endpoint (cat $HOME/.cf/endpoints.json | jq .[].endpoint | string trim -c "\"" | peco)
     set -l org (cat $HOME/.cf/endpoints.json | jq ".[] | select(.endpoint == \"$endpoint\").org")
@@ -174,7 +172,6 @@ if type -q cf; and type -q jq; and type -q peco
       cf login -a $endpoint --sso --skip-ssl-validation -o $org
     end
   end
-
 end
 
 
@@ -183,12 +180,12 @@ end
 # --------------------------------------------------
 if type -q docker
 
-  # $set $variableName $image $tag $containerName
-  set baseDev    "miya10kei/base-dev"    "latest" "base-dev"
-  set k8sDev     "miya10kei/k8s-dev"     "latest" "k8s-dev"
-  set ansibleDev "miya10kei/ansible-dev" "latest" "ansible-dev"
-  set vaultDev   "miya10kei/vault-dev"   "latest" "vault-dev"
-  set devEnv     "miya10kei/devenv"      "latest" "devenv"
+  #   $variableName $image                  $tag     $containerName
+  set baseDev       "miya10kei/base-dev"    "latest" "base-dev"
+  set k8sDev        "miya10kei/k8s-dev"     "latest" "k8s-dev"
+  set ansibleDev    "miya10kei/ansible-dev" "latest" "ansible-dev"
+  set vaultDev      "miya10kei/vault-dev"   "latest" "vault-dev"
+  set devEnv        "miya10kei/devenv"      "latest" "devenv"
   set -l targets $baseDev[3] $k8sDev[3] $ansibleDev[3] $vaultDev[3] $devEnv[3]
 
   function ctnr -d "Manipulate container"
@@ -268,13 +265,16 @@ if type -q docker
                       -e REMOTE_UID=$uid \
                       -e REMOTE_USER=$remoteUser \
                       -h $containerName \
-                      -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish:ro \
-                      -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
+                      -v $HOME/.config/coc/extensions/package.json:$remoteHome/.config/coc/extensions/package.json \
+                      -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish \
+                      -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile \
                       -v $HOME/.config/nvim/coc-settings.json:$remoteHome/.config/nvim/coc-settings.json \
                       -v $HOME/.config/nvim/init.vim:$remoteHome/.config/nvim/init.vim \
                       -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
+                      -v $HOME/.npmrc:$remoteHome/.npmrc \
                       -v $HOME/.ssh:$remoteHome/.ssh \
                       -v $HOME/dev:$remoteHome/dev \
+                      -v $HOME/package.json:$remoteHome/package.json \
                       $runOpts \
                       $argv[2..-1] \
                     "
@@ -373,54 +373,56 @@ if type -q git; and type -q ghq; and type -q peco
   apply-completion "gitt" $gittCompletion
 end
 
+
 # --------------------------------------------------
 # language configuration
 # --------------------------------------------------
 # java
 # --------------------------------------------------
-function jenv -a subCommand
-  argparse -i -n jenv "q/quit" -- $argv; or return 1
-
-  switch $OS
-    case "Darwin"
-      set jvmDir /Library/Java/JavaVirtualMachines/*
-    case "Linux"
-      set jvmDir /usr/lib/jvm/*
-  end
-
-  switch $subCommand
-    case "current"
-      $JAVA_HOME/bin/java --version
-    case "latest" "set"
-      if [ $subCommand = "latest" ]
-        set newJavaHome (ls -f1d $jvmDir | tail -1 | string trim -r -c "/")
-      else
-        set newJavaHome (ls -fd $jvmDir | string trim -r -c "/" | peco)
-      end
-      if [ -n "$newJavaHome" ]
-        test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
-        removePath $JAVA_HOME/bin
-        set -x JAVA_HOME "$newJavaHome"
-        addPath $JAVA_HOME/bin
-        if test -z "$_flag_quit"
-          set_color green && echo "☕ Applied: $JAVA_HOME" && set_color normal
-        end
-      end
-    case "*"
-      echo "🙅 Unsupported sub-command: $subCommand"
-      return 1
-  end
+switch $OS
+  case "Darwin"
+    set jvmDir /Library/Java/JavaVirtualMachines
+  case "Linux"
+    set jvmDir /usr/lib/jvm
 end
-set -l jenvCompletion \
-      "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
-      "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
-      "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
-      "complete -f -c jenv -n '__fish_seen_subcommand_from latest' -s q -l quit -d 'Not display message'" \
-      "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
-apply-completion "jenv" $jenvCompletion
 
-jenv latest -q
+if test -e $jvmDir
+  function jenv -a subCommand
+    argparse -i -n jenv "q/quit" -- $argv; or return 1
 
+    switch $subCommand
+      case "current"
+        $JAVA_HOME/bin/java --version
+      case "latest" "set"
+        if [ $subCommand = "latest" ]
+          set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
+        else
+          set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
+        end
+        if [ -n "$newJavaHome" ]
+          test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
+          removePath $JAVA_HOME/bin
+          set -xg JAVA_HOME "$newJavaHome"
+          addPath $JAVA_HOME/bin
+          if test -z "$_flag_quit"
+            set_color green && echo "☕ Applied: $JAVA_HOME" && set_color normal
+          end
+        end
+      case "*"
+        echo "🙅 Unsupported sub-command: $subCommand"
+        return 1
+    end
+  end
+  set -l jenvCompletion \
+        "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
+        "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
+        "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
+        "complete -f -c jenv -n '__fish_seen_subcommand_from latest' -s q -l quit -d 'Not display message'" \
+        "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
+  apply-completion "jenv" $jenvCompletion
+
+  jenv latest -q
+end
 # --------------------------------------------------
 # golang
 # --------------------------------------------------
@@ -429,10 +431,12 @@ switch $OS
     set -x GOPATH $HOME/go
     addPath $GOPATH/bin
   case "Linux"
-    set -x GO_HOME "/usr/local/go"
-    addPath "$GO_HOME/bin"
-    set -x GOPATH "$HOME/go"
-    addPath "$GOPATH/bin"
+    if test -e /usr/local/go
+      set -x GO_HOME "/usr/local/go"
+      addPath "$GO_HOME/bin"
+      set -x GOPATH "$HOME/go"
+      addPath "$GOPATH/bin"
+    end
 end
 # --------------------------------------------------
 # nodejs
@@ -440,6 +444,33 @@ end
 if type -q node; and type -q npm
   set -x NODE_MODULE $HOME/node_modules
   addPath $NODE_MODULE/.bin
+  set -a backgroundCmds "pushd $HOME \
+                          && npm install --global-style \
+                                         --ignore-scripts \
+                                         --no-package-lock \
+                                         --only=prod \
+                                         --loglevel=error \
+                                         > /dev/null \
+                          && popd"
+end
+
+
+# --------------------------------------------------
+# neovim
+# --------------------------------------------------
+if type -q nvim
+  set -x NVIM_HOME      $HOME/.config/nvim
+  set -a backgroundCmds "nvim --headless +PlugInstall +qa > /dev/null"
+  set -a backgroundCmds "pushd $HOME/.config/coc/extensions \
+                          && npm install --global-style \
+                                         --ignore-scripts \
+                                         --loglevel=error \
+                                         --no-bin-links \
+                                         --no-package-lock \
+                                         --only=prod \
+                                         > /dev/null \
+                          && popd"
+end
 
 
 # --------------------------------------------------
@@ -515,15 +546,12 @@ alias-if-needed xsel       "xsel -b"
 if not test -e $HOME/.lastinstalled
   epochtime > $HOME/.lastinstalled
 
-  set -a cmds "nvim --headless +PlugInstall +qa"
-  if -e $HOME/.package.json
-  set -a cmds "pushd $HOME && npm install --global-style --ignore-scripts --no-package-lock --only=prod --loglevel=error && popd"
-
-  for cmd in $cmds
+  for cmd in $backgroundCmds
     set_color green && echo "🐡 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
-    eval "fish -c '$cmd' > /dev/null &"
+    eval "fish -c '$cmd > /dev/null' &"
   end
 end
+
 
 # --------------------------------------------------
 # key binding
