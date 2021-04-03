@@ -282,6 +282,8 @@ if type -q docker
                       -h $containerName \
                       -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish:ro \
                       -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile:ro \
+                      -v $HOME/.config/nvim/coc-settings.json:$remoteHome/.config/nvim/coc-settings.json \
+                      -v $HOME/.config/nvim/init.vim:$remoteHome/.config/nvim/init.vim \
                       -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
                       -v $HOME/.ssh:$remoteHome/.ssh \
                       -v $HOME/dev:$remoteHome/dev \
@@ -431,6 +433,15 @@ jenv latest -q
 
 
 # --------------------------------------------------
+# nodejs
+# --------------------------------------------------
+if type -q node; and type -q npm
+  set -x NODE_MODULE $HOME/node_modules
+  addPath $NODE_MODULE/.bin
+end
+
+
+# --------------------------------------------------
 # package manager
 # --------------------------------------------------
 function package -a subCommand -d "manage package"
@@ -443,14 +454,15 @@ function package -a subCommand -d "manage package"
           set -a cmds "sudo apt update && sudo apt upgrade && sudo apt autoremove"
       end
       set -a cmds "fisher update"
-      set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate +CocUpdateSync +qa"
+      set -a cmds "pushd $HOME/.config/coc/extensions && ncu -u && npm update && popd"
+      set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate +qa"
     case "*"
       echo "🙅 Unsupported sub-command: $subCommand"
       return 1
   end
 
   for cmd in $cmds
-    set_color green && echo "🐟 $cmd" && set_color normal
+    set_color green && echo "🐟 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
     eval $cmd
   end
 end
@@ -495,6 +507,22 @@ alias-if-needed vim        "nvim"
 alias-if-needed vims       "vim (fzf)"
 alias-if-needed xsel       "xsel -b"
 
+
+# --------------------------------------------------
+# backgroun process
+# --------------------------------------------------
+if not test -e $HOME/.lastinstalled
+  epochtime > $HOME/.lastinstalled
+
+  set -a cmds "nvim --headless +PlugInstall +qa"
+  if -e $HOME/.package.json
+  set -a cmds "pushd $HOME && npm install --global-style --ignore-scripts --no-package-lock --only=prod --loglevel=error && popd"
+
+  for cmd in $cmds
+    set_color green && echo "🐡 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
+    eval "fish -c '$cmd' > /dev/null &"
+  end
+end
 
 # --------------------------------------------------
 # key binding
