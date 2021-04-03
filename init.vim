@@ -157,23 +157,6 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 " --------------------------------
 " --- coc(Language Server Procotol) ---
 " --------------------------------
-" let g:coc_node_path = expand('$GRAAL_HOME') . '/bin/node'
-" extentions
-let g:coc_global_extensions = [
-      \ 'coc-docker',
-      \ 'coc-eslint',
-      \ 'coc-fish',
-      \ 'coc-highlight',
-      \ 'coc-html',
-      \ 'coc-json',
-      \ 'coc-metals',
-      \ 'coc-tsserver',
-      \ 'coc-vetur',
-      \ 'coc-xml',
-      \ 'coc-yaml',
-      \ 'coc-yank'
-      \]
-
 " if hidden is not set, TextEdit might fail.
 set hidden
 
