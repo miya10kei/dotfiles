@@ -486,6 +486,7 @@ function package -a subCommand -d "manage package"
           set -a cmds "sudo apt update && sudo apt upgrade && sudo apt autoremove"
       end
       set -a cmds "fisher update"
+      set -a cmds "pushd $HOME && ncu -u && npm update && popd"
       set -a cmds "pushd $HOME/.config/coc/extensions && ncu -u && npm update && popd"
       set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate +qa"
     case "*"
