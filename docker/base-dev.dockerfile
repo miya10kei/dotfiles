@@ -21,6 +21,8 @@ RUN apt-get update \
           less \
           locales \
           neovim \
+          nodejs \
+          npm \
           sudo \
           tree \
           tzdata \
