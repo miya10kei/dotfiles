@@ -368,6 +368,7 @@ if type -q git; and type -q ghq; and type -q peco
   set -l gittCompletion \
         "complete -f -c gitt -n '__fish_use_subcommand'          -a 'cd'       -d 'Change directory of git'" \
         "complete -f -c gitt -n '__fish_use_subcommand'          -a 'checkout' -d 'Checkout branch'" \
+        "complete -f -c gitt -n '__fish_use_subcommand'          -a 'ch'       -d 'Checkout branch'" \
         "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'private'  -d 'Change directory of private git'" \
         "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'work'     -d 'Change directory of work git'"
   apply-completion "gitt" $gittCompletion
@@ -392,7 +393,7 @@ if test -e $jvmDir
 
     switch $subCommand
       case "current"
-        $JAVA_HOME/bin/java --version
+        $JAVA_HOME/bin/java -version
       case "latest" "set"
         if [ $subCommand = "latest" ]
           set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
@@ -421,7 +422,7 @@ if test -e $jvmDir
         "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
   apply-completion "jenv" $jenvCompletion
 
-  jenv latest -q
+  not set -q JAVA_HOME && jenv latest -q
 end
 # --------------------------------------------------
 # golang
