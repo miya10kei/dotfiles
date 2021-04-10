@@ -144,6 +144,87 @@ end
 
 
 # --------------------------------------------------
+# language configuration
+# --------------------------------------------------
+# java
+# --------------------------------------------------
+switch $OS
+  case "Darwin"
+    set jvmDir /Library/Java/JavaVirtualMachines
+  case "Linux"
+    set jvmDir /usr/lib/jvm
+end
+
+if test -e $jvmDir
+  function jenv -a subCommand
+    argparse -i -n jenv "q/quit" -- $argv; or return 1
+
+    switch $subCommand
+      case "current"
+        $JAVA_HOME/bin/java -version
+      case "latest" "set"
+        if [ $subCommand = "latest" ]
+          set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
+        else
+          set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
+        end
+        if [ -n "$newJavaHome" ]
+          test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
+          removePath $JAVA_HOME/bin
+          set -xg JAVA_HOME "$newJavaHome"
+          addPath $JAVA_HOME/bin
+          if test -z "$_flag_quit"
+            set_color green && echo "☕ Applied: $JAVA_HOME" && set_color normal
+          end
+        end
+      case "*"
+        echo "🙅 Unsupported sub-command: $subCommand"
+        return 1
+    end
+  end
+  set -l jenvCompletion \
+        "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
+        "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
+        "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
+        "complete -f -c jenv -n '__fish_seen_subcommand_from latest' -s q -l quit -d 'Not display message'" \
+        "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
+  apply-completion "jenv" $jenvCompletion
+
+  not set -q JAVA_HOME && jenv latest -q
+end
+# --------------------------------------------------
+# golang
+# --------------------------------------------------
+switch $OS
+  case "Darwin"
+    set -x GOPATH $HOME/go
+    addPath $GOPATH/bin
+  case "Linux"
+    if test -e /usr/local/go
+      set -x GO_HOME "/usr/local/go"
+      addPath "$GO_HOME/bin"
+      set -x GOPATH "$HOME/go"
+      addPath "$GOPATH/bin"
+    end
+end
+# --------------------------------------------------
+# nodejs
+# --------------------------------------------------
+if type -q node; and type -q npm
+  set -x NODE_MODULE $HOME/node_modules
+  addPath $NODE_MODULE/.bin
+  set -ag backgroundCmds "pushd $HOME \
+                          && npm install --global-style \
+                                         --ignore-scripts \
+                                         --no-package-lock \
+                                         --only=prod \
+                                         --loglevel=error \
+                                         > /dev/null \
+                          && popd"
+end
+
+
+# --------------------------------------------------
 # ssh agent
 # --------------------------------------------------
 if test -z $SSH_AGENT_PID
@@ -376,87 +457,6 @@ end
 
 
 # --------------------------------------------------
-# language configuration
-# --------------------------------------------------
-# java
-# --------------------------------------------------
-switch $OS
-  case "Darwin"
-    set jvmDir /Library/Java/JavaVirtualMachines
-  case "Linux"
-    set jvmDir /usr/lib/jvm
-end
-
-if test -e $jvmDir
-  function jenv -a subCommand
-    argparse -i -n jenv "q/quit" -- $argv; or return 1
-
-    switch $subCommand
-      case "current"
-        $JAVA_HOME/bin/java -version
-      case "latest" "set"
-        if [ $subCommand = "latest" ]
-          set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
-        else
-          set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
-        end
-        if [ -n "$newJavaHome" ]
-          test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
-          removePath $JAVA_HOME/bin
-          set -xg JAVA_HOME "$newJavaHome"
-          addPath $JAVA_HOME/bin
-          if test -z "$_flag_quit"
-            set_color green && echo "☕ Applied: $JAVA_HOME" && set_color normal
-          end
-        end
-      case "*"
-        echo "🙅 Unsupported sub-command: $subCommand"
-        return 1
-    end
-  end
-  set -l jenvCompletion \
-        "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
-        "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
-        "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from latest' -s q -l quit -d 'Not display message'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
-  apply-completion "jenv" $jenvCompletion
-
-  not set -q JAVA_HOME && jenv latest -q
-end
-# --------------------------------------------------
-# golang
-# --------------------------------------------------
-switch $OS
-  case "Darwin"
-    set -x GOPATH $HOME/go
-    addPath $GOPATH/bin
-  case "Linux"
-    if test -e /usr/local/go
-      set -x GO_HOME "/usr/local/go"
-      addPath "$GO_HOME/bin"
-      set -x GOPATH "$HOME/go"
-      addPath "$GOPATH/bin"
-    end
-end
-# --------------------------------------------------
-# nodejs
-# --------------------------------------------------
-if type -q node; and type -q npm
-  set -x NODE_MODULE $HOME/node_modules
-  addPath $NODE_MODULE/.bin
-  set -ag backgroundCmds "pushd $HOME \
-                          && npm install --global-style \
-                                         --ignore-scripts \
-                                         --no-package-lock \
-                                         --only=prod \
-                                         --loglevel=error \
-                                         > /dev/null \
-                          && popd"
-end
-
-
-# --------------------------------------------------
 # neovim
 # --------------------------------------------------
 if type -q nvim
@@ -552,6 +552,7 @@ if not test -e $HOME/.lastinstalled
     fish -c "$cmd" &
   end
 end
+
 
 # --------------------------------------------------
 # key binding
