@@ -71,8 +71,14 @@ nnoremap <silent> gd :<C-u>action GotoDeclaration<CR>
 nnoremap <silent> gy :<C-u>action GotoTypeDeclaration<CR>
 nnoremap <silent> gi :<C-u>action GotoImplementation<CR>
 nnoremap <silent> gr :<C-u>action CallHierarchy<CR>
-nnoremap <silent> <C-w>\| :<C-u>action SplitVertically<CR>
-nnoremap <silent> <C-w>\- :<C-u>action SplitHorizontally<CR>
+nnoremap <silent> <C-g>\| :<C-u>action SplitVertically<CR>
+nnoremap <silent> <C-g>\- :<C-u>action SplitHorizontally<CR>
+nnoremap <silent> <C-g>r :<C-u>action RunMenu<CR>
 nnoremap <silent> <C-e> :<C-u>action RecentFiles<CR>
 nnoremap <silent> <C-t> :<C-u>action ActivateTerminalToolWindow<CR>
+nnoremap <silent> <C-1> :<C-u>action ActivateProjectToolWindow<CR>
+nnoremap <silent> <C-2> :<C-u>action ActivateStructureToolWindow<CR>
+nnoremap <silent> <C-3> :<C-u>action ActivateHierarchyToolWindow<CR>
+nnoremap <silent> <C-6> :<C-u>action ActivateGradleToolWindow<CR>
+
 set clipboard+=ideaput
