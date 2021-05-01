@@ -1,7 +1,6 @@
 {
   "private": true,
   "dependencies": {
-    "npm-check-updates": "11.5.1",
-    "playwright": "1.10.0"
+    "npm-check-updates": "11.5.9"
   }
 }

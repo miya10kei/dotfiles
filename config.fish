@@ -602,7 +602,9 @@ function cd-with-event
 end
 
 function cd-event-listener --on-event cd-event
-  change-java-version-depends-on-version-file $argv[1]
+  if type -q change-java-version-depends-on-version-file
+    change-java-version-depends-on-version-file $argv[1]
+  end
 end
 
 
