@@ -161,12 +161,26 @@ if test -e $jvmDir
 
     switch $subCommand
       case "current"
-        $JAVA_HOME/bin/java -version
+        argparse -i -n jenv "p/path" -- $argv; or return 1
+        if test -n "$_flag_path"
+          echo $JAVA_HOME
+        else
+          $JAVA_HOME/bin/java -version
+        end
       case "latest" "set"
         if [ $subCommand = "latest" ]
           set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
         else
-          set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
+          if test -n "$argv[2]"
+            if test -e "$argv[2]"
+              set newJavaHome $argv[2]
+            else
+              echo "🙅 Specified java version is not found: $argv[2]"
+              return 1
+            end
+          else
+            set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
+          end
         end
         if [ -n "$newJavaHome" ]
           test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
@@ -186,9 +200,24 @@ if test -e $jvmDir
         "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
         "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
         "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from latest' -s q -l quit -d 'Not display message'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from set'    -s q -l quit -d 'Not display message'"
+        "complete -f -c jenv -n '__fish_seen_subcommand_from current' -s p -l path -d 'Show current JAVA_HOME'" \
+        "complete -f -c jenv -n '__fish_seen_subcommand_from latest'  -s q -l quit -d 'Not display message'" \
+        "complete -f -c jenv -n '__fish_seen_subcommand_from set'     -s q -l quit -d 'Not display message'"
   apply-completion "jenv" $jenvCompletion
+
+  function change-java-version-depends-on-version-file
+    set -l versionFile "$argv[1]/.java_version"
+    if ls -1 $versionFile > /dev/null 2>&1
+      set -l newVersion (cat $versionFile | head -n 1)
+      if not string match -rq "$newVersion.*" (jenv current -p)
+        jenv set $newVersion
+      end
+    else
+      if test \( "$argv" != "$HOME" \) -a \( "$argv[1]" != "/" \)
+        change-java-version-depends-on-version-file (dirname $argv[1])
+      end
+    end
+  end
 
   not set -q JAVA_HOME && jenv latest -q
 end
@@ -240,19 +269,79 @@ end
 # cf
 # --------------------------------------------------
 if type -q cf; and type -q jq; and type -q peco
-  function cflogin
-    set -l endpoint (cat $HOME/.cf/endpoints.json | jq .[].endpoint | string trim -c "\"" | peco)
-    set -l org (cat $HOME/.cf/endpoints.json | jq ".[] | select(.endpoint == \"$endpoint\").org")
-    if test !!$endpoint
-      set -l passcode  (echo (echo $endpoint | string replace "api" "login")/passcode)
-      if type -q xsel
-        echo $passcode | xsel
-      else if type -q pbcopy
-        echo $passcode | pbcopy
-      end
-      cf login -a $endpoint --sso --skip-ssl-validation -o $org
+  function cff -a subCommand
+    switch $subCommand
+      case "env"
+        argparse -n cff "c/copy" -- $argv; or return 1
+        set -l app (cf apps | tail -n +5 | awk '{print($1)}' | peco) && test -z $app && return
+        if test -z "$_flag_copy"
+          set cmd "cf env $app"
+        else
+          set -a envs "VCAP_SERVICES="(LANG=C cf env $app \
+                        | awk -v RS= -v ORS='\n\n' '/System-Provided:/' \
+                        | awk 'BEGIN{lines=""}NR>1{lines=lines$0}END{print lines}' \
+                        | jq .VCAP_SERVICES -c -M
+                     )
+          for env in (LANG=C cf env $app \
+                          | awk -v RS= -v ORS='\n\n' '/User-Provided:/' \
+                          | awk '/./{print $0}' \
+                          | awk -F ': ' 'NR>1 {sub(": ", "="); print $0}'
+                       )
+            set -a envs $env
+          end
+          set cmd "string collect -N '$envs' | pbcopy"
+        end
+
+      case "log" "logs"
+        set -l app (cf apps | tail -n +5 | awk '{print($1)}' | peco) && test -z $app && return
+        set cmd "cf logs $app"
+
+      case "login"
+        set endpoint (jq -r ".[]" $HOME/.cf/endpoints.json | peco) && test -z $endpoint && return
+        open "https://login.$endpoint/passcode"
+        set cmd "cf login --sso -a https://api.$endpoint"
+
+      case "open"
+        set endpoint (jq -r ".[]" $HOME/.cf/endpoints.json | peco) && test -z $endpoint && return
+        set cmd "open https://apps.$endpoint"
+
+      case "ssh"
+        set -l app (cf apps | tail -n +5 | awk '{print($1)}' | peco) && test -z $app && return
+        set cmd "cf ssh $app"
+
+      case "switch" "sw"
+        argparse -n cff "t/target=" -- $argv; or return 1
+        switch $_flag_target
+          case "org" "orgs" "o"
+            set -l org (cf orgs| tail -n +4 | peco) && test -z $org && return
+            set cmd "cf target -o $org"
+          case "space" "spaces" "s"
+            set space (cf spaces | tail -n +4 | peco) && test -z $space && return
+            set cmd "cf target -s $space"
+          case "*"
+            echo "🙅 Unsupported option value: $_flag_target"
+            return 1
+        end
+
+      case "*"
+        echo "🙅 Unsupported sub-command: $subCommand"
+        return 1
     end
+
+    set_color green && echo "🐟 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
+    eval $cmd
   end
+
+  set -l cffCompletion \
+        "complete -f -c cff -n '__fish_use_subcommand' -a 'env'     -d 'show app enviroment values'" \
+        "complete -f -c cff -n '__fish_use_subcommand' -a 'log'     -d 'tail app log'" \
+        "complete -f -c cff -n '__fish_use_subcommand' -a 'login'   -d 'login cloud foundry'" \
+        "complete -f -c cff -n '__fish_use_subcommand' -a 'open'    -d 'open Apps Manager'" \
+        "complete -f -c cff -n '__fish_use_subcommand' -a 'ssh'     -d 'ssh app'" \
+        "complete -f -c cff -n '__fish_use_subcommand' -a 'switch'  -d 'switch org or space'" \
+        "complete -f -c cff -n '__fish_seen_subcommand_from env'    -s c -l copy   -d 'Copy into clipboard'" \
+        "complete -x -c cff -n '__fish_seen_subcommand_from switch' -s t -l target -a 'org space' -d 'target to switch'"
+  apply-completion "cff" $cffCompletion
 end
 
 
@@ -505,8 +594,22 @@ apply-completion "package" $packageCompletion
 
 
 # --------------------------------------------------
+# event
+# --------------------------------------------------
+function cd-with-event
+  builtin cd $argv
+  emit cd-event (pwd)
+end
+
+function cd-event-listener --on-event cd-event
+  change-java-version-depends-on-version-file $argv[1]
+end
+
+
+# --------------------------------------------------
 # alias
 # --------------------------------------------------
+alias-if-needed cd         "cd-with-event"
 alias-if-needed cdevp      "cd $HOME/dev/private"
 alias-if-needed cdevw      "cd $HOME/dev/work"
 alias-if-needed cdot       "cd $HOME/.dotfiles"
