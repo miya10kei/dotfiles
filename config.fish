@@ -619,6 +619,7 @@ alias-if-needed cdr        "cd -"
 alias-if-needed epochtime  "date -u +%s"
 alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
+alias-if-needed thistory    "history --show-time='%Y-%m-%d %H:%M:%S  '"
 alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
 if ls --color > /dev/null 2>&1
   alias-if-needed ll       "ls --color -hlFG"
