@@ -498,8 +498,8 @@ end
 if type -q git; and type -q ghq; and type -q peco
 
   alias-if-needed ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
-  alias-if-needed pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
-  alias-if-needed wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; $GOPATH/bin/ghq"
+  alias-if-needed pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; /usr/local/bin/ghq"
+  alias-if-needed wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; /usr/local/bin/ghq"
   alias-if-needed delbr "git branch | grep -vE '\*|master|develop' | xargs git branch -D"
 
   function gitt -a subCommand
@@ -507,25 +507,23 @@ if type -q git; and type -q ghq; and type -q peco
       case "cd"
         switch $argv[2]
           case "private"
-            set -l repository (pghq list | peco)
-            set cmd "test !!$repository; and cd (pghq root)/$repository"
+            set -l repository (pghq list | peco) && test -z "$repository" && return
+            set cmd "cd (pghq root)/$repository"
           case "work"
-            set -l repository (wghq list | peco)
-            set cmd "test !!$repository; and cd (wghq root)/$repository"
+            set -l repository (wghq list | peco) && test -z "$repository" && return
+            set cmd "cd (wghq root)/$repository"
           case "*"
             echo "🙅 Unsupported repository: $argv[2]"
             return 1
           end
       case "checkout" "ch"
-        set -l branch (git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco)
-        if test !!$branch
-          if string match -rq '^remotes' $branch
-            set -l remote (string replace -r 'remotes/' '' $branch)
-            set -l new (string replace -r '[^/]*/' '' $remote)
-            set cmd "git checkout -b $new $remote"
-          else
-            set cmd "git checkout $branch"
-          end
+        set -l branch (git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco) && test -z "$branch" && return
+        if string match -rq '^remotes' $branch
+          set -l remote (string replace -r 'remotes/' '' $branch)
+          set -l new (string replace -r '[^/]*/' '' $remote)
+          set cmd "git checkout -b $new $remote"
+        else
+          set cmd "git checkout $branch"
         end
       case "*"
         echo "🙅 Unsupported sub-command: $subCommand"
@@ -663,9 +661,18 @@ end
 # --------------------------------------------------
 # key binding
 # --------------------------------------------------
+function searchEmojiShortcodeAndInsert
+  set shorcode (cat $HOME/.emoji.list | peco | awk '{ print($1) }') && test -z $shorcode && return
+  set buf (commandline -b)
+  set position (commandline -C)
+  commandline -i $shorcode
+  commandline -C (math $position + (string length $shorcode))
+end
+
 if type -q peco
   function fish_user_key_bindings
     bind \cr 'peco_select_history (commandline -b)'
+    bind \ce 'searchEmojiShortcodeAndInsert'
   end
 end
 
