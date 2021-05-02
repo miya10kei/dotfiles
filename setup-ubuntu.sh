@@ -9,6 +9,7 @@ function main() {
   installHyper
   installIdea
   installJdk
+  installLibinputGestures
   installNeovim
 
   config
@@ -63,6 +64,7 @@ function installDocker() {
 
   sudo apt-get update \
     && sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+  sudo gpasswd -a $USER docker
 }
 
 function installFish() {
@@ -110,6 +112,21 @@ function installJdk() {
     && sudo apt-get install -y bellsoft-java11 bellsoft-java16
 }
 
+function installLibinputGestures() {
+  if ! [ -e /usr/bin/libinput-gestures ]; then
+    sudo gpasswd -a $USER input
+    sudo apt-get update \
+      && sudo apt-get install -y wmctrl xdotool libinput-tools
+    pushd $HOME/Downloads
+    git clone https://github.com/bulletmark/libinput-gestures.git
+    pushd libinput-gestures
+    sudo make install
+    popd && popd
+    rm -rf $HOME/Downloads/libinput-gestures
+    libinput-gestures-setup autostart
+  fi
+}
+
 function installNeovim() {
   if ! [ -e /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-focal.list ]; then
     sudo add-apt-repository -ny ppa:neovim-ppa/stable
@@ -146,6 +163,8 @@ function config() {
   if ! [ -e $HOME/.tmux/plugins/tpm ]; then
     git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
   fi
+  # emoji
+  curl -s -o $HOME/.emoji.list https://raw.githubusercontent.com/miya10kei/emoji-dict/main/dist/emoji.list
 }
 
 function linkDotfiles() {
@@ -153,11 +172,12 @@ function linkDotfiles() {
 
   local -r DOT_DIR=$HOME/.dotfiles
 
+  ln -fs $DOT_DIR/.editorconfig      $HOME/.editorconfig
   ln -fs $DOT_DIR/.gitconfig         $HOME/.gitconfig
   ln -fs $DOT_DIR/.gitconfig_private $HOME/.gitconfig_private
   ln -fs $DOT_DIR/.hyper.js          $HOME/.hyper.js
-  ln -fs $DOT_DIR/.ideavimrc         $HOME/.config/fish/.ideavimrc
-  ln -fs $DOT_DIR/.npmrc             $HOME/.config/fish/.npmrc
+  ln -fs $DOT_DIR/.ideavimrc         $HOME/.ideavimrc
+  ln -fs $DOT_DIR/.npmrc             $HOME/.npmrc
   ln -fs $DOT_DIR/.tmux.conf         $HOME/.tmux.conf
   ln -fs $DOT_DIR/coc-package.json   $HOME/.config/coc/extensions/package.json
   ln -fs $DOT_DIR/coc-settings.json  $HOME/.config/coc/coc-settings.json
