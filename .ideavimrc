@@ -75,10 +75,13 @@ nnoremap <silent> <C-g>\| :<C-u>action SplitVertically<CR>
 nnoremap <silent> <C-g>\- :<C-u>action SplitHorizontally<CR>
 nnoremap <silent> <C-g>r :<C-u>action RunMenu<CR>
 nnoremap <silent> <C-e> :<C-u>action RecentFiles<CR>
-nnoremap <silent> <C-t> :<C-u>action ActivateTerminalToolWindow<CR>
 nnoremap <silent> <C-1> :<C-u>action ActivateProjectToolWindow<CR>
+nnoremap <silent> <A-1> :<C-u>action ActivateProjectToolWindow<CR>
 nnoremap <silent> <C-2> :<C-u>action ActivateStructureToolWindow<CR>
+nnoremap <silent> <A-2> :<C-u>action ActivateStructureToolWindow<CR>
 nnoremap <silent> <C-3> :<C-u>action ActivateHierarchyToolWindow<CR>
+nnoremap <silent> <A-3> :<C-u>action ActivateHierarchyToolWindow<CR>
 nnoremap <silent> <C-6> :<C-u>action ActivateGradleToolWindow<CR>
+nnoremap <silent> <A-6> :<C-u>action ActivateGradleToolWindow<CR>
 
 set clipboard+=ideaput
