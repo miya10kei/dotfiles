@@ -497,25 +497,13 @@ end
 # --------------------------------------------------
 if type -q git; and type -q ghq; and type -q peco
 
-  alias-if-needed ghq "echo -ne \"🙅 Use of this command is prohibited.\nPlease use 'pghq' or 'wghq' command.\n\""
-  alias-if-needed pghq "echo -ne \"[ghq]\n  root = ~/dev/private\" > ~/.gitconfig_ghq; /usr/local/bin/ghq"
-  alias-if-needed wghq "echo -ne \"[ghq]\n  root = ~/dev/work\" > ~/.gitconfig_ghq; /usr/local/bin/ghq"
-  alias-if-needed delbr "git branch | grep -vE '\*|master|develop' | xargs git branch -D"
+  alias-if-needed delbr "git branch | grep -vE '\*|master|develop|main' | xargs git branch -D"
 
   function gitt -a subCommand
     switch $subCommand
       case "cd"
-        switch $argv[2]
-          case "private"
-            set -l repository (pghq list | peco) && test -z "$repository" && return
-            set cmd "cd (pghq root)/$repository"
-          case "work"
-            set -l repository (wghq list | peco) && test -z "$repository" && return
-            set cmd "cd (wghq root)/$repository"
-          case "*"
-            echo "🙅 Unsupported repository: $argv[2]"
-            return 1
-          end
+        set -l repository (ghq list | peco) && test -z "$repository" && return
+        set cmd "cd (ghq root)/$repository"
       case "checkout" "ch"
         set -l branch (git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco) && test -z "$branch" && return
         if string match -rq '^remotes' $branch
@@ -617,6 +605,7 @@ alias-if-needed cdr        "cd -"
 alias-if-needed epochtime  "date -u +%s"
 alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
+alias-if-needed gcd        "gitt cd"
 alias-if-needed thistory    "history --show-time='%Y-%m-%d %H:%M:%S  '"
 alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
 if ls --color > /dev/null 2>&1
