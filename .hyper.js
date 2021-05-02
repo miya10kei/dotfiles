@@ -35,7 +35,7 @@ module.exports = {
     cursorAccentColor: '#000',
 
     // `'BEAM'` for |, `'UNDERLINE'` for _, `'BLOCK'` for █
-    cursorShape: 'BLOCK',
+    cursorShape: 'UNDERLINE',
 
     // set to `true` (without backticks and without quotes) for blinking cursor
     cursorBlink: false,
@@ -69,7 +69,7 @@ module.exports = {
     showWindowControls: '',
 
     // custom padding (CSS format, i.e.: `top right bottom left`)
-    padding: '12px 14px',
+    padding: '0px 5px',
 
     // the full list. if you're going to provide the full color palette,
     // including the 6 x 6 color cubes and the grayscale map, just provide
@@ -115,7 +115,7 @@ module.exports = {
     env: {},
 
     // set to `false` for no bell
-    bell: 'SOUND',
+    bell: 'false',
 
     // if `true` (without backticks and without quotes), selected text will automatically be copied to the clipboard
     copyOnSelect: false,
@@ -137,13 +137,13 @@ module.exports = {
 
     // Whether to use the WebGL renderer. Set it to false to use canvas-based
     // rendering (slower, but supports transparent backgrounds)
-    webGLRenderer: true,
+    webGLRenderer: false,
 
     // for advanced config flags please refer to https://hyper.is/#cfg
     //
     gruvboxTheme: {
       style: 'dark', // or 'light'
-      contrast: 'hard' // or 'soft', 'hard'
+      contrast: 'normal' // or 'soft', 'hard'
     },
   },
 
