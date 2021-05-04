@@ -49,7 +49,15 @@ inoremap <silent> <C-h> <Left>
 inoremap <silent> <C-k> <Up>
 inoremap <silent> <C-l> <Right>
 inoremap <silent> <C-x> <C-h>
+
+
 nnoremap x "_x
+nnoremap <ESC><ESC> :<C-u>noh<CR>
+nnoremap p "0p
+
+nnoremap <silent> <Space><Space> viw:<C-u>action Find<CR>
+nnoremap <silent> / :<C-u>action Find<CR>
+
 
 " --- disable to fold code
 nnoremap <silent> zM <Nop>
