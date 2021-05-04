@@ -24,6 +24,7 @@ function installBasic() {
                       gdebi-core \
                       git \
                       gnome-tweak-tool \
+                      jq \
                       mozc-utils-gui \
                       peco \
                       tlp \
