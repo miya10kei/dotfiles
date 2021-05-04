@@ -1,5 +1,9 @@
 #!/bin/env bash
 
+readonly SCRIPT_DIR=$(cd $(dirname $0); pwd)
+
+source $SCRIPT_DIR/setup-common.sh
+
 function main() {
   installBasic
   installChrome
@@ -166,26 +170,6 @@ function config() {
   fi
   # emoji
   curl -s -o $HOME/.emoji.list https://raw.githubusercontent.com/miya10kei/emoji-dict/main/dist/emoji.list
-}
-
-function linkDotfiles() {
-  mkdir -p $HOME/.config/coc/extensions $HOME/.config/fish
-
-  local -r DOT_DIR=$HOME/.dotfiles
-
-  ln -fs $DOT_DIR/.editorconfig      $HOME/.editorconfig
-  ln -fs $DOT_DIR/.gitconfig         $HOME/.gitconfig
-  ln -fs $DOT_DIR/.gitconfig_private $HOME/.gitconfig_private
-  ln -fs $DOT_DIR/.hyper.js          $HOME/.hyper.js
-  ln -fs $DOT_DIR/.ideavimrc         $HOME/.ideavimrc
-  ln -fs $DOT_DIR/.npmrc             $HOME/.npmrc
-  ln -fs $DOT_DIR/.tmux.conf         $HOME/.tmux.conf
-  ln -fs $DOT_DIR/coc-package.json   $HOME/.config/coc/extensions/package.json
-  ln -fs $DOT_DIR/coc-settings.json  $HOME/.config/coc/coc-settings.json
-  ln -fs $DOT_DIR/config.fish        $HOME/.config/fish/config.fish
-  ln -fs $DOT_DIR/fishfile           $HOME/.config/fish/fishfile
-  ln -fs $DOT_DIR/init.vim           $HOME/.config/nvim/init.vim
-  ln -fs $DOT_DIR/package.json       $HOME/package.json
 }
 
 main
