@@ -62,6 +62,18 @@ function alias-if-needed -a name -a command
   alias $name $command
 end
 
+function compress -a format -a target -d "Compress the file or directory"
+  test -z "$target" && echo "😰 You must pass the target file/directory"
+  switch $format
+    case "tar.gz"
+      tar -zcvf "$target.$format" $target
+    case "zip"
+      zip "$target.$format" $target
+    case "*"
+      echo "😰 I don't knw $format ..."
+  end
+end
+
 function decompress -d "Decompress the compressed file."
   if test -f $argv[1]
     switch $argv[1]
@@ -661,7 +673,7 @@ end
 if type -q peco
   function fish_user_key_bindings
     bind \cr 'peco_select_history (commandline -b)'
-    bind \ce 'searchEmojiShortcodeAndInsert'
+    bind \co 'searchEmojiShortcodeAndInsert'
   end
 end
 
