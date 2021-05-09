@@ -28,8 +28,10 @@ function installBasic() {
                       gdebi-core \
                       git \
                       gnome-tweak-tool \
+                      graphviz \
                       jq \
                       mozc-utils-gui \
+                      pass \
                       peco \
                       tlp \
                       tmux \
@@ -70,6 +72,11 @@ function installDocker() {
   sudo apt-get update \
     && sudo apt-get install -y docker-ce docker-ce-cli containerd.io
   sudo gpasswd -a $USER docker
+
+  if ! [ -e /usr/local/bin/docker-compose ]; then
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+  fi
 }
 
 function installFish() {
