@@ -43,6 +43,8 @@ Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
 Plug 'kannokanno/previm', {'for': 'markdown'}
 " --- TypeScript
 Plug 'leafgarland/typescript-vim'
+" --- kotlin
+Plug 'udalov/kotlin-vim'
 " --- vue
 Plug 'posva/vim-vue', {'for': 'vue'}
 " --- GraphQL
