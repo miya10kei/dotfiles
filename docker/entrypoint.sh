@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-NEW_UID=${REMOTE_UID}
 NEW_GID=${REMOTE_GID}
+NEW_GROUP_NAME=${REMOTE_GROUP_NAME}
+NEW_UID=${REMOTE_UID}
 NEW_USER=${REMOTE_USER}
 
-if [ -n "${NEW_UID}" ] && [ -n "${NEW_GID}" ] && [ -n "${NEW_USER}" ]; then
+if [ -n "${NEW_UID}" ] && [ -n "${NEW_GID}" ] && [ -n "${NEW_USER}" ] && [ -n "${NEW_GROUP_NAME}" ]; then
   HOME_DIR=/home/${NEW_USER}
 
-  useradd -u ${NEW_UID} -o ${NEW_USER}
-  groupmod -g ${NEW_GID} ${NEW_USER}
+  groupadd -g ${NEW_GID} ${NEW_GROUP_NAME}
+  useradd -u ${NEW_UID} -g ${NEW_GID} -o ${NEW_USER}
   chown -R ${NEW_UID}:${NEW_GID} "$HOME_DIR"
   echo "${NEW_USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
   chmod 440 /etc/sudoers
