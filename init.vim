@@ -33,6 +33,7 @@ Plug 'https://github.com/nicwest/vim-camelsnek.git'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'glidenote/memolist.vim'
 Plug 'tpope/vim-surround'
+Plug 'aklt/plantuml-syntax'
 " --- fish shell
 Plug 'dag/vim-fish'
 " --- Docker
