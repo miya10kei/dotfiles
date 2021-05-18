@@ -34,6 +34,7 @@ Plug 'tmux-plugins/vim-tmux'
 Plug 'glidenote/memolist.vim'
 Plug 'tpope/vim-surround'
 Plug 'aklt/plantuml-syntax'
+Plug 'Matt-Deacalion/vim-systemd-syntax'
 " --- fish shell
 Plug 'dag/vim-fish'
 " --- Docker
@@ -466,6 +467,7 @@ augroup kotlin
   autocmd!
   autocmd BufNewFile,BufRead *.kt setfiletype kotlin
 augroup END
+
 
 " Windows Subsystem for Linux で、ヤンクでクリップボードにコピー
 if system('uname -a | grep Microsoft') != ''

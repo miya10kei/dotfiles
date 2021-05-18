@@ -440,10 +440,12 @@ if type -q docker
       case "run"
         set -l uid  (id -u)
         set -l gid  (id -g)
+        set -l groupName (getent group (id -g) | awk -F ":" '{print($1)}')
         set runOpts "\
                       --name $containerName \
                       -e DOCKER_MACHINE_NAME='🐳 $containerName' \
                       -e REMOTE_GID=$gid \
+                      -e REMOTE_GROUP_NAME=$groupName \
                       -e REMOTE_UID=$uid \
                       -e REMOTE_USER=$remoteUser \
                       -h $containerName \
@@ -525,6 +527,12 @@ if type -q git; and type -q ghq; and type -q peco
         else
           set cmd "git checkout $branch"
         end
+      case "clone"
+        set -l repository (curl -s https://api.github.com/users/miya10kei/repos | jq -r '.[].name' | peco) \
+          && test -z "$repository" \
+          && return
+        set -l url (curl -s https://api.github.com/users/miya10kei/repos | jq -r ".[] | select(.name==\"$repository\") | .ssh_url")
+        set cmd "git clone $url $HOME/dev/private/$repository"
       case "*"
         echo "🙅 Unsupported sub-command: $subCommand"
         return 1
@@ -619,7 +627,6 @@ alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
 alias-if-needed gcd        "gitt cd"
 alias-if-needed thistory    "history --show-time='%Y-%m-%d %H:%M:%S  '"
-alias-if-needed idea       "intellij-idea-ultimate" "intellij-idea-ultimate"
 if ls --color > /dev/null 2>&1
   alias-if-needed ll       "ls --color -hlFG"
   alias-if-needed lla      "ls --color -ahlFG"
