@@ -1,4 +1,4 @@
-name: dev-env CI
+name: dev-env container image CI
 
 on:
   push:
@@ -7,6 +7,17 @@ on:
     paths:
       - ./docker/dev-env.dockerfile
       - ./docker/entrypoint.sh
+  workflow_dispath:
+    inputs:
+      tags:
+        description: 'Tag name'
+        required: true
+        default: miya10kei/nightly
+      push:
+        description: 'If exectute docker push with build'
+        required: true
+        default: false
+
 
 jobs:
   build:
