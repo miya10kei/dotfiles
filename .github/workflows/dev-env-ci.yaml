@@ -33,13 +33,13 @@ jobs:
         id: detect-parameter
         run: |
           echo "Trigger on ${{ github.event_name }}"
-          if [ ${{ github.event_name = "push" }} ]; then
+          if   [ ${{ github.event_name }} = "push" ]; then
             echo "::set-output name=version::latest"
             echo "::set-output name=push::true"
-          elif [ ${{ github.event_name = "pull_request" }} ]; then
+          elif [ ${{ github.event_name }} = "pull_request" ]; then
             echo "::set-output name=version::none"
             echo "::set-output name=push::false"
-          else [ ${{ github.event_name = "workflow_dispatch" }} ]; then
+          else [ ${{ github.event_name }} = "workflow_dispatch" ]; then
             echo "::set-output name=version::${{ github.event.inputs.version }}"
             echo "::set-output name=push::false${{ github.event.inputs.push }}"
           fi
