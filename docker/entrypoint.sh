@@ -1,29 +1,30 @@
 #!/usr/bin/env bash
 
-NEW_GID=${REMOTE_GID}
-NEW_GROUP_NAME=${REMOTE_GROUP_NAME}
-NEW_UID=${REMOTE_UID}
-NEW_USER=${REMOTE_USER}
+if [ -n "$REMOTE_UID" ] && [ -n "$REMOTE_GID" ] && [ -n "$REMOTE_USER" ] && [ -n "$REMOTE_GROUP_NAME" ]; then
+  HOME_DIR=/home/${REMOTE_USER}
 
-if [ -n "${NEW_UID}" ] && [ -n "${NEW_GID}" ] && [ -n "${NEW_USER}" ] && [ -n "${NEW_GROUP_NAME}" ]; then
-  HOME_DIR=/home/${NEW_USER}
-
-  groupadd -g ${NEW_GID} ${NEW_GROUP_NAME}
-  useradd -u ${NEW_UID} -g ${NEW_GID} -o ${NEW_USER}
-  chown -R ${NEW_UID}:${NEW_GID} "$HOME_DIR"
-  echo "${NEW_USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+  groupadd -g $REMOTE_GID $REMOTE_GROUP_NAME
+  useradd  -g $REMOTE_GID -o $REMOTE_USER -u $REMOTE_UID
+  chown    -R $REMOTE_UID:$REMOTE_GID $HOME_DIR
+  echo "$REMOTE_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
   chmod 440 /etc/sudoers
 
-  if [ "${NEW_USER}" = "ansible" ]; then
-    # shellcheck disable=SC2076
+  if [ -n "$DOCKER_GID" ]; then
+    groupadd -g  $DOCKER_GID docker
+    usermod  -aG docker $REMOTE_USER
+
+  fi
+
+  if [ "${REMOTE_USER}" = "ansible" ]; then
     if [[ ! "$(cat $HOME_DIR/.ssh/authorized_keys)" =~ "$(cat $HOME_DIR/.ssh/id_rsa_ansible.pub)" ]]; then
       echo "contains"
       cat $HOME_DIR/.ssh/id_rsa_ansible.pub > $HOME_DIR/.ssh/authorized_keys
     fi
   fi
 
-  echo "Starting with ${NEW_USER}(uid=${NEW_UID}, gid=${NEW_GID})"
-  exec /usr/sbin/gosu ${NEW_USER} "$@"
+  echo "Starting with $REMOTE_USER(uid=$REMOTE_UID, gid=$REMOTE_GID)"
+  exec /usr/sbin/gosu $REMOTE_USER "$@"
 else
   exec "$@"
 fi
+
