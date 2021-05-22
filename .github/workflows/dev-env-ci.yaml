@@ -39,9 +39,9 @@ jobs:
           elif [ ${{ github.event_name }} = "pull_request" ]; then
             echo "::set-output name=version::none"
             echo "::set-output name=push::false"
-          else [ ${{ github.event_name }} = "workflow_dispatch" ]; then
+          else [ ${{ github.event_name }} = "workflow_dispatch" ];
             echo "::set-output name=version::${{ github.event.inputs.version }}"
-            echo "::set-output name=push::false${{ github.event.inputs.push }}"
+            echo "::set-output name=push::${{ github.event.inputs.push }}"
           fi
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
