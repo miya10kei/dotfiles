@@ -371,7 +371,7 @@ if type -q docker
   set k8sDev        "miya10kei/k8s-dev"     "latest" "k8s-dev"
   set ansibleDev    "miya10kei/ansible-dev" "latest" "ansible-dev"
   set vaultDev      "miya10kei/vault-dev"   "latest" "vault-dev"
-  set devEnv        "miya10kei/devenv"      "latest" "devenv"
+  set devEnv        "miya10kei/dev-env"     "latest" "dev-env"
   set -l targets $baseDev[3] $k8sDev[3] $ansibleDev[3] $vaultDev[3] $devEnv[3]
 
   function ctnr -d "Manipulate container"
@@ -407,30 +407,6 @@ if type -q docker
         set image         $devEnv[1]
         set tag           $devEnv[2]
         set containerName $devEnv[3]
-        set runOpts       "\
-                            --cap-add=ALL \
-                            --privileged=true \
-                            -v $HOME/.cf:/root/.cf \
-                            -v $HOME/.dotfiles:/root/.dotfiles \
-                            -v $HOME/.gradle:/root/.gradle \
-                            -v $HOME/.sbt:/root/.sbt \
-                            -v $HOME/.java:/root/.java \
-                            -v $HOME/.kube:/root/.kube \
-                            -v $HOME/.m2:/root/.m2 \
-                            -v $HOME/.ssh:/tmp/.ssh \
-                            -v $HOME/Documents:/root/Documents \
-                            -v $HOME/Downloads:/root/Downloads \
-                            -v $HOME/dev:/root/dev \
-                            -v /var/run/docker.sock:/var/run/docker.sock \
-                            -e DISPLAY=$IP:0 \
-                            -e HOST_OS=$OS
-                          "
-                            #-v $HOME/.cache/JetBrains:/root/.cache/JetBrains \
-                            #-v $HOME/.config/JetBrains:/root/.config/JetBrains \
-                            #-v $HOME/.Xauthority:/root/.Xauthority \
-                            #-v $HOME/.local/share/JetBrains:/root/.local/share/JetBrains \
-                            #-v $HOME/.local/share/fish/fish_history:/root/.local/share/fish/fish_history \
-                            #-v /tmp/.X11-unix/:/tmp/.X11-unix \
       case "*"
         echo "🙅 Not support container: $_flag_target"
         return 1
@@ -444,9 +420,12 @@ if type -q docker
       case "run"
         set -l uid  (id -u)
         set -l gid  (id -g)
-        set -l groupName (getent group (id -g) | awk -F ":" '{print($1)}')
+        set -l groupName (getent group (id -g) | awk -F: '{print($1)}')
+        set -l dockerGid (cat /etc/group | grep docker | awk -F: '{print($3)}')
         set runOpts "\
                       --name $containerName \
+                      -e DISPLAY \
+                      -e DOCKER_GID=$dockerGid \
                       -e DOCKER_MACHINE_NAME='🐳 $containerName' \
                       -e REMOTE_GID=$gid \
                       -e REMOTE_GROUP_NAME=$groupName \
@@ -458,11 +437,23 @@ if type -q docker
                       -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile \
                       -v $HOME/.config/nvim/coc-settings.json:$remoteHome/.config/nvim/coc-settings.json \
                       -v $HOME/.config/nvim/init.vim:$remoteHome/.config/nvim/init.vim \
+                      -v $HOME/.docker/config.json:$remoteHome/.docker/config.json \
+                      -v $HOME/.dotfiles:/$remoteHome/.dotfiles \
+                      -v $HOME/.editorconfig:/$remoteHome/.editorconfig \
+                      -v $HOME/.gitconfig:/$remoteHome/.gitconfig \
+                      -v $HOME/.gitconfig_private:/$remoteHome/.gitconfig_private \
+                      -v $HOME/.gradle:$remoteHome/.gradle \
+                      -v $HOME/.hyper.js:$remoteHome/.hyper.js \
                       -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
+                      -v $HOME/.m2:$remoteHome/.m2 \
                       -v $HOME/.npmrc:$remoteHome/.npmrc \
                       -v $HOME/.ssh:$remoteHome/.ssh \
+                      -v $HOME/Documents:/$remoteHome/Documents \
+                      -v $HOME/Downloads:/$remoteHome/Downloads \
                       -v $HOME/dev:$remoteHome/dev \
                       -v $HOME/package.json:$remoteHome/package.json \
+                      -v /tmp/.X11-unix:/tmp/.X11-unix \
+                      -v /var/run/docker.sock:/var/run/docker.sock \
                       $runOpts \
                       $argv[2..-1] \
                     "
