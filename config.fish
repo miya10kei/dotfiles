@@ -8,7 +8,6 @@ status is-interactive; or exit
 # general
 # --------------------------------------------------
 set -q SHELL; or set -x SHELL /usr/bin/fish
-set -x LANG ja_JP.UTF-8
 set -x OS    (uname -s)
 switch $TERM
   case "xterm"
