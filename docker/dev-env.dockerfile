@@ -143,13 +143,13 @@ RUN apt-get update \
   gosu \
   hexyl \
   jq \
+  libz-dev \
   locales \
   neovim \
   nodejs \
   npm \
   ripgrep \
   sudo \
-  tree \
   tzdata \
   wget \
   zip \
