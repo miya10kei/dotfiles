@@ -1,14 +1,22 @@
 # --------------------------------------------------
+# working image
+# --------------------------------------------------
+FROM ubuntu:groovy AS working
+RUN apt-get update && apt-get install -y \
+  curl \
+  gnupg2
+RUN mkdir /out
+
+
+# --------------------------------------------------
 # cloudfoundry cli
 # --------------------------------------------------
-FROM ubuntu:groovy AS cf-cli
-RUN apt-get update && apt-get install -y curl gnupg2
+FROM working AS cf-cli
 RUN curl -s https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key \
   | apt-key add -
 RUN echo "deb https://packages.cloudfoundry.org/debian stable main" \
   | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
 RUN apt-get update && apt-get install -y cf7-cli
-RUN mkdir /out
 RUN cp /usr/bin/cf7 /out
 
 
@@ -23,11 +31,8 @@ RUN cp /usr/local/bin/* /out
 # --------------------------------------------------
 # docker-compose
 # --------------------------------------------------
-FROM ubuntu:groovy AS docker-compose
+FROM working AS docker-compose
 ARG VERSION=1.29.2
-RUN apt-get update \
-  && apt-get install -y curl
-RUN mkdir /out
 RUN curl -sL "https://github.com/docker/compose/releases/download/${VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /out/docker-compose \
   && chmod +x /out/docker-compose
 
@@ -52,6 +57,16 @@ FROM ghcr.io/graalvm/graalvm-ce:latest AS graalvm
 RUN gu install native-image
 RUN mkdir /out
 RUN cp -r $JAVA_HOME/* /out
+
+# --------------------------------------------------
+# haribote
+# --------------------------------------------------
+FROM working AS haribote
+ARG VERSION=0.0.1
+WORKDIR /tmp
+RUN curl -sfLO "https://github.com/miya10kei/haribote/releases/download/v0.0.1/haribote-linux-amd64-v${VERSION}.tar.gz"
+RUN tar -zxvf haribote-linux-amd64-v${VERSION}.tar.gz
+RUN cp ./haribote /out
 
 
 # --------------------------------------------------
@@ -94,14 +109,12 @@ RUN cp -r /opt/gradle/* /out
 # --------------------------------------------------
 # kubernetes
 # --------------------------------------------------
-FROM ubuntu:groovy AS k8s
-RUN apt-get update && apt-get install -y curl gnupg2
+FROM working AS k8s
 RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg \
   | apt-key add -
 RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" \
   | tee -a /etc/apt/sources.list.d/kubernetes.list
 RUN apt-get update && apt-get install -y kubectl
-RUN mkdir /out
 RUN cp /usr/bin/kubectl /out
 
 
@@ -168,6 +181,7 @@ COPY --from=docker         /out /usr/local/bin
 COPY --from=docker-compose /out /usr/local/bin
 COPY --from=golang         /out /usr/local/bin
 COPY --from=graalvm        /out /usr/local/graalvm
+COPY --from=haribote       /out /usr/local/bin
 COPY --from=jdk11          /out /usr/local/jdk11
 COPY --from=jdk16          /out /usr/local/jdk16
 COPY --from=maven          /out /usr/local/maven
