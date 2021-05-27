@@ -157,7 +157,6 @@ ENV LANG            en_US.UTF-8
 ENV LANGUAGE        en_US.UTF-8
 ENV LC_ALL          en_US.UTF-8
 ENV TZ              Asia/Tokyo
-ENV JAVA_HOME /usr/local/jdk11
 
 RUN apt-get update \
   && apt-get install -y \
@@ -168,7 +167,6 @@ RUN apt-get update \
   fish \
   fontconfig \
   git \
-  gosu \
   hexyl \
   jq \
   libz-dev \
@@ -178,6 +176,7 @@ RUN apt-get update \
   npm \
   ripgrep \
   sudo \
+  tmux \
   tzdata \
   wget \
   zip \
@@ -197,9 +196,10 @@ COPY --from=docker-compose /out /usr/local/bin
 COPY --from=golang         /out /usr/local/bin
 COPY --from=graalvm        /out /usr/local/graalvm
 COPY --from=haribote       /out /usr/local/bin
-COPY --from=jdk11          /out /usr/local/jdk11
 COPY --from=kotlin-ls      /out /usr/local/kotlin-ls
-COPY --from=jdk16          /out /usr/local/jdk16
+COPY --from=jdk8           /out /usr/local/jvm/jdk8
+COPY --from=jdk11          /out /usr/local/jvm/jdk11
+COPY --from=jdk16          /out /usr/local/jvm/jdk16
 COPY --from=maven          /out /usr/local/maven
 COPY --from=gradle         /out /usr/local/gradle
 COPY --from=k8s            /out /usr/local/bin
@@ -234,18 +234,25 @@ COPY --chown=$LOGIN:$GROUP fishfile           $HOME/.config/fish/fishfile
 COPY --chown=$LOGIN:$GROUP init.vim           $HOME/.config/nvim/init.vim
 COPY --chown=$LOGIN:$GROUP package.json       $HOME/package.json
 
+# tpm
+RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+
+# fisher
 RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source \
   && fisher install jorgebucaran/fisher \
   && fisher install < $HOME/.config/fish/fishfile"
 
+# global npm pakcage
 RUN npm install --global-style \
   --ignore-scripts \
   --no-package-lock \
   --only=prod \
   --loglevel=error
 
+# neovim
 RUN NVIM_HOME=$HOME/.config/nvim nvim --headless +PlugInstall +qa
 
+# coc.vim
 RUN npm install --global-style \
   --ignore-scripts \
   --loglevel=error \
@@ -253,6 +260,7 @@ RUN npm install --global-style \
   --no-package-lock \
   --only=prod \
   --prefix $HOME/.config/coc/extensions
+
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/usr/bin/fish"]

@@ -174,7 +174,7 @@ switch $OS
   case "Darwin"
     set jvmDir /Library/Java/JavaVirtualMachines
   case "Linux"
-    set jvmDir /usr/lib/jvm
+    set jvmDir /usr/local/jvm
 end
 
 if test -e $jvmDir
@@ -400,6 +400,7 @@ if type -q docker
                       --mount type=bind,src=$HOME/.dotfiles/.gitconfig,dst=$REMOTE_HOME/.gitconfig \
                       --mount type=bind,src=$HOME/.dotfiles/.gitconfig_private,dst=$REMOTE_HOME/.gitconfig_private \
                       --mount type=bind,src=$HOME/.dotfiles/.npmrc,dst=$REMOTE_HOME/.npmrc \
+                      --mount type=bind,src=$HOME/.dotfiles/.tmux.conf,dst=$REMOTE_HOME/.tmux.conf\
                       --mount type=bind,src=$HOME/.dotfiles/coc-package.json,dst=$REMOTE_HOME/.config/coc/extensions/package.json \
                       --mount type=bind,src=$HOME/.dotfiles/coc-settings.json,dst=$REMOTE_HOME/.config/nvim/coc-settings.json \
                       --mount type=bind,src=$HOME/.dotfiles/config.fish,dst=$REMOTE_HOME/.config/fish/config.fish \
