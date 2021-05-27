@@ -131,6 +131,13 @@ function removePath -a target -d "Remove path from PATH variable"
   set -x PATH $newPath
 end
 
+function execCmd -a CMD
+    set_color green
+    echo \uf739" $CMD" | sed "s/ \{2,\}/ /g"
+    set_color normal
+    eval $CMD
+end
+
 
 # --------------------------------------------------
 # os dependency
@@ -257,14 +264,6 @@ end
 if type -q node; and type -q npm
   set -x NODE_MODULE $HOME/node_modules
   addPath $NODE_MODULE/.bin
-  set -ag backgroundCmds "pushd $HOME \
-                          && npm install --global-style \
-                                         --ignore-scripts \
-                                         --no-package-lock \
-                                         --only=prod \
-                                         --loglevel=error \
-                                         > /dev/null \
-                          && popd"
 end
 
 
@@ -276,7 +275,9 @@ if test -z $SSH_AGENT_PID
 end
 
 if not ssh-add -l > /dev/null
-  ssh-add (ls $HOME/.ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
+  if  test -e $HOME/.ssh/id_rsa
+    ssh-add (ls $HOME/.ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
+  end
 end
 
 
@@ -366,135 +367,107 @@ end
 if type -q docker
 
   #   $variableName $image                  $tag     $containerName
-  set baseDev       "miya10kei/base-dev"    "latest" "base-dev"
-  set k8sDev        "miya10kei/k8s-dev"     "latest" "k8s-dev"
-  set ansibleDev    "miya10kei/ansible-dev" "latest" "ansible-dev"
-  set vaultDev      "miya10kei/vault-dev"   "latest" "vault-dev"
-  set devEnv        "miya10kei/dev-env"     "latest" "dev-env"
-  set -l targets $baseDev[3] $k8sDev[3] $ansibleDev[3] $vaultDev[3] $devEnv[3]
+  set DEV_ENV        "miya10kei/dev-env"     "latest" "dev-env"
+  set TARGETS $DEV_ENV[3]
 
   function ctnr -d "Manipulate container"
 
     argparse -i -n ctnr "t/target=" "a/attach" "r/recreate" -- $argv; or return 1
 
+    set REMOTE_USER miya10kei
+    set REMOTE_HOME /home/$REMOTE_USER
+    set SUB_COMMAND $argv[1]
+
     switch $_flag_target
-      case $baseDev[3]
-        set image         $baseDev[1]
-        set tag           $baseDev[2]
-        set containerName $baseDev[3]
-      case $k8sDev[3]
-        set image         $k8sDev[1]
-        set tag           $k8sDev[2]
-        set containerName $k8sDev[3]
-      case $ansibleDev[3]
-        set image         $ansibleDev[1]
-        set tag           $ansibleDev[2]
-        set containerName $ansibleDev[3]
-        set remoteUser    "ansible"
-        set runOpts       "\
-                            -v $HOME/.ansible.cfg:/home/$remoteUser/.ansible.cfg \
-                          "
-      case $vaultDev[3]
-        set image         $vaultDev[1]
-        set tag           $vaultDev[2]
-        set containerName $vaultDev[3]
-        set runOpts       "\
-                            --cap-add=IPC_LOCK \
-                            -e VAULT_ADDR=http://vault1:8200 \
-                          "
-      case $devEnv[3]
-        set image         $devEnv[1]
-        set tag           $devEnv[2]
-        set containerName $devEnv[3]
+      case $DEV_ENV[3]
+        set IMAGE_NAME     $DEV_ENV[1]
+        set TAG_NAME       $DEV_ENV[2]
+        set CONTAINER_NAME $DEV_ENV[3]
       case "*"
         echo "🙅 Not support container: $_flag_target"
         return 1
     end
 
-    set -q remoteUser; or set -l remoteUser $USER
-    set remoteHome "/home/$remoteUser"
-    set subCommand $argv[1]
-
-    switch $subCommand
+    switch $SUB_COMMAND
       case "run"
-        set -l uid  (id -u)
-        set -l gid  (id -g)
-        set -l groupName (getent group (id -g) | awk -F: '{print($1)}')
-        set -l dockerGid (cat /etc/group | grep docker | awk -F: '{print($3)}')
-        set runOpts "\
-                      --name $containerName \
+        set RUN_OPTS "--name $CONTAINER_NAME \
                       -e DISPLAY \
-                      -e DOCKER_GID=$dockerGid \
-                      -e DOCKER_MACHINE_NAME='🐳 $containerName' \
-                      -e REMOTE_GID=$gid \
-                      -e REMOTE_GROUP_NAME=$groupName \
-                      -e REMOTE_UID=$uid \
-                      -e REMOTE_USER=$remoteUser \
-                      -h $containerName \
-                      -v $HOME/.config/coc/extensions/package.json:$remoteHome/.config/coc/extensions/package.json \
-                      -v $HOME/.config/fish/config.fish:$remoteHome/.config/fish/config.fish \
-                      -v $HOME/.config/fish/fishfile:$remoteHome/.config/fish/fishfile \
-                      -v $HOME/.config/nvim/coc-settings.json:$remoteHome/.config/nvim/coc-settings.json \
-                      -v $HOME/.config/nvim/init.vim:$remoteHome/.config/nvim/init.vim \
-                      -v $HOME/.docker/config.json:$remoteHome/.docker/config.json \
-                      -v $HOME/.dotfiles:/$remoteHome/.dotfiles \
-                      -v $HOME/.editorconfig:/$remoteHome/.editorconfig \
-                      -v $HOME/.gitconfig:/$remoteHome/.gitconfig \
-                      -v $HOME/.gitconfig_private:/$remoteHome/.gitconfig_private \
-                      -v $HOME/.gradle:$remoteHome/.gradle \
-                      -v $HOME/.hyper.js:$remoteHome/.hyper.js \
-                      -v $HOME/.local/share/fish/fish_history:$remoteHome/.local/share/fish/fish_history \
-                      -v $HOME/.m2:$remoteHome/.m2 \
-                      -v $HOME/.npmrc:$remoteHome/.npmrc \
-                      -v $HOME/.ssh:$remoteHome/.ssh \
-                      -v $HOME/Documents:/$remoteHome/Documents \
-                      -v $HOME/Downloads:/$remoteHome/Downloads \
-                      -v $HOME/dev:$remoteHome/dev \
-                      -v $HOME/package.json:$remoteHome/package.json \
-                      -v /tmp/.X11-unix:/tmp/.X11-unix \
-                      -v /var/run/docker.sock:/var/run/docker.sock \
-                      $runOpts \
-                      $argv[2..-1] \
-                    "
-        set cmd     "docker run -dit $runOpts $image:$tag /usr/bin/bash"
-        test -n "$_flag_recreate"
-          and test (docker container ls -qa -f name="$containerName")
-          and set beforeCmd "ctnr stop -t $containerName"
-        test -n "$_flag_attach"; and set afterCmd "ctnr attach -t $containerName"
+                      -e DOCKER_MACHINE_NAME='"\ue7b0" $CONTAINER_NAME' \
+                      -e REMOTE_USER=$REMOTE_USER\
+                      -h $CONTAINER_NAME \
+                      --mount type=bind,src=$HOME/.dotfiles,dst=$REMOTE_HOME/.dotfiles \
+                      --mount type=bind,src=$HOME/.dotfiles/.editorconfig,dst=$REMOTE_HOME/.editorconfig \
+                      --mount type=bind,src=$HOME/.dotfiles/.gitconfig,dst=$REMOTE_HOME/.gitconfig \
+                      --mount type=bind,src=$HOME/.dotfiles/.gitconfig_private,dst=$REMOTE_HOME/.gitconfig_private \
+                      --mount type=bind,src=$HOME/.dotfiles/.npmrc,dst=$REMOTE_HOME/.npmrc \
+                      --mount type=bind,src=$HOME/.dotfiles/coc-package.json,dst=$REMOTE_HOME/.config/coc/extensions/package.json \
+                      --mount type=bind,src=$HOME/.dotfiles/coc-settings.json,dst=$REMOTE_HOME/.config/nvim/coc-settings.json \
+                      --mount type=bind,src=$HOME/.dotfiles/config.fish,dst=$REMOTE_HOME/.config/fish/config.fish \
+                      --mount type=bind,src=$HOME/.dotfiles/fishfile,dst=$REMOTE_HOME/.config/fish/fishfile \
+                      --mount type=bind,src=$HOME/.dotfiles/init.vim,dst=$REMOTE_HOME/.config/nvim/init.vim \
+                      --mount type=bind,src=$HOME/.dotfiles/package.json,dst=$REMOTE_HOME/package.json \
+                      --mount type=bind,src=$HOME/.gradle,dst=$REMOTE_HOME/.gradle \
+                      --mount type=bind,src=$HOME/.local/share/fish/fish_history,dst=$REMOTE_HOME/.local/share/fish/fish_history \
+                      --mount type=bind,src=$HOME/.m2,dst=$REMOTE_HOME/.m2 \
+                      --mount type=bind,src=$HOME/.ssh,dst=$REMOTE_HOME/.ssh \
+                      --mount type=bind,src=$HOME/Documents,dst=$REMOTE_HOME/Documents \
+                      --mount type=bind,src=$HOME/Downloads,dst=$REMOTE_HOME/Downloads \
+                      --mount type=bind,src=$HOME/dev,dst=$REMOTE_HOME/dev \
+                      --mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
+                      --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+                      $RUN_OPTS \
+                      $argv[2..-1]"
+
+        set DOCKER_GID (cat /etc/group | grep docker | awk -F: '{print($3)}')
+        if test -n "$DOCKER_GID"
+          set RUN_OPTS "-e DOCKER_GID=$DOCKER_GID $RUN_OPTS"
+        end
+
+        set CMD "docker run -dit $RUN_OPTS $IMAGE_NAME:$TAG_NAME /usr/bin/bash"
+        if test -n "$_flag_recreate"
+          if test (docker container ls -qa -f name="$CONTAINER_NAME")
+            set PRE_CMD "ctnr stop -t $CONTAINER_NAME"
+          end
+        end
+        if test -n "$_flag_attach"
+          set POST_CMD "ctnr attach -t $CONTAINER_NAME"
+        end
+
       case "attach"
-        set attachOpts "\
-                         -u $remoteUser \
-                         -w $remoteHome \
-                         $attachOpts \
-                         $argv[2..-1] \
-                       "
-        set cmd "docker exec -it $attachOpts $containerName /usr/bin/fish"
+        set ATTACH_OPTS "-u $REMOTE_USER $ATTACH_OPTS $argv[2..-1]"
+        set CMD "docker exec -it $ATTACH_OPTS $CONTAINER_NAME /usr/bin/fish"
+
       case "start"
-        set cmd "docker start $containerName"
+        set CMD "docker start $CONTAINER_NAME"
+
       case "stop"
-        set cmd "docker stop $containerName && docker rm $containerName"
+        set CMD "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME"
+
       case "*"
-        echo "🙅 Unsupported sub-command: $subCommand"
+        echo "🙅 Unsupported sub-command:$SUB_COMMAND"
         return 1
     end
 
-    test -n $beforeCmd; eval $beforeCmd
-    set_color green && echo "🐟 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
-    eval $cmd
-    test -n $afterCmd && sleep 0.5 && eval $afterCmd
+    if test -n "$PRE_CMD"
+      execCmd $PRE_CMD
+    end
+    execCmd $CMD
+    if test -n "$POST_CMD"
+      execCmd $POST_CMD
+    end
   end
 
   # completion
-  set -l targetAlias (string join ' ' $targets)
-  set -l cntrCompletion \
+  set -l TARGET_ALIAS (string join ' ' $TARGETS)
+  set -l CNTR_COMPLETION \
     "complete -f -c ctnr -n '__fish_use_subcommand' -a 'run'    -d 'Run container'" \
     "complete -f -c ctnr -n '__fish_seen_subcommand_from run' -s a -l attach   -d 'execute attach after run'" \
     "complete -f -c ctnr -n '__fish_seen_subcommand_from run' -s r -l recreate -d 'recreate container if already exists'" \
     "complete -f -c ctnr -n '__fish_use_subcommand' -a 'attach' -d 'Attach to container'" \
     "complete -f -c ctnr -n '__fish_use_subcommand' -a 'start'  -d 'Start container'" \
     "complete -f -c ctnr -n '__fish_use_subcommand' -a 'stop'   -d 'Stop and remove container'" \
-    "complete -x -c ctnr -s t -l target -a '$targetAlias' -d 'Target container'"
-  apply-completion "ctnr" $cntrCompletion
+    "complete -x -c ctnr -s t -l target -a '$TARGET_ALIAS' -d 'Target container'"
+  apply-completion "ctnr" $CNTR_COMPLETION
 
   alias-if-needed rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
 end
@@ -550,16 +523,6 @@ end
 # --------------------------------------------------
 if type -q nvim
   set -x  NVIM_HOME      $HOME/.config/nvim
-  set -ag backgroundCmds "nvim --headless +PlugInstall +qa > /dev/null 2>&1"
-  set -ag backgroundCmds "pushd $HOME/.config/coc/extensions \
-                          && npm install --global-style \
-                                         --ignore-scripts \
-                                         --loglevel=error \
-                                         --no-bin-links \
-                                         --no-package-lock \
-                                         --only=prod \
-                                         > /dev/null \
-                          && popd"
 end
 
 
@@ -645,19 +608,6 @@ alias-if-needed uuu        "cd ../../../"
 alias-if-needed uuuu       "cd ../../../../"
 alias-if-needed vim        "nvim"
 alias-if-needed xsel       "xsel -b"
-
-
-# --------------------------------------------------
-# backgroun process
-# --------------------------------------------------
-if not test -e $HOME/.lastinstalled
-  epochtime > $HOME/.lastinstalled
-
-  for cmd in $backgroundCmds
-    set_color green && echo "🐡 $cmd" | sed "s/ \{2,\}/ /g" && set_color normal
-    fish -c "$cmd" &
-  end
-end
 
 
 # --------------------------------------------------

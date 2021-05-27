@@ -189,15 +189,54 @@ COPY --from=gradle         /out /usr/local/gradle
 COPY --from=k8s            /out /usr/local/bin
 COPY --from=rust           /out /usr/local/cargo
 
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 0755 /usr/local/bin/entrypoint.sh
+
 RUN ln -s /usr/local/maven/bin/mvn     /usr/local/bin/mvn
 RUN ln -s /usr/local/gradle/bin/gradle /usr/local/bin/gradle
 RUN ls /usr/local/cargo/bin \
   | xargs -n1 -I{} ln -s /usr/local/cargo/bin/{} /usr/local/bin/{}
 
-COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod 0755 /usr/local/bin/entrypoint.sh
+ARG UID=1000
+ARG LOGIN=miya10kei
+ARG GID=1000
+ARG GROUP=miya10kei
+ARG HOME=/home/$LOGIN
+ARG DOTFILES=$HOME/.dotfiles
+
+RUN groupadd -g $GID $GROUP
+RUN useradd  -g $GID -u $UID -m $LOGIN
+RUN echo "$LOGIN ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+
+USER $LOGIN
+WORKDIR $HOME
+
+COPY --chown=$LOGIN:$GROUP .npmrc             $HOME/.npmrc
+COPY --chown=$LOGIN:$GROUP coc-package.json   $HOME/.config/coc/extensions/package.json
+COPY --chown=$LOGIN:$GROUP fishfile           $HOME/.config/fish/fishfile
+COPY --chown=$LOGIN:$GROUP init.vim           $HOME/.config/nvim/init.vim
+COPY --chown=$LOGIN:$GROUP package.json       $HOME/package.json
+
+RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source \
+  && fisher install jorgebucaran/fisher \
+  && fisher install < $HOME/.config/fish/fishfile"
+
+RUN npm install --global-style \
+  --ignore-scripts \
+  --no-package-lock \
+  --only=prod \
+  --loglevel=error
+
+RUN NVIM_HOME=$HOME/.config/nvim nvim --headless +PlugInstall +qa
+
+RUN npm install --global-style \
+  --ignore-scripts \
+  --loglevel=error \
+  --no-bin-links \
+  --no-package-lock \
+  --only=prod \
+  --prefix $HOME/.config/coc/extensions
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
 CMD ["/usr/bin/fish"]
 
