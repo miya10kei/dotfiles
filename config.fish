@@ -559,11 +559,6 @@ apply-completion "package" $packageCompletion
 # --------------------------------------------------
 # event
 # --------------------------------------------------
-function cd-with-event
-  builtin cd $argv
-  emit cd-event (pwd)
-end
-
 function cd-event-listener --on-event cd-event
   if type -q change-java-version-depends-on-version-file
     change-java-version-depends-on-version-file $argv[1]
@@ -575,7 +570,6 @@ end
 # alias
 # --------------------------------------------------
 alias-if-needed cat        "batcat --theme=TwoDark" "batcat"
-alias-if-needed cd         "cd-with-event"
 alias-if-needed cdevp      "cd $HOME/dev/private"
 alias-if-needed cdevw      "cd $HOME/dev/work"
 alias-if-needed cdot       "cd $HOME/.dotfiles"
