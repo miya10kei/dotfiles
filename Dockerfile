@@ -4,7 +4,8 @@
 FROM ubuntu:groovy AS working
 RUN apt-get update && apt-get install -y \
   curl \
-  gnupg2
+  gnupg2 \
+  unzip
 RUN mkdir /out
 
 
@@ -58,15 +59,29 @@ RUN gu install native-image
 RUN mkdir /out
 RUN cp -r $JAVA_HOME/* /out
 
+
 # --------------------------------------------------
 # haribote
 # --------------------------------------------------
 FROM working AS haribote
 ARG VERSION=0.0.1
 WORKDIR /tmp
-RUN curl -sfLO "https://github.com/miya10kei/haribote/releases/download/v0.0.1/haribote-linux-amd64-v${VERSION}.tar.gz"
-RUN tar -zxvf haribote-linux-amd64-v${VERSION}.tar.gz
-RUN cp ./haribote /out
+RUN curl -sfLO "https://github.com/miya10kei/haribote/releases/download/v0.0.1/haribote-linux-amd64-v${VERSION}.tar.gz" \
+  && tar -zxvf haribote-linux-amd64-v${VERSION}.tar.gz \
+  && rm  -f    haribote-linux-amd64-v${VERSION}.tar.gz \
+  && mv ./haribote /out
+
+
+# --------------------------------------------------
+# kotlin-language-server
+# --------------------------------------------------
+FROM working AS kotlin-ls
+ARG VERSION=1.1.1
+WORKDIR /tmp
+RUN curl -sLO "https://github.com/fwcd/kotlin-language-server/releases/download/${VERSION}/server.zip" \
+  && unzip server.zip \
+  && rm -f server.zip \
+  && mv server/* /out
 
 
 # --------------------------------------------------
@@ -183,6 +198,7 @@ COPY --from=golang         /out /usr/local/bin
 COPY --from=graalvm        /out /usr/local/graalvm
 COPY --from=haribote       /out /usr/local/bin
 COPY --from=jdk11          /out /usr/local/jdk11
+COPY --from=kotlin-ls      /out /usr/local/kotlin-ls
 COPY --from=jdk16          /out /usr/local/jdk16
 COPY --from=maven          /out /usr/local/maven
 COPY --from=gradle         /out /usr/local/gradle
@@ -192,8 +208,9 @@ COPY --from=rust           /out /usr/local/cargo
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 0755 /usr/local/bin/entrypoint.sh
 
-RUN ln -s /usr/local/maven/bin/mvn     /usr/local/bin/mvn
-RUN ln -s /usr/local/gradle/bin/gradle /usr/local/bin/gradle
+RUN ln -s /usr/local/kotlin-ls/bin/kotlin-language-server /usr/local/bin/kotlin-language-server
+RUN ln -s /usr/local/gradle/bin/gradle                    /usr/local/bin/gradle
+RUN ln -s /usr/local/maven/bin/mvn                        /usr/local/bin/mvn
 RUN ls /usr/local/cargo/bin \
   | xargs -n1 -I{} ln -s /usr/local/cargo/bin/{} /usr/local/bin/{}
 

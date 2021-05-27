@@ -1,5 +1,12 @@
 {
-  "languageserver": {},
+  "languageserver": {
+    "kotlin": {
+      "command": "/usr/local/bin/kotlin-language-server",
+      "filetypes": [
+        "kotlin"
+      ]
+    }
+  },
   "eslint.autoFixOnSave": true,
   "vetur.format.defaultFormatter.js": "prettier-eslint",
   "yaml.completion": true,
