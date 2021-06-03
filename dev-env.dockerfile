@@ -1,4 +1,5 @@
-FROM miya10kei/dev-env-base
+ARG TAG=latest
+FROM docker.pkg.github.com/miya10kei/dotfiles/dev-env:latest
 
 ARG UID
 ARG LOGIN

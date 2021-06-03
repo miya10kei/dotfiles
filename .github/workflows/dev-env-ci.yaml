@@ -60,7 +60,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          registry: ghcr.io
+          registry: docker.pkg.github.com
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push dev-env-base
@@ -68,7 +68,7 @@ jobs:
         with:
           file: dev-env-base.dockerfile
           push: ${{ steps.detect-parameter.outputs.push }}
-          tags: ghcr.io/miya10kei/dev-env-base:${{ steps.detect-parameter.outputs.version }}
+          tags: docker.pkg.github.com/miya10kei/dotfiles/dev-env-base:${{ steps.detect-parameter.outputs.version }}
       - name: Build and push dev-env
         uses: docker/build-push-action@v2
         with:
@@ -78,9 +78,10 @@ jobs:
             GID=${{ secrets.GID }}
             GROUP=${{ secrets.GROUP }}
             DOCKER_GID=${{ secrets.DOCKER_GID }}
+            TAG=${{ steps.detect-parameter.outputs.version }}
           file: dev-env.dockerfile
           push: ${{ steps.detect-parameter.outputs.push }}
-          tags: ghcr.io/miya10kei/dev-env:${{ steps.detect-parameter.outputs.version }}
+          tags: docker.pkg.github.com/miya10kei/dotfiles/dev-env:${{ steps.detect-parameter.outputs.version }}
       - name: Notify result to Slack
         uses: 8398a7/action-slack@v3
         with:
