@@ -380,8 +380,7 @@ if type -q docker
 
     argparse -i -n ctnr "t/target=" "a/attach" "r/recreate" -- $argv; or return 1
 
-    set REMOTE_USER miya10kei
-    set REMOTE_HOME /home/$REMOTE_USER
+    set REMOTE_HOME /home/$USER
     set SUB_COMMAND $argv[1]
 
     switch $_flag_target
@@ -441,7 +440,7 @@ if type -q docker
         end
 
       case "attach"
-        set ATTACH_OPTS "-u $REMOTE_USER $ATTACH_OPTS $argv[2..-1]"
+        set ATTACH_OPTS "$argv[2..-1]"
         set CMD "docker exec -it $ATTACH_OPTS $CONTAINER_NAME /usr/bin/fish"
 
       case "start"
@@ -629,4 +628,4 @@ if type -q peco
   end
 end
 
-sleep 0.2
+sleep 0.5

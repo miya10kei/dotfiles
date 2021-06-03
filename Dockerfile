@@ -205,24 +205,23 @@ COPY --from=gradle         /out /usr/local/gradle
 COPY --from=k8s            /out /usr/local/bin
 COPY --from=rust           /out /usr/local/cargo
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod 0755 /usr/local/bin/entrypoint.sh
-
 RUN ln -s /usr/local/kotlin-ls/bin/kotlin-language-server /usr/local/bin/kotlin-language-server
 RUN ln -s /usr/local/gradle/bin/gradle                    /usr/local/bin/gradle
 RUN ln -s /usr/local/maven/bin/mvn                        /usr/local/bin/mvn
 RUN ls /usr/local/cargo/bin \
   | xargs -n1 -I{} ln -s /usr/local/cargo/bin/{} /usr/local/bin/{}
 
-ARG UID=1000
-ARG LOGIN=miya10kei
-ARG GID=1000
-ARG GROUP=miya10kei
+ARG UID
+ARG LOGIN
+ARG GID
+ARG GROUP
+ARG DOCKER_GID
 ARG HOME=/home/$LOGIN
 ARG DOTFILES=$HOME/.dotfiles
 
 RUN groupadd -g $GID $GROUP
-RUN useradd  -g $GID -u $UID -m $LOGIN
+RUN groupadd -g $DOCKER_GID docker
+RUN useradd  -g $GID -G docker -u $UID -m $LOGIN
 RUN echo "$LOGIN ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
 USER $LOGIN
@@ -261,7 +260,5 @@ RUN npm install --global-style \
   --only=prod \
   --prefix $HOME/.config/coc/extensions
 
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/usr/bin/fish"]
 
