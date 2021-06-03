@@ -174,6 +174,7 @@ RUN apt-get update \
   git \
   hexyl \
   jq \
+  less \
   libz-dev \
   locales \
   neovim \
