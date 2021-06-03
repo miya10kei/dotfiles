@@ -2,7 +2,8 @@
 # working image
 # --------------------------------------------------
 FROM ubuntu:groovy AS working
-RUN apt-get update && apt-get install -y \
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
   curl \
   gnupg2 \
   unzip
@@ -17,7 +18,9 @@ RUN curl -s https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key \
   | apt-key add -
 RUN echo "deb https://packages.cloudfoundry.org/debian stable main" \
   | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-RUN apt-get update && apt-get install -y cf7-cli
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+  cf7-cli
 RUN cp /usr/bin/cf7 /out
 
 
@@ -129,7 +132,9 @@ RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg \
   | apt-key add -
 RUN echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" \
   | tee -a /etc/apt/sources.list.d/kubernetes.list
-RUN apt-get update && apt-get install -y kubectl
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+  kubectl
 RUN cp /usr/bin/kubectl /out
 
 
@@ -159,7 +164,7 @@ ENV LC_ALL          en_US.UTF-8
 ENV TZ              Asia/Tokyo
 
 RUN apt-get update \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
   bat \
   curl \
   exa \

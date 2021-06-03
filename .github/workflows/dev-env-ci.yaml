@@ -80,7 +80,7 @@ jobs:
             DOCKER_GID=${{ secrets.DOCKER_GID }}
           file: dev-env.dockerfile
           push: ${{ steps.detect-parameter.outputs.push }}
-          tags: miya10kei/dev-env:${{ steps.detect-parameter.outputs.version }}
+          tags: ghcr.io/miya10kei/dev-env:${{ steps.detect-parameter.outputs.version }}
       - name: Notify result to Slack
         uses: 8398a7/action-slack@v3
         with:
