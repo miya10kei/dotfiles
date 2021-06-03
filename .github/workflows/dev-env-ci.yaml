@@ -6,9 +6,9 @@ on:
       - master
     paths:
       - .npmrc
-      - Dockerfile
+      - dev-env-base.dockerfile
+      - dev-env.dockerfile
       - coc-package.json
-      - entrypoint.sh
       - fishfile
       - init.vim
       - package.json
@@ -17,9 +17,9 @@ on:
       - master
     paths:
       - .npmrc
-      - Dockerfile
+      - dev-env-base.dockerfile
+      - dev-env.dockerfile
       - coc-package.json
-      - entrypoint.sh
       - fishfile
       - init.vim
       - package.json
@@ -62,13 +62,24 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
+      - name: Build and push dev-env-base
         uses: docker/build-push-action@v2
         with:
+          file: dev-env-base.dockerfile
+          push: ${{ steps.detect-parameter.outputs.push }}
+          tags: miya10kei/dev-env-base:${{ steps.detect-parameter.outputs.version }}
+      - name: Build and push dev-env
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            UID=${{ secrets.UID }}
+            LOGIN=${{ secrets.LOGIN }}
+            GID=${{ secrets.GID }}
+            GROUP=${{ secrets.GROUP }}
+            DOCKER_GID=${{ secrets.DOCKER_GID }}
+          file: dev-env.dockerfile
           push: ${{ steps.detect-parameter.outputs.push }}
           tags: miya10kei/dev-env:${{ steps.detect-parameter.outputs.version }}
-      - name: Print image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
       - name: Notify result to Slack
         uses: 8398a7/action-slack@v3
         with:
