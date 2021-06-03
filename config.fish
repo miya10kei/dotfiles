@@ -50,6 +50,12 @@ set -g theme_newline_prompt         \uf739' '
 set -g theme_powerline_fonts        no
 set -g theme_show_exit_status       yes
 
+function fish_greeting
+  set_color $fish_color_autosuggestion
+  echo \uf90a" Live as if you were to die tomorrow. Learn as if you were to live forever."
+  set_color normal
+end
+
 
 # --------------------------------------------------
 # utility
@@ -623,3 +629,4 @@ if type -q peco
   end
 end
 
+sleep 0.2
