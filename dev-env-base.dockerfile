@@ -3,7 +3,7 @@
 # --------------------------------------------------
 FROM ubuntu:groovy AS working
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
+  && apt-get install -y \
   curl \
   gnupg2 \
   unzip
