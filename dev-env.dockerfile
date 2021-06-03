@@ -1,5 +1,5 @@
 ARG TAG=latest
-FROM docker.pkg.github.com/miya10kei/dotfiles/dev-env:latest
+FROM ghcr.io/miya10kei/dev-env-base:$TAG
 
 ARG UID
 ARG LOGIN
