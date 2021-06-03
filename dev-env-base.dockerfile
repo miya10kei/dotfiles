@@ -179,6 +179,7 @@ RUN apt-get update \
   neovim \
   nodejs \
   npm \
+  openssh-client \
   ripgrep \
   sudo \
   tmux \

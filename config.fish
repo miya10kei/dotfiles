@@ -372,8 +372,8 @@ end
 # --------------------------------------------------
 if type -q docker
 
-  #   $variableName $image                  $tag     $containerName
-  set DEV_ENV        "miya10kei/dev-env"     "latest" "dev-env"
+  #   $variableName $image $tag $containerName
+  set DEV_ENV "ghcr.io/miya10kei/dev-env" "latest" "dev-env"
   set TARGETS $DEV_ENV[3]
 
   function ctnr -d "Manipulate container"
