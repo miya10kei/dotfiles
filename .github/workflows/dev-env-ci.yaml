@@ -68,7 +68,7 @@ jobs:
         with:
           file: dev-env-base.dockerfile
           push: ${{ steps.detect-parameter.outputs.push }}
-          tags: miya10kei/dev-env-base:${{ steps.detect-parameter.outputs.version }}
+          tags: ghcr.io/miya10kei/dev-env-base:${{ steps.detect-parameter.outputs.version }}
       - name: Build and push dev-env
         uses: docker/build-push-action@v2
         with:
