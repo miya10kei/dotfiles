@@ -33,6 +33,8 @@
   path = ~/.gitconfig_private
 [includeIf "gitdir:~/.dotfiles/"]
   path = ~/.gitconfig_private
+[includeIf "gitdir:~/.dotfiles-inhouse/"]
+  path = ~/.gitconfig_work
 [interactive]
   diffFilter = delta --color-only
 [commit]

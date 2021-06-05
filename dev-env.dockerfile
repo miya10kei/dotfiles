@@ -9,10 +9,11 @@ ARG DOCKER_GID
 ARG HOME=/home/$LOGIN
 ARG DOTFILES=$HOME/.dotfiles
 
-RUN groupadd -g $GID $GROUP
-RUN groupadd -g $DOCKER_GID docker
-RUN useradd  -g $GID -G docker -u $UID -m $LOGIN
-RUN echo "$LOGIN ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+RUN groupadd -g $GID $GROUP \
+  && groupadd -g $DOCKER_GID docker \
+  && useradd -l -g $GID -G docker -u $UID -m $LOGIN \
+  && echo "$LOGIN ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
+
 
 USER $LOGIN
 WORKDIR $HOME
@@ -31,12 +32,12 @@ RUN /usr/bin/fish -c "curl -sL https://git.io/fisher | source \
   && fisher install jorgebucaran/fisher \
   && fisher install < $HOME/.config/fish/fishfile"
 
-# global npm pakcage
-RUN npm install --global-style \
-  --ignore-scripts \
-  --no-package-lock \
-  --only=prod \
-  --loglevel=error
+## global npm pakcage
+#RUN npm install --global-style \
+#  --ignore-scripts \
+#  --no-package-lock \
+#  --only=prod \
+#  --loglevel=error
 
 # neovim
 RUN NVIM_HOME=$HOME/.config/nvim nvim --headless +PlugInstall +qa

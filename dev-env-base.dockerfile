@@ -258,6 +258,7 @@ RUN apt-get update \
   tmux \
   tzdata \
   unzip \
+  upx \
   wget \
   zip \
   && apt-get autoclean \
