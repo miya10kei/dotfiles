@@ -123,8 +123,10 @@ function apply-completion -a commandName -d 'Apply command completion'
 end
 
 function addPath -a target -d "Add new path into PATH variable"
-  if not contains $target $PATH
-    set -x PATH $target $PATH
+  if test -e $target
+    if not contains $target $PATH
+      set -x PATH $target $PATH
+    end
   end
 end
 
@@ -272,6 +274,11 @@ if type -q node; and type -q npm
   addPath $NODE_MODULE/.bin
 end
 
+# --------------------------------------------------
+# rust
+# --------------------------------------------------
+addPath $HOME/.cargo/bin
+
 
 # --------------------------------------------------
 # ssh agent
@@ -412,9 +419,13 @@ if type -q docker
                       --mount type=bind,src=$HOME/.dotfiles/fishfile,dst=$REMOTE_HOME/.config/fish/fishfile \
                       --mount type=bind,src=$HOME/.dotfiles/init.vim,dst=$REMOTE_HOME/.config/nvim/init.vim \
                       --mount type=bind,src=$HOME/.dotfiles/package.json,dst=$REMOTE_HOME/package.json \
-                      --mount type=bind,src=$HOME/.gradle,dst=$REMOTE_HOME/.gradle \
-                      --mount type=bind,src=$HOME/.local/share/fish/fish_history,dst=$REMOTE_HOME/.local/share/fish/fish_history \
-                      --mount type=bind,src=$HOME/.m2,dst=$REMOTE_HOME/.m2 \
+                      --mount type=bind,src=$HOME/.devenv/fish/fish_history,dst=$REMOTE_HOME/.local/share/fish/fish_history \
+                      --mount type=bind,src=$HOME/.devenv/gradle,dst=$REMOTE_HOME/.gradle \
+                      --mount type=bind,src=$HOME/.devenv/idea/cache,dst=$REMOTE_HOME/.cache/JetBrains \
+                      --mount type=bind,src=$HOME/.devenv/idea/config,dst=$REMOTE_HOME/.config/JetBrains \
+                      --mount type=bind,src=$HOME/.devenv/idea/local,dst=$REMOTE_HOME/.local/share/JetBrains \
+                      --mount type=bind,src=$HOME/.devenv/java,dst=$REMOTE_HOME/.java \
+                      --mount type=bind,src=$HOME/.devenv/maven,dst=$REMOTE_HOME/.m2 \
                       --mount type=bind,src=$HOME/.ssh,dst=$REMOTE_HOME/.ssh \
                       --mount type=bind,src=$HOME/Documents,dst=$REMOTE_HOME/Documents \
                       --mount type=bind,src=$HOME/Downloads,dst=$REMOTE_HOME/Downloads \
@@ -476,6 +487,21 @@ if type -q docker
   apply-completion "ctnr" $CNTR_COMPLETION
 
   alias-if-needed rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
+end
+
+
+# --------------------------------------------------
+# fzf
+# --------------------------------------------------
+if type -q fzf
+  # morhetz/gruvbox
+  set -l fzf_color  'bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934'
+  set -l bat_option '--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
+  set -l fzf_option "--layout=reverse --height=80% --border --margin=1 --padding=1 --info=inline --color=$fzf_color --preview='bat $bat_option' --preview-window right:70%"
+  alias-if-needed fzf "fzf $fzf_option" "fzf"
+  if type -q fzf_key_bindings
+    fzf_key_bindings
+  end
 end
 
 
@@ -575,12 +601,13 @@ end
 # --------------------------------------------------
 # alias
 # --------------------------------------------------
-alias-if-needed cat        "batcat --theme=TwoDark" "batcat"
+alias-if-needed cat        "bat --style=numbers --color=always --theme=TwoDark" "bat"
 alias-if-needed cdevp      "cd $HOME/dev/private"
 alias-if-needed cdevw      "cd $HOME/dev/work"
 alias-if-needed cdot       "cd $HOME/.dotfiles"
 alias-if-needed cdr        "cd -"
 alias-if-needed diff       "delta" "delta"
+alias-if-needed dk         "docker" "docker"
 alias-if-needed epochtime  "date -u +%s"
 alias-if-needed find       "fdfind"
 alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
