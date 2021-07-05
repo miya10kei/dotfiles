@@ -153,9 +153,6 @@ end
 switch $OS
   case "Darwin"
     set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
-    # nodejs
-    set -x NODE_HOME $HOME/.nodebrew/current
-    addPath $NODE_HOME/bin
 
     addPath /usr/local/opt/mysql-client/bin
 
@@ -380,7 +377,9 @@ end
 if type -q docker
 
   #   $variableName $image $tag $containerName
-  set DEV_ENV "ghcr.io/miya10kei/dev-env" "latest" "dev-env"
+  #set DEV_ENV "ghcr.io/miya10kei/dev-env" "latest" "dev-env"
+  set DEV_ENV "cd.docker-registry.corp.yahoo.co.jp:4443/kmiyaush/dev-env-inhouse" "latest" "dev-env"
+
   set TARGETS $DEV_ENV[3]
 
   function ctnr -d "Manipulate container"
@@ -609,7 +608,7 @@ alias-if-needed cdr        "cd -"
 alias-if-needed diff       "delta" "delta"
 alias-if-needed dk         "docker" "docker"
 alias-if-needed epochtime  "date -u +%s"
-alias-if-needed find       "fdfind"
+alias-if-needed find       "fdfind" "fdfind"
 alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
 alias-if-needed gcd        "gitt cd"
