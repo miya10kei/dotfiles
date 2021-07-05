@@ -194,7 +194,7 @@ if test -e $jvmDir
         end
       case "latest" "set"
         if [ $subCommand = "latest" ]
-          set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
+          set newJavaHome (ls -1d $jvmDir/* | tail -1 | string trim -r -c "/")
         else
           if test -n "$argv[2]"
             if test -e "$argv[2]"
@@ -204,7 +204,7 @@ if test -e $jvmDir
               return 1
             end
           else
-            set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
+            set newJavaHome (ls -d $jvmDir/* | string trim -r -c "/" | peco)
           end
         end
         if [ -n "$newJavaHome" ]
