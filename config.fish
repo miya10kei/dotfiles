@@ -71,6 +71,16 @@ function alias-if-needed -a name -a command
   alias $name $command
 end
 
+function bind-if-available -a key -a command
+  if type -q $command
+    if test -z $key
+      $command
+    else
+      bind $key $command
+    end
+  end
+end
+
 function compress -a format -a target -d "Compress the file or directory"
   test -z "$target" && echo "😰 You must pass the target file/directory"
   switch $format
@@ -224,7 +234,7 @@ end
 
 if not ssh-add -l > /dev/null
   if  test -e $HOME/.ssh/id_rsa
-    ssh-add (ls $HOME/.ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
+    ssh-add (ls -l1 $HOME/.ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
   end
 end
 
@@ -432,13 +442,10 @@ end
 # --------------------------------------------------
 if type -q fzf
   # morhetz/gruvbox
-  set -l fzf_color  'bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934'
-  set -l bat_option '--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
-  set -l fzf_option "--layout=reverse --height=80% --border --margin=1 --padding=1 --info=inline --color=$fzf_color --preview='bat $bat_option' --preview-window right:70%"
-  alias-if-needed fzf "fzf $fzf_option" "fzf"
-  if type -q fzf_key_bindings
-    fzf_key_bindings
-  end
+  set -l FZF_COLOR              'bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934'
+  set FZF_DEFAULT_OPTS          "--layout=reverse --height=80% --border --margin=1 --padding=1 --info=inline --color=$FZF_COLOR"
+  set -l FZF_PREVIEW_BAT_OPTION '--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
+  set FZF_CTRL_T_OPTS           "--preview='bat $FZF_PREVIEW_BAT_OPTION' --preview-window right:70%"
 end
 
 
@@ -528,27 +535,27 @@ apply-completion "package" $packageCompletion
 # --------------------------------------------------
 # alias
 # --------------------------------------------------
-alias-if-needed cat        "bat --style=numbers --color=always --theme=TwoDark" "bat"
+alias-if-needed catt       "bat --style=numbers --color=always --theme=TwoDark" "bat"
 alias-if-needed cdevp      "cd $HOME/dev/private"
 alias-if-needed cdevw      "cd $HOME/dev/work"
 alias-if-needed cdot       "cd $HOME/.dotfiles"
 alias-if-needed cdr        "cd -"
-alias-if-needed diff       "delta" "delta"
+alias-if-needed difff      "delta" "delta"
 alias-if-needed dk         "docker" "docker"
 alias-if-needed epochtime  "date -u +%s"
-alias-if-needed find       "fdfind" "fdfind"
+alias-if-needed findd      "fdfind" "fdfind"
 alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
 alias-if-needed gcd        "gitt cd"
-alias-if-needed grep       "rg" "rg"
+alias-if-needed grepp      "rg" "rg"
 alias-if-needed ll         "ls -lg"
 alias-if-needed lla        "ll -a"
 alias-if-needed ls         "exa" "exa"
 alias-if-needed lsa        "ls -a"
 alias-if-needed mv         "mv -i"
 alias-if-needed mvnwrapper "mvn -N io.takari:maven:wrapper" "mvn"
-alias-if-needed od         "hexyl" "hexyl"
-alias-if-needed ps         "procs" "procs"
+alias-if-needed odd         "hexyl" "hexyl"
+alias-if-needed pss         "procs" "procs"
 alias-if-needed q          "exit"
 alias-if-needed rm         "rm -i"
 alias-if-needed rr         "rm -ri"
@@ -567,19 +574,10 @@ alias-if-needed xsel       "xsel -b"
 # --------------------------------------------------
 # key binding
 # --------------------------------------------------
-function searchEmojiShortcodeAndInsert
-  set shorcode (cat $HOME/.emoji.list | peco | awk '{ print($1) }') && test -z $shorcode && return
-  set buf (commandline -b)
-  set position (commandline -C)
-  commandline -i $shorcode
-  commandline -C (math $position + (string length $shorcode))
+function fish_user_key_bindings
+  bind-if-available ''  'fzf_key_bindings'
+  bind-if-available \co 'gitmoji_fish'
 end
 
-if type -q peco
-  function fish_user_key_bindings
-    bind \cr 'peco_select_history (commandline -b)'
-    bind \co 'searchEmojiShortcodeAndInsert'
-  end
-end
 
 sleep 0.5
