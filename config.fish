@@ -286,7 +286,7 @@ end
 
 if not ssh-add -l > /dev/null
   if  test -e $HOME/.ssh/id_rsa
-    ssh-add (ls $HOME/.ssh/id_rsa* | grep -Ev '(\.pub|\.bk)$') > /dev/null 2>&1
+    ssh-add (ls $HOME/.ssh/id_rsa* | grep -ev '(\.pub|\.bk)$') > /dev/null 2>&1
   end
 end
 
@@ -509,7 +509,7 @@ end
 # --------------------------------------------------
 if type -q git; and type -q ghq; and type -q peco
 
-  alias-if-needed delbr "git branch | grep -vE '\*|master|develop|main' | xargs git branch -D"
+  alias-if-needed delbr "git branch | grep -ve '\*|master|develop|main' | xargs git branch -D"
 
   function gitt -a subCommand
     switch $subCommand
@@ -517,7 +517,7 @@ if type -q git; and type -q ghq; and type -q peco
         set -l repository (ghq list | peco) && test -z "$repository" && return
         set cmd "cd (ghq root)/$repository"
       case "checkout" "ch"
-        set -l branch (git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco) && test -z "$branch" && return
+        set -l branch (git branch -a --sort=-authordate | grep -v -e "\*|\->" | string trim | peco) && test -z "$branch" && return
         if string match -rq '^remotes' $branch
           set -l remote (string replace -r 'remotes/' '' $branch)
           set -l new (string replace -r '[^/]*/' '' $remote)
