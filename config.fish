@@ -175,79 +175,17 @@ end
 # --------------------------------------------------
 # java
 # --------------------------------------------------
-switch $OS
-  case "Darwin"
-    set jvmDir /Library/Java/JavaVirtualMachines
-  case "Linux"
-    set jvmDir /usr/local/jvm
-end
-
-if test -e $jvmDir
-  function jenv -a subCommand
-    argparse -i -n jenv "q/quit" -- $argv; or return 1
-
-    switch $subCommand
-      case "current"
-        argparse -i -n jenv "p/path" -- $argv; or return 1
-        if test -n "$_flag_path"
-          echo $JAVA_HOME
-        else
-          $JAVA_HOME/bin/java -version
-        end
-      case "latest" "set"
-        if [ $subCommand = "latest" ]
-          set newJavaHome (ls -f1d $jvmDir/* | tail -1 | string trim -r -c "/")
-        else
-          if test -n "$argv[2]"
-            if test -e "$argv[2]"
-              set newJavaHome $argv[2]
-            else
-              echo "🙅 Specified java version is not found: $argv[2]"
-              return 1
-            end
-          else
-            set newJavaHome (ls -fd $jvmDir/* | string trim -r -c "/" | peco)
-          end
-        end
-        if [ -n "$newJavaHome" ]
-          test $OS = "Darwin" && set newJavaHome $newJavaHome/Contents/Home
-          removePath $JAVA_HOME/bin
-          set -xg JAVA_HOME "$newJavaHome"
-          addPath $JAVA_HOME/bin
-          if test -z "$_flag_quit"
-            set_color green && echo "☕ Applied: $JAVA_HOME" && set_color normal
-          end
-        end
-      case "*"
-        echo "🙅 Unsupported sub-command: $subCommand"
-        return 1
-    end
-  end
-  set -l jenvCompletion \
-        "complete -f -c jenv -n '__fish_use_subcommand' -a 'current' -d 'Show current java version'" \
-        "complete -f -c jenv -n '__fish_use_subcommand' -a 'latest'  -d 'Set latest Java version'" \
-        "complete -f -c jenv -n '__fish_use_subcommand' -a 'set'     -d 'Select Java version and set it'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from current' -s p -l path -d 'Show current JAVA_HOME'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from latest'  -s q -l quit -d 'Not display message'" \
-        "complete -f -c jenv -n '__fish_seen_subcommand_from set'     -s q -l quit -d 'Not display message'"
-  apply-completion "jenv" $jenvCompletion
-
-  function change-java-version-depends-on-version-file
-    set -l versionFile "$argv[1]/.java_version"
-    if ls -1 $versionFile > /dev/null 2>&1
-      set -l newVersion (cat $versionFile | head -n 1)
-      if not string match -rq "$newVersion.*" (jenv current -p)
-        jenv set $newVersion
-      end
-    else
-      if test \( "$argv" != "$HOME" \) -a \( "$argv[1]" != "/" \)
-        change-java-version-depends-on-version-file (dirname $argv[1])
-      end
-    end
+if test -e $HOME/.sdkman
+  function sdk
+    bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk $argv"
   end
 
-  not set -q JAVA_HOME && jenv latest -q
+  for ITEM in $HOME/.sdkman/candidates/* ;
+    addPath $ITEM/current/bin
+  end
 end
+
+
 # --------------------------------------------------
 # golang
 # --------------------------------------------------
@@ -588,16 +526,6 @@ apply-completion "package" $packageCompletion
 
 
 # --------------------------------------------------
-# event
-# --------------------------------------------------
-function cd-event-listener --on-event cd-event
-  if type -q change-java-version-depends-on-version-file
-    change-java-version-depends-on-version-file $argv[1]
-  end
-end
-
-
-# --------------------------------------------------
 # alias
 # --------------------------------------------------
 alias-if-needed cat        "bat --style=numbers --color=always --theme=TwoDark" "bat"
@@ -613,7 +541,7 @@ alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
 alias-if-needed gcd        "gitt cd"
 alias-if-needed grep       "rg" "rg"
-alias-if-needed ll         "ls -l"
+alias-if-needed ll         "ls -lg"
 alias-if-needed lla        "ll -a"
 alias-if-needed ls         "exa" "exa"
 alias-if-needed lsa        "ls -a"
