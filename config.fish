@@ -162,7 +162,7 @@ end
 # --------------------------------------------------
 switch $OS
   case "Darwin"
-    set -x IP (ifconfig en0 | grep -e "inet\s" | awk '$1=="inet" {print $2}')
+    set -x IP (ifconfig en0 | grep -E "inet\s" | awk '$1=="inet" {print $2}')
 
     addPath /usr/local/opt/mysql-client/bin
 
@@ -462,7 +462,7 @@ if type -q git; and type -q ghq; and type -q peco
         set -l repository (ghq list | peco) && test -z "$repository" && return
         set cmd "cd (ghq root)/$repository"
       case "checkout" "ch"
-        set -l branch (git branch -a --sort=-authordate | grep -v -E "\*|\->" | string trim | peco) && test -z "$branch" && return
+        set -l branch (git branch -a --sort=-authordate | grep -vE "\*|\->" | string trim | peco) && test -z "$branch" && return
         if string match -rq '^remotes' $branch
           set -l remote (string replace -r 'remotes/' '' $branch)
           set -l new (string replace -r '[^/]*/' '' $remote)
