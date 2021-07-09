@@ -443,54 +443,9 @@ end
 if type -q fzf
   # morhetz/gruvbox
   set -l FZF_COLOR              'bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934'
-  set FZF_DEFAULT_OPTS          "--layout=reverse --height=80% --border --margin=1 --padding=1 --info=inline --color=$FZF_COLOR"
+  set -x FZF_DEFAULT_OPTS       "--layout=reverse --height=80% --border --margin=1 --padding=1 --info=inline --color=$FZF_COLOR"
   set -l FZF_PREVIEW_BAT_OPTION '--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
   set FZF_CTRL_T_OPTS           "--preview='bat $FZF_PREVIEW_BAT_OPTION' --preview-window right:70%"
-end
-
-
-# --------------------------------------------------
-# git
-# --------------------------------------------------
-if type -q git; and type -q ghq; and type -q peco
-
-  alias-if-needed delbr "git branch | grep -vE '\*|master|develop|main' | xargs git branch -D"
-
-  function gitt -a subCommand
-    switch $subCommand
-      case "cd"
-        set -l repository (ghq list | peco) && test -z "$repository" && return
-        set cmd "cd (ghq root)/$repository"
-      case "checkout" "ch"
-        set -l branch (git branch -a --sort=-authordate | grep -vE "\*|\->" | string trim | peco) && test -z "$branch" && return
-        if string match -rq '^remotes' $branch
-          set -l remote (string replace -r 'remotes/' '' $branch)
-          set -l new (string replace -r '[^/]*/' '' $remote)
-          set cmd "git checkout -b $new $remote"
-        else
-          set cmd "git checkout $branch"
-        end
-      case "clone"
-        set -l repository (curl -s https://api.github.com/users/miya10kei/repos | jq -r '.[].name' | peco) \
-          && test -z "$repository" \
-          && return
-        set -l url (curl -s https://api.github.com/users/miya10kei/repos | jq -r ".[] | select(.name==\"$repository\") | .ssh_url")
-        set cmd "git clone $url $HOME/dev/private/$repository"
-      case "*"
-        echo "🙅 Unsupported sub-command: $subCommand"
-        return 1
-    end
-    eval $cmd
-  end
-
-  # completion
-  set -l gittCompletion \
-        "complete -f -c gitt -n '__fish_use_subcommand'          -a 'cd'       -d 'Change directory of git'" \
-        "complete -f -c gitt -n '__fish_use_subcommand'          -a 'checkout' -d 'Checkout branch'" \
-        "complete -f -c gitt -n '__fish_use_subcommand'          -a 'ch'       -d 'Checkout branch'" \
-        "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'private'  -d 'Change directory of private git'" \
-        "complete -f -c gitt -n '__fish_seen_subcommand_from cd' -a 'work'     -d 'Change directory of work git'"
-  apply-completion "gitt" $gittCompletion
 end
 
 
@@ -546,7 +501,7 @@ alias-if-needed epochtime  "date -u +%s"
 alias-if-needed findd      "fdfind" "fdfind"
 alias-if-needed fishconf   "vim $HOME/.config/fish/config.fish"
 alias-if-needed fishload   "source $HOME/.config/fish/config.fish"
-alias-if-needed gcd        "gitt cd"
+alias-if-needed g          "git_fish" "git_fish"
 alias-if-needed grepp      "rg" "rg"
 alias-if-needed ll         "ls -lg"
 alias-if-needed lla        "ll -a"
@@ -554,8 +509,8 @@ alias-if-needed ls         "exa" "exa"
 alias-if-needed lsa        "ls -a"
 alias-if-needed mv         "mv -i"
 alias-if-needed mvnwrapper "mvn -N io.takari:maven:wrapper" "mvn"
-alias-if-needed odd         "hexyl" "hexyl"
-alias-if-needed pss         "procs" "procs"
+alias-if-needed odd        "hexyl" "hexyl"
+alias-if-needed pss        "procs" "procs"
 alias-if-needed q          "exit"
 alias-if-needed rm         "rm -i"
 alias-if-needed rr         "rm -ri"
