@@ -27,12 +27,12 @@ set -g $fish_emoji_width 2
 # fisher
 # --------------------------------------------------
 if not type -q fisher
-  echo "🚧 Installing fisher and plugins..."
+  echo \uf0ed" Installing fisher and plugins..."
   curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher > /dev/null
   if [ -e $HOME/.config/fish/fishfile ]
     fisher install < $HOME/.config/fish/fishfile > /dev/null
   end
-  echo "👍 Complete to install fisher and plugins"
+  echo \ufa12" Complete to install fisher and plugins"
 end
 
 
@@ -82,14 +82,14 @@ function bind-if-available -a key -a command
 end
 
 function compress -a format -a target -d "Compress the file or directory"
-  test -z "$target" && echo "😰 You must pass the target file/directory"
+  test -z "$target" && echo \uf05c" You must pass the target file/directory"
   switch $format
     case "tar.gz"
       tar -zcvf "$target.$format" $target
     case "zip"
       zip "$target.$format" $target
     case "*"
-      echo "😰 I don't knw $format ..."
+      echo \uf05c" I don't knw $format ..."
   end
 end
 
@@ -107,10 +107,10 @@ function decompress -d "Decompress the compressed file."
       case "*.zip" "*.jar"
         unzip $argv[1]
       case "*"
-        echo "😰 I don't know how to decompress $argv[1] ..."
+        echo \uf05c" I don't know how to decompress $argv[1] ..."
     end
   else
-    echo "🙅 $argv[1] is not a compressed file"
+    echo \uf05c" $argv[1] is not a compressed file"
   end
 end
 
@@ -168,7 +168,7 @@ switch $OS
 
     alias-if-needed edge "open -a Microsoft\ Edge"
     alias-if-needed excel "open -a Microsoft\ Excel"
-    alias-if-needed readlink "greadlink"
+    alias-if-needed readlink "greadlink" "greadlink"
   case "Linux"
     set -l RELEASE (uname -r | string match -ir microsoft)
     if test -z "$HOST_OS" -a "$RELEASE" = microsoft
@@ -293,12 +293,12 @@ if type -q cf; and type -q jq; and type -q peco
             set space (cf spaces | tail -n +4 | peco) && test -z $space && return
             set cmd "cf target -s $space"
           case "*"
-            echo "🙅 Unsupported option value: $_flag_target"
+            echo \uf05c" Unsupported option value: $_flag_target"
             return 1
         end
 
       case "*"
-        echo "🙅 Unsupported sub-command: $subCommand"
+        echo \uf05c" Unsupported sub-command: $subCommand"
         return 1
     end
 
@@ -343,7 +343,7 @@ if type -q docker
         set TAG_NAME       $DEV_ENV[2]
         set CONTAINER_NAME $DEV_ENV[3]
       case "*"
-        echo "🙅 Not support container: $_flag_target"
+        echo \uf05c" Not support container: $_flag_target"
         return 1
     end
 
@@ -408,7 +408,7 @@ if type -q docker
         set CMD "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME"
 
       case "*"
-        echo "🙅 Unsupported sub-command:$SUB_COMMAND"
+        echo \uf05c" Unsupported sub-command:$SUB_COMMAND"
         return 1
     end
 
@@ -474,7 +474,7 @@ function package -a subCommand -d "manage package"
       set -a cmds "pushd $HOME/.config/coc/extensions && ncu -u && npm update && popd"
       set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate +qa"
     case "*"
-      echo "🙅 Unsupported sub-command: $subCommand"
+      echo \uf05c" Unsupported sub-command: $subCommand"
       return 1
   end
 
