@@ -23,6 +23,8 @@
   ignorecase   = false
   pager        = delta
   quotepath    = false
+[pull]
+  rebase = false
 [push]
   default = simple
 [includeIf "gitdir:~/dev/work/"]
