@@ -158,6 +158,12 @@ end
 
 
 # --------------------------------------------------
+# common
+# --------------------------------------------------
+addPath $HOME/.local/bin
+
+
+# --------------------------------------------------
 # os dependency
 # --------------------------------------------------
 switch $OS
@@ -181,11 +187,24 @@ end
 
 
 # --------------------------------------------------
+# Homebrew
+# --------------------------------------------------
+switch $OS
+  case "Darwin"
+
+  case "Linux"
+    addPath /home/linuxbrew/.linuxbrew/bin
+    addPath /home/linuxbrew/.linuxbrew/sbin
+end
+
+
+# --------------------------------------------------
 # language configuration
 # --------------------------------------------------
 # java
 # --------------------------------------------------
 if test -e $HOME/.sdkman
+  set -x JAVA_HOME $HOME/.sdkman/candidates/java/current
   function sdk
     bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk $argv"
   end
@@ -215,8 +234,7 @@ end
 # nodejs
 # --------------------------------------------------
 if type -q node; and type -q npm
-  set -x NODE_MODULE $HOME/node_modules
-  addPath $NODE_MODULE/.bin
+  addPath (yarn global bin)
 end
 
 # --------------------------------------------------
@@ -471,7 +489,8 @@ function package -a subCommand -d "manage package"
       end
       set -a cmds "fisher update"
       set -a cmds "pushd $HOME && ncu -u && npm update && popd"
-      set -a cmds "pushd $HOME/.config/coc/extensions && ncu -u && npm update && popd"
+      set -a cmds "pushd $HOME/.config/coc/extensions && ncu -u && yarn upgrade && popd"
+      #yarn install --global-style --ignore-scripts  --no-bin-links --no-lockfile --production
       set -a cmds "nvim --headless +PlugUpgrade +PlugUpdate +qa"
     case "*"
       echo \uf05c" Unsupported sub-command: $subCommand"
