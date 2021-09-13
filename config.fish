@@ -165,6 +165,7 @@ switch $OS
     set -x IP (ifconfig en0 | grep -E "inet\s" | awk '$1=="inet" {print $2}')
 
     addPath /usr/local/opt/mysql-client/bin
+    addPath /usr/local/sbin
 
     alias-if-needed edge "open -a Microsoft\ Edge"
     alias-if-needed excel "open -a Microsoft\ Excel"
@@ -507,6 +508,7 @@ alias-if-needed ll         "ls -lg"
 alias-if-needed lla        "ll -a"
 alias-if-needed ls         "exa" "exa"
 alias-if-needed lsa        "ls -a"
+alias-if-needed k          "kubectl" "kubectl"
 alias-if-needed mv         "mv -i"
 alias-if-needed mvnwrapper "mvn -N io.takari:maven:wrapper" "mvn"
 alias-if-needed odd        "hexyl" "hexyl"
