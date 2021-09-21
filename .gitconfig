@@ -17,14 +17,20 @@
   diff   = auto
   status = auto
   ui     = auto
+[commit]
+  template = ~/.gitmessage
 [core]
   editor       = nvim -c \"set fenc=utf-8\"
   excludesfile = ~/.gitignore_global
   ignorecase   = false
   pager        = delta
   quotepath    = false
-[push]
-  default = simple
+[delta]
+  line-numbers = true
+  navigate     = true
+  syntax-theme = gruvbox-dark
+[ghq]
+  root = ~/dev
 [includeIf "gitdir:~/dev/work/"]
   path = ~/.gitconfig_work
 [includeIf "gitdir:~/dev/private/"]
@@ -35,20 +41,17 @@
   path = ~/.gitconfig_private
 [includeIf "gitdir:~/.dotfiles-inhouse/"]
   path = ~/.gitconfig_work
+[init]
+  defaultBranch = main
 [interactive]
   diffFilter = delta --color-only
-[commit]
-  template = ~/.gitmessage
 [pager]
   branch = false
   diff   = delta
   log    = delta
   reflog = delta
   show   = delta
-[ghq]
-  root = ~/dev
-[delta]
-  line-numbers = true
-  navigate     = true
-  syntax-theme = gruvbox-dark
-
+[pull]
+  rebase = false
+[push]
+  default = simple
