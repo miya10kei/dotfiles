@@ -81,39 +81,6 @@ function bind-if-available -a key -a command
   end
 end
 
-function compress -a format -a target -d "Compress the file or directory"
-  test -z "$target" && echo \uf05c" You must pass the target file/directory"
-  switch $format
-    case "tar.gz"
-      tar -zcvf "$target.$format" $target
-    case "zip"
-      zip "$target.$format" $target
-    case "*"
-      echo \uf05c" I don't knw $format ..."
-  end
-end
-
-function decompress -d "Decompress the compressed file."
-  if test -f $argv[1]
-    switch $argv[1]
-      case "*.tar.gz" "*.tgz"
-        tar -zxvf $argv[1]
-      case "*.tar.bz2"
-        tar -jxvf $argv[1]
-      case "*.tar.xz"
-        tar -Jxvf $argv[1]
-      case "*.tar"
-        tar -xvf $argv[1]
-      case "*.zip" "*.jar"
-        unzip $argv[1]
-      case "*"
-        echo \uf05c" I don't know how to decompress $argv[1] ..."
-    end
-  else
-    echo \uf05c" $argv[1] is not a compressed file"
-  end
-end
-
 function loadenv -d "Load .env file and run command passed as arguments"
   set cmd "env"
   for line in (cat $argv[1])
@@ -164,34 +131,11 @@ addPath $HOME/.local/bin
 
 
 # --------------------------------------------------
-# os dependency
-# --------------------------------------------------
-switch $OS
-  case "Darwin"
-    set -x IP (ifconfig en0 | grep -E "inet\s" | awk '$1=="inet" {print $2}')
-
-    addPath /usr/local/opt/mysql-client/bin
-
-    alias-if-needed edge "open -a Microsoft\ Edge"
-    alias-if-needed excel "open -a Microsoft\ Excel"
-    alias-if-needed readlink "greadlink" "greadlink"
-  case "Linux"
-    set -l RELEASE (uname -r | string match -ir microsoft)
-    if test -z "$HOST_OS" -a "$RELEASE" = microsoft
-      set -x OS wsl
-      set -x IP (ip route | head -n1 | awk '{print $3}')
-    else if test "$HOST_OS" = Darwin
-      set -x TERM screen-256color
-    end
-end
-
-
-# --------------------------------------------------
 # Homebrew
 # --------------------------------------------------
 switch $OS
   case "Darwin"
-
+    # nop
   case "Linux"
     addPath /home/linuxbrew/.linuxbrew/bin
     addPath /home/linuxbrew/.linuxbrew/sbin
@@ -205,12 +149,15 @@ end
 # --------------------------------------------------
 if test -e $HOME/.sdkman
   set -x JAVA_HOME $HOME/.sdkman/candidates/java/current
-  function sdk
-    bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk $argv"
+
+  for candidate in $HOME/.sdkman/candidates/* ;
+    addPath $candidate/current/bin
   end
 
-  for ITEM in $HOME/.sdkman/candidates/* ;
-    addPath $ITEM/current/bin
+  if type -q __sdk_auto_env
+    function sdk_auto_env --on-variable PWD
+      __sdk_auto_env
+    end
   end
 end
 
@@ -231,12 +178,15 @@ switch $OS
     end
 end
 # --------------------------------------------------
+# nim
+# --------------------------------------------------
+addPath $HOME/.nimble/bin
+# --------------------------------------------------
 # nodejs
 # --------------------------------------------------
 if type -q node; and type -q npm
   addPath (yarn global bin)
 end
-
 # --------------------------------------------------
 # rust
 # --------------------------------------------------
@@ -338,124 +288,6 @@ end
 
 
 # --------------------------------------------------
-# docker
-# --------------------------------------------------
-if type -q docker
-
-  #   $variableName $image $tag $containerName
-  #set DEV_ENV "ghcr.io/miya10kei/dev-env" "latest" "dev-env"
-  set DEV_ENV "cd.docker-registry.corp.yahoo.co.jp:4443/kmiyaush/dev-env-inhouse" "latest" "dev-env"
-
-  set TARGETS $DEV_ENV[3]
-
-  function ctnr -d "Manipulate container"
-
-    argparse -i -n ctnr "t/target=" "a/attach" "r/recreate" -- $argv; or return 1
-
-    set REMOTE_HOME /home/$USER
-    set SUB_COMMAND $argv[1]
-
-    switch $_flag_target
-      case $DEV_ENV[3]
-        set IMAGE_NAME     $DEV_ENV[1]
-        set TAG_NAME       $DEV_ENV[2]
-        set CONTAINER_NAME $DEV_ENV[3]
-      case "*"
-        echo \uf05c" Not support container: $_flag_target"
-        return 1
-    end
-
-    switch $SUB_COMMAND
-      case "run"
-        set RUN_OPTS "--name $CONTAINER_NAME \
-                      -e DISPLAY \
-                      -e DOCKER_MACHINE_NAME='"\ue7b0" $CONTAINER_NAME' \
-                      -e REMOTE_USER=$REMOTE_USER\
-                      -h $CONTAINER_NAME \
-                      --mount type=bind,src=$HOME/.dotfiles,dst=$REMOTE_HOME/.dotfiles \
-                      --mount type=bind,src=$HOME/.dotfiles/.editorconfig,dst=$REMOTE_HOME/.editorconfig \
-                      --mount type=bind,src=$HOME/.dotfiles/.gitconfig,dst=$REMOTE_HOME/.gitconfig \
-                      --mount type=bind,src=$HOME/.dotfiles/.gitconfig_private,dst=$REMOTE_HOME/.gitconfig_private \
-                      --mount type=bind,src=$HOME/.dotfiles/.npmrc,dst=$REMOTE_HOME/.npmrc \
-                      --mount type=bind,src=$HOME/.dotfiles/.tmux.conf,dst=$REMOTE_HOME/.tmux.conf\
-                      --mount type=bind,src=$HOME/.dotfiles/coc-package.json,dst=$REMOTE_HOME/.config/coc/extensions/package.json \
-                      --mount type=bind,src=$HOME/.dotfiles/coc-settings.json,dst=$REMOTE_HOME/.config/nvim/coc-settings.json \
-                      --mount type=bind,src=$HOME/.dotfiles/config.fish,dst=$REMOTE_HOME/.config/fish/config.fish \
-                      --mount type=bind,src=$HOME/.dotfiles/fishfile,dst=$REMOTE_HOME/.config/fish/fishfile \
-                      --mount type=bind,src=$HOME/.dotfiles/init.vim,dst=$REMOTE_HOME/.config/nvim/init.vim \
-                      --mount type=bind,src=$HOME/.dotfiles/package.json,dst=$REMOTE_HOME/package.json \
-                      --mount type=bind,src=$HOME/.devenv/fish/fish_history,dst=$REMOTE_HOME/.local/share/fish/fish_history \
-                      --mount type=bind,src=$HOME/.devenv/gradle,dst=$REMOTE_HOME/.gradle \
-                      --mount type=bind,src=$HOME/.devenv/idea/cache,dst=$REMOTE_HOME/.cache/JetBrains \
-                      --mount type=bind,src=$HOME/.devenv/idea/config,dst=$REMOTE_HOME/.config/JetBrains \
-                      --mount type=bind,src=$HOME/.devenv/idea/local,dst=$REMOTE_HOME/.local/share/JetBrains \
-                      --mount type=bind,src=$HOME/.devenv/java,dst=$REMOTE_HOME/.java \
-                      --mount type=bind,src=$HOME/.devenv/maven,dst=$REMOTE_HOME/.m2 \
-                      --mount type=bind,src=$HOME/.ssh,dst=$REMOTE_HOME/.ssh \
-                      --mount type=bind,src=$HOME/Documents,dst=$REMOTE_HOME/Documents \
-                      --mount type=bind,src=$HOME/Downloads,dst=$REMOTE_HOME/Downloads \
-                      --mount type=bind,src=$HOME/dev,dst=$REMOTE_HOME/dev \
-                      --mount type=bind,src=/tmp/.X11-unix,dst=/tmp/.X11-unix \
-                      --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
-                      $RUN_OPTS \
-                      $argv[2..-1]"
-
-        set DOCKER_GID (cat /etc/group | grep docker | awk -F: '{print($3)}')
-        if test -n "$DOCKER_GID"
-          set RUN_OPTS "-e DOCKER_GID=$DOCKER_GID $RUN_OPTS"
-        end
-
-        set CMD "docker run -dit $RUN_OPTS $IMAGE_NAME:$TAG_NAME /usr/bin/bash"
-        if test -n "$_flag_recreate"
-          if test (docker container ls -qa -f name="$CONTAINER_NAME")
-            set PRE_CMD "ctnr stop -t $CONTAINER_NAME"
-          end
-        end
-        if test -n "$_flag_attach"
-          set POST_CMD "ctnr attach -t $CONTAINER_NAME"
-        end
-
-      case "attach"
-        set ATTACH_OPTS "$argv[2..-1]"
-        set CMD "docker exec -it $ATTACH_OPTS $CONTAINER_NAME /usr/bin/fish"
-
-      case "start"
-        set CMD "docker start $CONTAINER_NAME"
-
-      case "stop"
-        set CMD "docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME"
-
-      case "*"
-        echo \uf05c" Unsupported sub-command:$SUB_COMMAND"
-        return 1
-    end
-
-    if test -n "$PRE_CMD"
-      execCmd $PRE_CMD
-    end
-    execCmd $CMD
-    if test -n "$POST_CMD"
-      execCmd $POST_CMD
-    end
-  end
-
-  # completion
-  set -l TARGET_ALIAS (string join ' ' $TARGETS)
-  set -l CNTR_COMPLETION \
-    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'run'    -d 'Run container'" \
-    "complete -f -c ctnr -n '__fish_seen_subcommand_from run' -s a -l attach   -d 'execute attach after run'" \
-    "complete -f -c ctnr -n '__fish_seen_subcommand_from run' -s r -l recreate -d 'recreate container if already exists'" \
-    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'attach' -d 'Attach to container'" \
-    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'start'  -d 'Start container'" \
-    "complete -f -c ctnr -n '__fish_use_subcommand' -a 'stop'   -d 'Stop and remove container'" \
-    "complete -x -c ctnr -s t -l target -a '$TARGET_ALIAS' -d 'Target container'"
-  apply-completion "ctnr" $CNTR_COMPLETION
-
-  alias-if-needed rmnoneimg "docker rmi (docker images -f 'dangling=true' -q)"
-end
-
-
-# --------------------------------------------------
 # fzf
 # --------------------------------------------------
 if type -q fzf
@@ -471,7 +303,7 @@ end
 # neovim
 # --------------------------------------------------
 if type -q nvim
-  set -x  NVIM_HOME      $HOME/.config/nvim
+  set -x NVIM_HOME $HOME/.config/nvim
 end
 
 
@@ -542,6 +374,8 @@ alias-if-needed uu         "cd ../../"
 alias-if-needed uuu        "cd ../../../"
 alias-if-needed uuuu       "cd ../../../../"
 alias-if-needed vim        "nvim"
+alias-if-needed vi         "vim"
+alias-if-needed v          "vi"
 alias-if-needed xsel       "xsel -b"
 
 
