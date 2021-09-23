@@ -184,7 +184,7 @@ addPath $HOME/.nimble/bin
 # --------------------------------------------------
 # nodejs
 # --------------------------------------------------
-if type -q node; and type -q npm
+if type -q node; and type -q npm; and type -q yarn
   addPath (yarn global bin)
 end
 # --------------------------------------------------
