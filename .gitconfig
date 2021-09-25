@@ -37,7 +37,7 @@
   path = ~/.gitconfig_private
 [includeIf "gitdir:~/.dotfiles/"]
   path = ~/.gitconfig_private
-[includeIf "gitdir:~/Documents/mydocs/private-docs//"]
+[includeIf "gitdir:~/Documents/mydocs/private-docs/"]
   path = ~/.gitconfig_private
 [includeIf "gitdir:~/dev/work/"]
   path = ~/.gitconfig_work
