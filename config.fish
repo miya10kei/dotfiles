@@ -39,16 +39,17 @@ end
 # --------------------------------------------------
 # oh-my-fish theme-bobthefish
 # --------------------------------------------------
-set -g theme_color_scheme           gruvbox
-set -g theme_date_format            "+%Y-%m-%d %H:%M:%S(%a)"
-set -g theme_date_timezone          Asia/Tokyo
-set -g theme_display_docker_machine yes
-set -g theme_display_user           yes
-set -g theme_nerd_fonts             yes
-set -g theme_newline_cursor         yes
-set -g theme_newline_prompt         \uf739' '
-set -g theme_powerline_fonts        no
-set -g theme_show_exit_status       yes
+set -g theme_color_scheme               gruvbox
+set -g theme_date_format                "+%Y-%m-%d %H:%M:%S(%a)"
+set -g theme_date_timezone              Asia/Tokyo
+set -g theme_display_docker_machine     yes
+set -g theme_display_git_default_branch yes
+set -g theme_display_user               yes
+set -g theme_nerd_fonts                 yes
+set -g theme_newline_cursor             yes
+set -g theme_newline_prompt             \uf739' '
+set -g theme_powerline_fonts            no
+set -g theme_show_exit_status           yes
 
 function fish_greeting
   set_color $fish_color_autosuggestion
