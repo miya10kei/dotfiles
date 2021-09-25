@@ -31,15 +31,21 @@
   syntax-theme = gruvbox-dark
 [ghq]
   root = ~/dev
-[includeIf "gitdir:~/dev/work/"]
-  path = ~/.gitconfig_work
 [includeIf "gitdir:~/dev/private/"]
   path = ~/.gitconfig_private
 [includeIf "gitdir:~/.password-store/"]
   path = ~/.gitconfig_private
 [includeIf "gitdir:~/.dotfiles/"]
   path = ~/.gitconfig_private
+[includeIf "gitdir:~/Documents/mydocs/private-docs//"]
+  path = ~/.gitconfig_private
+[includeIf "gitdir:~/dev/work/"]
+  path = ~/.gitconfig_work
 [includeIf "gitdir:~/.dotfiles-inhouse/"]
+  path = ~/.gitconfig_work
+[includeIf "gitdir:~/Documents/seminar/"]
+  path = ~/.gitconfig_work
+[includeIf "gitdir:~/Documents/mydocs/work-docs/"]
   path = ~/.gitconfig_work
 [init]
   defaultBranch = main
