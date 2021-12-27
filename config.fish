@@ -8,7 +8,12 @@ status is-interactive; or exit
 # general
 # --------------------------------------------------
 set -q SHELL; or set -x SHELL /usr/bin/fish
-set -x OS    (uname -s)
+set -x OS (uname -s)
+if string match -iqr 'wsl2$' (uname -r)
+  set -x WSL "wsl2"
+else if string match -iqr 'wsl2$' (uname -r)
+  set -x WSL "wsl1"
+end
 switch $TERM
   case "xterm"
     set -x TERM "xterm-256color"
@@ -146,7 +151,7 @@ end
 # --------------------------------------------------
 # language configuration
 # --------------------------------------------------
-# java
+#   java
 # --------------------------------------------------
 if test -e $HOME/.sdkman
   set -x JAVA_HOME $HOME/.sdkman/candidates/java/current
@@ -161,35 +166,43 @@ if test -e $HOME/.sdkman
     end
   end
 end
-
-
 # --------------------------------------------------
-# golang
+#   golang
 # --------------------------------------------------
 switch $OS
   case "Darwin"
     set -x GOPATH $HOME/go
     addPath $GOPATH/bin
-  case "Linux"
-    if test -e /usr/local/go
-      set -x GO_HOME "/usr/local/go"
-      addPath "$GO_HOME/bin"
-      set -x GOPATH "$HOME/go"
-      addPath "$GOPATH/bin"
-    end
+end
+if type -q goenv
+  set -x GOENV_ROOT $HOME/.goenv
+  addPath $GOENV_ROOT/bin
+  goenv init - | source
 end
 # --------------------------------------------------
-# nim
+#   nim
 # --------------------------------------------------
 addPath $HOME/.nimble/bin
 # --------------------------------------------------
-# nodejs
+#   nodejs
 # --------------------------------------------------
-if type -q node; and type -q npm; and type -q yarn
+if type -q nvm
+  set -U nvm_default_version v16.13.1
+end
+if type -q yarn
   addPath (yarn global bin)
 end
 # --------------------------------------------------
-# rust
+#   python
+# --------------------------------------------------
+if type -q pyenv
+  set -x PYENV_ROOT $HOME/.pyenv
+  addPath $PYENV_ROOT/bin
+  status is-login; and pyenv init --path | source
+  status is-interactive; and pyenv init - | source
+end
+# --------------------------------------------------
+#   rust
 # --------------------------------------------------
 addPath $HOME/.cargo/bin
 
@@ -379,7 +392,11 @@ alias-if-needed uuuu       "cd ../../../../"
 alias-if-needed vim        "nvim"
 alias-if-needed vi         "vim"
 alias-if-needed v          "vi"
-alias-if-needed xsel       "xsel -b"
+if set -q WSL
+  alias-if-needed xsel     "clip.exe"
+else
+  alias-if-needed xsel     "xsel -b" "xsel"
+end
 
 
 # --------------------------------------------------
