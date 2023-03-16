@@ -1,4 +1,4 @@
-DOTDIR := ~/.dotfiles
+DOTDIR := $(HOME)/.dotfiles
 
 .PHONY: deploy
 deploy: \
@@ -125,26 +125,46 @@ install-vim-plugin:
 #	cd $(HOME)/.config/coc/extensions
 #	npm install
 
-# ------------
-# --- util ---
-# ------------
-.PHONY: build-devenv
-build-devenv:
-	docker build . -t devenv
+# -----------
+# --- Mac ---
+# -----------
+.PHONY: install-homebrew
+install-homebrew: 
+ifeq ("$(wildcard /opt/homebrew/bin/brew)", "")
+	curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+else
+	@echo "Homebrew is already installed"
+endif
+
+.PHONY: uninstall-homebrew
+uninstall-homebrew: 
+ifeq ("$(wildcard /opt/homebrew/bin/brew)", "")
+	@echo "Homebrew is not installed"
+else
+	NONINTERACTIVE=1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh | bash
+endif
+
+.PHONY: install-mac-app-with-homebrew
+install-mac-app-with-homebrew: $(DOTDIR)/Brewfile
+	brew bundle --file $(DOTDIR)/Brewfile
+
+.PHONY: deploy-dotfiles-on-mac
+deploy-dotfiles-on-mac:
+	ln -fs $(DOTDIR)/.zprofile $(HOME)/.zprofile
+	ln -fs $(DOTDIR/.zshrc) $(HOME)/.zshrc
+
+
+# ---------------
+# --- Utility ---
+# ---------------
 
 C := miya10kei@gmail.com
-.PHONY: create-sshkey
-create-sshkey:
-	ssh-keygen -t rsa -b 4096 -C ${C}
 
-.PHONY: create-dir
-create-dir:
-	mkdir -p \
-		$(HOME)/.cf \
-		$(HOME)/.dotfiles \
-		$(HOME)/.gradle \
-		$(HOME)/.java \
-		$(HOME)/.kube \
-		$(HOME)/.m2 \
-		$(HOME)/.sbt \
-		$(HOME)/dev
+.PHONY: generate-sshkey
+generate-sshkey: backup-sshkey
+	ssh-keygen -t ed25519 -C ${C}
+
+.PHONY: backup-sshkey
+backup-sshkey: $(HOME)/.ssh/id_ed25519 $(HOME)/.ssh/id_ed25519.pub
+	cp -f $(HOME)/.ssh/id_ed25519 $(HOME)/.ssh/id_ed25519.bk
+	cp -f $(HOME)/.ssh/id_ed25519.pub $(HOME)/.ssh/id_ed25519.pub.bk
