@@ -13,7 +13,8 @@ module.exports = {
 
     // font family with optional fallbacks
     // fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
-    fontFamily: '"DaddyTimeMono Nerd Font Mono","Noto Color Emoji", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    // fontFamily: '"HackGen Console NFJ","Noto Color Emoji", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+    fontFamily: '"HackGen Console NFJ"',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',
@@ -142,7 +143,7 @@ module.exports = {
     //
     gruvboxTheme: {
       style: 'dark', // or 'light'
-      contrast: 'normal' // or 'soft', 'hard'
+      contrast: 'hard' // or 'soft', 'hard'
     },
   },
 

@@ -1,2 +1,0 @@
-default-builder-image = "paketobuildpacks/builder:base"
-experimental = true

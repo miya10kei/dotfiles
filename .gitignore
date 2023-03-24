@@ -1,1 +1,4 @@
+.DS_Store
 .gitconfig_work
+.zsh_history
+Brewfile.locl.json
