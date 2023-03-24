@@ -1,4 +1,4 @@
 .DS_Store
+.aws
 .gitconfig_work
 .zsh_history
-Brewfile.locl.json
