@@ -9,6 +9,7 @@ FZF_VERSION := 0.38.0
 GHQ_VERSION := 1.4.1
 GITHUB_CLI_VERSION := 2.25.1
 JQ_VERSION := 1.6
+PROCS_VERSION := 0.14.0
 RIPGREP_VERSION := 13.0.0
 STARSHIP_VERSION := 1.13.1
 YQ_VERSION := 4.32.2
@@ -26,6 +27,7 @@ install-bins: \
 	$(BIN_DIR)/gh \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
+	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
 	$(BIN_DIR)/starship \
 	$(BIN_DIR)/yq \
@@ -105,6 +107,13 @@ $(BIN_DIR)/rg:
 	mv /tmp/rg/rg $(BIN_DIR)/rg
 	chown `whoami`:`groups` $(BIN_DIR)/rg
 	rm -rf /tmp/rg
+
+$(BIN_DIR)/procs:
+	mkdir -p /tmp/procs
+	curl -fsLS -o /tmp/procs/procs.zip https://github.com/dalance/procs/releases/download/v0.14.0/procs-v0.14.0-x86_64-linux.zip
+	unzip /tmp/procs/procs.zip -d /tmp/procs
+	mv /tmp/procs/procs $(BIN_DIR)/procs
+	rm -rf /tmp/procs
 
 $(BIN_DIR)/starship:
 	mkdir -p /tmp/starship
