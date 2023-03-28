@@ -7,6 +7,7 @@ EXA_VERSION := 0.10.1
 FD_VERSION := 8.7.0
 FZF_VERSION := 0.38.0
 GHQ_VERSION := 1.4.1
+GITHUB_CLI_VERSION := 2.25.1
 JQ_VERSION := 1.6
 RIPGREP_VERSION := 13.0.0
 STARSHIP_VERSION := 1.13.1
@@ -22,6 +23,7 @@ install-bins: \
 	$(BIN_DIR)/exa\
 	$(BIN_DIR)/fd \
 	$(BIN_DIR)/fzf \
+	$(BIN_DIR)/gh \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
 	$(BIN_DIR)/rg \
@@ -76,6 +78,14 @@ $(BIN_DIR)/fzf:
 	mv /tmp/fzf/fzf $(BIN_DIR)/fzf
 	chown `whoami`:`groups` $(BIN_DIR)/fzf
 	rm -rf /tmp/fzf
+
+$(BIN_DIR)/gh:
+	mkdir -p /tmp/gh
+	curl -fsLS -o /tmp/gh/gh.tar.gz https://github.com/cli/cli/releases/download/v${GITHUB_CLI_VERSION}/gh_${GITHUB_CLI_VERSION}_linux_arm64.tar.gz
+	tar -zxf /tmp/gh/gh.tar.gz -C /tmp/gh
+	mv /tmp/gh/gh_${GITHUB_CLI_VERSION}_linux_arm64/bin/gh $(BIN_DIR)/gh
+	chown `whoami`:`groups` $(BIN_DIR)/gh
+	rm -rf /tmp/gh
 
 $(BIN_DIR)/ghq:
 	mkdir -p /tmp/ghq
