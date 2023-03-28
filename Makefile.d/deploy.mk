@@ -1,4 +1,11 @@
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-aws
+deploy-aws: \
+	$(HOME)/.aws
+
+$(HOME)/.aws: 
+	ln -fs $(DOTDIR)/.aws $(HOME)/.aws
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
 	gitconfig \
@@ -44,6 +51,17 @@ $(HOME)/.config/nvim:
 .PHONY: delete-nvimrc
 delete-nvimrc:
 	rm -rf $(HOME)/.config/nvim
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-starship
+deploy-starship: \
+	starshiptoml
+
+.PHONY: startshiptoml
+starshiptoml: $(HOME)/.config/starship.toml
+$(HOME)/.config/starship.toml:
+	ln -fs $(DOTDIR)/starship.toml $(HOME)/.config/starship.toml
 
 
 # ----------------------------------------------------------------------------------------------------------------------

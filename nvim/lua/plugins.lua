@@ -85,6 +85,7 @@ require("lazy").setup({
         'Shougo/ddu.vim',
         config = function() require('ddu') end,
         dependencies = {
+            'Shougo/ddu-column-filename',
             'Shougo/ddu-filter-matcher_substring',
             'Shougo/ddu-kind-file',
             'Shougo/ddu-kind-word',
@@ -98,12 +99,11 @@ require("lazy").setup({
         },
         lazy = false,
         keys = {
-            { '<C-t>',       "<CMD>call ddu#start({ 'name': 'filer'    })<CR>", silent = true },
-            { '<LEADER>db',  "<CMD>call ddu#start({ 'name': 'buffer'   })<CR>", silent = true },
-            { '<LEADER>df',  "<CMD>call ddu#start({ 'name': 'file'     })<CR>", silent = true },
-            { '<LEADER>dfr', "<CMD>call ddu#start({ 'name': 'file_rec' })<CR>", silent = true },
-            { '<LEADER>dr',  "<CMD>call ddu#start({ 'name': 'register' })<CR>", silent = true },
-            { '<LEADER>dg',  "<CMD>call ddu#start({ 'name': 'grep'     })<CR>", silent = true },
+            { '<C-t>',      "<CMD>call ddu#start({ 'name': 'filer'    })<CR>", silent = true },
+            { '<LEADER>db', "<CMD>call ddu#start({ 'name': 'buffer'   })<CR>", silent = true },
+            { '<LEADER>df', "<CMD>call ddu#start({ 'name': 'file_rec' })<CR>", silent = true },
+            { '<LEADER>dr', "<CMD>call ddu#start({ 'name': 'register' })<CR>", silent = true },
+            { '<LEADER>dg', "<CMD>call ddu#start({ 'name': 'grep'     })<CR>", silent = true },
         }
     },
     {

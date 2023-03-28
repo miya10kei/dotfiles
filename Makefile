@@ -7,8 +7,10 @@ build-dev-env:
 .PHONY: setup4d
 setup4d: \
 	delete-nvimrc \
+	deploy-aws \
 	deploy-git \
 	deploy-nvim \
+	deploy-starship \
 	deploy-tmux \
 	zshhistory \
 	start-bg-job

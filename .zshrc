@@ -101,4 +101,9 @@ if builtin command -v starship > /dev/null 2>&1; then
     eval "$(starship init zsh)"
 fi
 
+if builtin command -v zoxide > /dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
+
 autoload -Uz compinit && compinit

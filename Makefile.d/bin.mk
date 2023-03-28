@@ -90,9 +90,9 @@ $(BIN_DIR)/jq:
 
 $(BIN_DIR)/rg:
 	mkdir -p /tmp/rg
-	curl -fsLOS https://github.com/BurntSushi/ripgrep/releases/download/$(RIPGREP_VERSION)/ripgrep-$(RIPGREP_VERSION)-arm-unknown-linux-gnueabihf.tar.gz
-	tar -zxf ripgrep-$(RIPGREP_VERSION)-arm-unknown-linux-gnueabihf.tar.gz -C /tmp/rg
-	mv /tmp/rg/ripgrep-$(RIPGREP_VERSION)-arm-unknown-linux-gnueabihf/rg $(BIN_DIR)/rg
+	curl -fsLS -o /tmp/rg/rg.tar.gz https://github.com/microsoft/ripgrep-prebuilt/releases/download/v13.0.0-7/ripgrep-v13.0.0-7-aarch64-unknown-linux-gnu.tar.gz
+	tar -zxf /tmp/rg/rg.tar.gz -C /tmp/rg
+	mv /tmp/rg/rg $(BIN_DIR)/rg
 	chown `whoami`:`groups` $(BIN_DIR)/rg
 	rm -rf /tmp/rg
 

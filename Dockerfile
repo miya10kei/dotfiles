@@ -241,6 +241,7 @@ RUN apt-get update \
         build-essential \
         ca-certificates \
         cmake \
+        cmigemo \
         curl \
         git \
         libffi-dev \

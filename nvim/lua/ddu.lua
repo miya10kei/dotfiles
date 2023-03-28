@@ -10,7 +10,7 @@ vim.fn['ddu#custom#patch_global']({
     sourceOptions = {
         _ = {
             matchers = { 'matcher_substring' },
-        }
+        },
     },
     kindOptions = {
         file = {
@@ -24,8 +24,12 @@ vim.fn['ddu#custom#patch_global']({
         ff = {
             prompt = '> ',
             startFilter = true,
+            autoAction = { name = 'preview' },
+            ignoreEmpty = false,
+            previewSplit = 'vertical',
+            previewWidth = 80,
         }
-    }
+    },
 })
 
 vim.fn['ddu#custom#patch_local']('file_rec', {
@@ -34,7 +38,7 @@ vim.fn['ddu#custom#patch_local']('file_rec', {
             name = 'file_rec',
             path = vim.fn.expand('~'),
             params = {
-                ignoredDirectories = { '.git', '.gradle', 'node_modules' }
+                ignoredDirectories = { '.git', '.gradle', 'node_modules', '__pycache__' }
             }
         },
     },
@@ -65,10 +69,27 @@ vim.fn['ddu#custom#patch_local']('register', {
 vim.fn['ddu#custom#patch_local']('filer', {
     ui = 'filer',
     sources = {
-        { name = 'file' },
+        {
+            name = 'file',
+        },
+    },
+    sourceOptions = {
+        _ = {
+            columns = { 'filename' },
+        },
+        file = {
+            path = fn.expand('%:p:h'),
+        }
     },
     actionOptions = {
         narrow = { quit = false }
+    },
+    uiParams = {
+        filer = {
+            previewSplit = 'vertical',
+            previewWidth = 80,
+            sortTreesFirst = true
+        }
     }
 })
 
@@ -77,23 +98,14 @@ vim.fn['ddu#custom#patch_local']('grep', {
     sources = {
         {
             name = 'rg',
-            --params = {
-            --    input = fn.input('Patern: '),
-            --    path = fn.getcwd()
-            --}
         }
     },
     sourceParams = {
         rg = {
             arg = { '--column', '--no-heading', '--color', 'never' },
+            inputType = 'migemo',
         }
     },
-    uiParams = {
-        ff = {
-            ignoreEmpty = false,
-            autoResize = false
-        }
-    }
 })
 
 autocmd({ 'FileType' }, {
@@ -104,6 +116,7 @@ autocmd({ 'FileType' }, {
         keymap('n', '<CR>', function() action('itemAction') end, bufopts)
         keymap('n', '<SPACE>', function() action('toggleSelectItem') end, bufopts)
         keymap('n', 'i', function() action('openFilterWindow') end, bufopts)
+        keymap('n', 'p', function() action('preview') end, bufopts)
         keymap('n', 'q', function() action('quit') end, bufopts)
         keymap('n', 'yy', function() action('itemAction', { name = 'yank' }) end, bufopts)
     end
@@ -114,7 +127,7 @@ autocmd({ 'FileType' }, {
     callback = function()
         local close_action = function() fn['ddu#ui#do_action']('closeFilterWindow') end
         local bufops = { buffer = true, silent = true }
-        --keymap('i', '<CR>', '<ESC><CMD>call ddu#ui#do_action(\'closeFilterWindow\')<CR>', bufops) not working
+        keymap('i', '<CR>', '<ESC><CMD>call ddu#ui#do_action(\'closeFilterWindow\')<CR>', bufops)
         keymap('n', '<CR>', close_action, bufops)
         keymap('n', 'q', close_action, bufops)
     end
@@ -125,9 +138,8 @@ autocmd({ 'FileType' }, {
     callback = function()
         local action = fn['ddu#ui#do_action']
         local bufopts = { buffer = true, silent = true }
-        keymap('n', '..', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
         keymap('n', '<CR>', function()
-            if fn['ddu#ui#get_item']()['isTree'] == false then
+            if fn['ddu#ui#get_item']()['isTree'] == true then
                 action('itemAction', { name = 'narrow' })
             else
                 action('itemAction', { name = 'open' })
@@ -144,5 +156,7 @@ autocmd({ 'FileType' }, {
         keymap('n', 'rn', function() action('itemAction', { name = 'rename' }) end, bufopts)
         keymap('n', 's', function() action('toggleSelectItem') end, bufopts)
         keymap('n', 'uu', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
+        keymap('n', '..', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
+        keymap('n', 'p', function() action('preview') end, bufopts)
     end
 })
