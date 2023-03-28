@@ -76,6 +76,17 @@ $(HOME)/.tmux.conf:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-zoxide
+deploy-zoxide: \
+	zoxide
+
+.PHONY: zoxide
+zoxide: $(HOME)/.local/share/zoxide
+$(HOME)/.local/share/zoxide:
+	ln -fs $(DOTDIR)/zoxide/ $(HOME)/.local/share/
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-zsh
 deploy-zsh: \
 	zprofile \
