@@ -1,7 +1,7 @@
 BIN_DIR := $(HOME)/.local/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 
-BAT_VERSION := 0.22.1
+BAT_VERSION := 0.23.0
 DELTA_VERSION := 0.15.1
 EXA_VERSION := 0.10.1
 FD_VERSION := 8.7.0
@@ -10,9 +10,9 @@ GHQ_VERSION := 1.4.1
 GITHUB_CLI_VERSION := 2.25.1
 JQ_VERSION := 1.6
 PROCS_VERSION := 0.14.0
-RIPGREP_VERSION := 13.0.0
+RIPGREP_VERSION := 13.0.0-7
 STARSHIP_VERSION := 1.13.1
-YQ_VERSION := 4.32.2
+YQ_VERSION := 4.33.1
 ZOXIDE_VERSION := 0.9.0
 
 .PHONY: install-bins
@@ -102,7 +102,7 @@ $(BIN_DIR)/jq:
 
 $(BIN_DIR)/rg:
 	mkdir -p /tmp/rg
-	curl -fsLS -o /tmp/rg/rg.tar.gz https://github.com/microsoft/ripgrep-prebuilt/releases/download/v13.0.0-7/ripgrep-v13.0.0-7-aarch64-unknown-linux-gnu.tar.gz
+	curl -fsLS -o /tmp/rg/rg.tar.gz https://github.com/microsoft/ripgrep-prebuilt/releases/download/v${RIPGREP_VERSION}/ripgrep-v${RIPGREP_VERSION}-aarch64-unknown-linux-gnu.tar.gz
 	tar -zxf /tmp/rg/rg.tar.gz -C /tmp/rg
 	mv /tmp/rg/rg $(BIN_DIR)/rg
 	chown `whoami`:`groups` $(BIN_DIR)/rg
