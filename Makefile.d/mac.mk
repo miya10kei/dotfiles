@@ -28,4 +28,5 @@ brew-install:
 		hyper \
 		karabiner-elements\
 		kindle \
+		miro \
 		rectangle
