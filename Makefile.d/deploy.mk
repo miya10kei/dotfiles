@@ -5,10 +5,12 @@ deploy-aws: \
 
 $(HOME)/.aws: 
 	ln -fs $(DOTDIR)/.aws $(HOME)/.aws
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
-	gitconfig \
+	gitconfig
 
 .PHONY: gitconfig
 gitconfig: $(HOME)/.gitconfig
