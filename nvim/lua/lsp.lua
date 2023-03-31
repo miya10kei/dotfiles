@@ -1,14 +1,3 @@
---local masson_ok, _ = pcall(require, 'mason')
---local masson_lspconfig_ok, _ = pcall(require, 'mason-lspconfig')
---local lspconfig_ok, _ = pcall(require, 'lspconfig')
---local null_ls_ok = pcall(require, 'null-ls')
---if not (masson_ok
---    and masson_lspconfig_ok
---    and lspconfig_ok
---    and null_ls_ok) then
---    return
---end
-
 -- keymaps
 local keymap = vim.keymap.set
 keymap('n', '<SPACE>e', vim.diagnostic.open_float, { silent = true })
@@ -39,13 +28,29 @@ end
 -- mason
 require('mason').setup({
     log_level = vim.log.levels.WARN,
-    max_concurrent_installers = 1,
 })
 require('mason-lspconfig').setup()
 
 
 -- nvim-lspconfig
 local lspconfig = require('lspconfig')
+local server_configs = {
+    'bashls',
+    'docker_compose_language_service',
+    'dockerls',
+    'hls',
+    'html',
+    'jsonls',
+    'pyright',
+    'terraformls',
+    'tsserver',
+    'yamlls'
+}
+for _, v in pairs(server_configs) do
+    lspconfig[v].setup {
+        on_attach = on_attach,
+    }
+end
 lspconfig['gopls'].setup {
     on_attach = on_attach,
     cmd = {
@@ -55,9 +60,6 @@ lspconfig['gopls'].setup {
         '-debug=:0',
         '-rpc.trace'
     }
-}
-lspconfig['hls'].setup {
-    on_attach = on_attach,
 }
 lspconfig['lua_ls'].setup {
     on_attach = on_attach,
@@ -77,12 +79,6 @@ lspconfig['lua_ls'].setup {
             },
         }
     }
-}
-lspconfig['pyright'].setup {
-    on_attach = on_attach,
-}
-lspconfig['terraformls'].setup {
-    on_attach = on_attach,
 }
 
 

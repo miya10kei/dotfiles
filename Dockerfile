@@ -281,15 +281,12 @@ ENV PATH    "/usr/local/nodejs/bin:$PATH"
 ENV NVM_DIR "$HOME/.nvm"
 
 COPY ./nvim $HOME/.config/nvim
-RUN . $NVM_DIR/nvm.sh \
-    && nvim --headless -c 'Lazy sync' -c 'qa' \
-     && nvim --headless -c 'MasonInstall goimports gopls haskell-language-server lua-language-server@3.6.14 pyright terraform-ls' -c 'qa' 
-
 COPY Makefile   $HOME/.dotfiles/Makefile
 COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles 
-RUN ["/bin/bash", "-c", "make --jobs=4 install4d"]
+RUN make --jobs=4 install4d
+RUN . $NVM_DIR/nvm.sh && make --jobs=4 setup-nvim
 
 WORKDIR $HOME
 
