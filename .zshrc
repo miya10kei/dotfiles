@@ -105,5 +105,8 @@ if builtin command -v zoxide > /dev/null 2>&1; then
     eval "$(zoxide init zsh)"
 fi
 
+if builtin command -v xhost > /dev/null 2>&1; then
+    xhost + localhost
+fi
 
 autoload -Uz compinit && compinit
