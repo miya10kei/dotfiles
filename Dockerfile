@@ -286,7 +286,7 @@ COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles 
 RUN make --jobs=4 install4d
-RUN . $NVM_DIR/nvm.sh && make --jobs=4 setup-nvim
+RUN . $NVM_DIR/nvm.sh && make setup-nvim
 
 WORKDIR $HOME
 
