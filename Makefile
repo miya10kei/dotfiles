@@ -12,6 +12,7 @@ setup4d: \
 	deploy-nvim \
 	deploy-starship \
 	deploy-tmux \
+	deploy-zoxide \
 	zshhistory \
 	start-bg-job
 
