@@ -21,6 +21,7 @@ brew-install:
 		1password \
 		alt-tab \
 		datagrip \
+		deepl \
 		docker \
 		firefox \
 		font-hackgen-nerd \
