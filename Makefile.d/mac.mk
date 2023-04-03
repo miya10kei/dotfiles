@@ -29,4 +29,5 @@ brew-install:
 		karabiner-elements\
 		kindle \
 		miro \
-		rectangle
+		rectangle \
+		xquartz
