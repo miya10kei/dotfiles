@@ -1,2 +1,5 @@
 [python]
 python_binary = [ 'python3', 'python', 'python2' ]
+[time]
+disabled = false
+time_format = '%F %T'
