@@ -30,5 +30,6 @@ brew-install:
 		karabiner-elements\
 		kindle \
 		miro \
+		obsidian \
 		rectangle \
 		xquartz
