@@ -56,6 +56,16 @@ delete-nvimrc:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-obsidian
+deploy-obsidian: \
+	obsidianvimrc
+
+obsidianvimrc: $(HOME)/.obsidian.vimrc
+$(HOME)/.obsidian.vimrc:
+	ln -fs $(DOTDIR)/.obsidian.vimrc $(HOME)/.obsidian.vimrc
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-starship
 deploy-starship: \
 	starshiptoml
