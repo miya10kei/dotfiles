@@ -118,4 +118,7 @@ require("lazy").setup({
             'nvim-lua/plenary.nvim',
         }
     },
+    {
+        'APZelos/blamer.nvim',
+    },
 })
