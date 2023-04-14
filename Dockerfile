@@ -17,6 +17,7 @@ ARG PYTHON3_VERSION=3.11.3
 FROM ubuntu:latest AS builder
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        apache2-utils \
         build-essential \
         ca-certificates \
         cmake \
@@ -24,6 +25,7 @@ RUN apt-get update \
         g++ \
         gettext \
         git \
+        less \
         libbz2-dev \
         libdb-dev \
         libffi-dev \
