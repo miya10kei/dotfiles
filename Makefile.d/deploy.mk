@@ -3,7 +3,7 @@
 deploy-aws: \
 	$(HOME)/.aws
 
-$(HOME)/.aws: 
+$(HOME)/.aws:
 	ln -fs $(DOTDIR)/.aws $(HOME)/.aws
 
 
@@ -36,7 +36,7 @@ deploy-karabiner: \
 
 .PHONY: karabinerjson
 karabinerjson: $(HOME)/.config/karabiner/karabiner.json
-$(HOME)/.config/karabiner/karabiner.json: 
+$(HOME)/.config/karabiner/karabiner.json:
 	ln -fs $(DOTDIR)/karabiner.json $(HOME)/.config/karabiner/karabiner.json
 
 
@@ -118,3 +118,7 @@ $(HOME)/.zshrc:
 zshhistory: $(HOME)/.zsh_history
 $(HOME)/.zsh_history:
 	ln -fs $(DOTDIR)/.zsh_history $(HOME)/.zsh_history
+
+.PHONY: delete-zshhistory
+delete-zshhistory:
+	rm -rf $(HOME)/.zsh_history

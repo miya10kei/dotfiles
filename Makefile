@@ -7,6 +7,7 @@ build-dev-env:
 .PHONY: setup4d
 setup4d: \
 	delete-nvimrc \
+	delete-zshhistory \
 	deploy-aws \
 	deploy-git \
 	deploy-nvim \
