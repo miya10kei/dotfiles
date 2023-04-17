@@ -64,28 +64,6 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history
 
-
-# -----------
-# --- fzf ---
-# -----------
-if type fzf > /dev/null 2>&1; then
-    # gruvbox-dark-soft
-    #FZF_COLOR='bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934'
-    # gruvbox-dark-hard
-    FZF_COLOR='bg+:#3c3836,bg:#1d2021,spinner:#8ec07c,hl:#83a598,fg:#bdae93,header:#83a598,info:#fabd2f,pointer:#8ec07c,marker:#8ec07c,fg+:#ebdbb2,prompt:#fabd2f,hl+:#83a598'
-    export FZF_DEFAULT_OPTS="--layout=reverse --height=50% --border --margin=1 --padding=1 --info=inline --color=$FZF_COLOR"
-    FZF_PREVIEW_BAT_OPTION='--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
-    export FZF_CTRL_T_OPTS="--preview='batcat $FZF_PREVIEW_BAT_OPTION' --preview-window right:70%"
-
-    function fzf-select-history() {
-        BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER")
-        CURSOR=$#BUFFER
-        zle reset-prompt
-    }
-    zle -N fzf-select-history
-    bindkey '^r' fzf-select-history
-fi
-
 if [[ -e $HOME/.nvm ]]; then
     export NVM_DIR=$HOME/.nvm
     . $NVM_DIR/nvm.sh
@@ -108,6 +86,22 @@ fi
 
 if builtin command -v xhost > /dev/null 2>&1; then
     xhost + localhost
+fi
+
+if builtin command -v fzf > /dev/null 2>&1; then
+    # gruvbox-dark-hard
+    FZF_COLOR='bg+:#3c3836,bg:#1d2021,spinner:#8ec07c,hl:#83a598,fg:#bdae93,header:#83a598,info:#fabd2f,pointer:#8ec07c,marker:#8ec07c,fg+:#ebdbb2,prompt:#fabd2f,hl+:#83a598'
+    export FZF_DEFAULT_OPTS="--layout=reverse --height=50% --border --margin=1 --padding=1 --info=inline --color=$FZF_COLOR"
+    FZF_PREVIEW_BAT_OPTION='--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
+    export FZF_CTRL_T_OPTS="--preview='batcat $FZF_PREVIEW_BAT_OPTION' --preview-window right:70%"
+
+    function fzf-select-history() {
+        BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER")
+        CURSOR=$#BUFFER
+        zle reset-prompt
+    }
+    zle -N fzf-select-history
+    bindkey '^r' fzf-select-history
 fi
 
 autoload -Uz compinit && compinit
