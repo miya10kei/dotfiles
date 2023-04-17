@@ -17,7 +17,6 @@ ARG PYTHON3_VERSION=3.11.3
 FROM ubuntu:latest AS builder
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        apache2-utils \
         build-essential \
         ca-certificates \
         cmake \
@@ -124,7 +123,7 @@ RUN curl -fsLS -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/
 
 # ------------------------------------------------------------------------------------------------------------------------
 
-FROM builder AS python2 
+FROM builder AS python2
 ARG PYTHON2_VERSION=2.7.17
 RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON2_VERSION}/Python-${PYTHON2_VERSION}.tar.xz \
     && tar -Jxf Python-${PYTHON2_VERSION}.tar.xz \
@@ -240,6 +239,7 @@ ENV TZ              Asia/Tokyo
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        apache2-utils \
         build-essential \
         ca-certificates \
         cmake \
@@ -286,7 +286,7 @@ COPY ./nvim $HOME/.config/nvim
 COPY Makefile   $HOME/.dotfiles/Makefile
 COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
-WORKDIR $HOME/.dotfiles 
+WORKDIR $HOME/.dotfiles
 RUN make --jobs=4 install4d
 RUN . $NVM_DIR/nvm.sh && make setup-nvim
 
