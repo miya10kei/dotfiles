@@ -24,7 +24,6 @@ RUN apt-get update \
         g++ \
         gettext \
         git \
-        less \
         libbz2-dev \
         libdb-dev \
         libffi-dev \
@@ -246,6 +245,7 @@ RUN apt-get update \
         cmigemo \
         curl \
         git \
+        less \
         libffi-dev \
         libffi7 \
         libgmp-dev \
