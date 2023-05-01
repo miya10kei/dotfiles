@@ -5,6 +5,7 @@
   ch    = checkout
   cm    = commit
   df    = diff
+  er    = !git branch | grep -vE '^\\*' | fzf --multi | xargs git branch -D
   fetch = fetch -p
   graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
   lg    = log --name-status
@@ -12,6 +13,7 @@
   ps    = push
   pull  = pull -p
   st    = status
+  sw    = !git branch -a | grep -vE '^\\*' | fzf | sed -e 's/remotes\\/origin\\///' | xargs git switch
 [color]
   branch = auto
   diff   = auto
