@@ -96,11 +96,11 @@ require("lazy").setup({
         },
         lazy = false,
         keys = {
-            { '<C-t>',      "<CMD>call ddu#start({ 'name': 'filer'    })<CR>", silent = true },
-            { '<LEADER>db', "<CMD>call ddu#start({ 'name': 'buffer'   })<CR>", silent = true },
-            { '<LEADER>df', "<CMD>call ddu#start({ 'name': 'file_rec' })<CR>", silent = true },
-            { '<LEADER>dr', "<CMD>call ddu#start({ 'name': 'register' })<CR>", silent = true },
-            { '<LEADER>dg', "<CMD>call ddu#start({ 'name': 'grep'     })<CR>", silent = true },
+            { '<C-t>',      function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'filer'}) end, silent = true },
+            { '<LEADER>db', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'buffer'}) end, silent = true },
+            { '<LEADER>df', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'file_rec'}) end, silent = true },
+            { '<LEADER>dr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'register'}) end, silent = true },
+            { '<LEADER>dg', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'grep'}) end, silent = true },
         }
     },
     {
