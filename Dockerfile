@@ -255,6 +255,7 @@ RUN apt-get update \
         libtinfo5 \
         locales \
         openssh-client \
+        rlwrap \
         tmux \
         tzdata \
         unzip \
