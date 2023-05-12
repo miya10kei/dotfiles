@@ -96,6 +96,9 @@ $(BIN_DIR)/ghq:
 	mv /tmp/ghq/ghq_linux_arm64/ghq $(BIN_DIR)/ghq
 	rm -rf /tmp/ghq
 
+$(COMPLETION_DIR)/git-completion.zsh:
+	curl -fsLS -o $(COMPLETION_DIR)/git-completion.zsh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+
 $(BIN_DIR)/jq:
 	curl -fsLS -o $(BIN_DIR)/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
 	chmod +x $(BIN_DIR)/jq
