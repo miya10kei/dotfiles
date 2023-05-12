@@ -104,4 +104,5 @@ if builtin command -v fzf > /dev/null 2>&1; then
     bindkey '^r' fzf-select-history
 fi
 
+FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
 autoload -Uz compinit && compinit
