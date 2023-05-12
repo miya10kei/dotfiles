@@ -32,7 +32,7 @@
   navigate     = true
   syntax-theme = gruvbox-dark
 [ghq]
-  root = ~/dev
+  root = ~/dev/ghq
 [init]
   defaultBranch = main
 [interactive]
