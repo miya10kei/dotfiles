@@ -13,8 +13,10 @@ function alias_if_exists() {
     fi
 }
 
-alias_if_exists 'cdr'  'cd -'
 alias_if_exists 'cdg'  'cd $(ghq list --full-path | fzf)' 'ghq'
+alias_if_exists 'cdot' 'cd $HOME/.dotfiles'
+alias_if_exists 'cdr'  'cd -'
+alias_if_exists 'cdw'  'cd $HOME/dev/workspaces'
 alias_if_exists 'dk'   'docker'          'docker'
 alias_if_exists 'g'    'git'             'git'
 alias_if_exists 'll'   'exa -al'         'exa' 'ls -la'
