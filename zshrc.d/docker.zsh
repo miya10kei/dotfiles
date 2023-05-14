@@ -1,4 +1,5 @@
 function launch_dev_env() {
+    docker rm --force dev-env
     docker run \
         --detach \
         --env DISPLAY=host.docker.internal:0 \
@@ -14,7 +15,6 @@ function launch_dev_env() {
         --publish=3000:3000\
         --publish=35432:35432 \
         --publish=4200:4200 \
-        --publish=4300:4300 \
         --publish=4300:4300 \
         --publish=8100-8199:8100-8199 \
         --restart=always \

@@ -25,9 +25,8 @@ vim.fn['ddu#custom#patch_global']({
             prompt = '> ',
             startFilter = true,
             autoAction = { name = 'preview' },
-            ignoreEmpty = false,
-            previewSplit = 'vertical',
-            previewWidth = 80,
+            previewWidth = fn.winwidth(0) / 3,
+            winHeight = fn.winheight(0) / 4,
         }
     },
 })
@@ -75,26 +74,24 @@ vim.fn['ddu#custom#patch_local']('filer', {
     },
     sourceOptions = {
         _ = {
-            columns = { 'filename' },
+            columns = { 'icon_filename' },
         },
-        file = {
-            path = fn.expand('%:p:h'),
-        }
     },
     actionOptions = {
         narrow = { quit = false }
     },
     uiParams = {
         filer = {
-            previewSplit = 'vertical',
-            previewWidth = 80,
-            sortTreesFirst = true
+            previewSplit = 'no',
+            sortTreesFirst = true,
+            split = 'vertical',
+            statusline = false,
+            winWidth = fn.winwidth(0) / 3,
         }
     }
 })
 
 vim.fn['ddu#custom#patch_local']('grep', {
-    volatile = true,
     sources = {
         {
             name = 'rg',

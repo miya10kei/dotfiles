@@ -14,7 +14,7 @@ module.exports = {
     // font family with optional fallbacks
     // fontFamily: 'Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
     // fontFamily: '"HackGen Console NFJ","Noto Color Emoji", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
-    fontFamily: '"HackGen Console NFJ"',
+    fontFamily: '"HackGen Console NF", "Noto Color Emoji"',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: 'normal',
@@ -137,7 +137,7 @@ module.exports = {
 
     // Whether to use the WebGL renderer. Set it to false to use canvas-based
     // rendering (slower, but supports transparent backgrounds)
-    webGLRenderer: false,
+    webGLRenderer: true,
 
     // for advanced config flags please refer to https://hyper.is/#cfg
     //

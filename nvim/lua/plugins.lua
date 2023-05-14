@@ -13,6 +13,9 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
     {
+      'cohama/lexima.vim'
+    },
+    {
         'morhetz/gruvbox',
         config = function()
             vim.g.gruvbox_contrast_dark='hard'
@@ -93,10 +96,11 @@ require("lazy").setup({
             'Shougo/ddu-source-rg',
             'Shougo/ddu-ui-ff',
             'Shougo/ddu-ui-filer',
+            'ryota2357/ddu-column-icon_filename',
         },
         lazy = false,
         keys = {
-            { '<C-t>',      function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'filer'}) end, silent = true },
+            { '<C-t>',      function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'filer', searchPath = vim.fn.expand('%:p') }) end, silent = true },
             { '<LEADER>db', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'buffer'}) end, silent = true },
             { '<LEADER>df', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'file_rec'}) end, silent = true },
             { '<LEADER>dr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'register'}) end, silent = true },

@@ -14,6 +14,7 @@ setup4d: \
 	deploy-starship \
 	deploy-tmux \
 	deploy-zoxide \
+	autoenv_auth \
 	zshhistory \
 	start-bg-job
 

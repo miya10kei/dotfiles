@@ -4,7 +4,7 @@ deploy-aws: \
 	$(HOME)/.aws
 
 $(HOME)/.aws:
-	ln -fs $(DOTDIR)/.aws $(HOME)/.aws
+	ln -fs $(DOTDIR)/data-volume/aws-cli $(HOME)/.aws
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -95,14 +95,20 @@ deploy-zoxide: \
 .PHONY: zoxide
 zoxide: $(HOME)/.local/share/zoxide
 $(HOME)/.local/share/zoxide:
-	ln -fs $(DOTDIR)/zoxide/ $(HOME)/.local/share/
+	ln -fs $(DOTDIR)/data-volume/zoxide/ $(HOME)/.local/share/
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-zsh
 deploy-zsh: \
+	autoenv_auth \
 	zprofile \
 	zshrc
+
+.PHONY: autoenv_auth
+autoenv_auth: $(HOME)/.local/share/autoenv_auth
+$(HOME)/.local/share/autoenv_auth:
+	ln -fs $(DOTDIR)/data-volume/zsh-autoenv/autoenv_auth $(HOME)/.local/share/autoenv_auth
 
 .PHONY: zprofile
 zprofile: $(HOME)/.zprofile
@@ -117,7 +123,7 @@ $(HOME)/.zshrc:
 .PHONY: zshhistory
 zshhistory: $(HOME)/.zsh_history
 $(HOME)/.zsh_history:
-	ln -fs $(DOTDIR)/.zsh_history $(HOME)/.zsh_history
+	ln -fs $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
 
 .PHONY: delete-zshhistory
 delete-zshhistory:

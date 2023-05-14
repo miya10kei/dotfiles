@@ -16,6 +16,7 @@ local options = {
     smartcase = true,
     swapfile = false,
     tabstop = 4,
+    virtualedit = 'onemore',
 }
 
 for k, v in pairs(options) do
