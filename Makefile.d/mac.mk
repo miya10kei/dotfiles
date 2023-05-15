@@ -24,7 +24,6 @@ brew-install:
 		deepl \
 		docker \
 		firefox \
-		font-hackgen-nerd \
 		google-japanese-ime \
 		hyper \
 		karabiner-elements\
