@@ -22,10 +22,11 @@ vim.fn['ddu#custom#patch_global']({
     },
     uiParams = {
         ff = {
+            autoAction = { name = 'preview' },
+            previewSplit = 'no',
+            previewWidth = fn.winwidth(0) / 3,
             prompt = '> ',
             startFilter = true,
-            autoAction = { name = 'preview' },
-            previewWidth = fn.winwidth(0) / 3,
             winHeight = fn.winheight(0) / 4,
         }
     },
