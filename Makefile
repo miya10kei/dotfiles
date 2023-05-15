@@ -2,7 +2,7 @@ DOTDIR := $(HOME)/.dotfiles
 
 .PHONY: build-dev-env
 build-dev-env:
-	docker build --progress=plain --tag miya10kei/devenv:latest $(HOME)/.dotfiles
+	docker build --tag miya10kei/devenv:latest $(HOME)/.dotfiles
 
 .PHONY: setup4d
 setup4d: \
