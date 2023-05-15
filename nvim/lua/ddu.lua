@@ -98,12 +98,7 @@ vim.fn['ddu#custom#patch_local']('grep', {
             name = 'rg',
         }
     },
-    sourceParams = {
-        rg = {
-            arg = { '--column', '--no-heading', '--color', 'never' },
-            inputType = 'migemo',
-        }
-    },
+    volatile = true
 })
 
 autocmd({ 'FileType' }, {
