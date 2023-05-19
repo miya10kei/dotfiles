@@ -3,6 +3,7 @@ COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 
 BAT_VERSION := 0.23.0
 DELTA_VERSION := 0.15.1
+DIVE_VERSION := 0.10.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 8.7.0
 FZF_VERSION := 0.40.0
@@ -21,6 +22,7 @@ install-bins: \
 	$(COMPLETION_DIR) \
 	$(BIN_DIR)/bat \
 	$(BIN_DIR)/delta \
+	$(BIN_DIR)/dive \
 	$(BIN_DIR)/exa\
 	$(BIN_DIR)/fd \
 	$(BIN_DIR)/fzf \
@@ -56,6 +58,14 @@ $(BIN_DIR)/delta:
 	mv /tmp/delta/delta-$(DELTA_VERSION)-aarch64-unknown-linux-gnu/delta $(BIN_DIR)/delta
 	chown `whoami`:`groups` $(BIN_DIR)/delta
 	rm -rf /tmp/delta
+
+$(BIN_DIR)/dive:
+	mkdir -p /tmp/dive
+	curl -fsLS -o /tmp/dive/dive.tar.gz https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.tar.gz
+	tar -zxf /tmp/dive/dive.tar.gz -C /tmp/dive
+	mv /tmp/dive/dive $(BIN_DIR)/dive
+	chown `whoami`:`groups` $(BIN_DIR)/dive
+	rm -rf /tmp/dive
 
 $(BIN_DIR)/exa:
 	mkdir -p /tmp/exa
