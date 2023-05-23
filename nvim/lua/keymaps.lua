@@ -1,5 +1,4 @@
-local keymap = vim.keymap.set
-local fn = vim.fn
+local keymap = vim.keymap.set local fn = vim.fn
 
 vim.g.mapleader = ' '
 
@@ -17,6 +16,7 @@ keymap('n', 'q', '<NOP>')
 keymap('n', '<C-n>', function()
     return vim.o.number == true and ':<C-u>set nonumber<CR>' or ':<C-u>set number<CR>'
 end, { expr = true, silent = true })
+keymap('n', '<SPACE><SPACE>', "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<CR>")
 
 -- ddc
 keymap('i', '<TAB>', function()
