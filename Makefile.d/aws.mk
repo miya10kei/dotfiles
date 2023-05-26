@@ -8,13 +8,14 @@ install-aws: \
 .PHONY: pip
 pip:
 	pip3 install --user \
+		aws-mfa \
 		awscli \
-		aws-mfa
+    aws-sam-cli
 
 .PHONY: session-manager-plugin
 session-manager-plugin: /usr/local/sessionmanagerplugin
 /usr/local/sessionmanagerplugin:
 	mkdir -p /tmp/sessionmanagerplugin
-	curl -fsLS -o /tmp/sessionmanagerplugin/session-manager-plugin.deb https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_arm64/session-manager-plugin.deb 
+	curl -fsLS -o /tmp/sessionmanagerplugin/session-manager-plugin.deb https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_arm64/session-manager-plugin.deb
 	dpkg --install /tmp/sessionmanagerplugin/session-manager-plugin.deb
 	rm -rf /tmp/sessionmanagerplugin
