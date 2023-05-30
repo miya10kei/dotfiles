@@ -13,6 +13,7 @@ JQ_VERSION := 1.6
 PROCS_VERSION := 0.14.0
 RIPGREP_VERSION := 13.0.0-8
 STARSHIP_VERSION := 1.14.2
+TERRAFORM_VERSION := 1.4.6
 YQ_VERSION := 4.34.1
 ZOXIDE_VERSION := 0.9.1
 
@@ -32,6 +33,7 @@ install-bins: \
 	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
 	$(BIN_DIR)/starship \
+	$(BIN_DIR)/terraform \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide
 
@@ -135,6 +137,13 @@ $(BIN_DIR)/starship:
 	mv /tmp/starship/starship $(BIN_DIR)/starship
 	chown `whoami`:`groups` $(BIN_DIR)/starship
 	rm -rf /tmp/starship
+
+$(BIN_DIR)/terraform:
+	mkdir -p /tmp/terraform
+	curl -fsLS -o /tmp/terraform/terraform.zip  https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_linux_arm64.zip
+	unzip /tmp/terraform/terraform.zip -d /tmp/terraform
+	mv /tmp/terraform/terraform $(BIN_DIR)/terraform
+	rm -rf /tmp/terraform
 
 $(BIN_DIR)/yq:
 	curl -fsLS -o $(BIN_DIR)/yq https://github.com/mikefarah/yq/releases/download/v4.32.2/yq_linux_amd64
