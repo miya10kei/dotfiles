@@ -10,7 +10,7 @@ pip:
 	pip3 install --user \
 		aws-mfa \
 		awscli \
-    aws-sam-cli
+		aws-sam-cli
 
 .PHONY: session-manager-plugin
 session-manager-plugin: /usr/local/sessionmanagerplugin
