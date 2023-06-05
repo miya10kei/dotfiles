@@ -1,18 +1,19 @@
 MASON_PKG := \
-			 bash-language-server \
-			 docker-compose-language-service \
-			 dockerfile-language-server \
-			 flake8 \
-			 goimports \
-			 gopls \
-			 haskell-language-server \
-			 html-lsp \
-			 json-lsp \
-			 lua-language-server \
-			 pyright \
-			 terraform-ls \
-			 typescript-language-server \
-			 yaml-language-server
+			bash-language-server \
+			docker-compose-language-service \
+			dockerfile-language-server \
+			flake8 \
+			goimports \
+			gopls \
+			haskell-language-server \
+			html-lsp \
+			json-lsp \
+			lua-language-server \
+			pyright \
+			terraform-ls \
+			tflint \
+			typescript-language-server \
+			yaml-language-server
 
 .PHONY: setup-nvim
 setup-nvim: \
