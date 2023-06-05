@@ -107,17 +107,24 @@ RUN git clone https://github.com/neovim/neovim \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+FROM rust:latest AS volta
+RUN cargo install --git https://github.com/volta-cli/volta \
+    && mkdir -p \
+        /out/root \
+        /out/usr/local/bin \
+    && mv /usr/local/cargo/bin/volta* /out/usr/local/bin/
+
 FROM builder AS nodejs
-ARG NVM_VERSION
 ARG NODEJS_VERSION
-RUN curl -fsLS -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash \
-    && export NVM_DIR=/root/.nvm \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install v${NODEJS_VERSION} \
-    && nvm install v10.24.1 \
-    && nvm install v15.4.0 \
-    && mkdir -p /out/root \
-    && mv /root/.nvm /out/root/
+COPY --from=volta /out/ /
+RUN volta install node@10.24.1 \
+    && volta install node@15.4.0 \
+    && volta install node@${NODEJS_VERSION} \
+    && mkdir -p \
+        /out/root \
+        /out/usr/local/bin \
+    && mv /usr/local/bin/volta* /out/usr/local/bin/ \
+    && mv /root/.volta /out/root/
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -204,12 +211,8 @@ RUN upx --lzma --best /out/haskell/root/.ghcup/bin/ghcup \
 COPY --from=neovim /out /out/neovim
 RUN upx --lzma --best /out/neovim/usr/local/bin/nvim
 
-ARG NODEJS_VERSION
 COPY --from=nodejs /out /out/nodejs
-RUN ls -la /out/nodejs/root/.nvm/versions
-RUN upx --lzma --best /out/nodejs/root/.nvm/versions/node/v10.24.1/bin/node \
-    && upx --lzma --best /out/nodejs/root/.nvm/versions/node/v15.4.0/bin/node \
-    && upx --lzma --best /out/nodejs/root/.nvm/versions/node/v${NODEJS_VERSION}/bin/node
+# Compression slows down the node command
 
 COPY --from=python2 /out /out/python2
 RUN upx --lzma --best `readlink -f /out/python2/usr/local/bin/python`
@@ -277,11 +280,11 @@ COPY --from=packer /out/python3/ /
 COPY --from=packer /out/rust/  /
 COPY --from=packer /out/tools/  /
 
-ENV PATH    "$HOME/.deno/bin:$PATH"
-ENV PATH    "$HOME/.ghcup/bin:$PATH"
-ENV PATH    "/usr/local/go/bin:$PATH"
-ENV PATH    "/usr/local/nodejs/bin:$PATH"
-ENV NVM_DIR "$HOME/.nvm"
+ENV PATH       "$HOME/.deno/bin:$PATH"
+ENV PATH       "$HOME/.ghcup/bin:$PATH"
+ENV PATH       "/usr/local/go/bin:$PATH"
+ENV VOLTA_HOME "$HOME/.volta"
+ENV PATH       "$VOLTA_HOME/bin:$PATH"
 
 COPY ./nvim $HOME/.config/nvim
 COPY Makefile   $HOME/.dotfiles/Makefile
@@ -289,7 +292,7 @@ COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
 RUN make --jobs=4 install4d
-RUN . $NVM_DIR/nvm.sh && make setup-nvim
+RUN make setup-nvim
 
 WORKDIR $HOME
 
