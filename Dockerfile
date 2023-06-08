@@ -11,7 +11,7 @@ ARG HASKELL_STACK_VERSION=2.9.3
 ARG NODEJS_VERSION=18.16.0
 ARG NVM_VERSION=0.39.3
 ARG PYTHON2_VERSION=2.7.17
-ARG PYTHON3_VERSION=3.11.3
+ARG PYTHON3_VERSION=3.11.4
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM ubuntu:latest AS builder
