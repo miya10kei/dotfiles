@@ -265,7 +265,13 @@ RUN apt-get update \
         wget \
         xsel \
         zsh \
+        # add temporarily
+        libpq-dev \
+        libxslt-dev \
+        swig \
+        zlib1g-dev \
         zsh-antigen \
+        # add temporarily
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen --purge $LANG
