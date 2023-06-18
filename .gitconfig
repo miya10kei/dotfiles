@@ -5,7 +5,8 @@
   ch    = checkout
   cm    = commit
   df    = diff
-  er    = !git branch | grep -vE '^\\*' | fzf --multi | xargs git branch -D
+  er    = erase
+  erase = !git branch | grep -vE '^\\*' | fzf --multi | xargs git branch -D
   fetch = fetch -p
   graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
   lg    = log --name-status
