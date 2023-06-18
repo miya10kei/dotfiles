@@ -9,7 +9,6 @@ ARG HASKELL_GHCUP_VERSION=0.1.19.2
 ARG HASKELL_GHC_VERSION=9.2.7
 ARG HASKELL_STACK_VERSION=2.9.3
 ARG NODEJS_VERSION=18.16.0
-ARG NVM_VERSION=0.39.3
 ARG PYTHON2_VERSION=2.7.17
 ARG PYTHON3_VERSION=3.11.4
 
@@ -117,9 +116,7 @@ RUN cargo install --git https://github.com/volta-cli/volta \
 FROM builder AS nodejs
 ARG NODEJS_VERSION
 COPY --from=volta /out/ /
-RUN volta install node@10.24.1 \
-    && volta install node@15.4.0 \
-    && volta install node@${NODEJS_VERSION} \
+RUN volta install node@${NODEJS_VERSION} \
     && mkdir -p \
         /out/root \
         /out/usr/local/bin \
