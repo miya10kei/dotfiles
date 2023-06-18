@@ -1,3 +1,15 @@
+local BLAMER_VERSION = '1.3.0'
+local DDC_VERSION = 'v3.5.1'
+local DDU_VERSION = 'v3.0.2'
+local DENOPS_VERSION = '5.0.0'
+local EASYMOTION_VERSION = '3.0.1'
+local GRUVBOX_VERSION = '2.0.0'
+local INDENT_LINE_VERSION = '2.0'
+local LEXIMA_VERSION = 'v2.1.0'
+local NVIM_LSPCONFIG_VERSION = '0.1.4'
+local TCOMMENT_VERSION = '4.00'
+
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -13,13 +25,16 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
     {
-      'Yggdroot/indentLine'
+      'Yggdroot/indentLine',
+      version = INDENT_LINE_VERSION,
     },
     {
-      'cohama/lexima.vim'
+      'cohama/lexima.vim',
+      tag = LEXIMA_VERSION,
     },
     {
         'morhetz/gruvbox',
+        version = GRUVBOX_VERSION,
         config = function()
             vim.g.gruvbox_contrast_dark='hard'
             vim.cmd([[colorscheme gruvbox]])
@@ -27,6 +42,7 @@ require("lazy").setup({
     },
     {
         'easymotion/vim-easymotion',
+        version = EASYMOTION_VERSION,
         config = function()
             vim.g.EasyMotion_do_mapping = 0
             vim.g.EasyMotion_smartcase = 1
@@ -39,9 +55,11 @@ require("lazy").setup({
     },
     {
         'vim-denops/denops.vim',
+        version = DENOPS_VERSION,
     },
     {
         'Shougo/ddc.vim',
+        version = DDC_VERSION,
         config = function() require('ddc') end,
         dependencies = {
             'Shougo/ddc-matcher_head',
@@ -50,7 +68,7 @@ require("lazy").setup({
             'Shougo/ddc-source-nvim-lsp',
             'Shougo/ddc-ui-native',
         },
-        lazy = false,
+        lazy = true,
         keys = {
             {
                 '<TAB>',
@@ -86,6 +104,7 @@ require("lazy").setup({
     },
     {
         'Shougo/ddu.vim',
+        version = DDU_VERSION,
         config = function() require('ddu') end,
         dependencies = {
             'Shougo/ddu-column-filename',
@@ -96,10 +115,12 @@ require("lazy").setup({
             'Shougo/ddu-source-file',
             'Shougo/ddu-source-file_rec',
             'Shougo/ddu-source-register',
-            'Shougo/ddu-source-rg',
             'Shougo/ddu-ui-ff',
             'Shougo/ddu-ui-filer',
+            'shun/ddu-source-rg',
             'ryota2357/ddu-column-icon_filename',
+            'lambdalisue/kensaku.vim',
+            'Milly/ddu-filter-kensaku'
         },
         lazy = false,
         keys = {
@@ -107,11 +128,12 @@ require("lazy").setup({
             { '<LEADER>db', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'buffer'}) end, silent = true },
             { '<LEADER>df', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'file_rec'}) end, silent = true },
             { '<LEADER>dr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'register'}) end, silent = true },
-            { '<LEADER>dg', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'grep'}) end, silent = true },
+            { '<LEADER>dg', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'grep' }) end, silent = true },
         }
     },
     {
         'neovim/nvim-lspconfig',
+        --version = NVIM_LSPCONFIG_VERSION,
         config = function()
             require('lsp')
         end,
@@ -124,5 +146,13 @@ require("lazy").setup({
     },
     {
         'APZelos/blamer.nvim',
+        version = BLAMER_VERSION,
     },
+    {
+        'tomtom/tcomment_vim',
+        tag = TCOMMENT_VERSION,
+        keys = {
+          { '<C-_>', ':<C-u>TCommentInline<CR>' },
+        }
+    }
 })

@@ -23,11 +23,12 @@ vim.fn['ddu#custom#patch_global']({
     uiParams = {
         ff = {
             autoAction = { name = 'preview' },
+            floatingBorder = 'double',
             previewSplit = 'no',
             previewWidth = fn.winwidth(0) / 3,
             prompt = '> ',
+            split = 'floating',
             startFilter = true,
-            winHeight = fn.winheight(0) / 4,
         }
     },
 })
@@ -98,7 +99,18 @@ vim.fn['ddu#custom#patch_local']('grep', {
             name = 'rg',
         }
     },
-    volatile = true
+    sourceOptions = {
+      rg = {
+          volatile = true,
+          matchers = { 'matcher_kensaku' },
+      },
+    },
+    sourceParams = {
+      rg = {
+        args = { '--json' },
+        inputType = 'migemo',
+      }
+    }
 })
 
 autocmd({ 'FileType' }, {
@@ -142,14 +154,14 @@ autocmd({ 'FileType' }, {
         keymap('n', 'mk', function() action('itemAction', { name = 'newDirectory' }) end, bufopts)
         keymap('n', 'mv', function() action('itemAction', { name = 'move' }) end, bufopts)
         keymap('n', 'nf', function() action('itemAction', { name = 'newFile' }) end, bufopts)
-        keymap('n', 'o', function() action('expandItem', { mode = 'toggle' }) end, bufopts)
+        keymap('n', 'o',  function() action('expandItem', { mode = 'toggle' }) end, bufopts)
         keymap('n', 'pt', function() action('itemAction', { name = 'paste' }) end, bufopts)
-        keymap('n', 'q', function() action('quit') end, bufopts)
+        keymap('n', 'q',  function() action('quit') end, bufopts)
         keymap('n', 'rm', function() action('itemAction', { name = 'delete' }) end, bufopts)
         keymap('n', 'rn', function() action('itemAction', { name = 'rename' }) end, bufopts)
-        keymap('n', 's', function() action('toggleSelectItem') end, bufopts)
+        keymap('n', 's',  function() action('toggleSelectItem') end, bufopts)
         keymap('n', 'uu', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
         keymap('n', '..', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
-        keymap('n', 'p', function() action('preview') end, bufopts)
+        keymap('n', 'p',  function() action('preview') end, bufopts)
     end
 })
