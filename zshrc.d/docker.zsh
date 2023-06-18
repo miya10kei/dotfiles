@@ -13,15 +13,13 @@ function launch_dev_env() {
         --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
         --name=dev-env \
         --publish=3000:3000\
-        --publish=35432:35432 \
-        --publish=4200:4200 \
-        --publish=4300:4300 \
+        --publish=4200-4400:4200-4400 \
         --publish=8100-8199:8100-8199 \
+        --publish=35432:35432 \
         --restart=always \
         --tty \
         miya10kei/devenv:latest
 }
-
 
 function attach_dev_env() {
     docker exec \
