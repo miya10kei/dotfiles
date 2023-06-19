@@ -109,7 +109,7 @@ function main() {
     autoload -Uz compinit && compinit
 }
 
-if [ "$ZPROFILE_ENABLED" == true ]; then
+if [ "$ZPROFILE_ENABLED" = true ]; then
     zmodload zsh/zprof && zprof
     main
     zprof
