@@ -5,11 +5,14 @@ local keymap = vim.keymap.set
 vim.fn['ddu#custom#patch_global']({
     ui = 'ff',
     sources = {
-        { name = 'file' },
+        {
+            name = 'file'
+        },
     },
     sourceOptions = {
         _ = {
-            matchers = { 'matcher_substring' },
+            matchers = { 'matcher_fzf' },
+            sorters = { 'sorter_fzf' }
         },
     },
     kindOptions = {
@@ -20,15 +23,32 @@ vim.fn['ddu#custom#patch_global']({
             defaultAction = 'append',
         }
     },
+    filterParams = {
+        matcher_fzf = {
+            highlightMatched = 'Search'
+        }
+    },
     uiParams = {
         ff = {
             autoAction = { name = 'preview' },
+            filterFloatingPosition = 'top',
             floatingBorder = 'double',
-            previewSplit = 'no',
-            previewWidth = fn.winwidth(0) / 3,
+            ignoreEmpty = true,
+            previewFloating = true,
+            previewFloatingBorder = 'double',
+            previewFloatingTitle = 'Preview',
+            previewSplit = 'vertical',
             prompt = '> ',
             split = 'floating',
             startFilter = true,
+            winCol = math.floor(vim.opt.columns:get() * 0.05),
+            previewCol = math.floor(vim.opt.columns:get() * 0.05),
+            winHeight = math.floor(vim.opt.lines:get() * 0.8),
+            previewHeight = math.floor(vim.opt.lines:get()),
+            winRow = math.floor(vim.opt.lines:get() * 0.08),
+            previewRow  = math.floor(vim.opt.lines:get() * 0.08),
+            winWidth = math.floor(vim.opt.columns:get() * 0.9),
+            previewWidth = math.floor(math.floor(vim.opt.columns:get() * 0.8) / 2),
         }
     },
 })
@@ -47,7 +67,9 @@ vim.fn['ddu#custom#patch_local']('file_rec', {
 
 vim.fn['ddu#custom#patch_local']('buffer', {
     sources = {
-        { name = 'buffer' },
+        {
+            name = 'buffer'
+        },
     },
     uiParams = {
         ff = {
@@ -75,12 +97,14 @@ vim.fn['ddu#custom#patch_local']('filer', {
         },
     },
     sourceOptions = {
-        _ = {
+        file = {
             columns = { 'icon_filename' },
         },
     },
     actionOptions = {
-        narrow = { quit = false }
+        narrow = {
+            quit = false
+        }
     },
     uiParams = {
         filer = {
@@ -100,17 +124,57 @@ vim.fn['ddu#custom#patch_local']('grep', {
         }
     },
     sourceOptions = {
-      rg = {
-          volatile = true,
-          matchers = { 'matcher_kensaku' },
-      },
+        rg = {
+            volatile = true,
+            matchers = { 'matcher_kensaku' },
+        },
     },
     sourceParams = {
-      rg = {
-        args = { '--json' },
-        inputType = 'migemo',
-      }
+        rg = {
+            args = { '--json' },
+            inputType = 'migemo',
+        }
+    },
+    uiParams = {
+        ff = {
+            ignoreEmpty = false,
+        }
+    },
+})
+
+vim.fn['ddu#custom#patch_local']('lsp_call_hierarchy', {
+    kindOptions = {
+        lsp = {
+            defaultAction = 'open',
+        }
+    },
+    sources = {
+        {
+            name = 'lsp_callHierarchy',
+            params = {
+                method = 'callHierarchy/incomingCalls',
+            }
+        }
+    },
+    uiParams = {
+        ff = {
+            displayTree = true,
+            startFilter = false,
+        }
     }
+})
+
+vim.fn['ddu#custom#patch_local']('lsp_references', {
+    kindOptions = {
+        lsp = {
+            defaultAction = 'open',
+        }
+    },
+    sources = {
+        {
+            name = 'lsp_references',
+        }
+    },
 })
 
 autocmd({ 'FileType' }, {

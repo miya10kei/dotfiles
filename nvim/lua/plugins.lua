@@ -107,6 +107,7 @@ require("lazy").setup({
         version = DDU_VERSION,
         config = function() require('ddu') end,
         dependencies = {
+            'Milly/ddu-filter-kensaku',
             'Shougo/ddu-column-filename',
             'Shougo/ddu-filter-matcher_substring',
             'Shougo/ddu-kind-file',
@@ -117,10 +118,11 @@ require("lazy").setup({
             'Shougo/ddu-source-register',
             'Shougo/ddu-ui-ff',
             'Shougo/ddu-ui-filer',
-            'shun/ddu-source-rg',
-            'ryota2357/ddu-column-icon_filename',
             'lambdalisue/kensaku.vim',
-            'Milly/ddu-filter-kensaku'
+            'ryota2357/ddu-column-icon_filename',
+            'shun/ddu-source-rg',
+            'uga-rosa/ddu-source-lsp',
+            'yuki-yano/ddu-filter-fzf',
         },
         lazy = false,
         keys = {
@@ -129,6 +131,8 @@ require("lazy").setup({
             { '<LEADER>df', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'file_rec'}) end, silent = true },
             { '<LEADER>dr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'register'}) end, silent = true },
             { '<LEADER>dg', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'grep' }) end, silent = true },
+            { 'gr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'lsp_references' }) end, silent = true },
+            { 'gh', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'lsp_call_hierarchy' }) end, silent = true },
         }
     },
     {

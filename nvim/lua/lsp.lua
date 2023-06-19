@@ -20,7 +20,6 @@ local on_attach = function(_, bufnr)
     keymap('n', '<SPACE>D', vim.lsp.buf.type_definition, bufopts)
     keymap('n', '<SPACE>rn', vim.lsp.buf.rename, bufopts)
     keymap('n', '<SPACE>ca', vim.lsp.buf.code_action, bufopts)
-    keymap('n', 'gr', vim.lsp.buf.references, bufopts)
     keymap('n', '<SPACE>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 
