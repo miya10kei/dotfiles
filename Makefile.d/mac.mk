@@ -16,9 +16,9 @@ endif
 
 .PHONY: brew-install
 brew-install:
-	brew tap homebrew/cask-fonts
 	brew install --cask \
 		1password \
+		alfred \
 		alt-tab \
 		datagrip \
 		deepl \
@@ -26,7 +26,7 @@ brew-install:
 		firefox \
 		google-japanese-ime \
 		hyper \
-		karabiner-elements\
+		karabiner-elements \
 		kindle \
 		obsidian \
 		rectangle \
