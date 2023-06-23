@@ -20,6 +20,7 @@ brew-install:
 		1password \
 		alfred \
 		alt-tab \
+		aws-vpn-client \
 		datagrip \
 		deepl \
 		docker \
