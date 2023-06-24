@@ -36,146 +36,200 @@ vim.fn['ddu#custom#patch_global']({
             ignoreEmpty = true,
             previewFloating = true,
             previewFloatingBorder = 'double',
-            previewFloatingTitle = 'Preview',
             previewSplit = 'vertical',
             prompt = '> ',
             split = 'floating',
             startFilter = true,
-            winCol = math.floor(vim.opt.columns:get() * 0.05),
-            previewCol = math.floor(vim.opt.columns:get() * 0.05),
-            winHeight = math.floor(vim.opt.lines:get() * 0.8),
-            previewHeight = math.floor(vim.opt.lines:get()),
-            winRow = math.floor(vim.opt.lines:get() * 0.08),
-            previewRow  = math.floor(vim.opt.lines:get() * 0.08),
-            winWidth = math.floor(vim.opt.columns:get() * 0.9),
-            previewWidth = math.floor(math.floor(vim.opt.columns:get() * 0.8) / 2),
         }
     },
 })
 
-vim.fn['ddu#custom#patch_local']('file_rec', {
-    sources = {
-        {
-            name = 'file_rec',
-            path = vim.fn.expand('~'),
-            params = {
-                ignoredDirectories = { '.git', '.gradle', 'node_modules', '__pycache__' }
+
+local function resize()
+    local function to_nearest_even(val)
+        return math.floor(val / 2) * 2
+    end
+    local lines = vim.opt.lines:get()
+    local columns = vim.opt.columns:get()
+    --local lines = to_nearest_even(vim.api.nvim_win_get_height(0))
+    --local columns = to_nearest_even(vim.api.nvim_win_get_width(0))
+    local height = to_nearest_even(lines * 0.8)
+    local width = to_nearest_even(columns * 0.4)
+
+    vim.fn['ddu#custom#patch_global']('uiParams',{
+        ff = {
+            winHeight = height,
+            winWidth = width,
+            winCol = to_nearest_even(width * 0.1),
+            winRow = to_nearest_even(height * 0.2),
+            previewHeight = height,
+            previewWidth = width,
+            previewCol = to_nearest_even(width * 0.2),
+            --previewRow  = math.floor(vim.opt.lines:get() * 0.08),
+        }
+    })
+end
+
+local M = {}
+
+function M.ddu__file_rec()
+  vim.fn['ddu#start']({
+      sources = {
+          {
+              name = 'file_rec',
+              path = vim.fn.expand('~'),
+              params = {
+                  ignoredDirectories = { '.git', '.gradle', 'node_modules', '__pycache__' }
+              }
+          },
+      },
+  })
+end
+
+function M.ddu__buffer()
+    vim.fn['ddu#start']({
+        sources = {
+            {
+                name = 'buffer'
+            },
+        },
+        uiParams = {
+            ff = {
+                startFilter = false,
             }
         },
-    },
-})
+    })
+end
 
-vim.fn['ddu#custom#patch_local']('buffer', {
-    sources = {
-        {
-            name = 'buffer'
+function M.ddu__register()
+    vim.fn['ddu#start']({
+        sources = {
+            { name = 'register' },
         },
-    },
-    uiParams = {
-        ff = {
-            startFilter = false,
-        }
-    },
-})
-
-vim.fn['ddu#custom#patch_local']('register', {
-    sources = {
-        { name = 'register' },
-    },
-    uiParams = {
-        ff = {
-            startFilter = false,
-        }
-    },
-})
-
-vim.fn['ddu#custom#patch_local']('filer', {
-    ui = 'filer',
-    sources = {
-        {
-            name = 'file',
+        uiParams = {
+            ff = {
+                startFilter = false,
+            }
         },
-    },
-    sourceOptions = {
-        file = {
-            columns = { 'icon_filename' },
-        },
-    },
-    actionOptions = {
-        narrow = {
-            quit = false
-        }
-    },
-    uiParams = {
-        filer = {
-            previewSplit = 'no',
-            sortTreesFirst = true,
-            split = 'vertical',
-            statusline = false,
-            winWidth = fn.winwidth(0) / 3,
-        }
-    }
-})
+    })
+end
 
-vim.fn['ddu#custom#patch_local']('grep', {
-    sources = {
-        {
-            name = 'rg',
-        }
-    },
-    sourceOptions = {
-        rg = {
-            volatile = true,
-            matchers = { 'matcher_kensaku' },
+function M.ddu__grep()
+    vim.fn['ddu#start']({
+        sources = {
+            {
+                name = 'rg',
+            }
         },
-    },
-    sourceParams = {
-        rg = {
-            args = { '--json' },
-            inputType = 'migemo',
-        }
-    },
-    uiParams = {
-        ff = {
-            ignoreEmpty = false,
-        }
-    },
-})
+        sourceOptions = {
+            rg = {
+                volatile = true,
+                matchers = { 'matcher_kensaku' },
+            },
+        },
+        sourceParams = {
+            rg = {
+                args = { '--json' },
+                inputType = 'migemo',
+            }
+        },
+        uiParams = {
+            ff = {
+                ignoreEmpty = false,
+            }
+        },
+    })
+end
 
-vim.fn['ddu#custom#patch_local']('lsp_call_hierarchy', {
-    kindOptions = {
-        lsp = {
-            defaultAction = 'open',
-        }
-    },
-    sources = {
-        {
-            name = 'lsp_callHierarchy',
-            params = {
-                method = 'callHierarchy/incomingCalls',
+function M.ddu__lsp_call_hierarchy()
+    vim.fn['ddu#start']({
+        kindOptions = {
+            lsp = {
+                defaultAction = 'open',
+            }
+        },
+        sources = {
+            {
+                name = 'lsp_callHierarchy',
+                params = {
+                    method = 'callHierarchy/incomingCalls',
+                }
+            }
+        },
+        uiParams = {
+            ff = {
+                displayTree = true,
+                startFilter = false,
             }
         }
-    },
-    uiParams = {
-        ff = {
-            displayTree = true,
-            startFilter = false,
-        }
-    }
-})
+    })
+end
 
-vim.fn['ddu#custom#patch_local']('lsp_references', {
-    kindOptions = {
-        lsp = {
-            defaultAction = 'open',
+function M.ddu__lsp_references()
+    vim.fn['ddu#start']({
+        kindOptions = {
+            lsp = {
+                defaultAction = 'open',
+            }
+        },
+        sources = {
+            {
+                name = 'lsp_references',
+            }
+        },
+    })
+end
+
+function M.ddu__filer()
+    vim.fn['ddu#start']({
+        ui = 'filer',
+        searchPath = vim.fn.getcwd(),
+        sources = {
+            {
+                name = 'file',
+            },
+        },
+        sourceOptions = {
+            file = {
+                columns = { 'icon_filename' },
+            },
+        },
+        actionOptions = {
+            narrow = {
+                quit = false
+            }
+        },
+        uiParams = {
+            filer = {
+                previewSplit = 'no',
+                sortTreesFirst = true,
+                split = 'vertical',
+                statusline = false,
+                winWidth = fn.winwidth(0) / 3,
+            }
         }
-    },
-    sources = {
-        {
-            name = 'lsp_references',
-        }
-    },
-})
+    })
+end
+
+---------------------
+--- User Commands ---
+---------------------
+
+vim.api.nvim_create_user_command(
+    'Ddu',
+    function(opts)
+        local subcomand = opts.fargs[1]
+        vim.fn['ddu#ui#do_action']('quit')
+        resize()
+        M[subcomand]()
+    end,
+    { nargs=1 }
+)
+
+
+--------------------
+--- Autocommands ---
+--------------------
 
 autocmd({ 'FileType' }, {
     pattern = { 'ddu-ff' },
@@ -227,5 +281,15 @@ autocmd({ 'FileType' }, {
         keymap('n', 'uu', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
         keymap('n', '..', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
         keymap('n', 'p',  function() action('preview') end, bufopts)
+    end
+})
+
+local dduAutogroup = vim.api.nvim_create_augroup('Ddu', {})
+vim.api.nvim_clear_autocmds({ group = dduAutogroup })
+vim.api.nvim_create_autocmd({ 'WinResized' }, {
+    group = dduAutogroup,
+    pattern = { '*' },
+    callback = function()
+        resize()
     end
 })

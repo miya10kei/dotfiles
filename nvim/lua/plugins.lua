@@ -1,6 +1,6 @@
 local BLAMER_VERSION = '1.3.0'
 local DDC_VERSION = 'v3.5.1'
-local DDU_VERSION = 'v3.0.2'
+local DDU_VERSION = 'v3.2.7'
 local DENOPS_VERSION = '5.0.0'
 local EASYMOTION_VERSION = '3.0.1'
 local GRUVBOX_VERSION = '2.0.0'
@@ -126,13 +126,13 @@ require("lazy").setup({
         },
         lazy = false,
         keys = {
-            { '<C-t>',      function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'filer', searchPath = vim.fn.expand('%:p') }) end, silent = true },
-            { '<LEADER>db', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'buffer'}) end, silent = true },
-            { '<LEADER>df', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'file_rec'}) end, silent = true },
-            { '<LEADER>dr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'register'}) end, silent = true },
-            { '<LEADER>dg', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'grep' }) end, silent = true },
-            { 'gr', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'lsp_references' }) end, silent = true },
-            { 'gh', function() vim.fn['ddu#ui#do_action']('quit') vim.fn['ddu#start']({ name = 'lsp_call_hierarchy' }) end, silent = true },
+            { '<C-t>',      "<ESC><CMD>Ddu ddu__filer<CR>",              silent = true },
+            { '<LEADER>df', "<ESC><CMD>Ddu ddu__file_rec<CR>",           silent = true },
+            { '<LEADER>db', "<ESC><CMD>Ddu ddu__buffer<CR>",             silent = true },
+            { '<LEADER>dr', "<ESC><CMD>Ddu ddu__register<CR>",           silent = true },
+            { '<LEADER>dg', "<ESC><CMD>Ddu ddu__grep<CR>",               silent = true },
+            { '<LEADER>gr', "<ESC><CMD>Ddu ddu__lsp_references<CR>",     silent = true },
+            { '<LEADER>gh', "<ESC><CMD>Ddu ddu__lsp_call_hierarchy<CR>", silent = true },
         }
     },
     {
