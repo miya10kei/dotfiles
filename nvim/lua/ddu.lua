@@ -209,8 +209,12 @@ end
 
 function M.ddu__filer()
     fn['ddu#start']({
-        ui = 'filer',
-        searchPath = fn.getcwd(),
+        actionOptions = {
+            narrow = {
+                quit = false
+            }
+        },
+        searchPath = fn.expand('%:p'),
         sources = {
             {
                 name = 'file',
@@ -219,13 +223,11 @@ function M.ddu__filer()
         sourceOptions = {
             file = {
                 columns = { 'icon_filename' },
+                path = fn.getcwd(),
             },
         },
-        actionOptions = {
-            narrow = {
-                quit = false
-            }
-        },
+        sync = true,
+        ui = 'filer',
         uiParams = {
             filer = {
                 previewSplit = 'no',
