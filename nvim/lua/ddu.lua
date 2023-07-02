@@ -1,14 +1,16 @@
-local autocmd = vim.api.nvim_create_autocmd
+local M = {}
+local api = vim.api
+local autocmd = api.nvim_create_autocmd
 local fn = vim.fn
 local keymap = vim.keymap.set
+local opt = vim.opt
 
-vim.fn['ddu#custom#patch_global']({
+---------------------
+--- Base Settings ---
+---------------------
+
+fn['ddu#custom#patch_global']({
     ui = 'ff',
-    sources = {
-        {
-            name = 'file'
-        },
-    },
     sourceOptions = {
         _ = {
             matchers = { 'matcher_fzf' },
@@ -45,41 +47,24 @@ vim.fn['ddu#custom#patch_global']({
 })
 
 
-local function resize()
-    local function to_nearest_even(val)
-        return math.floor(val / 2) * 2
-    end
-    local lines = vim.opt.lines:get()
-    local columns = vim.opt.columns:get()
-    --local lines = to_nearest_even(vim.api.nvim_win_get_height(0))
-    --local columns = to_nearest_even(vim.api.nvim_win_get_width(0))
-    local height = to_nearest_even(lines * 0.8)
-    local width = to_nearest_even(columns * 0.4)
-
-    vim.fn['ddu#custom#patch_global']('uiParams',{
-        ff = {
-            winHeight = height,
-            winWidth = width,
-            winCol = to_nearest_even(width * 0.1),
-            winRow = to_nearest_even(height * 0.2),
-            previewHeight = height,
-            previewWidth = width,
-            previewCol = to_nearest_even(width * 0.2),
-            --previewRow  = math.floor(vim.opt.lines:get() * 0.08),
-        }
-    })
-end
-
-local M = {}
+-----------------
+--- Functions ---
+-----------------
 
 function M.ddu__file_rec()
-  vim.fn['ddu#start']({
+  fn['ddu#start']({
       sources = {
           {
               name = 'file_rec',
-              path = vim.fn.expand('~'),
+              path = fn.expand('~'),
               params = {
-                  ignoredDirectories = { '.git', '.gradle', 'node_modules', '__pycache__' }
+                  ignoredDirectories = {
+                    '.git',
+                    '.gradle',
+                    'node_modules',
+                    '__pycache__',
+                    'python3.11'
+                  }
               }
           },
       },
@@ -87,7 +72,7 @@ function M.ddu__file_rec()
 end
 
 function M.ddu__buffer()
-    vim.fn['ddu#start']({
+    fn['ddu#start']({
         sources = {
             {
                 name = 'buffer'
@@ -102,7 +87,7 @@ function M.ddu__buffer()
 end
 
 function M.ddu__register()
-    vim.fn['ddu#start']({
+    fn['ddu#start']({
         sources = {
             { name = 'register' },
         },
@@ -115,7 +100,7 @@ function M.ddu__register()
 end
 
 function M.ddu__grep()
-    vim.fn['ddu#start']({
+    fn['ddu#start']({
         sources = {
             {
                 name = 'rg',
@@ -141,8 +126,30 @@ function M.ddu__grep()
     })
 end
 
+function M.ddu__lsp_definition()
+    fn['ddu#start']({
+        kindOptions = {
+            lsp = {
+                defaultAction = 'open',
+            }
+        },
+        sources = {
+            {
+                name = 'lsp_definition',
+            }
+        },
+        sync = true,
+        uiParams = {
+            ff = {
+              immediateAction = 'open'
+            }
+        },
+
+    })
+end
+
 function M.ddu__lsp_call_hierarchy()
-    vim.fn['ddu#start']({
+    fn['ddu#start']({
         kindOptions = {
             lsp = {
                 defaultAction = 'open',
@@ -166,7 +173,7 @@ function M.ddu__lsp_call_hierarchy()
 end
 
 function M.ddu__lsp_references()
-    vim.fn['ddu#start']({
+    fn['ddu#start']({
         kindOptions = {
             lsp = {
                 defaultAction = 'open',
@@ -180,10 +187,30 @@ function M.ddu__lsp_references()
     })
 end
 
+function M.ddu__lsp_workspace()
+    fn['ddu#start']({
+        sources = {
+            {
+                name = 'lsp_workspaceSymbol',
+            }
+        },
+        sourceOptions = {
+            lsp = {
+                volatile = true
+            }
+        },
+        uiParams = {
+            ff = {
+                ignoreEmpty = false,
+            }
+        },
+    })
+end
+
 function M.ddu__filer()
-    vim.fn['ddu#start']({
+    fn['ddu#start']({
         ui = 'filer',
-        searchPath = vim.fn.getcwd(),
+        searchPath = fn.getcwd(),
         sources = {
             {
                 name = 'file',
@@ -205,21 +232,51 @@ function M.ddu__filer()
                 sortTreesFirst = true,
                 split = 'vertical',
                 statusline = false,
-                winWidth = fn.winwidth(0) / 3,
+                winWidth = fn.winwidth(0) / 3
             }
         }
     })
 end
 
+-----------------------
+--- Local Functions ---
+-----------------------
+
+local function resize()
+    local function to_nearest_even(val)
+        return math.floor(val / 2) * 2
+    end
+    local lines = opt.lines:get()
+    local columns = opt.columns:get()
+    --local lines = to_nearest_even(api.nvim_win_get_height(0))
+    --local columns = to_nearest_even(api.nvim_win_get_width(0))
+    local height = to_nearest_even(lines * 0.8)
+    local width = to_nearest_even(columns * 0.4)
+
+    fn['ddu#custom#patch_global']('uiParams',{
+        ff = {
+            winHeight = height,
+            winWidth = width,
+            winCol = to_nearest_even(width * 0.1),
+            winRow = to_nearest_even(height * 0.2),
+            previewHeight = height,
+            previewWidth = width,
+            previewCol = to_nearest_even(width * 0.2),
+            --previewRow  = math.floor(opt.lines:get() * 0.08),
+        }
+    })
+end
+
+
 ---------------------
 --- User Commands ---
 ---------------------
 
-vim.api.nvim_create_user_command(
+api.nvim_create_user_command(
     'Ddu',
     function(opts)
         local subcomand = opts.fargs[1]
-        vim.fn['ddu#ui#do_action']('quit')
+        fn['ddu#ui#do_action']('quit')
         resize()
         M[subcomand]()
     end,
@@ -284,9 +341,16 @@ autocmd({ 'FileType' }, {
     end
 })
 
-local dduAutogroup = vim.api.nvim_create_augroup('Ddu', {})
-vim.api.nvim_clear_autocmds({ group = dduAutogroup })
-vim.api.nvim_create_autocmd({ 'WinResized' }, {
+autocmd({ 'TabEnter', 'WinEnter', 'CursorHold', 'FocusGained' }, {
+    pattern = { '*' },
+    callback = function()
+        fn['ddu#ui#do_action']('checkItems')
+    end
+})
+
+local dduAutogroup = api.nvim_create_augroup('Ddu', {})
+api.nvim_clear_autocmds({ group = dduAutogroup })
+api.nvim_create_autocmd({ 'WinResized' }, {
     group = dduAutogroup,
     pattern = { '*' },
     callback = function()

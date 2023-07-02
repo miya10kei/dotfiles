@@ -8,7 +8,6 @@ keymap('n', '<SPACE>q', vim.diagnostic.setloclist, { silent = true })
 local on_attach = function(_, bufnr)
     local bufopts = { buffer = bufnr, silent = true }
     keymap('n', 'gD', vim.lsp.buf.declaration, bufopts)
-    keymap('n', 'gd', vim.lsp.buf.definition, bufopts)
     keymap('n', 'K', vim.lsp.buf.hover, bufopts)
     keymap('n', 'gi', vim.lsp.buf.implementation, bufopts)
     keymap('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)

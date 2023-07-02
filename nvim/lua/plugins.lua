@@ -126,13 +126,15 @@ require("lazy").setup({
         },
         lazy = false,
         keys = {
-            { '<C-t>',      "<ESC><CMD>Ddu ddu__filer<CR>",              silent = true },
-            { '<LEADER>df', "<ESC><CMD>Ddu ddu__file_rec<CR>",           silent = true },
-            { '<LEADER>db', "<ESC><CMD>Ddu ddu__buffer<CR>",             silent = true },
-            { '<LEADER>dr', "<ESC><CMD>Ddu ddu__register<CR>",           silent = true },
-            { '<LEADER>dg', "<ESC><CMD>Ddu ddu__grep<CR>",               silent = true },
-            { '<LEADER>gr', "<ESC><CMD>Ddu ddu__lsp_references<CR>",     silent = true },
-            { '<LEADER>gh', "<ESC><CMD>Ddu ddu__lsp_call_hierarchy<CR>", silent = true },
+            { '<C-t>',      "<ESC><CMD>Ddu ddu__filer<CR>",      silent = true },
+            { '<LEADER>df', "<ESC><CMD>Ddu ddu__file_rec<CR>",   silent = true },
+            { '<LEADER>db', "<ESC><CMD>Ddu ddu__buffer<CR>",     silent = true },
+            { '<LEADER>dr', "<ESC><CMD>Ddu ddu__register<CR>",   silent = true },
+            { '<LEADER>dg', "<ESC><CMD>Ddu ddu__grep<CR>",       silent = true },
+            { 'gd', "<ESC><CMD>Ddu ddu__lsp_definition<CR>",     silent = true },
+            { 'gh', "<ESC><CMD>Ddu ddu__lsp_call_hierarchy<CR>", silent = true },
+            { 'gr', "<ESC><CMD>Ddu ddu__lsp_references<CR>",     silent = true },
+            { 'gw', "<ESC><CMD>Ddu ddu__lsp_workspace<CR>",      silent = true },
         }
     },
     {
