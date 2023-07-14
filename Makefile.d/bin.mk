@@ -3,7 +3,7 @@ COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 
 BAT_VERSION := 0.23.0
 DELTA_VERSION := 0.16.5
-DIVE_VERSION := 0.10.0
+DIVE_VERSION := 0.11.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 8.7.0
 FZF_VERSION := 0.42.0
