@@ -1,6 +1,6 @@
 local BLAMER_VERSION = '1.3.0'
 local DDC_VERSION = 'v3.8.2'
-local DDU_VERSION = 'v3.3.3'
+local DDU_VERSION = 'v3.4.2'
 local DENOPS_VERSION = '5.0.0'
 local EASYMOTION_VERSION = '3.0.1'
 local GRUVBOX_VERSION = '2.0.0'
@@ -57,7 +57,7 @@ require("lazy").setup({
         'vim-denops/denops.vim',
         version = DENOPS_VERSION,
         config = function()
-             vim.g.denops_server_addr = '127.0.0.1:32123'
+          --vim.g.denops_server_addr = '127.0.0.1:32123'
         end
     },
     {
