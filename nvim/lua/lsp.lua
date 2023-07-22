@@ -34,6 +34,7 @@ require('mason-lspconfig').setup()
 local lspconfig = require('lspconfig')
 local server_configs = {
     'bashls',
+    'denols',
     'docker_compose_language_service',
     'dockerls',
     'hls',
@@ -42,7 +43,6 @@ local server_configs = {
     'pyright',
     'terraformls',
     'tsserver',
-    'yamlls'
 }
 for _, v in pairs(server_configs) do
     lspconfig[v].setup {
@@ -79,6 +79,16 @@ lspconfig['lua_ls'].setup {
     }
 }
 
+lspconfig['yamlls'].setup {
+    on_attach = on_attach,
+    settings = {
+        yaml = {
+            schemas = {
+                ["https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json"] = "template.yaml"
+            }
+        }
+    }
+}
 
 -- null-ls
 local null_ls = require('null-ls')

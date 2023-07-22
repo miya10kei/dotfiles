@@ -59,7 +59,7 @@ function main() {
     setopt extended_history
     setopt hist_ignore_all_dups
     setopt hist_ignore_dups
-    setopt hist_no_store
+    setopt hist_ignore_space
     setopt hist_reduce_blanks
     setopt hist_verify
     setopt inc_append_history
@@ -70,11 +70,18 @@ function main() {
         . $NVM_DIR/nvm.sh
     fi
 
+    if [[ -e $HOME/.rye/env ]]; then
+        source "$HOME/.rye/env"
+    fi
 
     if [[ -e $HOME/.dotfiles/zshrc.d ]]; then
         source $HOME/.dotfiles/zshrc.d/plugins.zsh
         source $HOME/.dotfiles/zshrc.d/docker.zsh
         source $HOME/.dotfiles/zshrc.d/aliases.zsh
+
+        if builtin command -v fzf > /dev/null 2>&1; then
+            source $HOME/.dotfiles/zshrc.d/fzf.zsh
+        fi
     fi
 
     if builtin command -v starship > /dev/null 2>&1; then
@@ -87,22 +94,6 @@ function main() {
 
     if builtin command -v xhost > /dev/null 2>&1; then
         xhost + localhost
-    fi
-
-    if builtin command -v fzf > /dev/null 2>&1; then
-        # gruvbox-dark-hard
-        FZF_COLOR='bg+:#3c3836,bg:#1d2021,spinner:#8ec07c,hl:#83a598,fg:#bdae93,header:#83a598,info:#fabd2f,pointer:#8ec07c,marker:#8ec07c,fg+:#ebdbb2,prompt:#fabd2f,hl+:#83a598'
-        export FZF_DEFAULT_OPTS="--layout=reverse --height=50% --border --margin=1 --padding=1 --info=inline --color=$FZF_COLOR"
-        FZF_PREVIEW_BAT_OPTION='--style=numbers --color=always --theme=TwoDark --line-range :500 {}'
-        export FZF_CTRL_T_OPTS="--preview='batcat $FZF_PREVIEW_BAT_OPTION' --preview-window right:70%"
-
-        function fzf-select-history() {
-            BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER")
-            CURSOR=$#BUFFER
-            zle reset-prompt
-        }
-        zle -N fzf-select-history
-        bindkey '^r' fzf-select-history
     fi
 
     FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"

@@ -92,6 +92,11 @@ $(BIN_DIR)/fzf:
 	mv /tmp/fzf/fzf $(BIN_DIR)/fzf
 	chown `whoami`:`groups` $(BIN_DIR)/fzf
 	rm -rf /tmp/fzf
+	curl -fsLS -o $(BIN_DIR)/fzf-tmux https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/bin/fzf-tmux
+	chmod +x $(BIN_DIR)/fzf-tmux
+	curl -fsLS -o $(BIN_DIR)/fzf-key-bindings.zsh https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.zsh
+	chmod +x $(BIN_DIR)/fzf-key-bindings.zsh
+	curl -fsLS -o $(COMPLETION_DIR)/fzf.zsh https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.zsh
 
 $(BIN_DIR)/gh:
 	mkdir -p /tmp/gh

@@ -15,6 +15,7 @@ fn['ddu#custom#patch_global']({
         _ = {
             matchers = { 'matcher_fzf' },
             sorters = { 'sorter_fzf' }
+            --matchers = { 'matcher_substring' }
         },
     },
     kindOptions = {
@@ -32,7 +33,11 @@ fn['ddu#custom#patch_global']({
     },
     uiParams = {
         ff = {
-            autoAction = { name = 'preview' },
+            --autoAction = {
+            --    delay = 300,
+            --    name = 'preview',
+            --    sync = false,
+            --},
             filterFloatingPosition = 'top',
             floatingBorder = 'double',
             ignoreEmpty = true,
@@ -41,6 +46,7 @@ fn['ddu#custom#patch_global']({
             previewSplit = 'vertical',
             prompt = '> ',
             split = 'floating',
+            --startAutoAction = true,
             startFilter = true,
         }
     },
@@ -56,17 +62,26 @@ function M.ddu__file_rec()
       sources = {
           {
               name = 'file_rec',
-              path = fn.expand('~'),
               params = {
                   ignoredDirectories = {
                     '.git',
                     '.gradle',
-                    'node_modules',
                     '__pycache__',
-                    'python3.11'
+                    'node_modules',
+                    'python3.11',
                   }
               }
           },
+      },
+      sourceOptions = {
+          file_rec = {
+              path = fn.getcwd(),
+          },
+      },
+      uiParams = {
+          ff = {
+              ignoreEmpty = true,
+          }
       },
   })
 end
@@ -77,12 +92,7 @@ function M.ddu__buffer()
             {
                 name = 'buffer'
             },
-        },
-        uiParams = {
-            ff = {
-                startFilter = false,
-            }
-        },
+        }
     })
 end
 
@@ -109,13 +119,21 @@ function M.ddu__grep()
         sourceOptions = {
             rg = {
                 volatile = true,
-                matchers = { 'matcher_kensaku' },
+                --matchers = { 'matcher_substring' },
+                --matchers = { 'matcher_kensaku' },
             },
         },
         sourceParams = {
             rg = {
-                args = { '--json' },
-                inputType = 'migemo',
+                args = {'--column', '--no-heading', '--color', 'never'},
+                --args = {
+                --  '--json'
+                --  --'--glob', '!.git/',
+                --},
+                paths = {
+                  fn.getcwd()
+                }
+                --inputType = 'migemo',
             }
         },
         uiParams = {
@@ -250,21 +268,19 @@ local function resize()
     end
     local lines = opt.lines:get()
     local columns = opt.columns:get()
-    --local lines = to_nearest_even(api.nvim_win_get_height(0))
-    --local columns = to_nearest_even(api.nvim_win_get_width(0))
-    local height = to_nearest_even(lines * 0.8)
-    local width = to_nearest_even(columns * 0.4)
+    local height = to_nearest_even(lines * 0.2)
+    local width = to_nearest_even(columns * 0.8)
 
     fn['ddu#custom#patch_global']('uiParams',{
         ff = {
             winHeight = height,
             winWidth = width,
             winCol = to_nearest_even(width * 0.1),
-            winRow = to_nearest_even(height * 0.2),
-            previewHeight = height,
+            winRow = to_nearest_even(height * 0.6),
+            previewHeight = height * 2,
             previewWidth = width,
-            previewCol = to_nearest_even(width * 0.2),
-            --previewRow  = math.floor(opt.lines:get() * 0.08),
+            previewCol = to_nearest_even(width * 0.1),
+            previewRow = to_nearest_even(height * 1.8),
         }
     })
 end

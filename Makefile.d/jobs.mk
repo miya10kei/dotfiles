@@ -5,7 +5,8 @@ start-bg-job: \
 
 .PHONY: starjt-denops
 start-denops:
-	deno run -q --no-lock --unstable -A /root/.local/share/nvim/lazy/denops.vim/denops/@denops-private/cli.ts --quiet --identity --port 32123
+	#deno run --v8-flags=--max-old-space-size=8192 -q --no-lock --unstable -A /root/.local/share/nvim/lazy/denops.vim/denops/@denops-private/cli.ts --quiet --identity --port 32123
+	deno run --v8-flags=--max-old-space-size=8192 --no-lock --unstable -A /root/.local/share/nvim/lazy/denops.vim/denops/@denops-private/cli.ts --identity --port 32123
 
 .PHONY: start-gopls
 start-gopls:
