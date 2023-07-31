@@ -1,5 +1,5 @@
 local BLAMER_VERSION = '1.3.0'
-local DDC_VERSION = 'v3.9.0'
+local DDC_VERSION = 'v3.9.1'
 local DDU_VERSION = 'v3.4.4'
 local DENOPS_VERSION = '5.0.0'
 local EASYMOTION_VERSION = '3.0.1'
