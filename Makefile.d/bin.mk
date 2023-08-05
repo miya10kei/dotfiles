@@ -10,6 +10,7 @@ FZF_VERSION := 0.42.0
 GHQ_VERSION := 1.4.2
 GITHUB_CLI_VERSION := 2.32.1
 JQ_VERSION := 1.6
+NAVI_VERSION := 2.22.1
 PROCS_VERSION := 0.14.0
 RIPGREP_VERSION := 13.0.0-10
 STARSHIP_VERSION := 1.16.0
@@ -119,6 +120,14 @@ $(COMPLETION_DIR)/git-completion.zsh:
 $(BIN_DIR)/jq:
 	curl -fsLS -o $(BIN_DIR)/jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
 	chmod +x $(BIN_DIR)/jq
+
+$(BIN_DIR)/navi:
+	mkdir -p /tmp/navi
+	curl -fsLS -o $(BIN_DIR)/navi/navi.tar.gz https://github.com/denisidoro/navi/releases/download/v$(NAVI_VERSION)/navi-v$(NAVI_VERSION)-aarch64-unknown-linux-gnu.tar.gz
+	tar -zxf /tmp/navi/navi.tar.gz -C /tmp/navi
+	mv /tmp/navi/navi $(BIN_DIR)/navi
+	chown `whoami`:`groups` $(BIN_DIR)/navi
+	rm -rf /tmp/navi
 
 $(BIN_DIR)/rg:
 	mkdir -p /tmp/rg
