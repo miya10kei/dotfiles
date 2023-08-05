@@ -2,7 +2,7 @@ ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
 ARG DOCKER_COMPOSE_VERSION=2.16.0
-ARG DOCKER_VERSION=23.0.1
+ARG DOCKER_VERSION=24.0.5
 ARG GOLANG_VERSION=1.20.7
 ARG HASKELL_CABAL_VERSION=3.6.2.0
 ARG HASKELL_GHCUP_VERSION=0.1.19.5
@@ -181,6 +181,7 @@ ARG DOCKER_VERSION
 RUN curl -fsLOS https://download.docker.com/linux/static/stable/${ARCH1}/docker-${DOCKER_VERSION}.tgz \
     && tar -zxf docker-${DOCKER_VERSION}.tgz \
     && mv docker/docker /out/usr/local/bin \
+    && chown `whoami`:`groups` /out/usr/local/bin/docker \
     && rm -rf docker*
 
 ARG DOCKER_COMPOSE_VERSION
