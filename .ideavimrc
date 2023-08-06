@@ -9,7 +9,6 @@
 " ----------------------
 " --- Basic settings ---
 " ----------------------
-set clipboard+=ideaput
 set clipboard+=unnamed
 set hlsearch
 set ideajoin

@@ -11,6 +11,7 @@ setup4d: \
 	deploy-aws \
 	deploy-git \
 	deploy-nvim \
+	deploy-sheldon \
 	deploy-starship \
 	deploy-tmux \
 	deploy-zoxide \

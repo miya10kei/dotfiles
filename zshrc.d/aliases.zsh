@@ -14,7 +14,7 @@ function alias_if_exists() {
 }
 
 function _fzf_change_directory() {
-  selected=$(eval $1 | fzf)
+  selected=$(eval $1 | fzf-tmux $FZF_TMUX_OPTS)
   if [ -n "$selected" ]; then
     base_dir=$(eval $2)
     cd "$base_dir/$selected"

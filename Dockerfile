@@ -1,6 +1,7 @@
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
+ARG DOCKER_BUILDX_VERSION=0.11.2
 ARG DOCKER_COMPOSE_VERSION=2.20.2
 ARG DOCKER_VERSION=24.0.5
 ARG GOLANG_VERSION=1.20.7
@@ -189,6 +190,10 @@ RUN curl -fsLS https://github.com/docker/compose/releases/download/v${DOCKER_COM
         -o /out/root/.docker/cli-plugins/docker-compose \
     && chmod +x /out/root/.docker/cli-plugins/docker-compose
 
+ARG DOCKER_BUILDX_VERSION
+RUN curl -fsLS https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${ARCH2} \
+        -o /out/root/.docker/cli-plugins/docker-buildx \
+    && chmod +x /out/root/.docker/cli-plugins/docker-buildx
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS packer

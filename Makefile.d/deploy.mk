@@ -66,6 +66,29 @@ $(HOME)/.obsidian.vimrc:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-sheldon
+deploy-sheldon: \
+	sheldondir \
+	pluginstoml \
+	pluginslock
+
+.PHONY: sheldondir
+sheldondir: $(HOME)/.config/sheldon
+$(HOME)/.config/sheldon:
+	mkdir -p $(HOME)/.config/sheldon
+
+.PHONY: pluginstoml
+pluginstoml: $(HOME)/.config/sheldon/plugins.toml
+$(HOME)/.config/sheldon/plugins.toml:
+	ln -fs $(DOTDIR)/plugins.toml $(HOME)/.config/sheldon/plugins.toml
+
+.PHONY: pluginslock
+pluginslock: $(HOME)/.local/share/plugins.lock
+$(HOME)/.local/share/plugins.lock:
+	sheldon lock
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-starship
 deploy-starship: \
 	starshiptoml

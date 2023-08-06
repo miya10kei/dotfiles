@@ -13,6 +13,7 @@ JQ_VERSION := 1.6
 NAVI_VERSION := 2.22.1
 PROCS_VERSION := 0.14.0
 RIPGREP_VERSION := 13.0.0-10
+SHELDON_VERSION := 0.7.3
 STARSHIP_VERSION := 1.16.0
 TERRAFORM_VERSION := 1.4.6
 YQ_VERSION := 4.34.2
@@ -25,14 +26,16 @@ install-bins: \
 	$(BIN_DIR)/bat \
 	$(BIN_DIR)/delta \
 	$(BIN_DIR)/dive \
-	$(BIN_DIR)/exa\
+	$(BIN_DIR)/exa \
 	$(BIN_DIR)/fd \
 	$(BIN_DIR)/fzf \
 	$(BIN_DIR)/gh \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
+	$(BIN_DIR)/navi \
 	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
+	$(BIN_DIR)/sheldon \
 	$(BIN_DIR)/starship \
 	$(BIN_DIR)/terraform \
 	$(BIN_DIR)/yq \
@@ -123,7 +126,7 @@ $(BIN_DIR)/jq:
 
 $(BIN_DIR)/navi:
 	mkdir -p /tmp/navi
-	curl -fsLS -o $(BIN_DIR)/navi/navi.tar.gz https://github.com/denisidoro/navi/releases/download/v$(NAVI_VERSION)/navi-v$(NAVI_VERSION)-aarch64-unknown-linux-gnu.tar.gz
+	curl -fsLS -o /tmp/navi/navi.tar.gz https://github.com/denisidoro/navi/releases/download/v$(NAVI_VERSION)/navi-v$(NAVI_VERSION)-aarch64-unknown-linux-gnu.tar.gz
 	tar -zxf /tmp/navi/navi.tar.gz -C /tmp/navi
 	mv /tmp/navi/navi $(BIN_DIR)/navi
 	chown `whoami`:`groups` $(BIN_DIR)/navi
@@ -143,6 +146,15 @@ $(BIN_DIR)/procs:
 	unzip /tmp/procs/procs.zip -d /tmp/procs
 	mv /tmp/procs/procs $(BIN_DIR)/procs
 	rm -rf /tmp/procs
+
+$(BIN_DIR)/sheldon:
+	mkdir -p /tmp/sheldon
+	curl -fsLS -o /tmp/sheldon/sheldon.tar.gz https://github.com/rossmacarthur/sheldon/releases/download/$(SHELDON_VERSION)/sheldon-$(SHELDON_VERSION)-aarch64-unknown-linux-musl.tar.gz
+	tar -zxf /tmp/sheldon/sheldon.tar.gz -C /tmp/sheldon
+	mv /tmp/sheldon/sheldon $(BIN_DIR)/sheldon
+	chown `whoami`:`groups` $(BIN_DIR)/sheldon
+	mv /tmp/sheldon/completions/sheldon.zsh $(COMPLETION_DIR)/sheldon.zsh
+	chown `whoami`:`groups` $(COMPLETION_DIR)/sheldon.zsh
 
 $(BIN_DIR)/starship:
 	mkdir -p /tmp/starship

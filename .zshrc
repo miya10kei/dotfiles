@@ -74,9 +74,13 @@ function main() {
         source "$HOME/.rye/env"
     fi
 
+    if builtin command -v sheldon > /dev/null 2>&1; then
+        eval "$(sheldon source)"
+    fi
+
     if [[ -e $HOME/.dotfiles/zshrc.d ]]; then
-        source $HOME/.dotfiles/zshrc.d/plugins.zsh
         source $HOME/.dotfiles/zshrc.d/docker.zsh
+        source $HOME/.dotfiles/zshrc.d/tmux.zsh
         source $HOME/.dotfiles/zshrc.d/aliases.zsh
 
         if builtin command -v fzf > /dev/null 2>&1; then
