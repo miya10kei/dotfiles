@@ -1,6 +1,5 @@
 .PHONY: start-bg-job
 start-bg-job: \
-	start-denops \
 	start-gopls
 
 .PHONY: starjt-denops

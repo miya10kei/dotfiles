@@ -1,6 +1,7 @@
 BIN_DIR := $(HOME)/.local/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 
+AWS_VALUT := 7.2.0
 BAT_VERSION := 0.23.0
 DELTA_VERSION := 0.16.5
 DIVE_VERSION := 0.11.0
@@ -23,6 +24,9 @@ ZOXIDE_VERSION := 0.9.2
 install-bins: \
 	$(BIN_DIR) \
 	$(COMPLETION_DIR) \
+	$(BIN_DIR)/aws-cli \
+	aws-session-manager \
+	$(BIN_DIR)/aws-vault \
 	$(BIN_DIR)/bat \
 	$(BIN_DIR)/delta \
 	$(BIN_DIR)/dive \
@@ -46,6 +50,25 @@ $(BIN_DIR):
 
 $(COMPLETION_DIR):
 	mkdir -p $(COMPLETION_DIR)
+
+$(BIN_DIR)/aws-cli:
+	mkdir -p /tmp/aws
+	curl -fsLS -o /tmp/aws/awscliv2.zip https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip
+	unzip /tmp/aws/awscliv2.zip -d /tmp/aws
+	/tmp/aws/aws/install --bin-dir $(BIN_DIR) --install-dir $(HOME)/.local/src
+	rm -rf /tmp/aws
+
+.PHONY: aws-session-manager
+aws-session-manager: /usr/local/sessionmanagerplugin
+/usr/local/sessionmanagerplugin:
+	mkdir -p /tmp/sessionmanagerplugin
+	curl -fsLS -o /tmp/sessionmanagerplugin/session-manager-plugin.deb https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_arm64/session-manager-plugin.deb
+	dpkg --install /tmp/sessionmanagerplugin/session-manager-plugin.deb
+	rm -rf /tmp/sessionmanagerplugin
+
+$(BIN_DIR)/aws-vault:
+	curl -fsLS -o $(BIN_DIR)/aws-vault https://github.com/99designs/aws-vault/releases/download/v7.2.0/aws-vault-linux-arm64
+	chmod +x $(BIN_DIR)/aws-vault
 
 $(BIN_DIR)/bat:
 	mkdir -p /tmp/bat

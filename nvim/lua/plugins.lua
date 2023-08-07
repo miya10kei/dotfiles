@@ -57,7 +57,7 @@ require("lazy").setup({
         'vim-denops/denops.vim',
         version = DENOPS_VERSION,
         config = function()
-          vim.g.denops_server_addr = '127.0.0.1:32123'
+          --vim.g.denops_server_addr = '127.0.0.1:32123'
         end
     },
     {
@@ -131,7 +131,7 @@ require("lazy").setup({
         keys = {
             { '<C-t>',      "<ESC><CMD>Ddu ddu__filer<CR>",      silent = true },
             { '<LEADER>df', "<ESC><CMD>Ddu ddu__file_rec<CR>",   silent = true },
-            { '<LEADER>db', "<ESC><CMD>Ddu ddu__buffer<CR>",     silent = true },
+            { '<C-e>',      "<ESC><CMD>Ddu ddu__buffer<CR>",     silent = true },
             { '<LEADER>dr', "<ESC><CMD>Ddu ddu__register<CR>",   silent = true },
             { '<LEADER>dg', "<ESC><CMD>Ddu ddu__grep<CR>",       silent = true },
             { 'gd', "<ESC><CMD>Ddu ddu__lsp_definition<CR>",     silent = true },

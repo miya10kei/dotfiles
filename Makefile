@@ -7,16 +7,17 @@ build-dev-env:
 .PHONY: setup4d
 setup4d: \
 	delete-nvimrc \
-	delete-zshhistory \
 	deploy-aws \
 	deploy-git \
+	deploy-gpg \
 	deploy-nvim \
+	deploy-pass \
 	deploy-sheldon \
 	deploy-starship \
 	deploy-tmux \
 	deploy-zoxide \
 	autoenv_auth \
-	zshhistory \
+	zshhistory_force \
 	start-bg-job
 
 .PHONY: install4d

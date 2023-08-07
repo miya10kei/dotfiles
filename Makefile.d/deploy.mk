@@ -19,6 +19,17 @@ $(HOME)/.gitconfig:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-gpg
+deploy-gpg: \
+	gpgdir
+
+.PHONY: gpgdir
+gpgdir: $(HOME)/.gnupg
+$(HOME)/.gnupg:
+	ln -fs $(DOTDIR)/data-volume/gpg $(HOME)/.gnupg
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-hyper
 deploy-hyper: \
 	hyperjs
@@ -89,6 +100,17 @@ $(HOME)/.local/share/plugins.lock:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-pass
+deploy-pass: \
+	passwordstore
+
+.PHONY: passwordstore
+passwordstore: $(HOME)/.password-store
+$(HOME)/.password-store:
+	ln -s $(DOTDIR)/data-volume/pass $(HOME)/.password-store
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-starship
 deploy-starship: \
 	starshiptoml
@@ -146,6 +168,10 @@ $(HOME)/.zshrc:
 .PHONY: zshhistory
 zshhistory: $(HOME)/.zsh_history
 $(HOME)/.zsh_history:
+	ln -fs $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
+
+.PHONY: zshhistory_force
+zshhistory_force:
 	ln -fs $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
 
 .PHONY: delete-zshhistory
