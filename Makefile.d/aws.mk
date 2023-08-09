@@ -7,5 +7,4 @@ install-aws: \
 .PHONY: pip
 pip:
 	pip3 install --user \
-		aws-mfa \
 		aws-sam-cli
