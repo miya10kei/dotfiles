@@ -1,6 +1,6 @@
 local BLAMER_VERSION = '1.3.0'
 local DDC_VERSION = 'v3.9.2'
-local DDU_VERSION = 'v3.4.5'
+local DDU_VERSION = 'v3.5.1'
 local DENOPS_VERSION = '5.0.0'
 local EASYMOTION_VERSION = '3.0.1'
 local GRUVBOX_VERSION = '2.0.0'
@@ -163,5 +163,11 @@ require("lazy").setup({
         keys = {
           { '<C-_>', ':<C-u>TCommentInline<CR>' },
         }
+    },
+    {
+        'tpope/vim-dadbod'
+    },
+    {
+        'tpope/vim-surround'
     }
 })
