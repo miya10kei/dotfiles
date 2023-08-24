@@ -12,17 +12,18 @@ setup4d: \
 	deploy-gpg \
 	deploy-nvim \
 	deploy-pass \
+	deploy-rye \
 	deploy-sheldon \
 	deploy-starship \
 	deploy-tmux \
 	deploy-zoxide \
 	autoenv_auth \
-	zshhistory_force \
-	start-bg-job
+	zshhistory_force
+	#start-bg-job
 
 .PHONY: install4d
 install4d: \
-	install-bins \
-	install-aws
+	install-bins
+	#install-aws
 
 include Makefile.d/*.mk

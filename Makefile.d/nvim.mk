@@ -17,8 +17,8 @@ MASON_PKG := \
 
 .PHONY: setup-nvim
 setup-nvim: \
-	install-plugins \
-	install-mason-pkg
+	install-plugins
+	#install-mason-pkg
 
 .PHONY: install-plugins
 install-plugins:

@@ -9,13 +9,13 @@ function launch_dev_env() {
         --mount type=bind,source=$HOME/.dotfiles,target=/root/.dotfiles \
         --mount type=bind,source=$HOME/.dotfiles/.zshrc,target=/root/.zshrc \
         --mount type=bind,source=$HOME/.ssh,target=/root/.ssh,readonly \
+        --mount type=bind,source=$HOME/Documents,target=/root/Documents \
         --mount type=bind,source=$HOME/dev,target=/root/dev \
         --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
         --name=dev-env \
         --publish=3000:3000\
         --publish=4200:4200\
         --publish=4300:4400\
-        --publish=4400:4400\
         --publish=8100:8100 \
         --publish=35432:35432 \
         --restart=always \

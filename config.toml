@@ -1,0 +1,6 @@
+[behavior]
+global-python = true
+
+[default]
+requires-python = ">= 3.8"
+toolchain = "cpython@3.10.11"

@@ -111,6 +111,17 @@ $(HOME)/.password-store:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-rye
+deploy-rye: \
+	configtoml
+
+.PHONY: configtoml
+configtoml: $(HOME)/.rye/config.toml
+$(HOME)/.rye/config.toml:
+	ln -s $(DOTDIR)/config.toml $(HOME)/.rye/config.toml
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-starship
 deploy-starship: \
 	starshiptoml

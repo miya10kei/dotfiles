@@ -25,6 +25,7 @@ function main() {
     add_path "$HOME/.ghcup/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.local/share/nvim/mason/bin"
+    add_path "$HOME/.rye/shims"
     add_path "$HOME/Library/Python/3.11/bin"
     add_path "/usr/local/go/bin"
     add_path "/usr/local/nodejs/bin"

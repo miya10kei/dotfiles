@@ -66,6 +66,7 @@ function M.ddu__file_rec()
                   ignoredDirectories = {
                     '.git',
                     '.gradle',
+                    '.venv',
                     '__pycache__',
                     'node_modules',
                     'python3.11',

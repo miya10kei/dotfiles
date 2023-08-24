@@ -40,7 +40,7 @@ local server_configs = {
     'hls',
     'html',
     'jsonls',
-    'pyright',
+    'pylsp',
     'terraformls',
     'tsserver',
 }
