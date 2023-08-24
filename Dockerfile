@@ -2,7 +2,7 @@ ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
 ARG DOCKER_BUILDX_VERSION=0.11.2
-ARG DOCKER_COMPOSE_VERSION=2.20.2
+ARG DOCKER_COMPOSE_VERSION=2.20.3
 ARG DOCKER_VERSION=24.0.5
 ARG GOLANG_VERSION=1.21.0
 ARG HASKELL_CABAL_VERSION=3.6.2.0
@@ -126,7 +126,15 @@ RUN volta install node@${NODEJS_VERSION} \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+FROM builder AS python
+RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
+    && . "$HOME/.rye/env" \
+    && rye install pip \
+    && mkdir -p /out/root \
+    && mv /root/.rye /out/root/
 
+
+# ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS python2
 ARG PYTHON2_VERSION=2.7.17
 RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON2_VERSION}/Python-${PYTHON2_VERSION}.tar.xz \
@@ -217,6 +225,10 @@ RUN upx --lzma --best /out/neovim/usr/local/bin/nvim
 COPY --from=nodejs /out /out/nodejs
 # Compression slows down the node command
 
+COPY --from=python /out /out/python
+RUN upx --lzma --best `readlink -f /out/python/root/.rye/shims/python`
+RUN upx --lzma --best `readlink -f /out/python/root/.rye/shims/python3`
+
 COPY --from=python2 /out /out/python2
 RUN upx --lzma --best `readlink -f /out/python2/usr/local/bin/python`
 
@@ -248,7 +260,6 @@ RUN apt-get update \
         build-essential \
         ca-certificates \
         cmake \
-        cmigemo \
         curl \
         git \
         less \
@@ -274,7 +285,6 @@ RUN apt-get update \
         libxslt-dev \
         swig \
         zlib1g-dev \
-        zsh-antigen \
         # add temporarily
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -287,6 +297,7 @@ COPY --from=packer /out/neovim/ /
 COPY --from=packer /out/nodejs/ /
 COPY --from=packer /out/python2/ /
 COPY --from=packer /out/python3/ /
+COPY --from=packer /out/python/ /
 COPY --from=packer /out/rust/  /
 COPY --from=packer /out/tools/  /
 
