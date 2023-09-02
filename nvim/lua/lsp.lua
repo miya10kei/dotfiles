@@ -79,6 +79,23 @@ lspconfig['lua_ls'].setup {
     }
 }
 
+lspconfig['pylsp'].setup {
+    on_attach = on_attach,
+    settings = {
+        pylsp = {
+          configurationSources = {'flake8'},
+          plugins = {
+            flake8 = {
+              enabled = true
+            },
+            --rope_autoimport = {
+            --  enabled = true
+            --}
+          }
+        }
+    }
+}
+
 lspconfig['yamlls'].setup {
     on_attach = on_attach,
     settings = {

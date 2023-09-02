@@ -55,9 +55,9 @@ require("lazy").setup({
     },
     {
         'vim-denops/denops.vim',
-        version = DENOPS_VERSION,
+        --version = DENOPS_VERSION,
         config = function()
-          --vim.g.denops_server_addr = '127.0.0.1:32123'
+          -- vim.g.denops_server_addr = '127.0.0.1:32123'
         end
     },
     {

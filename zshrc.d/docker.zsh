@@ -15,7 +15,7 @@ function launch_dev_env() {
         --name=dev-env \
         --publish=3000:3000\
         --publish=4200:4200\
-        --publish=4300:4400\
+        --publish=4300:4300\
         --publish=8100:8100 \
         --publish=35432:35432 \
         --restart=always \

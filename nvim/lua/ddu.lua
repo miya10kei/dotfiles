@@ -253,7 +253,8 @@ function M.ddu__filer()
                 sortTreesFirst = true,
                 split = 'vertical',
                 statusline = false,
-                winWidth = fn.winwidth(0) / 3
+                winWidth = fn.winwidth(0) / 3,
+                winCol = 1
             }
         }
     })

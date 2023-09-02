@@ -1,8 +1,9 @@
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
+ARG DENO_VERSION=1.36.1
 ARG DOCKER_BUILDX_VERSION=0.11.2
-ARG DOCKER_COMPOSE_VERSION=2.20.3
+ARG DOCKER_COMPOSE_VERSION=2.21.0
 ARG DOCKER_VERSION=24.0.5
 ARG GOLANG_VERSION=1.21.0
 ARG HASKELL_CABAL_VERSION=3.6.2.0
@@ -54,8 +55,9 @@ RUN apt-get update \
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS deno
 ARG ARCH1
+ARG DENO_VERSION
 RUN if [ "${ARCH1}" = "aarch64" ]; then \
-        curl -s https://gist.githubusercontent.com/LukeChannings/09d53f5c364391042186518c8598b85e/raw/ac8cd8c675b985edd4b3e16df63ffef14d1f0e24/deno_install.sh | sh; \
+        curl -s https://gist.githubusercontent.com/LukeChannings/09d53f5c364391042186518c8598b85e/raw/ac8cd8c675b985edd4b3e16df63ffef14d1f0e24/deno_install.sh | sh -s "v${DENO_VERSION}"; \
     else \
         curl -fsSL https://deno.land/x/install/install.sh | sh; \
     fi \
