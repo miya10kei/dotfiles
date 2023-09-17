@@ -10,6 +10,8 @@ ARG HASKELL_CABAL_VERSION=3.6.2.0
 ARG HASKELL_GHCUP_VERSION=0.1.19.5
 ARG HASKELL_GHC_VERSION=9.2.8
 ARG HASKELL_STACK_VERSION=2.9.3
+ARG LUAROCKS_VERSION=3.9.2
+ARG LUA_VERSION=5.4.6
 ARG NODEJS_VERSION=18.17.1
 ARG PYTHON2_VERSION=2.7.17
 ARG PYTHON3_VERSION=3.11.4
@@ -72,7 +74,12 @@ ARG GOLANG_VERSION
 RUN curl -fsLOS https://go.dev/dl/go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz \
     && tar -zxf go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz \
     && mkdir -p /out/usr/local/go \
-    && mv /go/bin /go/src /go/pkg /out/usr/local/go
+    && mv \
+      /go/bin \
+      /go/src \
+      /go/pkg \
+      /go/go.env \
+      /out/usr/local/go
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -90,6 +97,32 @@ RUN curl -fsLS -o ghcup https://downloads.haskell.org/~ghcup/${HASKELL_GHCUP_VER
     && mkdir -p /out/root \
     && mv /root/.ghcup /out/root/ \
     && mv ghcup /out/root/.ghcup/bin/
+
+
+# ------------------------------------------------------------------------------------------------------------------------
+FROM builder AS lua
+SHELL ["/bin/bash", "-c"]
+ARG LUA_VERSION
+RUN curl -fsLSO https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz \
+    && tar -zxf lua-${LUA_VERSION}.tar.gz \
+    && cd lua-${LUA_VERSION} \
+    && make all test install
+
+ARG LUAROCKS_VERSION
+RUN curl -fsLSO https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz \
+    && tar -zxf luarocks-${LUAROCKS_VERSION}.tar.gz \
+    && cd luarocks-${LUAROCKS_VERSION} \
+    && ./configure && make && make install
+
+RUN mkdir -p /out/usr/local/share \
+    && mv \
+      /usr/local/bin \
+      /usr/local/etc \
+      /usr/local/include \
+      /usr/local/lib \
+      /usr/local/man \
+      /usr/local/share \
+      /out/usr/local
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -221,6 +254,10 @@ RUN upx --lzma --best /out/haskell/root/.ghcup/bin/ghcup \
     && upx --lzma --best `readlink -f /out/haskell/root/.ghcup/bin/cabal` \
     && upx --lzma --best `readlink -f /out/haskell/root/.ghcup/bin/stack`
 
+COPY --from=lua /out /out/lua
+RUN upx --lzma --best /out/lua/usr/local/bin/lua \
+    && upx --lzma --best /out/lua/usr/local/bin/luac
+
 COPY --from=neovim /out /out/neovim
 RUN upx --lzma --best /out/neovim/usr/local/bin/nvim
 
@@ -292,16 +329,17 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen --purge $LANG
 
-COPY --from=packer /out/deno/   /
-COPY --from=packer /out/go/     /
-COPY --from=packer /out/haskell /
-COPY --from=packer /out/neovim/ /
-COPY --from=packer /out/nodejs/ /
+COPY --from=packer /out/deno/    /
+COPY --from=packer /out/go/      /
+COPY --from=packer /out/haskell  /
+COPY --from=packer /out/lua      /
+COPY --from=packer /out/neovim/  /
+COPY --from=packer /out/nodejs/  /
 COPY --from=packer /out/python2/ /
 COPY --from=packer /out/python3/ /
-COPY --from=packer /out/python/ /
-COPY --from=packer /out/rust/  /
-COPY --from=packer /out/tools/  /
+COPY --from=packer /out/python/  /
+COPY --from=packer /out/rust/    /
+COPY --from=packer /out/tools/   /
 
 ENV PATH       "$HOME/.deno/bin:$PATH"
 ENV PATH       "$HOME/.ghcup/bin:$PATH"

@@ -8,14 +8,17 @@ local opt = vim.opt
 ---------------------
 --- Base Settings ---
 ---------------------
-
 fn['ddu#custom#patch_global']({
     ui = 'ff',
     sourceOptions = {
         _ = {
-            matchers = { 'matcher_fzf' },
-            sorters = { 'sorter_fzf' }
-            --matchers = { 'matcher_substring' }
+            matchers = {
+                'matcher_fzf',
+            },
+            sorters = {
+                'sorter_fzf',
+            },
+            -- matchers = { 'matcher_substring' }
         },
     },
     kindOptions = {
@@ -24,20 +27,20 @@ fn['ddu#custom#patch_global']({
         },
         word = {
             defaultAction = 'append',
-        }
+        },
     },
     filterParams = {
         matcher_fzf = {
-            highlightMatched = 'Search'
-        }
+            highlightMatched = 'Search',
+        },
     },
     uiParams = {
         ff = {
-            --autoAction = {
+            -- autoAction = {
             --    delay = 300,
             --    name = 'preview',
             --    sync = false,
-            --},
+            -- },
             filterFloatingPosition = 'top',
             floatingBorder = 'double',
             ignoreEmpty = true,
@@ -46,66 +49,68 @@ fn['ddu#custom#patch_global']({
             previewSplit = 'vertical',
             prompt = '> ',
             split = 'floating',
-            --startAutoAction = true,
+            -- startAutoAction = true,
             startFilter = true,
-        }
+        },
     },
 })
-
 
 -----------------
 --- Functions ---
 -----------------
-
 function M.ddu__file_rec()
-  fn['ddu#start']({
-      sources = {
-          {
-              name = 'file_rec',
-              params = {
-                  ignoredDirectories = {
-                    '.git',
-                    '.gradle',
-                    '.venv',
-                    '__pycache__',
-                    'node_modules',
-                    'python3.11',
-                  }
-              }
-          },
-      },
-      sourceOptions = {
-          file_rec = {
-              path = fn.getcwd(),
-          },
-      },
-      uiParams = {
-          ff = {
-              ignoreEmpty = true,
-          }
-      },
-  })
+    fn['ddu#start']({
+        sources = {
+            {
+                name = 'file_rec',
+                params = {
+                    ignoredDirectories = {
+                        '.git',
+                        '.gradle',
+                        '.venv',
+                        '__pycache__',
+                        'node_modules',
+                        'python3.11',
+                        '.terraform',
+                        'data-volume',
+                    },
+                },
+            },
+        },
+        sourceOptions = {
+            file_rec = {
+                path = fn.getcwd(),
+            },
+        },
+        uiParams = {
+            ff = {
+                ignoreEmpty = true,
+            },
+        },
+    })
 end
 
 function M.ddu__buffer()
     fn['ddu#start']({
         sources = {
             {
-                name = 'buffer'
+                name = 'buffer',
             },
-        }
+        },
     })
 end
 
 function M.ddu__register()
     fn['ddu#start']({
         sources = {
-            { name = 'register' },
+            {
+                name = 'register',
+            },
         },
         uiParams = {
             ff = {
                 startFilter = false,
-            }
+            },
         },
     })
 end
@@ -115,32 +120,37 @@ function M.ddu__grep()
         sources = {
             {
                 name = 'rg',
-            }
+            },
         },
         sourceOptions = {
             rg = {
                 volatile = true,
-                --matchers = { 'matcher_substring' },
-                --matchers = { 'matcher_kensaku' },
+                -- matchers = { 'matcher_substring' },
+                -- matchers = { 'matcher_kensaku' },
             },
         },
         sourceParams = {
             rg = {
-                args = {'--column', '--no-heading', '--color', 'never'},
-                --args = {
+                args = {
+                    '--column',
+                    '--no-heading',
+                    '--color',
+                    'never',
+                },
+                -- args = {
                 --  '--json'
                 --  --'--glob', '!.git/',
-                --},
+                -- },
                 paths = {
-                  fn.getcwd()
-                }
-                --inputType = 'migemo',
-            }
+                    fn.getcwd(),
+                },
+                -- inputType = 'migemo',
+            },
         },
         uiParams = {
             ff = {
                 ignoreEmpty = false,
-            }
+            },
         },
     })
 end
@@ -150,18 +160,18 @@ function M.ddu__lsp_definition()
         kindOptions = {
             lsp = {
                 defaultAction = 'open',
-            }
+            },
         },
         sources = {
             {
                 name = 'lsp_definition',
-            }
+            },
         },
         sync = true,
         uiParams = {
             ff = {
-              immediateAction = 'open'
-            }
+                immediateAction = 'open',
+            },
         },
 
     })
@@ -172,22 +182,22 @@ function M.ddu__lsp_call_hierarchy()
         kindOptions = {
             lsp = {
                 defaultAction = 'open',
-            }
+            },
         },
         sources = {
             {
                 name = 'lsp_callHierarchy',
                 params = {
                     method = 'callHierarchy/incomingCalls',
-                }
-            }
+                },
+            },
         },
         uiParams = {
             ff = {
                 displayTree = true,
                 startFilter = false,
-            }
-        }
+            },
+        },
     })
 end
 
@@ -196,12 +206,12 @@ function M.ddu__lsp_references()
         kindOptions = {
             lsp = {
                 defaultAction = 'open',
-            }
+            },
         },
         sources = {
             {
                 name = 'lsp_references',
-            }
+            },
         },
     })
 end
@@ -211,17 +221,17 @@ function M.ddu__lsp_workspace()
         sources = {
             {
                 name = 'lsp_workspaceSymbol',
-            }
+            },
         },
         sourceOptions = {
             lsp = {
-                volatile = true
-            }
+                volatile = true,
+            },
         },
         uiParams = {
             ff = {
                 ignoreEmpty = false,
-            }
+            },
         },
     })
 end
@@ -230,8 +240,8 @@ function M.ddu__filer()
     fn['ddu#start']({
         actionOptions = {
             narrow = {
-                quit = false
-            }
+                quit = false,
+            },
         },
         searchPath = fn.expand('%:p'),
         sources = {
@@ -241,7 +251,9 @@ function M.ddu__filer()
         },
         sourceOptions = {
             file = {
-                columns = { 'icon_filename' },
+                columns = {
+                    'icon_filename',
+                },
                 path = fn.getcwd(),
             },
         },
@@ -254,26 +266,23 @@ function M.ddu__filer()
                 split = 'vertical',
                 statusline = false,
                 winWidth = fn.winwidth(0) / 3,
-                winCol = 1
-            }
-        }
+                winCol = 1,
+            },
+        },
     })
 end
 
 -----------------------
 --- Local Functions ---
 -----------------------
-
 local function resize()
-    local function to_nearest_even(val)
-        return math.floor(val / 2) * 2
-    end
+    local function to_nearest_even(val) return math.floor(val / 2) * 2 end
     local lines = opt.lines:get()
     local columns = opt.columns:get()
     local height = to_nearest_even(lines * 0.2)
     local width = to_nearest_even(columns * 0.8)
 
-    fn['ddu#custom#patch_global']('uiParams',{
+    fn['ddu#custom#patch_global']('uiParams', {
         ff = {
             winHeight = height,
             winWidth = width,
@@ -283,97 +292,175 @@ local function resize()
             previewWidth = width,
             previewCol = to_nearest_even(width * 0.1),
             previewRow = to_nearest_even(height * 1.8),
-        }
+        },
     })
 end
-
 
 ---------------------
 --- User Commands ---
 ---------------------
-
-api.nvim_create_user_command(
-    'Ddu',
-    function(opts)
-        local subcomand = opts.fargs[1]
-        fn['ddu#ui#do_action']('quit')
-        resize()
-        M[subcomand]()
-    end,
-    { nargs=1 }
-)
-
+api.nvim_create_user_command('Ddu', function(opts)
+    local subcomand = opts.fargs[1]
+    fn['ddu#ui#do_action']('quit')
+    resize()
+    M[subcomand]()
+end, {
+    nargs = 1,
+})
 
 --------------------
 --- Autocommands ---
 --------------------
-
-autocmd({ 'FileType' }, {
-    pattern = { 'ddu-ff' },
+autocmd({
+    'FileType',
+}, {
+    pattern = {
+        'ddu-ff',
+    },
     callback = function()
         local action = fn['ddu#ui#do_action']
-        local bufopts = { buffer = true, silent = true }
+        local bufopts = {
+            buffer = true,
+            silent = true,
+        }
         keymap('n', '<CR>', function() action('itemAction') end, bufopts)
         keymap('n', '<SPACE>', function() action('toggleSelectItem') end, bufopts)
         keymap('n', 'i', function() action('openFilterWindow') end, bufopts)
         keymap('n', 'p', function() action('preview') end, bufopts)
         keymap('n', 'q', function() action('quit') end, bufopts)
-        keymap('n', 'yy', function() action('itemAction', { name = 'yank' }) end, bufopts)
-    end
+        keymap('n', 'yy', function()
+            action('itemAction', {
+                name = 'yank',
+            })
+        end, bufopts)
+    end,
 })
 
-autocmd({ 'FileType' }, {
-    pattern = { 'ddu-ff-filter' },
+autocmd({
+    'FileType',
+}, {
+    pattern = {
+        'ddu-ff-filter',
+    },
     callback = function()
         local close_action = function() fn['ddu#ui#do_action']('closeFilterWindow') end
-        local bufops = { buffer = true, silent = true }
+        local bufops = {
+            buffer = true,
+            silent = true,
+        }
         keymap('i', '<CR>', '<ESC><CMD>call ddu#ui#do_action(\'closeFilterWindow\')<CR>', bufops)
         keymap('n', '<CR>', close_action, bufops)
         keymap('n', 'q', close_action, bufops)
-    end
+    end,
 })
 
-autocmd({ 'FileType' }, {
-    pattern = { 'ddu-filer' },
+autocmd({
+    'FileType',
+}, {
+    pattern = {
+        'ddu-filer',
+    },
     callback = function()
         local action = fn['ddu#ui#do_action']
-        local bufopts = { buffer = true, silent = true }
+        local bufopts = {
+            buffer = true,
+            silent = true,
+        }
         keymap('n', '<CR>', function()
             if fn['ddu#ui#get_item']()['isTree'] == true then
-                action('itemAction', { name = 'narrow' })
+                action('itemAction', {
+                    name = 'narrow',
+                })
             else
-                action('itemAction', { name = 'open' })
+                action('itemAction', {
+                    name = 'open',
+                })
             end
         end, bufopts)
-        keymap('n', 'cp', function() action('itemAction', { name = 'copy' }) end, bufopts)
-        keymap('n', 'mk', function() action('itemAction', { name = 'newDirectory' }) end, bufopts)
-        keymap('n', 'mv', function() action('itemAction', { name = 'move' }) end, bufopts)
-        keymap('n', 'nf', function() action('itemAction', { name = 'newFile' }) end, bufopts)
-        keymap('n', 'o',  function() action('expandItem', { mode = 'toggle' }) end, bufopts)
-        keymap('n', 'pt', function() action('itemAction', { name = 'paste' }) end, bufopts)
-        keymap('n', 'q',  function() action('quit') end, bufopts)
-        keymap('n', 'rm', function() action('itemAction', { name = 'delete' }) end, bufopts)
-        keymap('n', 'rn', function() action('itemAction', { name = 'rename' }) end, bufopts)
-        keymap('n', 's',  function() action('toggleSelectItem') end, bufopts)
-        keymap('n', 'uu', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
-        keymap('n', '..', function() action('itemAction', { name = 'narrow', params = { path = '..' } }) end, bufopts)
-        keymap('n', 'p',  function() action('preview') end, bufopts)
-    end
+        keymap('n', 'cp', function()
+            action('itemAction', {
+                name = 'copy',
+            })
+        end, bufopts)
+        keymap('n', 'mk', function()
+            action('itemAction', {
+                name = 'newDirectory',
+            })
+        end, bufopts)
+        keymap('n', 'mv', function()
+            action('itemAction', {
+                name = 'move',
+            })
+        end, bufopts)
+        keymap('n', 'nf', function()
+            action('itemAction', {
+                name = 'newFile',
+            })
+        end, bufopts)
+        keymap('n', 'o', function()
+            action('expandItem', {
+                mode = 'toggle',
+            })
+        end, bufopts)
+        keymap('n', 'pt', function()
+            action('itemAction', {
+                name = 'paste',
+            })
+        end, bufopts)
+        keymap('n', 'q', function() action('quit') end, bufopts)
+        keymap('n', 'rm', function()
+            action('itemAction', {
+                name = 'delete',
+            })
+        end, bufopts)
+        keymap('n', 'rn', function()
+            action('itemAction', {
+                name = 'rename',
+            })
+        end, bufopts)
+        keymap('n', 's', function() action('toggleSelectItem') end, bufopts)
+        keymap('n', 'uu', function()
+            action('itemAction', {
+                name = 'narrow',
+                params = {
+                    path = '..',
+                },
+            })
+        end, bufopts)
+        keymap('n', '..', function()
+            action('itemAction', {
+                name = 'narrow',
+                params = {
+                    path = '..',
+                },
+            })
+        end, bufopts)
+        keymap('n', 'p', function() action('preview') end, bufopts)
+    end,
 })
 
-autocmd({ 'TabEnter', 'WinEnter', 'CursorHold', 'FocusGained' }, {
-    pattern = { '*' },
-    callback = function()
-        fn['ddu#ui#do_action']('checkItems')
-    end
+autocmd({
+    'TabEnter',
+    'WinEnter',
+    'CursorHold',
+    'FocusGained',
+}, {
+    pattern = {
+        '*',
+    },
+    callback = function() fn['ddu#ui#do_action']('checkItems') end,
 })
 
 local dduAutogroup = api.nvim_create_augroup('Ddu', {})
-api.nvim_clear_autocmds({ group = dduAutogroup })
-api.nvim_create_autocmd({ 'WinResized' }, {
+api.nvim_clear_autocmds({
     group = dduAutogroup,
-    pattern = { '*' },
-    callback = function()
-        resize()
-    end
+})
+api.nvim_create_autocmd({
+    'WinResized',
+}, {
+    group = dduAutogroup,
+    pattern = {
+        '*',
+    },
+    callback = function() resize() end,
 })

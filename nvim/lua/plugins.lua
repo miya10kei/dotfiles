@@ -1,44 +1,41 @@
 local BLAMER_VERSION = '1.3.0'
 local DDC_VERSION = 'v4.0.4'
 local DDU_VERSION = 'v3.5.1'
-local DENOPS_VERSION = '5.0.0'
 local EASYMOTION_VERSION = '3.0.1'
 local GRUVBOX_VERSION = '2.0.0'
 local INDENT_LINE_VERSION = '2.0'
 local LEXIMA_VERSION = 'v2.1.0'
-local NVIM_LSPCONFIG_VERSION = '0.1.4'
 local TCOMMENT_VERSION = '4.00'
 
-
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable",
+        'git',
+        'clone',
+        '--filter=blob:none',
+        'https://github.com/folke/lazy.nvim.git',
+        '--branch=stable',
         lazypath,
     })
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
+require('lazy').setup({
     {
-      'Yggdroot/indentLine',
-      version = INDENT_LINE_VERSION,
+        'Yggdroot/indentLine',
+        version = INDENT_LINE_VERSION,
     },
     {
-      'cohama/lexima.vim',
-      tag = LEXIMA_VERSION,
+        'cohama/lexima.vim',
+        tag = LEXIMA_VERSION,
     },
     {
         'morhetz/gruvbox',
         version = GRUVBOX_VERSION,
         config = function()
-            vim.g.gruvbox_contrast_dark='hard'
+            vim.g.gruvbox_contrast_dark = 'hard'
             vim.cmd([[colorscheme gruvbox]])
-        end
+        end,
     },
     {
         'easymotion/vim-easymotion',
@@ -48,17 +45,29 @@ require("lazy").setup({
             vim.g.EasyMotion_smartcase = 1
         end,
         keys = {
-            { 's',         '<Plug>(easymotion-overwin-f2)', silent = true },
-            { '<LEADER>j', '<Plug>(easymotion-j)',          silent = true },
-            { '<LEADER>k', '<Plug>(easymotion-k)',          silent = true },
+            {
+                's',
+                '<Plug>(easymotion-overwin-f2)',
+                silent = true,
+            },
+            {
+                '<LEADER>j',
+                '<Plug>(easymotion-j)',
+                silent = true,
+            },
+            {
+                '<LEADER>k',
+                '<Plug>(easymotion-k)',
+                silent = true,
+            },
         },
     },
     {
         'vim-denops/denops.vim',
-        --version = DENOPS_VERSION,
+        -- version = DENOPS_VERSION,
         config = function()
-          -- vim.g.denops_server_addr = '127.0.0.1:32123'
-        end
+            -- vim.g.denops_server_addr = '127.0.0.1:32123'
+        end,
     },
     {
         'Shougo/ddc.vim',
@@ -76,7 +85,7 @@ require("lazy").setup({
             {
                 '<TAB>',
                 function()
-                    print("TAB")
+                    print('TAB')
                     if vim.fn.pumvisible() > 0 then
                         return '<C-n>'
                     else
@@ -96,14 +105,14 @@ require("lazy").setup({
             {
                 '<S-TAB>',
                 function()
-                    print("S-TAB")
+                    print('S-TAB')
                     return vim.fn.pumvisible() > 0 and '<C-p>' or '<C-d>'
                 end,
                 mode = 'i',
                 expr = true,
                 silent = true,
-            }
-        }
+            },
+        },
     },
     {
         'Shougo/ddu.vim',
@@ -129,29 +138,63 @@ require("lazy").setup({
         },
         lazy = false,
         keys = {
-            { '<C-t>',      "<ESC><CMD>Ddu ddu__filer<CR>",      silent = true },
-            { '<LEADER>df', "<ESC><CMD>Ddu ddu__file_rec<CR>",   silent = true },
-            { '<C-e>',      "<ESC><CMD>Ddu ddu__buffer<CR>",     silent = true },
-            { '<LEADER>dr', "<ESC><CMD>Ddu ddu__register<CR>",   silent = true },
-            { '<LEADER>dg', "<ESC><CMD>Ddu ddu__grep<CR>",       silent = true },
-            { 'gd', "<ESC><CMD>Ddu ddu__lsp_definition<CR>",     silent = true },
-            { 'gh', "<ESC><CMD>Ddu ddu__lsp_call_hierarchy<CR>", silent = true },
-            { 'gr', "<ESC><CMD>Ddu ddu__lsp_references<CR>",     silent = true },
-            { 'gw', "<ESC><CMD>Ddu ddu__lsp_workspace<CR>",      silent = true },
-        }
+            {
+                '<C-t>',
+                '<ESC><CMD>Ddu ddu__filer<CR>',
+                silent = true,
+            },
+            {
+                '<LEADER>df',
+                '<ESC><CMD>Ddu ddu__file_rec<CR>',
+                silent = true,
+            },
+            {
+                '<C-e>',
+                '<ESC><CMD>Ddu ddu__buffer<CR>',
+                silent = true,
+            },
+            {
+                '<LEADER>dr',
+                '<ESC><CMD>Ddu ddu__register<CR>',
+                silent = true,
+            },
+            {
+                '<LEADER>dg',
+                '<ESC><CMD>Ddu ddu__grep<CR>',
+                silent = true,
+            },
+            {
+                'gd',
+                '<ESC><CMD>Ddu ddu__lsp_definition<CR>',
+                silent = true,
+            },
+            {
+                'gh',
+                '<ESC><CMD>Ddu ddu__lsp_call_hierarchy<CR>',
+                silent = true,
+            },
+            {
+                'gr',
+                '<ESC><CMD>Ddu ddu__lsp_references<CR>',
+                silent = true,
+            },
+            {
+                'gw',
+                '<ESC><CMD>Ddu ddu__lsp_workspace<CR>',
+                silent = true,
+            },
+        },
     },
     {
         'neovim/nvim-lspconfig',
-        --version = NVIM_LSPCONFIG_VERSION,
-        config = function()
-            require('lsp')
-        end,
+        -- version = NVIM_LSPCONFIG_VERSION,
+        config = function() require('lsp') end,
         dependencies = {
             'williamboman/mason.nvim',
             'williamboman/mason-lspconfig.nvim',
             'jose-elias-alvarez/null-ls.nvim',
             'nvim-lua/plenary.nvim',
-        }
+        },
     },
     {
         'APZelos/blamer.nvim',
@@ -161,13 +204,40 @@ require("lazy").setup({
         'tomtom/tcomment_vim',
         tag = TCOMMENT_VERSION,
         keys = {
-          { '<C-_>', ':<C-u>TCommentInline<CR>' },
-        }
+            {
+                '<C-_>',
+                ':<C-u>TCommentInline<CR>',
+            },
+        },
     },
     {
-        'tpope/vim-dadbod'
+        'tpope/vim-dadbod',
     },
     {
-        'tpope/vim-surround'
-    }
+        'tpope/vim-surround',
+    },
+    {
+        'thinca/vim-quickrun',
+        config = function()
+            vim.g.quickrun_config = {
+                ['_'] = {
+                    ['runner'] = 'neovim_job',
+                    ['outputter'] = 'error',
+                    ['outputter/error/success'] = 'buffer',
+                    ['outputter/error/error'] = 'quickfix',
+                    ['outputter/buffer/opener'] = ':below new',
+                    ['outputter/buffer/close_on_empty'] = 1,
+                },
+            }
+        end,
+        dependencies = {
+            'lambdalisue/vim-quickrun-neovim-job',
+        },
+        keys = {
+            {
+                '<LEADER>r',
+                ':<C-u>QuickRun<CR>',
+            },
+        },
+    },
 })

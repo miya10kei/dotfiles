@@ -1,0 +1,10 @@
+# https://github.com/Koihik/LuaFormatter/blob/master/docs/Style-Config.md
+break_after_operator: false
+break_before_functioncall_rp: true
+break_before_functiondef_rp: true
+chop_down_table: true
+column_limit: 120
+column_table_limit: 1
+double_quote_to_single_quote: true
+extra_sep_at_table_end: true
+keep_simple_control_block_one_line: false

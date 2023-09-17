@@ -7,7 +7,6 @@ MASON_PKG := \
 			html-lsp \
 			json-lsp \
 			lua-language-server \
-			pyright \
 			python-lsp-server \
 			terraform-ls \
 			tflint \
@@ -30,4 +29,4 @@ install-plugins:
 
 .PHONY: install-mason-pkg
 install-mason-pkg:
-	nvim --headless -c 'MasonInstall $(MASON_PKG)' -c 'qa'
+	nvim --headless -c 'MasonInstallNeeded' -c 'qa'

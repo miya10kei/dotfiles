@@ -9,4 +9,3 @@ vim.api.nvim_create_autocmd('TermOpen', {
     group = 'terminal_config',
     pattern = '*',
 })
-

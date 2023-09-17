@@ -1,28 +1,33 @@
 vim.fn['ddc#custom#patch_global']({
     ui = 'native',
-    sources = { 'around', 'nvim-lsp' },
+    sources = {
+        'around',
+        'nvim-lsp',
+    },
     sourceOptions = {
         _ = {
-            matchers = { 'matcher_head' },
+            matchers = {
+                'matcher_head',
+            },
         },
         around = {
-            mark = '[A]'
+            mark = '[A]',
         },
-            ['nvim-lsp'] = {
+        ['nvim-lsp'] = {
             mark = '[LSP]',
             forceCompletionPattern = '\\.\\w*|:\\w*|->\\w*',
         },
     },
     sourceParams = {
         around = {
-            maxSize = 500
+            maxSize = 500,
         },
-            ['nvim-lsp'] = {
+        ['nvim-lsp'] = {
             kindLabels = {
                 Class = 'c',
             },
         },
-    }
+    },
 })
 
 vim.fn['ddc#enable']()
