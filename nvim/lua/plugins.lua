@@ -1,7 +1,6 @@
 local BLAMER_VERSION = '1.3.0'
-local DDC_VERSION = 'v4.0.4'
-local DDU_VERSION = 'v3.5.1'
-local EASYMOTION_VERSION = '3.0.1'
+local DDC_VERSION = 'v4.0.5'
+local DDU_VERSION = 'v3.6.0'
 local GRUVBOX_VERSION = '2.0.0'
 local INDENT_LINE_VERSION = '2.0'
 local LEXIMA_VERSION = 'v2.1.0'
@@ -38,36 +37,7 @@ require('lazy').setup({
         end,
     },
     {
-        'easymotion/vim-easymotion',
-        version = EASYMOTION_VERSION,
-        config = function()
-            vim.g.EasyMotion_do_mapping = 0
-            vim.g.EasyMotion_smartcase = 1
-        end,
-        keys = {
-            {
-                's',
-                '<Plug>(easymotion-overwin-f2)',
-                silent = true,
-            },
-            {
-                '<LEADER>j',
-                '<Plug>(easymotion-j)',
-                silent = true,
-            },
-            {
-                '<LEADER>k',
-                '<Plug>(easymotion-k)',
-                silent = true,
-            },
-        },
-    },
-    {
         'vim-denops/denops.vim',
-        -- version = DENOPS_VERSION,
-        config = function()
-            -- vim.g.denops_server_addr = '127.0.0.1:32123'
-        end,
     },
     {
         'Shougo/ddc.vim',
@@ -82,6 +52,7 @@ require('lazy').setup({
         },
         lazy = true,
         keys = {
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<TAB>',
                 function()
@@ -102,6 +73,7 @@ require('lazy').setup({
                 expr = true,
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<S-TAB>',
                 function()
@@ -138,46 +110,55 @@ require('lazy').setup({
         },
         lazy = false,
         keys = {
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<C-t>',
                 '<ESC><CMD>Ddu ddu__filer<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<LEADER>df',
                 '<ESC><CMD>Ddu ddu__file_rec<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<C-e>',
                 '<ESC><CMD>Ddu ddu__buffer<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<LEADER>dr',
                 '<ESC><CMD>Ddu ddu__register<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<LEADER>dg',
                 '<ESC><CMD>Ddu ddu__grep<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 'gd',
                 '<ESC><CMD>Ddu ddu__lsp_definition<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 'gh',
                 '<ESC><CMD>Ddu ddu__lsp_call_hierarchy<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 'gr',
                 '<ESC><CMD>Ddu ddu__lsp_references<CR>',
                 silent = true,
             },
+            ---@diagnostic disable-next-line: missing-fields
             {
                 'gw',
                 '<ESC><CMD>Ddu ddu__lsp_workspace<CR>',
@@ -187,7 +168,6 @@ require('lazy').setup({
     },
     {
         'neovim/nvim-lspconfig',
-        -- version = NVIM_LSPCONFIG_VERSION,
         config = function() require('lsp') end,
         dependencies = {
             'williamboman/mason.nvim',
@@ -204,6 +184,7 @@ require('lazy').setup({
         'tomtom/tcomment_vim',
         tag = TCOMMENT_VERSION,
         keys = {
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<C-_>',
                 ':<C-u>TCommentInline<CR>',
@@ -234,6 +215,7 @@ require('lazy').setup({
             'lambdalisue/vim-quickrun-neovim-job',
         },
         keys = {
+            ---@diagnostic disable-next-line: missing-fields
             {
                 '<LEADER>r',
                 ':<C-u>QuickRun<CR>',

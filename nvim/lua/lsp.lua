@@ -137,7 +137,9 @@ end
 --- null-ls ---
 ---------------
 local null_ls = require('null-ls')
-local null_sources = {}
+local null_sources = {
+    null_ls.builtins.formatting.terraform_fmt,
+}
 
 for _, package in ipairs(mason_registry.get_installed_packages()) do
     local package_category = package.spec.categories[1]
@@ -192,13 +194,3 @@ vim.api.nvim_create_user_command('MasonInstallNeeded', function()
     local install_packages_string = table.concat(install_packages, ' ')
     vim.api.nvim_command(string.format('MasonInstall %s', install_packages_string))
 end, {})
-
---------------------
---- Autocommands ---
---------------------
--- vim.api.nvim_create_autocmd({"BufWritePre"}, {
---  pattern = {"*.tf", "*.tfvars"},
---  callback = function()
---    vim.lsp.buf.format()
---  end,
--- })
