@@ -17,7 +17,10 @@ ARG PYTHON2_VERSION=2.7.17
 ARG PYTHON3_VERSION=3.11.4
 
 # ------------------------------------------------------------------------------------------------------------------------
+# hadolint ignore=DL3007
 FROM ubuntu:latest AS builder
+SHELL ["/bin/bash", "-c"]
+# hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
@@ -56,6 +59,7 @@ RUN apt-get update \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS deno
+SHELL ["/bin/bash", "-c"]
 ARG ARCH1
 ARG DENO_VERSION
 RUN if [ "${ARCH1}" = "aarch64" ]; then \
@@ -69,6 +73,7 @@ RUN if [ "${ARCH1}" = "aarch64" ]; then \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS go
+SHELL ["/bin/bash", "-c"]
 ARG ARCH2
 ARG GOLANG_VERSION
 RUN curl -fsLOS https://go.dev/dl/go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz \
@@ -84,6 +89,7 @@ RUN curl -fsLOS https://go.dev/dl/go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS haskell
+SHELL ["/bin/bash", "-c"]
 ARG ARCH1
 ARG HASKELL_GHCUP_VERSION
 ARG HASKELL_GHC_VERSION
@@ -127,6 +133,7 @@ RUN mkdir -p /out/usr/local/share \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS neovim
+SHELL ["/bin/bash", "-c"]
 RUN git clone https://github.com/neovim/neovim \
     && cd neovim \
     && git checkout stable \
@@ -142,7 +149,9 @@ RUN git clone https://github.com/neovim/neovim \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+# hadolint ignore=DL3007
 FROM rust:latest AS volta
+SHELL ["/bin/bash", "-c"]
 RUN cargo install --git https://github.com/volta-cli/volta \
     && mkdir -p \
         /out/root \
@@ -150,6 +159,7 @@ RUN cargo install --git https://github.com/volta-cli/volta \
     && mv /usr/local/cargo/bin/volta* /out/usr/local/bin/
 
 FROM builder AS nodejs
+SHELL ["/bin/bash", "-c"]
 ARG NODEJS_VERSION
 COPY --from=volta /out/ /
 RUN volta install node@${NODEJS_VERSION} \
@@ -162,6 +172,7 @@ RUN volta install node@${NODEJS_VERSION} \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS python
+SHELL ["/bin/bash", "-c"]
 RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
     && . "$HOME/.rye/env" \
     && rye install pip \
@@ -171,6 +182,7 @@ RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS python2
+SHELL ["/bin/bash", "-c"]
 ARG PYTHON2_VERSION=2.7.17
 RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON2_VERSION}/Python-${PYTHON2_VERSION}.tar.xz \
     && tar -Jxf Python-${PYTHON2_VERSION}.tar.xz \
@@ -187,6 +199,7 @@ RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON2_VERSION}/Python-${PY
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS python3
+SHELL ["/bin/bash", "-c"]
 ARG PYTHON3_VERSION
 RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tar.xz \
     && tar -Jxf Python-${PYTHON3_VERSION}.tar.xz \
@@ -203,6 +216,7 @@ RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PY
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS rust
+SHELL ["/bin/bash", "-c"]
 RUN curl -fsLS https://sh.rustup.rs > rust.sh \
     && chmod +x rust.sh \
     && ./rust.sh -y --no-modify-path \
@@ -215,6 +229,7 @@ RUN curl -fsLS https://sh.rustup.rs > rust.sh \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS tools
+SHELL ["/bin/bash", "-c"]
 ARG ARCH1
 ARG ARCH2
 RUN mkdir -p \
@@ -225,7 +240,7 @@ ARG DOCKER_VERSION
 RUN curl -fsLOS https://download.docker.com/linux/static/stable/${ARCH1}/docker-${DOCKER_VERSION}.tgz \
     && tar -zxf docker-${DOCKER_VERSION}.tgz \
     && mv docker/docker /out/usr/local/bin \
-    && chown `whoami`:`groups` /out/usr/local/bin/docker \
+    && chown "$(whoami)":"$(groups)" /out/usr/local/bin/docker \
     && rm -rf docker*
 
 ARG DOCKER_COMPOSE_VERSION
@@ -240,6 +255,7 @@ RUN curl -fsLS https://github.com/docker/buildx/releases/download/v${DOCKER_BUIL
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS packer
+SHELL ["/bin/bash", "-c"]
 ARG ARCH2
 
 COPY --from=deno /out /out/deno
@@ -251,8 +267,8 @@ RUN upx --lzma --best /out/go/usr/local/go/bin/* \
 
 COPY --from=haskell /out /out/haskell
 RUN upx --lzma --best /out/haskell/root/.ghcup/bin/ghcup \
-    && upx --lzma --best `readlink -f /out/haskell/root/.ghcup/bin/cabal` \
-    && upx --lzma --best `readlink -f /out/haskell/root/.ghcup/bin/stack`
+    && upx --lzma --best "$(readlink -f /out/haskell/root/.ghcup/bin/cabal)" \
+    && upx --lzma --best "$(readlink -f /out/haskell/root/.ghcup/bin/stack)"
 
 COPY --from=lua /out /out/lua
 RUN upx --lzma --best /out/lua/usr/local/bin/lua \
@@ -265,14 +281,14 @@ COPY --from=nodejs /out /out/nodejs
 # Compression slows down the node command
 
 COPY --from=python /out /out/python
-RUN upx --lzma --best `readlink -f /out/python/root/.rye/shims/python`
-RUN upx --lzma --best `readlink -f /out/python/root/.rye/shims/python3`
+RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python)"
+RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python3)"
 
 COPY --from=python2 /out /out/python2
-RUN upx --lzma --best `readlink -f /out/python2/usr/local/bin/python`
+RUN upx --lzma --best "$(readlink -f /out/python2/usr/local/bin/python)"
 
 COPY --from=python3 /out /out/python3
-RUN upx --lzma --best `readlink -f /out/python3/usr/local/bin/python3`
+RUN upx --lzma --best "$(readlink -f /out/python3/usr/local/bin/python3)"
 
 COPY --from=rust /out /out/rust
 #RUN upx --lzma --best /out/rust/root/.cargo/bin/*
@@ -283,7 +299,9 @@ RUN upx --lzma --best /out/tools/root/.docker/cli-plugins/docker-compose \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+# hadolint ignore=DL3007
 FROM ubuntu:latest
+SHELL ["/bin/bash", "-c"]
 LABEL maintainer = "miya10kei <miya10kei@gmail.com>"
 
 ENV DEBIAN_FRONTEND nointeractive
@@ -293,6 +311,7 @@ ENV LANGUAGE        $LANG
 ENV LC_ALL          $LANG
 ENV TZ              Asia/Tokyo
 
+# hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
@@ -312,6 +331,9 @@ RUN apt-get update \
         locales \
         openssh-client \
         pass \
+        redis-tools \
+        postgresql-client \
+        mysql-client \
         rlwrap \
         tmux \
         tzdata \
@@ -352,8 +374,8 @@ COPY Makefile   $HOME/.dotfiles/Makefile
 COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
-RUN make --jobs=4 install4d
-RUN make setup-nvim
+RUN make --jobs=4 install4d \
+    && make setup-nvim
 
 WORKDIR $HOME
 
