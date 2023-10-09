@@ -117,7 +117,9 @@ function main() {
     fi
 
     FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
+    autoload bashcompinit && bashcompinit
     autoload -Uz compinit && compinit
+    complete -C "$HOME/.local/bin/aws_completer" aws
 }
 
 if [ "$ZPROFILE_ENABLED" = true ]; then
