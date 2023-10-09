@@ -145,6 +145,7 @@ function M.ddu__grep()
                     fn.getcwd(),
                 },
                 -- inputType = 'migemo',
+                minInputLength = 3,
             },
         },
         uiParams = {
@@ -262,11 +263,12 @@ function M.ddu__filer()
         uiParams = {
             filer = {
                 previewSplit = 'no',
+                sort = 'filename',
                 sortTreesFirst = true,
                 split = 'vertical',
                 statusline = false,
-                winWidth = fn.winwidth(0) / 3,
                 winCol = 1,
+                winWidth = fn.winwidth(0) / 3,
             },
         },
     })

@@ -104,7 +104,7 @@ require('lazy').setup({
             'Shougo/ddu-ui-filer',
             'lambdalisue/kensaku.vim',
             'ryota2357/ddu-column-icon_filename',
-            'shun/ddu-source-rg',
+            'miya10kei/ddu-source-rg',
             'uga-rosa/ddu-source-lsp',
             'yuki-yano/ddu-filter-fzf',
         },
@@ -192,7 +192,29 @@ require('lazy').setup({
         },
     },
     {
-        'tpope/vim-dadbod',
+        'kristijanhusak/vim-dadbod-ui',
+        dependencies = {
+            {
+                'tpope/vim-dadbod',
+                lazy = true,
+            },
+
+            {
+                'kristijanhusak/vim-dadbod-completion',
+                ft = {
+                    'sql',
+                    'mysql',
+                    'plsql',
+                },
+                lazy = true,
+            },
+        },
+        cmd = {
+            'DBUI',
+            'DBUIToggle',
+            'DBUIAddConnection',
+            'DBUIFindBuffer',
+        },
     },
     {
         'tpope/vim-surround',

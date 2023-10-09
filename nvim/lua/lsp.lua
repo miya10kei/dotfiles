@@ -42,6 +42,18 @@ require('mason-lspconfig').setup()
 local mason_registry = require('mason-registry')
 local mason_package = require('mason-core.package')
 
+----------------
+--- nvim-lsp ---
+----------------
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+    update_in_insert = false,
+    virtual_text = {
+        format = function(diagnostic)
+            return string.format('%s (%s: %s)', diagnostic.message, diagnostic.source, diagnostic.code)
+        end,
+    },
+})
+
 ----------------------
 --- nvim-lspconfig ---
 ----------------------
@@ -57,6 +69,7 @@ local used_masson_packages = {
         'html-lsp',
         'json-lsp',
         'lua-language-server',
+        'marksman',
         'python-lsp-server',
         'terraform-ls',
         'typescript-language-server',
@@ -64,11 +77,15 @@ local used_masson_packages = {
     },
     ['linter'] = {
         'flake8',
+        'hadolint',
         'tflint',
         'tfsec',
     },
     ['formatter'] = {
+        'black',
         'goimports',
+        'luaformatter',
+        'yamlfmt',
     },
 }
 
@@ -101,12 +118,15 @@ for _, v in pairs(used_masson_packages['lsp']) do
             on_attach = on_attach,
             settings = {
                 pylsp = {
-                    configurationSources = {
-                        'flake8',
-                    },
                     plugins = {
                         flake8 = {
-                            enabled = true,
+                            enabled = false,
+                        },
+                        pycodestyle = {
+                            enabled = false,
+                        },
+                        pyflakes = {
+                            enabled = false,
                         },
                         rope_autoimport = {
                             enabled = true,
@@ -120,8 +140,14 @@ for _, v in pairs(used_masson_packages['lsp']) do
             on_attach = on_attach,
             settings = {
                 yaml = {
+                    format = {
+                        enable = false,
+                    },
                     schemas = {
-                        ['https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json'] = 'template.yaml',
+                        ['https://json.schemastore.org/github-action.json'] = '.github/actions/*.yaml',
+                        ['https://json.schemastore.org/github-workflow.json'] = '.github/workflows/*.yaml',
+                        ['https://raw.githubusercontent.com/aws/aws-sam-cli/master/schema/samcli.json'] = 'samconfig.yaml',
+                        ['https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json'] = '*sam/*template.yaml',
                     },
                 },
             },
@@ -148,32 +174,37 @@ for _, package in ipairs(mason_registry.get_installed_packages()) do
             local name = string.gsub(k, '-', '_')
             table.insert(null_sources, null_ls.builtins.formatting[name])
         end
+    elseif package_category == mason_package.Cat.Linter then
+        for k, _ in pairs(package.spec.bin) do
+            table.insert(null_sources, null_ls.builtins.diagnostics[k])
+        end
     end
 end
 
 null_ls.setup({
-    sources = null_sources,
-    on_attach = function(client, bufnr)
-        if client.supports_method('textDocument/formatting') then
-            local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-            vim.api.nvim_clear_autocmds({
-                group = augroup,
-                buffer = bufnr,
-            })
-            vim.api.nvim_create_autocmd({
-                'BufWritePre',
-            }, {
-                group = augroup,
-                buffer = bufnr,
-                callback = function()
-                    vim.lsp.buf.format({
-                        bufnr = bufnr,
-                        filter = function(lsp_client) return lsp_client.name == 'null-ls' end,
-                    })
-                end,
-            })
-        end
-    end,
+   diagnostics_format = '#{m} (#{s}: #{c})',
+   sources = null_sources,
+   -- on_attach = function(client, bufnr)
+   --    if client.supports_method('textDocument/formatting') then
+   --        local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+   --        vim.api.nvim_clear_autocmds({
+   --            group = augroup,
+   --            buffer = bufnr,
+   --        })
+   --        vim.api.nvim_create_autocmd({
+   --            'BufWritePre',
+   --        }, {
+   --            group = augroup,
+   --            buffer = bufnr,
+   --            callback = function()
+   --                vim.lsp.buf.format({
+   --                    bufnr = bufnr,
+   --                    filter = function(lsp_client) return lsp_client.name == 'null-ls' end,
+   --                })
+   --            end,
+   --        })
+   --    end
+   -- end,
 })
 
 ---------------------
