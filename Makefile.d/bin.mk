@@ -3,6 +3,7 @@ COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.23.0
+BUN_VERSION := 1.0.4
 DELTA_VERSION := 0.16.5
 DIVE_VERSION := 0.11.0
 EXA_VERSION := 0.10.1
@@ -12,7 +13,8 @@ GHQ_VERSION := 1.4.2
 GITHUB_CLI_VERSION := 2.35.0
 JQ_VERSION := 1.7
 NAVI_VERSION := 2.22.1
-PROCS_VERSION := 0.14.0
+POETRY_VERSION := 1.6.1
+PROCS_VERSION := 0.14.1
 RIPGREP_VERSION := 13.0.0-10
 SHELDON_VERSION := 0.7.3
 STARSHIP_VERSION := 1.16.0
@@ -28,6 +30,7 @@ install-bins: \
 	aws-session-manager \
 	$(BIN_DIR)/aws-vault \
 	$(BIN_DIR)/bat \
+	$(BIN_DIR)/bun\
 	$(BIN_DIR)/delta \
 	$(BIN_DIR)/dive \
 	$(BIN_DIR)/exa \
@@ -80,6 +83,9 @@ $(BIN_DIR)/bat:
 	chown `whoami`:`groups` $(BIN_DIR)/bat
 	chown `whoami`:`groups` $(COMPLETION_DIR)/bat.zsh
 	rm -rf /tmp/bat
+
+$(BIN_DIR)/bun:
+	curl -fsSL https://bun.sh/install | bash -s "bun-v$(BUN_VERSION)"
 
 $(BIN_DIR)/delta:
 	mkdir -p /tmp/delta
@@ -165,7 +171,7 @@ $(BIN_DIR)/rg:
 	rm -rf /tmp/rg
 
 $(BIN_DIR)/poetry:
-	curl -sSL https://install.python-poetry.org | python3 -
+	curl -sSL https://install.python-poetry.org | POETRY_VERSION=$(POETRY_VERSION) python3 -
 
 $(BIN_DIR)/procs:
 	mkdir -p /tmp/procs
