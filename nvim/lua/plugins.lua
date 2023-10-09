@@ -244,4 +244,20 @@ require('lazy').setup({
             },
         },
     },
+    {
+        'nvim-treesitter/nvim-treesitter',
+        -- config = require('plugins.treesitter').config,
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter-textobjects',
+        },
+    },
+    {
+        'windwp/nvim-ts-autotag',
+        config = function() require('nvim-ts-autotag').setup() end,
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
+        lazy = true,
+        event = 'VeryLazy',
+    },
 })

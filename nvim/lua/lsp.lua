@@ -46,7 +46,8 @@ local mason_package = require('mason-core.package')
 --- nvim-lsp ---
 ----------------
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-    update_in_insert = false,
+    underline = true,
+    update_in_insert = true,
     virtual_text = {
         format = function(diagnostic)
             return string.format('%s (%s: %s)', diagnostic.message, diagnostic.source, diagnostic.code)
@@ -85,6 +86,7 @@ local used_masson_packages = {
         'black',
         'goimports',
         'luaformatter',
+        'prettier',
         'yamlfmt',
     },
 }
@@ -182,29 +184,29 @@ for _, package in ipairs(mason_registry.get_installed_packages()) do
 end
 
 null_ls.setup({
-   diagnostics_format = '#{m} (#{s}: #{c})',
-   sources = null_sources,
-   -- on_attach = function(client, bufnr)
-   --    if client.supports_method('textDocument/formatting') then
-   --        local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-   --        vim.api.nvim_clear_autocmds({
-   --            group = augroup,
-   --            buffer = bufnr,
-   --        })
-   --        vim.api.nvim_create_autocmd({
-   --            'BufWritePre',
-   --        }, {
-   --            group = augroup,
-   --            buffer = bufnr,
-   --            callback = function()
-   --                vim.lsp.buf.format({
-   --                    bufnr = bufnr,
-   --                    filter = function(lsp_client) return lsp_client.name == 'null-ls' end,
-   --                })
-   --            end,
-   --        })
-   --    end
-   -- end,
+    diagnostics_format = '#{m} (#{s}: #{c})',
+    sources = null_sources,
+    -- on_attach = function(client, bufnr)
+    --    if client.supports_method('textDocument/formatting') then
+    --        local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+    --        vim.api.nvim_clear_autocmds({
+    --            group = augroup,
+    --            buffer = bufnr,
+    --        })
+    --        vim.api.nvim_create_autocmd({
+    --            'BufWritePre',
+    --        }, {
+    --            group = augroup,
+    --            buffer = bufnr,
+    --            callback = function()
+    --                vim.lsp.buf.format({
+    --                    bufnr = bufnr,
+    --                    filter = function(lsp_client) return lsp_client.name == 'null-ls' end,
+    --                })
+    --            end,
+    --        })
+    --    end
+    -- end,
 })
 
 ---------------------
