@@ -1,4 +1,5 @@
 require('autocmd')
+require('command')
 require('keymaps')
 require('options')
 require('plugins')

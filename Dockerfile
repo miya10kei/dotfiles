@@ -5,7 +5,7 @@ ARG DENO_VERSION=1.36.4
 ARG DOCKER_BUILDX_VERSION=0.11.2
 ARG DOCKER_COMPOSE_VERSION=2.22.0
 ARG DOCKER_VERSION=24.0.6
-ARG GOLANG_VERSION=1.21.1
+ARG GOLANG_VERSION=1.21.2
 ARG HASKELL_CABAL_VERSION=3.6.2.0
 ARG HASKELL_GHCUP_VERSION=0.1.19.5
 ARG HASKELL_GHC_VERSION=9.2.8
@@ -14,7 +14,8 @@ ARG LUAROCKS_VERSION=3.9.2
 ARG LUA_VERSION=5.4.6
 ARG NODEJS_VERSION=18.18.0
 ARG PYTHON2_VERSION=2.7.17
-ARG PYTHON3_VERSION=3.11.4
+ARG PYTHON3_VERSION=3.10.10
+#ARG PYTHON3_VERSION=3.11.4
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
@@ -171,13 +172,13 @@ RUN volta install node@${NODEJS_VERSION} \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS python
-SHELL ["/bin/bash", "-c"]
-RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
-    && . "$HOME/.rye/env" \
-    && rye install pip \
-    && mkdir -p /out/root \
-    && mv /root/.rye /out/root/
+#FROM builder AS python
+#SHELL ["/bin/bash", "-c"]
+#RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
+#    && . "$HOME/.rye/env" \
+#    && rye install pip \
+#    && mkdir -p /out/root \
+#    && mv /root/.rye /out/root/
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -280,9 +281,9 @@ RUN upx --lzma --best /out/neovim/usr/local/bin/nvim
 COPY --from=nodejs /out /out/nodejs
 # Compression slows down the node command
 
-COPY --from=python /out /out/python
-RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python)"
-RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python3)"
+#COPY --from=python /out /out/python
+#RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python)"
+#RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python3)"
 
 COPY --from=python2 /out /out/python2
 RUN upx --lzma --best "$(readlink -f /out/python2/usr/local/bin/python)"
@@ -342,6 +343,12 @@ RUN apt-get update \
         xsel \
         zsh \
         # add temporarily
+        gdal-bin \
+        libcairo2 \
+        libglib2.0-dev \
+        libmagic1 \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
         libpq-dev \
         libxslt-dev \
         swig \
@@ -359,7 +366,7 @@ COPY --from=packer /out/neovim/  /
 COPY --from=packer /out/nodejs/  /
 COPY --from=packer /out/python2/ /
 COPY --from=packer /out/python3/ /
-COPY --from=packer /out/python/  /
+#COPY --from=packer /out/python/  /
 COPY --from=packer /out/rust/    /
 COPY --from=packer /out/tools/   /
 
@@ -375,7 +382,7 @@ COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
 RUN make --jobs=4 install4d \
-    && make setup-nvim
+      && make setup-nvim
 
 WORKDIR $HOME
 
