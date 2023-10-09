@@ -19,6 +19,7 @@ function main() {
         fi
     }
 
+    add_path "$HOME/.bun/bin"
     add_path "$HOME/.cargo/bin"
     add_path "$HOME/.deno/bin"
     add_path "$HOME/.docker/bin"
@@ -100,6 +101,10 @@ function main() {
         fi
     fi
 
+    if [[ -e $HOME/.bun/_bun]]; then
+        source "$HOME/.bun/_bun"
+    fi
+
     if [[ -e $HOME/.rye/env ]]; then
         source "$HOME/.rye/env"
     fi
@@ -129,3 +134,4 @@ if [ "$ZPROFILE_ENABLED" = true ]; then
 else
     main
 fi
+
