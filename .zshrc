@@ -101,7 +101,7 @@ function main() {
         fi
     fi
 
-    if [[ -e $HOME/.bun/_bun]]; then
+    if [[ -e $HOME/.bun/_bun ]]; then
         source "$HOME/.bun/_bun"
     fi
 
