@@ -37,6 +37,7 @@ install-bins: \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
 	$(BIN_DIR)/navi \
+	$(BIN_DIR)/poetry \
 	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
 	$(BIN_DIR)/sheldon \
@@ -162,6 +163,9 @@ $(BIN_DIR)/rg:
 	mv /tmp/rg/rg $(BIN_DIR)/rg
 	chown `whoami`:`groups` $(BIN_DIR)/rg
 	rm -rf /tmp/rg
+
+$(BIN_DIR)/poetry:
+	curl -sSL https://install.python-poetry.org | python3 -
 
 $(BIN_DIR)/procs:
 	mkdir -p /tmp/procs

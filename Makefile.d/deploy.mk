@@ -144,6 +144,23 @@ $(HOME)/.tmux.conf:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-yamlfmt
+deploy-yamlfmt: \
+	yamlfmtdir \
+	yamlfmt
+
+.PHONY: yamlfmtdir
+yamlfmtdir: $(HOME)/.config/yamlfmt
+$(HOME)/.config/yamlfmt:
+	mkdir -p $(HOME)/.config/yamlfmt
+
+.PHONY: yamlfmt
+yamlfmt: $(HOME)/.config/yamlfmt/.yamlfmt
+$(HOME)/.config/yamlfmt/.yamlfmt:
+	ln -fs $(DOTDIR)/.yamlfmt $(HOME)/.config/yamlfmt/
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-zoxide
 deploy-zoxide: \
 	zoxide
