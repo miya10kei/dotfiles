@@ -318,6 +318,7 @@ RUN apt-get update \
         apache2-utils \
         build-essential \
         ca-certificates \
+        cloc \
         cmake \
         curl \
         git \
