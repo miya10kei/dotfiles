@@ -246,7 +246,13 @@ require('lazy').setup({
     },
     {
         'nvim-treesitter/nvim-treesitter',
-        -- config = require('plugins.treesitter').config,
+        config = function()
+            require'nvim-treesitter.configs'.setup {
+                highlight = {
+                    enable = true,
+                },
+            }
+        end,
         dependencies = {
             'nvim-treesitter/nvim-treesitter-textobjects',
         },
