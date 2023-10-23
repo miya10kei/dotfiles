@@ -1,4 +1,4 @@
-command_timeout = 1500
+command_timeout = 100
 
 [python]
 python_binary = [ 'python3', 'python', 'python2' ]

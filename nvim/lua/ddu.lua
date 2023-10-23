@@ -18,7 +18,6 @@ fn['ddu#custom#patch_global']({
             sorters = {
                 'sorter_fzf',
             },
-            -- matchers = { 'matcher_substring' }
         },
     },
     kindOptions = {
@@ -36,11 +35,6 @@ fn['ddu#custom#patch_global']({
     },
     uiParams = {
         ff = {
-            -- autoAction = {
-            --    delay = 300,
-            --    name = 'preview',
-            --    sync = false,
-            -- },
             filterFloatingPosition = 'top',
             floatingBorder = 'double',
             ignoreEmpty = true,
@@ -49,7 +43,6 @@ fn['ddu#custom#patch_global']({
             previewSplit = 'vertical',
             prompt = '> ',
             split = 'floating',
-            -- startAutoAction = true,
             startFilter = true,
         },
     },
@@ -127,8 +120,6 @@ function M.ddu__grep()
         sourceOptions = {
             rg = {
                 volatile = true,
-                -- matchers = { 'matcher_substring' },
-                -- matchers = { 'matcher_kensaku' },
             },
         },
         sourceParams = {
@@ -139,14 +130,6 @@ function M.ddu__grep()
                     '--color',
                     'never',
                 },
-                -- args = {
-                --  '--json'
-                --  --'--glob', '!.git/',
-                -- },
-                paths = {
-                    fn.getcwd(),
-                },
-                -- inputType = 'migemo',
                 minInputLength = 3,
             },
         },
@@ -284,13 +267,13 @@ local function resize()
     local lines = opt.lines:get()
     local columns = opt.columns:get()
     local height = to_nearest_even(lines * 0.2)
-    local width = to_nearest_even(columns * 0.8)
+    local width = to_nearest_even(columns * 0.9)
 
     fn['ddu#custom#patch_global']('uiParams', {
         ff = {
             winHeight = height,
             winWidth = width,
-            winCol = to_nearest_even(width * 0.1),
+            winCol = to_nearest_even(width * 0.05),
             winRow = to_nearest_even(height * 0.6),
             previewHeight = height * 2,
             previewWidth = width,

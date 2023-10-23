@@ -20,6 +20,7 @@ brew-install:
 		1password \
 		alfred \
 		alt-tab \
+		aquaskk \
 		aws-vault \
 		aws-vpn-client \
 		datagrip \

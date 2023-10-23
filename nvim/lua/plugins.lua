@@ -172,8 +172,11 @@ require('lazy').setup({
         dependencies = {
             'williamboman/mason.nvim',
             'williamboman/mason-lspconfig.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
+            'nvimtools/none-ls.nvim',
             'nvim-lua/plenary.nvim',
+        },
+        opts = {
+            autoformat = false,
         },
     },
     {
@@ -265,5 +268,8 @@ require('lazy').setup({
         },
         lazy = true,
         event = 'VeryLazy',
+    },
+    {
+        'mattn/vim-chatgpt',
     },
 })

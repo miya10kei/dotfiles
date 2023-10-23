@@ -79,13 +79,17 @@ local used_masson_packages = {
     ['linter'] = {
         'flake8',
         'hadolint',
+        'markdownlint',
         'tflint',
         'tfsec',
     },
     ['formatter'] = {
+        'autoflake',
         'black',
         'goimports',
+        'isort',
         'luaformatter',
+        'markdownlint',
         'prettier',
         'yamlfmt',
     },
@@ -170,15 +174,44 @@ local null_sources = {
 }
 
 for _, package in ipairs(mason_registry.get_installed_packages()) do
-    local package_category = package.spec.categories[1]
-    if package_category == mason_package.Cat.Formatter then
-        for k, _ in pairs(package.spec.bin) do
-            local name = string.gsub(k, '-', '_')
-            table.insert(null_sources, null_ls.builtins.formatting[name])
-        end
-    elseif package_category == mason_package.Cat.Linter then
-        for k, _ in pairs(package.spec.bin) do
-            table.insert(null_sources, null_ls.builtins.diagnostics[k])
+    for _, package_category in ipairs(package.spec.categories) do
+        if package_category == mason_package.Cat.Formatter then
+            for k, _ in pairs(package.spec.bin) do
+                local name = string.gsub(k, '-', '_')
+                local source = null_ls.builtins.formatting[name]
+                if name == 'autoflake' then
+                    source = source.with({
+                        extra_args = {
+                            '--remove-rhs-for-unused-variables',
+                            '--remove-all-unused-imports',
+                            '--remove-duplicate-keys',
+                            '--remove-unused-variables',
+                        },
+                    })
+                elseif name == 'prettier' then
+                    source = source.with({
+                        filetypes = {
+                            'javascript',
+                            'javascriptreact',
+                            'typescript',
+                            'typescriptreact',
+                            'vue',
+                            'css',
+                            'scss',
+                            'less',
+                            'html',
+                            'markdown.mdx',
+                            'graphql',
+                            'handlebars',
+                        },
+                    })
+                end
+                table.insert(null_sources, source)
+            end
+        elseif package_category == mason_package.Cat.Linter then
+            for k, _ in pairs(package.spec.bin) do
+                table.insert(null_sources, null_ls.builtins.diagnostics[k])
+            end
         end
     end
 end
@@ -186,27 +219,23 @@ end
 null_ls.setup({
     diagnostics_format = '#{m} (#{s}: #{c})',
     sources = null_sources,
-    -- on_attach = function(client, bufnr)
-    --    if client.supports_method('textDocument/formatting') then
-    --        local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-    --        vim.api.nvim_clear_autocmds({
-    --            group = augroup,
-    --            buffer = bufnr,
-    --        })
-    --        vim.api.nvim_create_autocmd({
-    --            'BufWritePre',
-    --        }, {
-    --            group = augroup,
-    --            buffer = bufnr,
-    --            callback = function()
-    --                vim.lsp.buf.format({
-    --                    bufnr = bufnr,
-    --                    filter = function(lsp_client) return lsp_client.name == 'null-ls' end,
-    --                })
-    --            end,
-    --        })
-    --    end
-    -- end,
+    on_attach = function()
+        local function toggle_source()
+            local query = {
+                method = null_ls.methods.FORMATTING,
+            }
+            null_ls.toggle(query)
+            local sources = null_ls.get_source(query)
+            if sources[1]._disabled then
+                vim.cmd('echo "x disable null_ls formatter"')
+            else
+                vim.cmd('echo "o enable null_ls formatter"')
+            end
+        end
+        keymap('n', '<LEADER>t', toggle_source, {
+            silent = true,
+        })
+    end,
 })
 
 ---------------------
