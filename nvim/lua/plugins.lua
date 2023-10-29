@@ -142,6 +142,12 @@ require('lazy').setup({
             },
             ---@diagnostic disable-next-line: missing-fields
             {
+                '<LEADER>gd',
+                '<ESC><CMD>Ddu ddu__grep_current_file<CR>',
+                silent = true,
+            },
+            ---@diagnostic disable-next-line: missing-fields
+            {
                 'gd',
                 '<ESC><CMD>Ddu ddu__lsp_definition<CR>',
                 silent = true,

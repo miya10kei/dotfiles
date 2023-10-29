@@ -10,6 +10,7 @@ setup4d: \
 	deploy-aws \
 	deploy-git \
 	deploy-gpg \
+	deploy-navi \
 	deploy-nvim \
 	deploy-pass \
 	deploy-sheldon \

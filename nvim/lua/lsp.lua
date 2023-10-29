@@ -135,7 +135,7 @@ for _, v in pairs(used_masson_packages['lsp']) do
                             enabled = false,
                         },
                         rope_autoimport = {
-                            enabled = true,
+                            enabled = false,
                         },
                     },
                 },
@@ -210,7 +210,9 @@ for _, package in ipairs(mason_registry.get_installed_packages()) do
             end
         elseif package_category == mason_package.Cat.Linter then
             for k, _ in pairs(package.spec.bin) do
-                table.insert(null_sources, null_ls.builtins.diagnostics[k])
+                if k ~= 'tflint' then
+                    table.insert(null_sources, null_ls.builtins.diagnostics[k])
+                end
             end
         end
     end

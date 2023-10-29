@@ -26,6 +26,7 @@ function main() {
     add_path "$HOME/.ghcup/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.local/share/nvim/mason/bin"
+    add_path "$HOME/.pyenv/bin"
     add_path "$HOME/.rye/shims"
     add_path "$HOME/Library/Python/3.11/bin"
     add_path "$HOME/go/bin"
@@ -105,6 +106,10 @@ function main() {
         source "$HOME/.bun/_bun"
     fi
 
+    if [[ -e $HOME/.pyenv ]]; then
+        eval "$(pyenv init -)"
+    fi
+
     if [[ -e $HOME/.rye/env ]]; then
         source "$HOME/.rye/env"
     fi
@@ -134,4 +139,3 @@ if [ "$ZPROFILE_ENABLED" = true ]; then
 else
     main
 fi
-

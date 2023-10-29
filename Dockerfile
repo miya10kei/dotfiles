@@ -316,6 +316,7 @@ ENV TZ              Asia/Tokyo
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
+        bsdmainutils \
         build-essential \
         ca-certificates \
         cloc \
@@ -323,20 +324,27 @@ RUN apt-get update \
         curl \
         git \
         less \
+        libbz2-dev \
         libffi-dev \
         libffi7 \
         libgmp-dev \
         libgmp10 \
         libncurses-dev \
         libncurses5 \
+        libreadline-dev \
+        libsqlite3-dev \
         libtinfo5 \
         locales \
+        lzma-dev \
+        mandoc \
+        mysql-client \
         openssh-client \
         pass \
-        redis-tools \
         postgresql-client \
-        mysql-client \
+        python3-tk \
+        redis-tools \
         rlwrap \
+        tk-dev \
         tmux \
         tzdata \
         unzip \

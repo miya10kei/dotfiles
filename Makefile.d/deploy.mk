@@ -52,6 +52,17 @@ $(HOME)/.config/karabiner/karabiner.json:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-navi
+deploy-navi: \
+	addmycheat
+
+.PHONY: addmycheat
+navidir: $(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets
+$(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets:
+	navi repo add https://github.com/miya10kei/navi-cheets
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-nvim
 deploy-nvim: \
 	nvimrc

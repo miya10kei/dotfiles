@@ -135,6 +135,49 @@ function M.ddu__grep()
         },
         uiParams = {
             ff = {
+                autoAction = {
+                    name = 'preview',
+                },
+                startAutoAction = true,
+                ignoreEmpty = false,
+            },
+        },
+    })
+end
+
+function M.ddu__grep_current_file()
+    fn['ddu#start']({
+        sources = {
+            {
+                name = 'rg',
+            },
+        },
+        sourceOptions = {
+            rg = {
+                volatile = true,
+            },
+        },
+        sourceParams = {
+            rg = {
+                args = {
+                    '--color',
+                    'never',
+                    '--column',
+                    '--no-heading',
+                    '--with-filename',
+                },
+                paths = {
+                    fn.expand('%'),
+                },
+                minInputLength = 3,
+            },
+        },
+        uiParams = {
+            ff = {
+                autoAction = {
+                    name = 'preview',
+                },
+                startAutoAction = true,
                 ignoreEmpty = false,
             },
         },
@@ -277,7 +320,7 @@ local function resize()
             winRow = to_nearest_even(height * 0.6),
             previewHeight = height * 2,
             previewWidth = width,
-            previewCol = to_nearest_even(width * 0.1),
+            previewCol = to_nearest_even(width * 0.05),
             previewRow = to_nearest_even(height * 1.8),
         },
     })
