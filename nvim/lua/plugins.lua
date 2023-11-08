@@ -1,5 +1,5 @@
 local BLAMER_VERSION = '1.3.0'
-local DDC_VERSION = 'v4.0.5'
+local DDC_VERSION = 'v4.1.0'
 local DDU_VERSION = 'v3.6.0'
 local GRUVBOX_VERSION = '2.0.0'
 local INDENT_LINE_VERSION = '2.0'
