@@ -3,7 +3,7 @@ COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.0.8
+BUN_VERSION := 1.0.9
 DELTA_VERSION := 0.16.5
 DIVE_VERSION := 0.11.0
 EXA_VERSION := 0.10.1
