@@ -7,9 +7,9 @@ ARG DOCKER_COMPOSE_VERSION=2.23.0
 ARG DOCKER_VERSION=24.0.7
 ARG GOLANG_VERSION=1.21.4
 ARG HASKELL_CABAL_VERSION=3.6.2.0
-ARG HASKELL_GHCUP_VERSION=0.1.19.5
-ARG HASKELL_GHC_VERSION=9.2.8
-ARG HASKELL_STACK_VERSION=2.9.3
+ARG HASKELL_GHCUP_VERSION=0.1.20.0
+ARG HASKELL_GHC_VERSION=9.4.7
+ARG HASKELL_STACK_VERSION=2.11.1
 ARG LUAROCKS_VERSION=3.9.2
 ARG LUA_VERSION=5.4.6
 ARG NODEJS_VERSION=20.9.0
@@ -313,7 +313,8 @@ ENV LC_ALL          $LANG
 ENV TZ              Asia/Tokyo
 
 # hadolint ignore=DL3008
-RUN apt-get update \
+RUN yes | unminimize \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
         bsdmainutils \
