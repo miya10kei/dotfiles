@@ -8,7 +8,7 @@ function launch_dev_env() {
         --mount type=bind,source=$HOME/.Xauthority,target=/root/.Xauthority \
         --mount type=bind,source=$HOME/.dotfiles,target=/root/.dotfiles \
         --mount type=bind,source=$HOME/.dotfiles/.zshrc,target=/root/.zshrc \
-        --mount type=bind,source=$HOME/.ssh,target=/root/.ssh,readonly \
+        --mount type=bind,source=$HOME/.ssh,target=/root/.ssh \
         --mount type=bind,source=$HOME/Documents,target=/root/Documents \
         --mount type=bind,source=$HOME/dev,target=/root/dev \
         --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
@@ -23,6 +23,8 @@ function launch_dev_env() {
         --tty \
         miya10kei/devenv:latest
 }
+
+      #--mount type=bind,source=$HOME/.ssh,target=/root/.ssh,readonly \
 
 function attach_dev_env() {
     docker exec \

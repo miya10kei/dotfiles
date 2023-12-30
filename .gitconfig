@@ -51,3 +51,7 @@
 [user]
   email = miya10kei@gmail.com
   name = miya10kei
+[credential "https://github.com"]
+  helper = !/root/.local/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+  helper = !/root/.local/bin/gh auth git-credential
