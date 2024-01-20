@@ -2,3 +2,4 @@
 .DS_Store
 lazy-lock.json
 data-volume
+.config/sqls/config.yaml
