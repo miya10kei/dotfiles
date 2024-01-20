@@ -1,6 +1,6 @@
 local BLAMER_VERSION = '1.3.0'
 local DDC_VERSION = 'v4.3.1'
-local DDU_VERSION = 'v3.9.0'
+local DDU_VERSION = 'v3.10.0'
 local GRUVBOX_VERSION = '2.0.0'
 local INDENT_LINE_VERSION = '2.0'
 local LEXIMA_VERSION = 'v2.1.0'
@@ -47,7 +47,7 @@ require('lazy').setup({
             'Shougo/ddc-matcher_head',
             'Shougo/ddc-sorter_rank',
             'Shougo/ddc-source-around',
-            'Shougo/ddc-source-nvim-lsp',
+            'Shougo/ddc-source-lsp',
             'Shougo/ddc-ui-native',
         },
         lazy = true,

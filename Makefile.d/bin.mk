@@ -1,23 +1,25 @@
 BIN_DIR := $(HOME)/.local/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
+GO_BIN_DIR := $(HOME)/go/bin
+RYE_SHIMS_DIR := $(HOME)/.rye/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.0.20
+BUN_VERSION := 1.0.24
 DELTA_VERSION := 0.16.5
 DIVE_VERSION := 0.11.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 9.0.0
-FZF_VERSION := 0.44.1
+FZF_VERSION := 0.45.0
 GHQ_VERSION := 1.4.2
-GITHUB_CLI_VERSION := 2.40.1
+GITHUB_CLI_VERSION := 2.42.1
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
 POETRY_VERSION := 1.7.1
 PROCS_VERSION := 0.14.4
 RIPGREP_VERSION := 13.0.0-10
 SHELDON_VERSION := 0.7.4
-STARSHIP_VERSION := 1.17.0
+STARSHIP_VERSION := 1.17.1
 YQ_VERSION := 4.40.5
 ZOXIDE_VERSION := 0.9.2
 
@@ -39,14 +41,17 @@ install-bins: \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
 	$(BIN_DIR)/navi \
-	$(BIN_DIR)/poetry \
 	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
 	$(BIN_DIR)/sheldon \
 	$(BIN_DIR)/starship \
 	$(BIN_DIR)/tfenv \
 	$(BIN_DIR)/yq \
-	$(BIN_DIR)/zoxide
+	$(BIN_DIR)/zoxide \
+	$(GO_BIN_DIR)/sqls \
+	$(RYE_SHIMS_DIR)/poetry \
+	$(RYE_SHIMS_DIR)/sam
+
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -169,9 +174,6 @@ $(BIN_DIR)/rg:
 	chown `whoami`:`groups` $(BIN_DIR)/rg
 	rm -rf /tmp/rg
 
-$(BIN_DIR)/poetry:
-	curl -sSL https://install.python-poetry.org | POETRY_VERSION=$(POETRY_VERSION) python3 -
-
 $(BIN_DIR)/procs:
 	mkdir -p /tmp/procs
 	curl -fsLS -o /tmp/procs/procs.zip https://github.com/dalance/procs/releases/download/v0.14.0/procs-v0.14.0-x86_64-linux.zip
@@ -210,3 +212,12 @@ $(BIN_DIR)/zoxide:
 	mv /tmp/zoxide/zoxide $(BIN_DIR)/zoxide
 	chown `whoami`:`groups` $(BIN_DIR)/zoxide
 	rm -rf /tmp/zoxide
+
+$(GO_BIN_DIR)/sqls:
+	go install github.com/sqls-server/sqls@latest
+
+$(RYE_SHIMS_DIR)/poetry:
+	rye install poetry
+
+$(RYE_SHIMS_DIR)/sam:
+	rye install aws-sam-cli

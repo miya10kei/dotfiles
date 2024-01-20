@@ -3,8 +3,8 @@ ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
 ARG DENO_VERSION=1.39.1
 ARG DOCKER_BUILDX_VERSION=0.12.0
-ARG DOCKER_COMPOSE_VERSION=2.23.2
-ARG DOCKER_VERSION=24.0.7
+ARG DOCKER_COMPOSE_VERSION=2.24.1
+ARG DOCKER_VERSION=25.0.0
 ARG GOLANG_VERSION=1.21.5
 ARG HASKELL_CABAL_VERSION=3.6.2.0-p1
 ARG HASKELL_GHCUP_VERSION=0.1.20.0
@@ -12,10 +12,10 @@ ARG HASKELL_GHC_VERSION=9.4.8
 ARG HASKELL_STACK_VERSION=2.13.1
 ARG LUAROCKS_VERSION=3.9.2
 ARG LUA_VERSION=5.4.6
-ARG NODEJS_VERSION=20.10.0
+ARG NODEJS_VERSION=20.11.0
 ARG PYTHON2_VERSION=2.7.17
 ARG PYTHON3_VERSION=3.10.10
-#ARG PYTHON3_VERSION=3.11.4
+ARG PYTHON_VERSION=3.12.0
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
@@ -172,47 +172,16 @@ RUN volta install node@${NODEJS_VERSION} \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-#FROM builder AS python
-#SHELL ["/bin/bash", "-c"]
-#RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
-#    && . "$HOME/.rye/env" \
-#    && rye install pip \
-#    && mkdir -p /out/root \
-#    && mv /root/.rye /out/root/
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS python2
+FROM builder AS python
 SHELL ["/bin/bash", "-c"]
-ARG PYTHON2_VERSION=2.7.17
-RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON2_VERSION}/Python-${PYTHON2_VERSION}.tar.xz \
-    && tar -Jxf Python-${PYTHON2_VERSION}.tar.xz \
-    && cd Python-${PYTHON2_VERSION} \
-    && ./configure \
-    && make \
-    && make install \
-    && mkdir -p /out/usr/local \
-    && mv /usr/local/bin/ \
-        /usr/local/lib \
-        /usr/local/include \
-        /out/usr/local
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS python3
-SHELL ["/bin/bash", "-c"]
-ARG PYTHON3_VERSION
-RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tar.xz \
-    && tar -Jxf Python-${PYTHON3_VERSION}.tar.xz \
-    && cd Python-${PYTHON3_VERSION} \
-    && ./configure \
-    && make \
-    && make install \
-    && mkdir -p /out/usr/local \
-    && mv /usr/local/bin/ \
-        /usr/local/lib \
-        /usr/local/include \
-        /out/usr/local
+ARG PYTHON_VERSION
+RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
+    && . "$HOME/.rye/env" \
+    && rye config --set-bool behavior.global-python=true \
+    && rye fetch cpython@$PYTHON_VERSION \
+    && rye install pip \
+    && mkdir -p /out/root \
+    && mv /root/.rye /out/root/
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -281,15 +250,7 @@ RUN upx --lzma --best /out/neovim/usr/local/bin/nvim
 COPY --from=nodejs /out /out/nodejs
 # Compression slows down the node command
 
-#COPY --from=python /out /out/python
-#RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python)"
-#RUN upx --lzma --best "$(readlink -f /out/python/root/.rye/shims/python3)"
-
-COPY --from=python2 /out /out/python2
-RUN upx --lzma --best "$(readlink -f /out/python2/usr/local/bin/python)"
-
-COPY --from=python3 /out /out/python3
-RUN upx --lzma --best "$(readlink -f /out/python3/usr/local/bin/python3)"
+COPY --from=python /out /out/python
 
 COPY --from=rust /out /out/rust
 #RUN upx --lzma --best /out/rust/root/.cargo/bin/*
@@ -375,9 +336,7 @@ COPY --from=packer /out/haskell  /
 COPY --from=packer /out/lua      /
 COPY --from=packer /out/neovim/  /
 COPY --from=packer /out/nodejs/  /
-COPY --from=packer /out/python2/ /
-COPY --from=packer /out/python3/ /
-#COPY --from=packer /out/python/  /
+COPY --from=packer /out/python/  /
 COPY --from=packer /out/rust/    /
 COPY --from=packer /out/tools/   /
 
@@ -386,14 +345,18 @@ ENV PATH       "$HOME/.ghcup/bin:$PATH"
 ENV PATH       "/usr/local/go/bin:$PATH"
 ENV VOLTA_HOME "$HOME/.volta"
 ENV PATH       "$VOLTA_HOME/bin:$PATH"
+ENV RYE_HOME   "$HOME/.rye"
+ENV PATH       "$RYE_HOME/shims:$PATH"
 
 COPY ./nvim $HOME/.config/nvim
 COPY Makefile   $HOME/.dotfiles/Makefile
 COPY Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
-RUN make --jobs=4 install4d \
-      && make setup-nvim
+
+#RUN python3 --version
+RUN make --jobs=4 install4d
+RUN make setup-nvim
 
 WORKDIR $HOME
 

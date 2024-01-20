@@ -37,6 +37,7 @@ end
 -------------
 require('mason').setup({
     log_level = vim.log.levels.WARN,
+    max_concurrent_installers = 8,
 })
 require('mason-lspconfig').setup()
 local mason_registry = require('mason-registry')
@@ -72,6 +73,7 @@ local used_masson_packages = {
         'lua-language-server',
         'marksman',
         'python-lsp-server',
+        'taplo',
         'terraform-ls',
         'typescript-language-server',
         'yaml-language-server',
@@ -124,7 +126,7 @@ for _, v in pairs(used_masson_packages['lsp']) do
             on_attach = on_attach,
             settings = {
                 pylsp = {
-                    plugins = {
+                    root_pattern = {
                         flake8 = {
                             enabled = false,
                         },
@@ -166,19 +168,13 @@ for _, v in pairs(used_masson_packages['lsp']) do
 end
 
 lspconfig['sqls'].setup {
-    settings = {
-        sqls = {
-            connections = {
-                {
-                    driver = 'mysql',
-                    dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
-                },
-                {
-                    driver = 'postgresql',
-                    dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
-                },
-            },
-        },
+    cmd = {
+        'sqls',
+        '--log',
+        '/root/log.log',
+        '--trace',
+        '--config',
+        vim.env.HOME .. '/.config/sqls/config.yaml',
     },
     on_attach = on_attach,
 }

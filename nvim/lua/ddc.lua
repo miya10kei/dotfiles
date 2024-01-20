@@ -2,7 +2,7 @@ vim.fn['ddc#custom#patch_global']({
     ui = 'native',
     sources = {
         'around',
-        'nvim-lsp',
+        'lsp',
     },
     sourceOptions = {
         _ = {
@@ -13,7 +13,7 @@ vim.fn['ddc#custom#patch_global']({
         around = {
             mark = '[A]',
         },
-        ['nvim-lsp'] = {
+        ['lsp'] = {
             mark = '[LSP]',
             forceCompletionPattern = '\\.\\w*|:\\w*|->\\w*',
         },
@@ -22,7 +22,7 @@ vim.fn['ddc#custom#patch_global']({
         around = {
             maxSize = 500,
         },
-        ['nvim-lsp'] = {
+        ['lsp'] = {
             kindLabels = {
                 Class = 'c',
             },
