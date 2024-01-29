@@ -3,7 +3,7 @@ ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
 ARG DENO_VERSION=1.39.1
 ARG DOCKER_BUILDX_VERSION=0.12.0
-ARG DOCKER_COMPOSE_VERSION=2.24.1
+ARG DOCKER_COMPOSE_VERSION=2.24.3
 ARG DOCKER_VERSION=25.0.0
 ARG GOLANG_VERSION=1.21.5
 ARG HASKELL_CABAL_VERSION=3.6.2.0-p1
@@ -13,7 +13,6 @@ ARG HASKELL_STACK_VERSION=2.13.1
 ARG LUAROCKS_VERSION=3.9.2
 ARG LUA_VERSION=5.4.6
 ARG NODEJS_VERSION=20.11.0
-ARG PYTHON2_VERSION=2.7.17
 ARG PYTHON3_VERSION=3.10.10
 ARG PYTHON_VERSION=3.12.0
 
@@ -185,6 +184,23 @@ RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+FROM builder AS python3
+SHELL ["/bin/bash", "-c"]
+ARG PYTHON3_VERSION
+RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tar.xz \
+    && tar -Jxf Python-${PYTHON3_VERSION}.tar.xz \
+    && cd Python-${PYTHON3_VERSION} \
+    && ./configure \
+    && make \
+    && make install \
+    && mkdir -p /out/usr/local \
+    && mv /usr/local/bin/ \
+        /usr/local/lib \
+        /usr/local/include \
+        /out/usr/local
+
+
+# ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS rust
 SHELL ["/bin/bash", "-c"]
 RUN curl -fsLS https://sh.rustup.rs > rust.sh \
@@ -251,6 +267,9 @@ COPY --from=nodejs /out /out/nodejs
 # Compression slows down the node command
 
 COPY --from=python /out /out/python
+
+COPY --from=python3 /out /out/python3
+RUN upx --lzma --best "$(readlink -f /out/python3/usr/local/bin/python3)"
 
 COPY --from=rust /out /out/rust
 #RUN upx --lzma --best /out/rust/root/.cargo/bin/*
@@ -337,6 +356,7 @@ COPY --from=packer /out/lua      /
 COPY --from=packer /out/neovim/  /
 COPY --from=packer /out/nodejs/  /
 COPY --from=packer /out/python/  /
+COPY --from=packer /out/python3/ /
 COPY --from=packer /out/rust/    /
 COPY --from=packer /out/tools/   /
 

@@ -1,6 +1,6 @@
 local BLAMER_VERSION = '1.3.0'
 local DDC_VERSION = 'v4.3.1'
-local DDU_VERSION = 'v3.10.0'
+local DDU_VERSION = 'v3.10.1'
 local GRUVBOX_VERSION = '2.0.0'
 local INDENT_LINE_VERSION = '2.0'
 local LEXIMA_VERSION = 'v2.1.0'
@@ -49,14 +49,14 @@ require('lazy').setup({
             'Shougo/ddc-source-around',
             'Shougo/ddc-source-lsp',
             'Shougo/ddc-ui-native',
+            'uga-rosa/ddc-source-lsp-setup',
         },
         lazy = true,
         keys = {
-            ---@diagnostic disable-next-line: missing-fields
+            -- @diagnostic disable-next-line: missing-fields
             {
                 '<TAB>',
                 function()
-                    print('TAB')
                     if vim.fn.pumvisible() > 0 then
                         return '<C-n>'
                     else
@@ -73,13 +73,10 @@ require('lazy').setup({
                 expr = true,
                 silent = true,
             },
-            ---@diagnostic disable-next-line: missing-fields
+            -- @diagnostic disable-next-line: missing-fields
             {
                 '<S-TAB>',
-                function()
-                    print('S-TAB')
-                    return vim.fn.pumvisible() > 0 and '<C-p>' or '<C-d>'
-                end,
+                function() return vim.fn.pumvisible() > 0 and '<C-p>' or '<C-h>' end,
                 mode = 'i',
                 expr = true,
                 silent = true,
@@ -180,6 +177,7 @@ require('lazy').setup({
             'williamboman/mason-lspconfig.nvim',
             'nvimtools/none-ls.nvim',
             'nvim-lua/plenary.nvim',
+            'nanotee/sqls.nvim',
         },
         opts = {
             autoformat = false,
@@ -260,10 +258,14 @@ require('lazy').setup({
                 highlight = {
                     enable = true,
                 },
+                tree_docs = {
+                    enable = false,
+                },
             }
         end,
         dependencies = {
             'nvim-treesitter/nvim-treesitter-textobjects',
+            'nvim-treesitter/nvim-tree-docs',
         },
     },
     {

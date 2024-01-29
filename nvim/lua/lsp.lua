@@ -176,7 +176,10 @@ lspconfig['sqls'].setup {
         '--config',
         vim.env.HOME .. '/.config/sqls/config.yaml',
     },
-    on_attach = on_attach,
+    on_attach = function(client, bufnr)
+        require('sqls').on_attach(client, bufnr)
+        on_attach(client, bufnr)
+    end,
 }
 
 ---------------

@@ -1,3 +1,5 @@
+require('ddc_source_lsp_setup').setup()
+
 vim.fn['ddc#custom#patch_global']({
     ui = 'native',
     sources = {
@@ -14,8 +16,12 @@ vim.fn['ddc#custom#patch_global']({
             mark = '[A]',
         },
         ['lsp'] = {
+            dup = 'keep',
+            keywordPattern = '\\k+',
             mark = '[LSP]',
-            forceCompletionPattern = '\\.\\w*|:\\w*|->\\w*',
+            sorters = {
+                'sorter_lsp-kind',
+            },
         },
     },
     sourceParams = {
@@ -26,6 +32,9 @@ vim.fn['ddc#custom#patch_global']({
             kindLabels = {
                 Class = 'c',
             },
+            enableResolveItem = true,
+            enableAdditionalTextEdit = true,
+            confirmBehavior = 'replace',
         },
     },
 })

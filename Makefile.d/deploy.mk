@@ -124,12 +124,34 @@ $(HOME)/.password-store:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-rye
 deploy-rye: \
+	delete-configtoml \
 	configtoml
+
+.PHONY: delete-configtoml
+delete-configtoml:
+	if [ ! -L $(HOME)/.rye/config.toml ]; then rm -rf $(HOME)/.rye/config.toml; fi
 
 .PHONY: configtoml
 configtoml: $(HOME)/.rye/config.toml
 $(HOME)/.rye/config.toml:
 	ln -s $(DOTDIR)/config.toml $(HOME)/.rye/config.toml
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-sqls
+deploy-sqls: \
+	sqlsdir \
+	configyaml
+
+.PHONY: sqlsdir
+sqlsdir: $(HOME)/.config/sqls
+$(HOME)/.config/sqls:
+	mkdir -p $(HOME)/.config/sqls
+
+.PHONY: configyaml
+configyaml: $(HOME)/.config/sqls/config.yaml
+$(HOME)/.config/sqls/config.yaml:
+	ln -s $(DOTDIR)/.config/sqls/config.yaml $(HOME)/.config/sqls/config.yaml
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -189,11 +211,15 @@ deploy-zsh: \
 	zprofile \
 	zshrc
 
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: autoenv_auth
 autoenv_auth: $(HOME)/.local/share/autoenv_auth
 $(HOME)/.local/share/autoenv_auth:
 	ln -fs $(DOTDIR)/data-volume/zsh-autoenv/autoenv_auth $(HOME)/.local/share/autoenv_auth
 
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: zprofile
 zprofile: $(HOME)/.zprofile
 $(HOME)/.zprofile:

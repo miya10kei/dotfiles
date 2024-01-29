@@ -13,14 +13,15 @@ setup4d: \
 	deploy-navi \
 	deploy-nvim \
 	deploy-pass \
+	deploy-rye \
 	deploy-sheldon \
+	deploy-sqls \
 	deploy-starship \
 	deploy-tmux \
 	deploy-yamlfmt \
 	deploy-zoxide \
 	autoenv_auth \
 	zshhistory_force
-	#deploy-rye \
 	#start-bg-job
 
 .PHONY: install4d

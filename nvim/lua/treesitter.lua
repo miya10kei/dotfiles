@@ -27,6 +27,7 @@ local used_treesitter_packages = {
     'tsv',
     'tsx',
     'typescript',
+    'vimdoc',
     'xml',
     'yaml',
 }
