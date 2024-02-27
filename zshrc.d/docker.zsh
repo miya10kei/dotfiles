@@ -1,8 +1,9 @@
 function launch_dev_env() {
     docker rm --force dev-env
     docker run \
+        --add-host host.docker.internal:host-gateway \
         --detach \
-        --env DISPLAY=host.docker.internal:0 \
+        --env DISPLAY=host.rancher-desktop.internal:0 \
         --hostname=dev-env \
         --interactive \
         --mount type=bind,source=$HOME/.Xauthority,target=/root/.Xauthority \
@@ -11,6 +12,7 @@ function launch_dev_env() {
         --mount type=bind,source=$HOME/.ssh,target=/root/.ssh \
         --mount type=bind,source=$HOME/Documents,target=/root/Documents \
         --mount type=bind,source=$HOME/dev,target=/root/dev \
+        --mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix \
         --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
         --name=dev-env \
         --publish=3000:3000\
@@ -23,8 +25,6 @@ function launch_dev_env() {
         --tty \
         miya10kei/devenv:latest
 }
-
-      #--mount type=bind,source=$HOME/.ssh,target=/root/.ssh,readonly \
 
 function attach_dev_env() {
     docker exec \
