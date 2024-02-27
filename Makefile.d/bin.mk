@@ -49,6 +49,7 @@ install-bins: \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(GO_BIN_DIR)/sqls \
+	$(RYE_SHIMS_DIR)/pgcli \
 	$(RYE_SHIMS_DIR)/poetry \
 	$(RYE_SHIMS_DIR)/sam
 
@@ -221,3 +222,6 @@ $(RYE_SHIMS_DIR)/poetry:
 
 $(RYE_SHIMS_DIR)/sam:
 	rye install aws-sam-cli
+
+$(RYE_SHIMS_DIR)/pgcli:
+	rye install pgcli
