@@ -5,23 +5,23 @@ RYE_SHIMS_DIR := $(HOME)/.rye/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.0.25
+BUN_VERSION := 1.0.29
 DELTA_VERSION := 0.16.5
-DIVE_VERSION := 0.11.0
+DIVE_VERSION := 0.12.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 9.0.0
-FZF_VERSION := 0.46.0
-GHQ_VERSION := 1.4.2
-GITHUB_CLI_VERSION := 2.42.1
+FZF_VERSION := 0.46.1
+GHQ_VERSION := 1.5.0
+GITHUB_CLI_VERSION := 2.44.1
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
-POETRY_VERSION := 1.7.1
+POETRY_VERSION := 1.8.1
 PROCS_VERSION := 0.14.4
 RIPGREP_VERSION := 13.0.0-10
 SHELDON_VERSION := 0.7.4
 STARSHIP_VERSION := 1.17.1
-YQ_VERSION := 4.40.5
-ZOXIDE_VERSION := 0.9.2
+YQ_VERSION := 4.42.1
+ZOXIDE_VERSION := 0.9.4
 
 .PHONY: install-bins
 install-bins: \
@@ -125,7 +125,7 @@ $(BIN_DIR)/fd:
 
 $(BIN_DIR)/fzf:
 	mkdir -p /tmp/fzf
-	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_armv7.tar.gz
+	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_amd64.tar.gz
 	tar -zxf /tmp/fzf/fzf.tar.gz -C /tmp/fzf
 	mv /tmp/fzf/fzf $(BIN_DIR)/fzf
 	chown `whoami`:`groups` $(BIN_DIR)/fzf
