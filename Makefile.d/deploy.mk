@@ -122,22 +122,6 @@ $(HOME)/.password-store:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-rye
-deploy-rye: \
-	delete-configtoml \
-	configtoml
-
-.PHONY: delete-configtoml
-delete-configtoml:
-	if [ ! -L $(HOME)/.rye/config.toml ]; then rm -rf $(HOME)/.rye/config.toml; fi
-
-.PHONY: configtoml
-configtoml: $(HOME)/.rye/config.toml
-$(HOME)/.rye/config.toml:
-	ln -s $(DOTDIR)/config.toml $(HOME)/.rye/config.toml
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-sqls
 deploy-sqls: \
 	sqlsdir \

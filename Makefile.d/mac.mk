@@ -18,12 +18,10 @@ endif
 brew-install:
 	brew install --cask \
 		1password \
+		adobe-acrobat-reader \
 		alfred \
 		alt-tab \
-		aquaskk \
-		aws-vault \
 		aws-vpn-client \
-		datagrip \
 		deepl \
 		docker \
 		firefox \
@@ -31,6 +29,6 @@ brew-install:
 		hyper \
 		karabiner-elements \
 		kindle \
-		obsidian \
+		rancher \
 		rectangle \
 		xquartz

@@ -21,7 +21,6 @@ function _fzf_change_directory() {
   fi
 }
 
-alias_if_exists 'aws-sw' 'export AWS_PROFILE=$(aws-vault list --profiles | grep -v -E "sso|default" | sort | fzf)' 'aws-vault'
 alias_if_exists 'cdc'    '_fzf_change_directory "ls -1D" "pwd"'
 alias_if_exists 'cdf'    'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'    '_fzf_change_directory "ghq list" "ghq root"' 'ghq'

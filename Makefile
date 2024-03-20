@@ -13,7 +13,6 @@ setup4d: \
 	deploy-navi \
 	deploy-nvim \
 	deploy-pass \
-	deploy-rye \
 	deploy-sheldon \
 	deploy-sqls \
 	deploy-starship \
@@ -22,11 +21,9 @@ setup4d: \
 	deploy-zoxide \
 	autoenv_auth \
 	zshhistory_force
-	#start-bg-job
 
 .PHONY: install4d
 install4d: \
 	install-bins
-	#install-aws
 
 include Makefile.d/*.mk

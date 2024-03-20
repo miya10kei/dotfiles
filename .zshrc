@@ -26,13 +26,18 @@ function main() {
     add_path "$HOME/.ghcup/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.local/share/nvim/mason/bin"
-    add_path "$HOME/.rye/shims"
     add_path "$HOME/.tfenv/bin"
     add_path "$HOME/Library/Python/3.11/bin"
     add_path "$HOME/go/bin"
     add_path "/usr/local/go/bin"
     add_path "/usr/local/nodejs/bin"
+    add_path "$HOME/.rd/bin"
 
+    if [[ -e $HOME/.pyenv ]]; then
+      export PYENV_ROOT="$HOME/.pyenv"
+      [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+      eval "$(pyenv init -)"
+    fi
 
     # ------------
     # --- tmux ---
@@ -104,10 +109,6 @@ function main() {
 
     if [[ -e $HOME/.bun/_bun ]]; then
         source "$HOME/.bun/_bun"
-    fi
-
-    if [[ -e $HOME/.rye/env ]]; then
-        source "$HOME/.rye/env"
     fi
 
     if builtin command -v starship > /dev/null 2>&1; then

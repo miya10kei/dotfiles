@@ -1,7 +1,7 @@
 BIN_DIR := $(HOME)/.local/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 GO_BIN_DIR := $(HOME)/go/bin
-RYE_SHIMS_DIR := $(HOME)/.rye/shims
+PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
@@ -12,7 +12,7 @@ EXA_VERSION := 0.10.1
 FD_VERSION := 9.0.0
 FZF_VERSION := 0.46.1
 GHQ_VERSION := 1.5.0
-GITHUB_CLI_VERSION := 2.44.1
+GITHUB_CLI_VERSION := 2.45.0
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
 POETRY_VERSION := 1.8.2
@@ -49,9 +49,9 @@ install-bins: \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(GO_BIN_DIR)/sqls \
-	$(RYE_SHIMS_DIR)/pgcli \
-	$(RYE_SHIMS_DIR)/poetry \
-	$(RYE_SHIMS_DIR)/sam
+	$(PYENV_SHIMS_DIR)/pgcli \
+	$(PYENV_SHIMS_DIR)/poetry \
+	$(PYENV_SHIMS_DIR)/sam
 
 
 $(BIN_DIR):
@@ -217,11 +217,11 @@ $(BIN_DIR)/zoxide:
 $(GO_BIN_DIR)/sqls:
 	go install github.com/sqls-server/sqls@latest
 
-$(RYE_SHIMS_DIR)/poetry:
-	rye install poetry
+$(PYENV_SHIMS_DIR)/poetry:
+	pip install poetry
 
-$(RYE_SHIMS_DIR)/sam:
-	rye install aws-sam-cli
+$(PYENV_SHIMS_DIR)/sam:
+	pip install aws-sam-cli
 
-$(RYE_SHIMS_DIR)/pgcli:
-	rye install pgcli
+$(PYENV_SHIMS_DIR)/pgcli:
+	pip install pgcli
