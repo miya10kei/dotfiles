@@ -15,7 +15,9 @@ function main() {
     function add_path() {
         new_path=$1
         if [[ ! $PATH =~ $new_path ]]; then
-            export PATH="$new_path:$PATH"
+	    if [[ -e $new_path ]]; then
+                export PATH="$new_path:$PATH"
+	    fi
         fi
     }
 

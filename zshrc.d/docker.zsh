@@ -1,29 +1,50 @@
 function launch_dev_env() {
-    docker rm --force dev-env
-    docker run \
-        --add-host host.docker.internal:host-gateway \
-        --detach \
-        --env DISPLAY=host.rancher-desktop.internal:0 \
-        --hostname=dev-env \
-        --interactive \
-        --mount type=bind,source=$HOME/.Xauthority,target=/root/.Xauthority \
-        --mount type=bind,source=$HOME/.dotfiles,target=/root/.dotfiles \
-        --mount type=bind,source=$HOME/.dotfiles/.zshrc,target=/root/.zshrc \
-        --mount type=bind,source=$HOME/.ssh,target=/root/.ssh \
-        --mount type=bind,source=$HOME/Documents,target=/root/Documents \
-        --mount type=bind,source=$HOME/dev,target=/root/dev \
-        --mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix \
-        --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
-        --name=dev-env \
-        --publish=3000:3000\
-        --publish=35432:35432 \
-        --publish=4200:4200\
-        --publish=4300:4300\
-        --publish=8090:8090 \
-        --publish=8100:8100 \
-        --restart=always \
-        --tty \
-        miya10kei/devenv:latest
+    os=$(uname)
+    name="dev-env"
+
+    if [ -n "$(docker container ls -q -f name=$name)" ]; then
+        docker rm --force dev-env
+    fi
+
+    opts=(
+        "--add-host host.docker.internal:host-gateway"
+        "--detach"
+        "--hostname=dev-env"
+        "--interactive"
+        "--mount type=bind,source=$HOME/.dotfiles,target=/root/.dotfiles"
+        "--mount type=bind,source=$HOME/.dotfiles/.zshrc,target=/root/.zshrc"
+        "--mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
+        "--name=dev-env"
+        "--restart=always"
+        "--tty"
+    )
+
+    case "$os" in
+        Darwin)
+            opts+=(
+                "--env DISPLAY=host.rancher-desktop.internal:0"
+                "--mount type=bind,source=$HOME/.Xauthority,target=/root/.Xauthority"
+                "--mount type=bind,source=$HOME/.ssh,target=/root/.ssh"
+                "--mount type=bind,source=$HOME/Documents,target=/root/Documents"
+                "--mount type=bind,source=$HOME/dev,target=/root/dev"
+                "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
+                "--publish=3000:3000"
+                "--publish=35432:35432"
+                "--publish=4200:4200"
+                "--publish=4300:4300"
+                "--publish=8090:8090"
+                "--publish=8100:8100"
+	    )
+	    ;;
+	Linux)
+            opts+=(
+                "--mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
+	    )
+	    ;;
+    esac
+    cmd="docker run $opts miya10kei/devenv:latest"
+    echo $cmd
+    eval $cmd
 }
 
 function attach_dev_env() {

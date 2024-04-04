@@ -1,8 +1,13 @@
+ARCH := $(shell uname -m)
 DOTDIR := $(HOME)/.dotfiles
 
 .PHONY: build-dev-env
 build-dev-env:
-	docker build --progress tty --tag miya10kei/devenv:latest $(HOME)/.dotfiles
+	if [ "$(ARCH)" = "x86_64" ]; then \
+		docker build --progress tty --tag miya10kei/devenv:latest --build-arg ARCH1=x86_64 --build-arg ARCH2=amd64 --build-arg ARCH3=x64 $(HOME)/.dotfiles; \
+	else \
+		docker build --progress tty --tag miya10kei/devenv:latest $(HOME)/.dotfiles; \
+	fi
 
 .PHONY: setup4d
 setup4d: \
