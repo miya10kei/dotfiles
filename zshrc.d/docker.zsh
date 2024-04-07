@@ -1,6 +1,7 @@
 function launch_dev_env() {
-    os=$(uname)
     name="dev-env"
+    os=$(uname)
+    uname=$(id -un)
 
     if [ -n "$(docker container ls -q -f name=$name)" ]; then
         docker rm --force dev-env
@@ -11,8 +12,9 @@ function launch_dev_env() {
         "--detach"
         "--hostname=dev-env"
         "--interactive"
-	"--mount type=bind,source=$HOME/.dotfiles,target=/home/$(id -un)/.dotfiles"
-        "--mount type=bind,source=$HOME/.dotfiles/.zshrc,target=/home/$(id -un)/.zshrc"
+        "--mount type=bind,source=${HOME}/.dotfiles,target=/home/${uname}/.dotfiles"
+        "--mount type=bind,source=${HOME}/.dotfiles/.zshrc,target=/home/${uname}/.zshrc"
+        "--mount type=bind,source=${HOME}/.ssh,target=/home/${uname}/.ssh"
         "--mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
         "--name=dev-env"
         "--restart=always"
@@ -24,7 +26,6 @@ function launch_dev_env() {
             opts+=(
                 "--env DISPLAY=host.rancher-desktop.internal:0"
                 "--mount type=bind,source=$HOME/.Xauthority,target=/root/.Xauthority"
-                "--mount type=bind,source=$HOME/.ssh,target=/root/.ssh"
                 "--mount type=bind,source=$HOME/Documents,target=/root/Documents"
                 "--mount type=bind,source=$HOME/dev,target=/root/dev"
                 "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
