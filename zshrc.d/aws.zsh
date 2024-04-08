@@ -15,6 +15,7 @@ fi
 
 if builtin command -v aws > /dev/null 2>&1; then
   function dive-ecs() {
+    aws sts get-caller-identity > /dev/null
     cluster=$(aws ecs list-clusters | jq -r ".clusterArns[]" | sed 's/.*\///g' | fzf)
     if [ -z "$cluster" ]; then
       return
@@ -32,6 +33,18 @@ if builtin command -v aws > /dev/null 2>&1; then
       return
     fi
     cmd="aws ecs execute-command --cluster $cluster --task $task --container $container --interactive --command bash"
+    echo -e "\e[32m\$$cmd\e[m"
+    print -s $cmd
+    eval $cmd
+  }
+
+  function dive-ec2() {
+    aws sts get-caller-identity > /dev/null
+    instanceId=$(aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | select(.State.Name="running") | [.InstanceId, (.Tags[] | select(.Key == "Name").Value)] | @tsv' | fzf | awk '{print $1}')
+    if [ -z "$instanceId" ]; then
+      return
+    fi
+    cmd="aws ssm start-session --target $instanceId"
     echo -e "\e[32m\$$cmd\e[m"
     print -s $cmd
     eval $cmd
