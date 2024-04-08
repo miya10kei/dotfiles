@@ -2,6 +2,7 @@ command_timeout = 100
 
 [python]
 python_binary = [ 'python3', 'python', 'python2' ]
+pyenv_version_name = true
 
 [time]
 disabled = false
