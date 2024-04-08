@@ -149,7 +149,7 @@ ARG LUAROCKS_VERSION
 RUN curl -fsLSO "https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz" \
     && tar -zxf "luarocks-${LUAROCKS_VERSION}.tar.gz" \
     && pushd "luarocks-${LUAROCKS_VERSION}" \
-    && ./configure --prefix="${HOME}/out/${HOEM}/.lua" && make && make install
+    && ./configure --prefix="${HOME}/out/${HOME}/.lua" && make && make install
 
 
 # ------------------------------------------------------------------------------------------------------------------------
