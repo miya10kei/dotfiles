@@ -24,6 +24,7 @@ brew-install:
 		aws-vpn-client \
 		deepl \
 		docker \
+		elgato-stream-deck \
 		firefox \
 		google-japanese-ime \
 		hyper \
@@ -32,3 +33,4 @@ brew-install:
 		rancher \
 		rectangle \
 		xquartz
+
