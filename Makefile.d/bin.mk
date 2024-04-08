@@ -49,11 +49,11 @@ install-bins: \
 	$(BIN_DIR)/tfenv \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
-	$(GO_BIN_DIR)/sqls \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/poetry \
 	$(PYENV_SHIMS_DIR)/sam
 
+	#$(GO_BIN_DIR)/sqls \
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -75,7 +75,7 @@ aws-session-manager: /usr/local/sessionmanagerplugin
 	mkdir -p /tmp/sessionmanagerplugin
 	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "64bit"; else echo "arm64"; fi))
 	curl -fsLS -o /tmp/sessionmanagerplugin/session-manager-plugin.deb https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_$(DL_ARCH)/session-manager-plugin.deb
-	dpkg --install /tmp/sessionmanagerplugin/session-manager-plugin.deb
+	sudo dpkg --install /tmp/sessionmanagerplugin/session-manager-plugin.deb
 	rm -rf /tmp/sessionmanagerplugin
 
 $(BIN_DIR)/aws-vault:
@@ -90,8 +90,8 @@ $(BIN_DIR)/bat:
 	tar -zxf /tmp/bat/bat.tar.gz -C /tmp/bat
 	mv /tmp/bat/bat-v$(BAT_VERSION)-$(DL_ARCH)-unknown-linux-gnu/bat $(BIN_DIR)/bat
 	mv /tmp/bat/bat-v$(BAT_VERSION)-$(DL_ARCH)-unknown-linux-gnu/autocomplete/bat.zsh $(COMPLETION_DIR)/bat.zsh
-	chown `whoami`:`groups` $(BIN_DIR)/bat
-	chown `whoami`:`groups` $(COMPLETION_DIR)/bat.zsh
+	chown `whoami`:`id -gn` $(BIN_DIR)/bat
+	chown `whoami`:`id -gn` $(COMPLETION_DIR)/bat.zsh
 	rm -rf /tmp/bat
 
 $(BIN_DIR)/bun:
@@ -103,7 +103,7 @@ $(BIN_DIR)/delta:
 	curl -fsLS -o /tmp/delta/delta.tar.gz https://github.com/dandavison/delta/releases/download/$(DELTA_VERSION)/delta-$(DELTA_VERSION)-$(DL_ARCH)-unknown-linux-gnu.tar.gz
 	tar -zxf /tmp/delta/delta.tar.gz -C /tmp/delta
 	mv /tmp/delta/delta-$(DELTA_VERSION)-$(DL_ARCH)-unknown-linux-gnu/delta $(BIN_DIR)/delta
-	chown `whoami`:`groups` $(BIN_DIR)/delta
+	chown `whoami`:`id -gn` $(BIN_DIR)/delta
 	rm -rf /tmp/delta
 
 $(BIN_DIR)/dive:
@@ -112,7 +112,7 @@ $(BIN_DIR)/dive:
 	curl -fsLS -o /tmp/dive/dive.tar.gz https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_$(DL_ARCH).tar.gz
 	tar -zxf /tmp/dive/dive.tar.gz -C /tmp/dive
 	mv /tmp/dive/dive $(BIN_DIR)/dive
-	chown `whoami`:`groups` $(BIN_DIR)/dive
+	chown `whoami`:`id -gn` $(BIN_DIR)/dive
 	rm -rf /tmp/dive
 
 $(BIN_DIR)/exa:
@@ -129,7 +129,7 @@ $(BIN_DIR)/fd:
 	curl -fsLS -o /tmp/fd/fd.tar.gz https://github.com/sharkdp/fd/releases/download/v$(FD_VERSION)/fd-v$(FD_VERSION)-$(DL_ARCH)-unknown-linux-gnu.tar.gz
 	tar -zxf /tmp/fd/fd.tar.gz -C /tmp/fd
 	mv /tmp/fd/fd-v$(FD_VERSION)-$(DL_ARCH)-unknown-linux-gnu/fd $(BIN_DIR)/fd
-	chown `whoami`:`groups` $(BIN_DIR)/fd
+	chown `whoami`:`id -gn` $(BIN_DIR)/fd
 	rm -rf /tmp/fd
 
 $(BIN_DIR)/fzf:
@@ -137,7 +137,7 @@ $(BIN_DIR)/fzf:
 	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_amd64.tar.gz
 	tar -zxf /tmp/fzf/fzf.tar.gz -C /tmp/fzf
 	mv /tmp/fzf/fzf $(BIN_DIR)/fzf
-	chown `whoami`:`groups` $(BIN_DIR)/fzf
+	chown `whoami`:`id -gn` $(BIN_DIR)/fzf
 	rm -rf /tmp/fzf
 	curl -fsLS -o $(BIN_DIR)/fzf-tmux https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/bin/fzf-tmux
 	chmod +x $(BIN_DIR)/fzf-tmux
@@ -151,7 +151,7 @@ $(BIN_DIR)/gh:
 	curl -fsLS -o /tmp/gh/gh.tar.gz https://github.com/cli/cli/releases/download/v${GITHUB_CLI_VERSION}/gh_${GITHUB_CLI_VERSION}_linux_$(DL_ARCH).tar.gz
 	tar -zxf /tmp/gh/gh.tar.gz -C /tmp/gh
 	mv /tmp/gh/gh_${GITHUB_CLI_VERSION}_linux_$(DL_ARCH)/bin/gh $(BIN_DIR)/gh
-	chown `whoami`:`groups` $(BIN_DIR)/gh
+	chown `whoami`:`id -gn` $(BIN_DIR)/gh
 	rm -rf /tmp/gh
 
 $(BIN_DIR)/ghq:
@@ -176,7 +176,7 @@ $(BIN_DIR)/navi:
 	curl -fsLS -o /tmp/navi/navi.tar.gz https://github.com/denisidoro/navi/releases/download/v$(NAVI_VERSION)/navi-v$(NAVI_VERSION)-$(DL_ARCH)-unknown-linux-$(DL_LIB).tar.gz
 	tar -zxf /tmp/navi/navi.tar.gz -C /tmp/navi
 	mv /tmp/navi/navi $(BIN_DIR)/navi
-	chown `whoami`:`groups` $(BIN_DIR)/navi
+	chown `whoami`:`id -gn` $(BIN_DIR)/navi
 	rm -rf /tmp/navi
 
 $(BIN_DIR)/rg:
@@ -186,7 +186,7 @@ $(BIN_DIR)/rg:
 	curl -fsLS -o /tmp/rg/rg.tar.gz https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREP_VERSION}/ripgrep-${RIPGREP_VERSION}-$(DL_ARCH)-unknown-linux-$(DL_LIB).tar.gz
 	tar -zxf /tmp/rg/rg.tar.gz -C /tmp/rg
 	mv /tmp/rg/ripgrep-$(RIPGREP_VERSION)-$(DL_ARCH)-unknown-linux-$(DL_LIB)/rg $(BIN_DIR)/rg
-	chown `whoami`:`groups` $(BIN_DIR)/rg
+	chown `whoami`:`id -gn` $(BIN_DIR)/rg
 	rm -rf /tmp/rg
 
 $(BIN_DIR)/procs:
@@ -202,9 +202,9 @@ $(BIN_DIR)/sheldon:
 	curl -fsLS -o /tmp/sheldon/sheldon.tar.gz https://github.com/rossmacarthur/sheldon/releases/download/$(SHELDON_VERSION)/sheldon-$(SHELDON_VERSION)-$(DL_ARCH)-unknown-linux-musl.tar.gz
 	tar -zxf /tmp/sheldon/sheldon.tar.gz -C /tmp/sheldon
 	mv /tmp/sheldon/sheldon $(BIN_DIR)/sheldon
-	chown `whoami`:`groups` $(BIN_DIR)/sheldon
+	chown `whoami`:`id -gn` $(BIN_DIR)/sheldon
 	mv /tmp/sheldon/completions/sheldon.zsh $(COMPLETION_DIR)/sheldon.zsh
-	chown `whoami`:`groups` $(COMPLETION_DIR)/sheldon.zsh
+	chown `whoami`:`id -gn` $(COMPLETION_DIR)/sheldon.zsh
 
 $(BIN_DIR)/starship:
 	mkdir -p /tmp/starship
@@ -212,7 +212,7 @@ $(BIN_DIR)/starship:
 	curl -fsLS -o /tmp/starship/starship.tar.gz https://github.com/starship/starship/releases/download/v$(STARSHIP_VERSION)/starship-$(DL_ARCH)-unknown-linux-musl.tar.gz
 	tar -zxf /tmp/starship/starship.tar.gz -C /tmp/starship
 	mv /tmp/starship/starship $(BIN_DIR)/starship
-	chown `whoami`:`groups` $(BIN_DIR)/starship
+	chown `whoami`:`id -gn` $(BIN_DIR)/starship
 	rm -rf /tmp/starship
 
 $(BIN_DIR)/tfenv:
@@ -228,7 +228,7 @@ $(BIN_DIR)/zoxide:
 	curl -fsLS -o /tmp/zoxide/zoxide.tar.gz https://github.com/ajeetdsouza/zoxide/releases/download/v$(ZOXIDE_VERSION)/zoxide-$(ZOXIDE_VERSION)-$(DL_ARCH)-unknown-linux-musl.tar.gz
 	tar -zxf /tmp/zoxide/zoxide.tar.gz -C /tmp/zoxide
 	mv /tmp/zoxide/zoxide $(BIN_DIR)/zoxide
-	chown `whoami`:`groups` $(BIN_DIR)/zoxide
+	chown `whoami`:`id -gn` $(BIN_DIR)/zoxide
 	rm -rf /tmp/zoxide
 
 $(GO_BIN_DIR)/sqls:

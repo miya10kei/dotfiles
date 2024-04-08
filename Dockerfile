@@ -16,12 +16,24 @@ ARG NODEJS_VERSION=20.11.1
 ARG PYTHON2_VERSION=2.7.18
 ARG PYTHON3_VERSION=3.12.2
 ARG PYTHON_VERSION=3.10.10
+ARG DKID
+ARG GID
+ARG GNAME
+ARG UID
+ARG UNAME
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
 FROM ubuntu:latest AS builder
-SHELL ["/bin/bash", "-c"]
+ARG ARCH1
+ARG ARCH2
+ARG ARCH3
+ARG GID
+ARG GNAME
+ARG UID
+ARG UNAME
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -50,6 +62,7 @@ RUN apt-get update \
         libtool-bin \
         ninja-build \
         pkg-config \
+        sudo \
         unzip \
         upx \
         uuid-dev \
@@ -57,244 +70,186 @@ RUN apt-get update \
         zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+RUN groupadd "${GNAME}" --gid "${GID}" \
+  && adduser "${UNAME}" --disabled-password --uid "${UID}" --gid "${GID}" \
+  && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers
+USER    ${UNAME}
+ENV     HOME /home/${UNAME}
+WORKDIR ${HOME}
+
+
+# ------------------------------------------------------------------------------------------------------------------------
+FROM builder AS builder-rust
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -fsLS https://sh.rustup.rs > rust.sh \
+    && chmod +x rust.sh \
+    && ./rust.sh -y --no-modify-path \
+    && rm -rf rust.sh
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS deno
-SHELL ["/bin/bash", "-c"]
-ARG ARCH1
 ARG DENO_VERSION
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN if [ "${ARCH1}" = "aarch64" ]; then \
         curl -s https://gist.githubusercontent.com/LukeChannings/09d53f5c364391042186518c8598b85e/raw/ac8cd8c675b985edd4b3e16df63ffef14d1f0e24/deno_install.sh | sh -s "v${DENO_VERSION}"; \
     else \
         curl -fsSL https://deno.land/x/install/install.sh | sh; \
     fi \
-    && mkdir -p /out/root \
-    && mv /root/.deno /out/root/
+    && mkdir -p "${HOME}/out/${HOME}" \
+    && mv "${HOME}/.deno" "${HOME}/out/${HOME}/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS go
-SHELL ["/bin/bash", "-c"]
-ARG ARCH2
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG GOLANG_VERSION
-RUN curl -fsLOS https://go.dev/dl/go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz \
-    && tar -zxf go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz \
-    && mkdir -p /out/usr/local/go \
+RUN curl -fsLOS "https://go.dev/dl/go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz" \
+    && tar -zxf "go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz" \
+    && mkdir -p "${HOME}/out/${HOME}/.go" \
     && mv \
-      /go/bin \
-      /go/src \
-      /go/pkg \
-      /go/go.env \
-      /out/usr/local/go
+      "${HOME}/go/bin" \
+      "${HOME}/go/src" \
+      "${HOME}/go/pkg" \
+      "${HOME}/go/go.env" \
+      "${HOME}/out/${HOME}/.go/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS haskell
-SHELL ["/bin/bash", "-c"]
-ARG ARCH1
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG HASKELL_GHCUP_VERSION
 ARG HASKELL_GHC_VERSION
 ARG HASKELL_CABAL_VERSION
 ARG HASKELL_STACK_VERSION
-RUN curl -fsLS -o ghcup https://downloads.haskell.org/~ghcup/${HASKELL_GHCUP_VERSION}/${ARCH1}-linux-ghcup-${HASKELL_GHCUP_VERSION} \
+RUN curl -fsLS -o ghcup "https://downloads.haskell.org/~ghcup/${HASKELL_GHCUP_VERSION}/${ARCH1}-linux-ghcup-${HASKELL_GHCUP_VERSION}" \
     && chmod +x ghcup \
-    && ./ghcup install ghc ${HASKELL_GHC_VERSION} --set \
-    && ./ghcup install cabal ${HASKELL_CABAL_VERSION} --set \
-    && ./ghcup install stack ${HASKELL_STACK_VERSION} --set \
-    && mkdir -p /out/root \
-    && mv /root/.ghcup /out/root/ \
-    && mv ghcup /out/root/.ghcup/bin/
+    && ./ghcup install ghc "${HASKELL_GHC_VERSION}" --set \
+    && ./ghcup install cabal "${HASKELL_CABAL_VERSION}" --set \
+    && ./ghcup install stack "${HASKELL_STACK_VERSION}" --set \
+    && mkdir -p "${HOME}/out/${HOME}" \
+    && mv "${HOME}/.ghcup" "${HOME}/out/${HOME}/" \
+    && mv "${HOME}/ghcup"  "${HOME}/out/${HOME}/.ghcup/bin/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS lua
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV PATH "${HOME}/out/${HOME}/.lua/bin:${PATH}"
+
+RUN mkdir -p "${HOME}/out/${HOME}/.lua/bin"
+
 ARG LUA_VERSION
-RUN curl -fsLSO https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz \
-    && tar -zxf lua-${LUA_VERSION}.tar.gz \
-    && cd lua-${LUA_VERSION} \
-    && make all test install
+RUN curl -fsLSO "https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz" \
+    && tar -zxf "lua-${LUA_VERSION}.tar.gz" \
+    && pushd "lua-${LUA_VERSION}" \
+    && make INSTALL_TOP="${HOME}/out/${HOME}/.lua" all test install
 
 ARG LUAROCKS_VERSION
-RUN curl -fsLSO https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz \
-    && tar -zxf luarocks-${LUAROCKS_VERSION}.tar.gz \
-    && cd luarocks-${LUAROCKS_VERSION} \
-    && ./configure && make && make install
-
-RUN mkdir -p /out/usr/local/share \
-    && mv \
-      /usr/local/bin \
-      /usr/local/etc \
-      /usr/local/include \
-      /usr/local/lib \
-      /usr/local/man \
-      /usr/local/share \
-      /out/usr/local
+RUN curl -fsLSO "https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz" \
+    && tar -zxf "luarocks-${LUAROCKS_VERSION}.tar.gz" \
+    && pushd "luarocks-${LUAROCKS_VERSION}" \
+    && ./configure --prefix="${HOME}/out/${HOME}/.lua" && make && make install
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS neovim
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN git clone https://github.com/neovim/neovim \
-    && cd neovim \
+    && pushd neovim \
     && git checkout stable \
-    && make CMAKE_BUILD_TYPE=RelWithDebInfo \
-    && make install \
-    && mkdir -p \
-        /out/usr/local/bin \
-        /out/usr/local/lib \
-        /out/usr/local/share \
-    && mv /usr/local/bin/nvim /out/usr/local/bin/ \
-    && mv /usr/local/lib/nvim /out/usr/local/lib/ \
-    && mv /usr/local/share/man /usr/local/share/nvim /out/usr/local/share/
+    && mkdir -p "${HOME}/out/${HOME}/.nvim" \
+    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX="${HOME}/out/${HOME}/.nvim" \
+    && make install
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-# hadolint ignore=DL3007
-FROM rust:latest AS volta
-SHELL ["/bin/bash", "-c"]
-RUN cargo install --git https://github.com/volta-cli/volta \
-    && mkdir -p \
-        /out/root \
-        /out/usr/local/bin \
-    && mv /usr/local/cargo/bin/volta* /out/usr/local/bin/
-
-FROM builder AS nodejs
-SHELL ["/bin/bash", "-c"]
+FROM  builder-rust AS volta
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV PATH "/${HOME}/.cargo/bin:${PATH}"
 ARG NODEJS_VERSION
-COPY --from=volta /out/ /
-RUN volta install node@${NODEJS_VERSION} \
-    && mkdir -p \
-        /out/root \
-        /out/usr/local/bin \
-    && mv /usr/local/bin/volta* /out/usr/local/bin/ \
-    && mv /root/.volta /out/root/
+RUN cargo install --git https://github.com/volta-cli/volta \
+    && volta install "node@${NODEJS_VERSION}" \
+    && mkdir -p "${HOME}/out/${HOME}" \
+    && mv "${HOME}/.cargo" \
+          "${HOME}/.volta" \
+          "${HOME}/out/${HOME}/"
 
-
-# ------------------------------------------------------------------------------------------------------------------------
-#FROM builder AS python
-#SHELL ["/bin/bash", "-c"]
-#ARG PYTHON_VERSION
-#RUN curl -sSf https://rye-up.com/get | RYE_INSTALL_OPTION='--yes' bash \
-#    && . "$HOME/.rye/env" \
-#    && rye config --set-bool behavior.global-python=true \
-#    && rye fetch cpython@$PYTHON_VERSION \
-#    && rye install pip \
-#    && mkdir -p /out/root \
-#    && mv /root/.rye /out/root/
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-#FROM builder AS python3
-#SHELL ["/bin/bash", "-c"]
-#ARG PYTHON3_VERSION
-#RUN curl -fsLOS https://www.python.org/ftp/python/${PYTHON3_VERSION}/Python-${PYTHON3_VERSION}.tar.xz \
-#    && tar -Jxf Python-${PYTHON3_VERSION}.tar.xz \
-#    && cd Python-${PYTHON3_VERSION} \
-#    && ./configure \
-#    && make \
-#    && make install \
-#    && mkdir -p /out/usr/local \
-#    && mv /usr/local/bin/ \
-#        /usr/local/lib \
-#        /usr/local/include \
-#        /out/usr/local
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS python
 ARG PYTHON_VERSION
 ARG PYTHON2_VERSION
 ARG PYTHON3_VERSION
-SHELL ["/bin/bash", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl https://pyenv.run | bash \
-    && export PATH="$HOME/.pyenv/bin:$PATH" \
+    && export PATH="${HOME}/.pyenv/bin:$PATH" \
     && eval "$(pyenv init -)" \
-    && pyenv install ${PYTHON_VERSION} \
-    && pyenv install ${PYTHON2_VERSION} \
-    && pyenv install ${PYTHON3_VERSION} \
-    && pyenv global ${PYTHON3_VERSION} \
-    && mkdir -p /out/root \
-    && mv /root/.pyenv /out/root/
+    && pyenv install "${PYTHON_VERSION}"  \
+    && pyenv install "${PYTHON2_VERSION}" \
+    && pyenv install "${PYTHON3_VERSION}" \
+    && pyenv global  "${PYTHON3_VERSION}" \
+    && mkdir -p "${HOME}/out/${HOME}" \
+    && mv "${HOME}/.pyenv" "${HOME}/out/${HOME}/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS rust
-SHELL ["/bin/bash", "-c"]
-RUN curl -fsLS https://sh.rustup.rs > rust.sh \
-    && chmod +x rust.sh \
-    && ./rust.sh -y --no-modify-path \
-    && mkdir -p /out/root \
-    && mv /root/.cargo \
-        /root/.rustup \
-        /out/root/ \
-    && rm -rf rust.sh
+FROM builder-rust AS rust
+RUN mkdir -p "${HOME}/out/${HOME}" \
+    && mv "${HOME}/.cargo" \
+          "${HOME}/.rustup" \
+          "${HOME}/out/${HOME}/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS tools
-SHELL ["/bin/bash", "-c"]
-ARG ARCH1
-ARG ARCH2
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN mkdir -p \
-    /out/usr/local/bin \
-    /out/root/.docker/cli-plugins
+    "${HOME}/out/${HOME}/.docker/bin" \
+    "${HOME}/out/${HOME}/.docker/cli-plugins"
 
 ARG DOCKER_VERSION
-RUN curl -fsLOS https://download.docker.com/linux/static/stable/${ARCH1}/docker-${DOCKER_VERSION}.tgz \
-    && tar -zxf docker-${DOCKER_VERSION}.tgz \
-    && mv docker/docker /out/usr/local/bin \
-    && chown "$(whoami)":"$(groups)" /out/usr/local/bin/docker \
+RUN curl -fsLOS "https://download.docker.com/linux/static/stable/${ARCH1}/docker-${DOCKER_VERSION}.tgz" \
+    && tar -zxf "docker-${DOCKER_VERSION}.tgz" \
+    && mv "${HOME}/docker/docker" "${HOME}/out/${HOME}/.docker/bin" \
     && rm -rf docker*
 
 ARG DOCKER_COMPOSE_VERSION
-RUN curl -fsLS https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${ARCH1} \
-        -o /out/root/.docker/cli-plugins/docker-compose \
-    && chmod +x /out/root/.docker/cli-plugins/docker-compose
+RUN curl -fsLS "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${ARCH1}" \
+        -o "${HOME}/out/${HOME}/.docker/cli-plugins/docker-compose" \
+    && chmod +x "${HOME}/out/${HOME}/.docker/cli-plugins/docker-compose"
 
 ARG DOCKER_BUILDX_VERSION
-RUN curl -fsLS https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${ARCH2} \
-        -o /out/root/.docker/cli-plugins/docker-buildx \
-    && chmod +x /out/root/.docker/cli-plugins/docker-buildx
+RUN curl -fsLS "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${ARCH2}" \
+        -o "${HOME}/out/${HOME}/.docker/cli-plugins/docker-buildx" \
+    && chmod +x "${HOME}/out/${HOME}/.docker/cli-plugins/docker-buildx"
+
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS packer
-SHELL ["/bin/bash", "-c"]
-ARG ARCH2
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-COPY --from=deno /out /out/deno
-RUN upx --lzma --best /out/deno/root/.deno/bin/deno
+COPY --from=deno    "${HOME}/out" /out/deno
+COPY --from=go      "${HOME}/out" /out/go
+COPY --from=haskell "${HOME}/out" /out/haskell
+COPY --from=lua     "${HOME}/out" /out/lua
+COPY --from=neovim  "${HOME}/out" /out/neovim
+COPY --from=python  "${HOME}/out" /out/python
+COPY --from=rust    "${HOME}/out" /out/rust
+COPY --from=tools   "${HOME}/out" /out/tools
+COPY --from=volta   "${HOME}/out" /out/volta
 
-COPY --from=go /out /out/go
-RUN upx --lzma --best /out/go/usr/local/go/bin/* \
-    && upx --lzma --best /out/go/usr/local/go/pkg/tool/linux_${ARCH2}/*
-
-COPY --from=haskell /out /out/haskell
-RUN upx --lzma --best /out/haskell/root/.ghcup/bin/ghcup \
-    && upx --lzma --best "$(readlink -f /out/haskell/root/.ghcup/bin/cabal)" \
-    && upx --lzma --best "$(readlink -f /out/haskell/root/.ghcup/bin/stack)"
-
-COPY --from=lua /out /out/lua
-RUN upx --lzma --best /out/lua/usr/local/bin/lua \
-    && upx --lzma --best /out/lua/usr/local/bin/luac
-
-COPY --from=neovim /out /out/neovim
-RUN upx --lzma --best /out/neovim/usr/local/bin/nvim
-
-COPY --from=nodejs /out /out/nodejs
-# Compression slows down the node command
-
-COPY --from=python /out /out/python
-
-#COPY --from=python3 /out /out/python3
-#RUN upx --lzma --best "$(readlink -f /out/python3/usr/local/bin/python3)"
-
-COPY --from=rust /out /out/rust
-#RUN upx --lzma --best /out/rust/root/.cargo/bin/*
-
-COPY --from=tools /out /out/tools
-RUN upx --lzma --best /out/tools/root/.docker/cli-plugins/docker-compose \
-    && upx --lzma --best /out/tools/usr/local/bin/docker
+RUN    upx --lzma --best "/out/deno${HOME}/.deno/bin/deno" \
+    && upx --lzma --best "/out/go/${HOME}/.go/bin/"* \
+    && upx --lzma --best "/out/go${HOME}/.go/pkg/tool/linux_${ARCH2}/"* \
+    && upx --lzma --best "/out/haskell${HOME}/.ghcup/bin/ghcup" \
+    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/cabal")" \
+    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/stack")" \
+    && upx --lzma --best "/out/lua${HOME}/.lua/bin/lua" \
+    && upx --lzma --best "/out/lua${HOME}/.lua/bin/luac" \
+    && upx --lzma --best "/out/neovim${HOME}/.nvim/bin/nvim" \
+    && upx --lzma --best "/out/tools${HOME}/.docker/cli-plugins/docker-compose" \
+    && upx --lzma --best "/out/tools${HOME}/.docker/bin/docker"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -303,8 +258,13 @@ FROM ubuntu:latest
 SHELL ["/bin/bash", "-c"]
 LABEL maintainer = "miya10kei <miya10kei@gmail.com>"
 
+ARG DKID
+ARG GID
+ARG GNAME
+ARG UID
+ARG UNAME
+
 ENV DEBIAN_FRONTEND nointeractive
-ENV HOME            /root
 ENV LANG            en_US.UTF-8
 ENV LANGUAGE        $LANG
 ENV LC_ALL          $LANG
@@ -361,37 +321,52 @@ RUN yes | unminimize \
         libpq-dev \
         libxslt-dev \
         swig \
+        sudo \
         zlib1g-dev \
         # add temporarily
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen --purge $LANG
 
-COPY --from=packer /out/deno/    /
-COPY --from=packer /out/go/      /
-COPY --from=packer /out/haskell  /
-COPY --from=packer /out/lua      /
-COPY --from=packer /out/neovim/  /
-COPY --from=packer /out/nodejs/  /
-COPY --from=packer /out/python/  /
-#COPY --from=packer /out/python3/ /
-COPY --from=packer /out/rust/    /
-COPY --from=packer /out/tools/   /
+RUN groupadd "${GNAME}" --gid "${GID}" \
+  && adduser "${UNAME}" --disabled-password --uid "${UID}" --gid "${GID}" \
+  && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers \
+  && groupadd docker --gid "${DKID}" \
+  && usermod -aG docker "${UNAME}"
 
-ENV PATH       "$HOME/.deno/bin:$PATH"
-ENV PATH       "$HOME/.ghcup/bin:$PATH"
-ENV PATH       "$HOME/.pyenv/bin:$PATH"
-ENV PATH       "/usr/local/go/bin:$PATH"
-ENV VOLTA_HOME "$HOME/.volta"
-ENV PATH       "$VOLTA_HOME/bin:$PATH"
-#ENV RYE_HOME   "$HOME/.rye"
-#ENV PATH       "$RYE_HOME/shims:$PATH"
+USER ${UNAME}
+ENV  HOME /home/${UNAME}
 
-COPY ./nvim $HOME/.config/nvim
-COPY Makefile   $HOME/.dotfiles/Makefile
-COPY Makefile.d $HOME/.dotfiles/Makefile.d
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/deno/   /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/go/     /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/haskell /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/lua     /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/neovim/ /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/volta/  /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/python/ /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/rust/   /
+COPY --from=packer --chown="${UNAME}:${GNAME}" /out/tools/  /
+
+ENV CARGO_HOME "${HOME}/.cargo"
+ENV PATH       "${CARGO_HOME}/bin:${PATH}"
+ENV PATH       "${HOME}/.deno/bin:${PATH}"
+ENV PATH       "${HOME}/.ghcup/bin:${PATH}"
+ENV GOPATH     "${HOME}/.go"
+ENV PATH       "${GOPATH}/bin:${PATH}"
+ENV PATH       "${HOME}/.lua/bin:${PATH}"
+ENV PATH       "${HOME}/.nvim/bin:${PATH}"
+ENV PATH       "${HOME}/.pyenv/bin:${PATH}"
+ENV VOLTA_HOME "${HOME}/.volta"
+ENV PATH       "${VOLTA_HOME}/bin:${PATH}"
+
+COPY --chown="${UNAME}:${GNAME}" ./nvim     $HOME/.config/nvim
+COPY --chown="${UNAME}:${GNAME}" Makefile   $HOME/.dotfiles/Makefile
+COPY --chown="${UNAME}:${GNAME}" Makefile.d $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
+
+RUN eval "$(pyenv init -)" \
+  && pip --version
 
 RUN eval "$(pyenv init -)" \
   && make --jobs=4 install4d \
