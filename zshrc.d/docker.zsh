@@ -35,13 +35,15 @@ function launch_dev_env() {
                 "--publish=4300:4300"
                 "--publish=8090:8090"
                 "--publish=8100:8100"
-	    )
-	    ;;
-	Linux)
+            )
+            ;;
+          Linux)
             opts+=(
+                "--mount type=bind,source=$HOME/dev,target=/home/${uname}/dev"
                 "--mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
-	    )
-	    ;;
+                "--net=host"
+            )
+            ;;
     esac
     cmd="docker run $opts miya10kei/devenv:latest"
     echo $cmd

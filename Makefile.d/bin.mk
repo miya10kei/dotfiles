@@ -1,6 +1,8 @@
 ARCH := $(shell uname -m)
 BIN_DIR := $(HOME)/.local/bin
+CARGO_BIN_DIR := $(CARGO_HOME)/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
+FLUTTER_DIR := $(HOME)/.flutter
 GO_BIN_DIR := $(HOME)/go/bin
 PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
@@ -11,6 +13,7 @@ DELTA_VERSION := 0.16.5
 DIVE_VERSION := 0.12.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 9.0.0
+FLUTTER_VERSION := 3.19.5
 FZF_VERSION := 0.48.1
 GHQ_VERSION := 1.5.0
 GITHUB_CLI_VERSION := 2.46.0
@@ -49,6 +52,8 @@ install-bins: \
 	$(BIN_DIR)/tfenv \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
+	$(CARGO_BIN_DIR)/jnv \
+	$(FLUTTER_DIR)/flutter \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/poetry \
 	$(PYENV_SHIMS_DIR)/sam
@@ -231,6 +236,18 @@ $(BIN_DIR)/zoxide:
 	chown `whoami`:`id -gn` $(BIN_DIR)/zoxide
 	rm -rf /tmp/zoxide
 
+$(CARGO_BIN_DIR)/jnv:
+	cargo install jnv
+	rm -dfr $(CARGO_HOME)/target
+
+$(FLUTTER_DIR)/flutter:
+	mkdir -p /tmp/flutter
+	curl -fsLS -o /tmp/flutter/flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$(FLUTTER_VERSION)-stable.tar.xz
+	tar -Jxf /tmp/flutter/flutter.tar.xz -C /tmp/flutter
+	mkdir $(FLUTTER_DIR)
+	mv /tmp/flutter/flutter $(FLUTTER_DIR)/
+	rm -rf /tmp/flutter
+
 $(GO_BIN_DIR)/sqls:
 	go install github.com/sqls-server/sqls@latest
 
@@ -242,3 +259,4 @@ $(PYENV_SHIMS_DIR)/sam:
 
 $(PYENV_SHIMS_DIR)/pgcli:
 	pip install pgcli
+

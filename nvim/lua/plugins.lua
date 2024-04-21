@@ -173,11 +173,12 @@ require('lazy').setup({
         'neovim/nvim-lspconfig',
         config = function() require('lsp') end,
         dependencies = {
-            'williamboman/mason.nvim',
-            'williamboman/mason-lspconfig.nvim',
-            'nvimtools/none-ls.nvim',
-            'nvim-lua/plenary.nvim',
+            'akinsho/flutter-tools.nvim',
             'nanotee/sqls.nvim',
+            'nvim-lua/plenary.nvim',
+            'nvimtools/none-ls.nvim',
+            'williamboman/mason-lspconfig.nvim',
+            'williamboman/mason.nvim',
         },
         opts = {
             autoformat = false,

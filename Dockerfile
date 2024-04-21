@@ -275,6 +275,8 @@ RUN yes | unminimize \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
+        autoconf \
+        automake \
         bsdmainutils \
         build-essential \
         ca-certificates \
@@ -285,6 +287,7 @@ RUN yes | unminimize \
         git \
         less \
         libbz2-dev \
+        libclang-dev \
         libffi-dev \
         libffi7 \
         libgmp-dev \
@@ -294,6 +297,7 @@ RUN yes | unminimize \
         libreadline-dev \
         libsqlite3-dev \
         libtinfo5 \
+        libtool \
         locales \
         lzma-dev \
         mandoc \
@@ -347,17 +351,18 @@ COPY --from=packer --chown="${UNAME}:${GNAME}" /out/python/ /
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/rust/   /
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/tools/  /
 
-ENV CARGO_HOME "${HOME}/.cargo"
-ENV PATH       "${CARGO_HOME}/bin:${PATH}"
-ENV PATH       "${HOME}/.deno/bin:${PATH}"
-ENV PATH       "${HOME}/.ghcup/bin:${PATH}"
-ENV GOPATH     "${HOME}/.go"
-ENV PATH       "${GOPATH}/bin:${PATH}"
-ENV PATH       "${HOME}/.lua/bin:${PATH}"
-ENV PATH       "${HOME}/.nvim/bin:${PATH}"
-ENV PATH       "${HOME}/.pyenv/bin:${PATH}"
-ENV VOLTA_HOME "${HOME}/.volta"
-ENV PATH       "${VOLTA_HOME}/bin:${PATH}"
+ENV CARGO_HOME       "${HOME}/.cargo"
+ENV CARGO_TARGET_DIR "${CARGO_HOME}/target"
+ENV PATH             "${CARGO_HOME}/bin:${PATH}"
+ENV PATH             "${HOME}/.deno/bin:${PATH}"
+ENV PATH             "${HOME}/.ghcup/bin:${PATH}"
+ENV GOPATH           "${HOME}/.go"
+ENV PATH             "${GOPATH}/bin:${PATH}"
+ENV PATH             "${HOME}/.lua/bin:${PATH}"
+ENV PATH             "${HOME}/.nvim/bin:${PATH}"
+ENV PATH             "${HOME}/.pyenv/bin:${PATH}"
+ENV VOLTA_HOME       "${HOME}/.volta"
+ENV PATH             "${VOLTA_HOME}/bin:${PATH}"
 
 COPY --chown="${UNAME}:${GNAME}" ./nvim     $HOME/.config/nvim
 COPY --chown="${UNAME}:${GNAME}" Makefile   $HOME/.dotfiles/Makefile

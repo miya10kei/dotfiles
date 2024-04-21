@@ -182,6 +182,12 @@ lspconfig['sqls'].setup {
     end,
 }
 
+ require("flutter-tools").setup {
+    on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+    end,
+}
+
 ---------------
 --- null-ls ---
 ---------------
