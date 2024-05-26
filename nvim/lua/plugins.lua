@@ -95,7 +95,7 @@ require("lazy").setup({
       "Shougo/ddu-ui-ff",
       "Shougo/ddu-ui-filer",
       "lambdalisue/kensaku.vim",
-      "miya10kei/ddu-source-rg",
+      "shun/ddu-source-rg",
       "ryota2357/ddu-column-icon_filename",
       "uga-rosa/ddu-source-lsp",
       "yuki-yano/ddu-filter-fzf",
@@ -123,12 +123,12 @@ require("lazy").setup({
         silent = true,
       },
       {
-        "<LEADER>dg",
+        "<LEADER>/",
         "<ESC><CMD>Ddu ddu__grep<CR>",
         silent = true,
       },
       {
-        "<LEADER>gd",
+        "/",
         "<ESC><CMD>Ddu ddu__grep_current_file<CR>",
         silent = true,
       },

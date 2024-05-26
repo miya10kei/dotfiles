@@ -25,12 +25,9 @@ function launch_dev_env() {
         Darwin)
             opts+=(
                 "--env DISPLAY=host.rancher-desktop.internal:0"
-                "--mount type=bind,source=${HOME}/.dotfiles,target=/root/.dotfiles"
-                "--mount type=bind,source=${HOME}/.dotfiles/.zshrc,target=/root/.zshrc"
-                "--mount type=bind,source=${HOME}/.ssh,target=/root/.ssh"
-                "--mount type=bind,source=${HOME}/.Xauthority,target=/root/.Xauthority"
-                "--mount type=bind,source=${HOME}/Documents,target=/root/Documents"
-                "--mount type=bind,source=${HOME}/dev,target=/root/dev"
+                "--mount type=bind,source=${HOME}/.Xauthority,target=/home/${uname}/.Xauthority"
+                "--mount type=bind,source=${HOME}/Documents,target=/home/${uname}/Documents"
+                "--mount type=bind,source=${HOME}/dev,target=/home/${uname}/dev"
                 "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
                 "--publish=3000:3000"
                 "--publish=35432:35432"

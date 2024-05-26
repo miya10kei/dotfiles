@@ -39,7 +39,6 @@ fn["ddu#custom#patch_global"]({
         name = "preview",
       },
       startAutoAction = true,
-      filterFloatingPosition = "top",
       floatingBorder = "double",
       ignoreEmpty = true,
       previewFloating = true,
@@ -105,42 +104,23 @@ function M.ddu__register()
         name = "register",
       },
     },
-    uiParams = {
-      ff = {
-        startFilter = false,
-      },
-    },
   })
 end
 
 function M.ddu__grep()
   fn["ddu#start"]({
     sources = {
-      {
-        name = "rg",
-      },
-    },
-    sourceOptions = {
-      rg = {
-        volatile = true,
-      },
+      { name = "rg" },
     },
     sourceParams = {
       rg = {
-        args = {
-          "--column",
-          "--no-heading",
-          "--color",
-          "never",
-        },
-        minInputLength = 3,
+        args = { "--json", "-i" },
+        input = fn.input("Pattern: "),
       },
     },
     uiParams = {
       ff = {
-        autoAction = {
-          name = "preview",
-        },
+        autoAction = { name = "preview" },
         startAutoAction = true,
         ignoreEmpty = false,
       },
@@ -150,29 +130,15 @@ end
 
 function M.ddu__grep_current_file()
   fn["ddu#start"]({
-    sources = {
-      {
-        name = "rg",
-      },
-    },
-    sourceOptions = {
-      rg = {
-        volatile = true,
-      },
-    },
+    sources = { { name = "rg" } },
     sourceParams = {
       rg = {
         args = {
-          "--color",
-          "never",
-          "--column",
-          "--no-heading",
-          "--with-filename",
+          "--json",
+          "-i",
         },
-        paths = {
-          fn.expand("%"),
-        },
-        minInputLength = 3,
+        paths = { fn.expand("%") },
+        input = fn.input("Pattern: "),
       },
     },
     uiParams = {
@@ -226,7 +192,6 @@ function M.ddu__lsp_call_hierarchy()
     uiParams = {
       ff = {
         displayTree = true,
-        startFilter = false,
       },
     },
   })
@@ -348,15 +313,10 @@ end, {
 autocmd({
   "FileType",
 }, {
-  pattern = {
-    "ddu-ff",
-  },
+  pattern = { "ddu-ff" },
   callback = function()
     local action = fn["ddu#ui#do_action"]
-    local bufopts = {
-      buffer = true,
-      silent = true,
-    }
+    local bufopts = { buffer = true, silent = true }
     keymap("n", "<CR>", function()
       action("itemAction")
     end, bufopts)
@@ -373,117 +333,71 @@ autocmd({
       action("quit")
     end, bufopts)
     keymap("n", "yy", function()
-      action("itemAction", {
-        name = "yank",
-      })
+      action("itemAction", { name = "yank" })
     end, bufopts)
   end,
 })
 
-autocmd({
-  "FileType",
-}, {
-  pattern = {
-    "ddu-ff-filter",
-  },
+autocmd({ "FileType" }, {
+  pattern = { "ddu-ff-filter" },
   callback = function()
     local close_action = function()
       fn["ddu#ui#do_action"]("closeFilterWindow")
     end
-    local bufops = {
-      buffer = true,
-      silent = true,
-    }
+    local bufops = { buffer = true, silent = true }
     keymap("i", "<CR>", "<ESC><CMD>call ddu#ui#do_action('closeFilterWindow')<CR>", bufops)
     keymap("n", "<CR>", close_action, bufops)
     keymap("n", "q", close_action, bufops)
   end,
 })
 
-autocmd({
-  "FileType",
-}, {
-  pattern = {
-    "ddu-filer",
-  },
+autocmd({ "FileType" }, {
+  pattern = { "ddu-filer" },
   callback = function()
     local action = fn["ddu#ui#do_action"]
-    local bufopts = {
-      buffer = true,
-      silent = true,
-    }
+    local bufopts = { buffer = true, silent = true }
     keymap("n", "<CR>", function()
       if fn["ddu#ui#get_item"]()["isTree"] == true then
-        action("itemAction", {
-          name = "narrow",
-        })
+        action("itemAction", { name = "narrow" })
       else
-        action("itemAction", {
-          name = "open",
-        })
+        action("itemAction", { name = "open" })
       end
     end, bufopts)
     keymap("n", "cp", function()
-      action("itemAction", {
-        name = "copy",
-      })
+      action("itemAction", { name = "copy" })
     end, bufopts)
     keymap("n", "mk", function()
-      action("itemAction", {
-        name = "newDirectory",
-      })
+      action("itemAction", { name = "newDirectory" })
     end, bufopts)
     keymap("n", "mv", function()
-      action("itemAction", {
-        name = "move",
-      })
+      action("itemAction", { name = "move" })
     end, bufopts)
     keymap("n", "nf", function()
-      action("itemAction", {
-        name = "newFile",
-      })
+      action("itemAction", { name = "newFile" })
     end, bufopts)
     keymap("n", "o", function()
-      action("expandItem", {
-        mode = "toggle",
-      })
+      action("expandItem", { mode = "toggle" })
     end, bufopts)
     keymap("n", "pt", function()
-      action("itemAction", {
-        name = "paste",
-      })
+      action("itemAction", { name = "paste" })
     end, bufopts)
     keymap("n", "q", function()
       action("quit")
     end, bufopts)
     keymap("n", "rm", function()
-      action("itemAction", {
-        name = "delete",
-      })
+      action("itemAction", { name = "delete" })
     end, bufopts)
     keymap("n", "rn", function()
-      action("itemAction", {
-        name = "rename",
-      })
+      action("itemAction", { name = "rename" })
     end, bufopts)
     keymap("n", "s", function()
       action("toggleSelectItem")
     end, bufopts)
     keymap("n", "uu", function()
-      action("itemAction", {
-        name = "narrow",
-        params = {
-          path = "..",
-        },
-      })
+      action("itemAction", { name = "narrow", params = { path = ".." } })
     end, bufopts)
     keymap("n", "..", function()
-      action("itemAction", {
-        name = "narrow",
-        params = {
-          path = "..",
-        },
-      })
+      action("itemAction", { name = "narrow", params = { path = ".." } })
     end, bufopts)
     keymap("n", "p", function()
       action("preview")
@@ -491,27 +405,16 @@ autocmd({
   end,
 })
 
-autocmd({
-  "TabEnter",
-  "WinEnter",
-  "CursorHold",
-  "FocusGained",
-}, {
-  pattern = {
-    "*",
-  },
+autocmd({ "TabEnter", "WinEnter", "CursorHold", "FocusGained" }, {
+  pattern = { "*" },
   callback = function()
     fn["ddu#ui#do_action"]("checkItems")
   end,
 })
 
 local dduAutogroup = api.nvim_create_augroup("Ddu", {})
-api.nvim_clear_autocmds({
-  group = dduAutogroup,
-})
-api.nvim_create_autocmd({
-  "WinResized",
-}, {
+api.nvim_clear_autocmds({ group = dduAutogroup })
+api.nvim_create_autocmd({ "WinResized" }, {
   group = dduAutogroup,
   pattern = {
     "*",
