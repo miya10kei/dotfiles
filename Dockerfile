@@ -1,20 +1,19 @@
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
-ARG DENO_VERSION=1.39.1
-ARG DOCKER_BUILDX_VERSION=0.12.0
-ARG DOCKER_COMPOSE_VERSION=2.25.0
-ARG DOCKER_VERSION=25.0.5
-ARG GOLANG_VERSION=1.21.8
-ARG HASKELL_CABAL_VERSION=3.10.2.1
+ARG DOCKER_BUILDX_VERSION=0.14.1
+ARG DOCKER_COMPOSE_VERSION=2.27.1
+ARG DOCKER_VERSION=26.1.3
+ARG GOLANG_VERSION=1.22.3
+ARG HASKELL_CABAL_VERSION=3.10.3.0
 ARG HASKELL_GHCUP_VERSION=0.1.22.0
 ARG HASKELL_GHC_VERSION=9.4.8
-ARG HASKELL_STACK_VERSION=2.13.1
-ARG LUAROCKS_VERSION=3.9.2
+ARG HASKELL_STACK_VERSION=2.15.5
+ARG LUAROCKS_VERSION=3.11.0
 ARG LUA_VERSION=5.4.6
-ARG NODEJS_VERSION=20.11.1
+ARG NODEJS_VERSION=20.13.1
 ARG PYTHON2_VERSION=2.7.18
-ARG PYTHON3_VERSION=3.12.2
+ARG PYTHON3_VERSION=3.12.3
 ARG PYTHON_VERSION=3.10.10
 ARG DKID
 ARG GID
@@ -88,11 +87,7 @@ RUN curl -fsLS https://sh.rustup.rs > rust.sh \
 FROM builder AS deno
 ARG DENO_VERSION
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN if [ "${ARCH1}" = "aarch64" ]; then \
-        curl -s https://gist.githubusercontent.com/LukeChannings/09d53f5c364391042186518c8598b85e/raw/ac8cd8c675b985edd4b3e16df63ffef14d1f0e24/deno_install.sh | sh -s "v${DENO_VERSION}"; \
-    else \
-        curl -fsSL https://deno.land/x/install/install.sh | sh; \
-    fi \
+RUN curl -fsSL https://deno.land/x/install/install.sh | sh \
     && mkdir -p "${HOME}/out/${HOME}" \
     && mv "${HOME}/.deno" "${HOME}/out/${HOME}/"
 
