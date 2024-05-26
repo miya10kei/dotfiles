@@ -6,7 +6,6 @@ local used_treesitter_packages = {
   "css",
   "csv",
   "diff",
-  "dockerfile",
   "git_config",
   "git_rebase",
   "gitattributes",
