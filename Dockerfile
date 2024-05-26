@@ -47,18 +47,15 @@ RUN apt-get update \
         libbz2-dev \
         libdb-dev \
         libffi-dev \
-        libffi7 \
         libgdbm-dev \
         libgmp-dev \
         libgmp10 \
         liblzma-dev \
         libncurses-dev \
-        libncurses5 \
         libncursesw5-dev \
         libreadline-dev  \
         libsqlite3-dev \
         libssl-dev \
-        libtinfo5 \
         libtool-bin \
         ninja-build \
         pkg-config \
@@ -71,7 +68,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 RUN groupadd "${GNAME}" --gid "${GID}" \
-  && adduser "${UNAME}" --disabled-password --uid "${UID}" --gid "${GID}" \
+  && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
   && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers
 USER    ${UNAME}
 ENV     HOME /home/${UNAME}
@@ -289,14 +286,11 @@ RUN yes | unminimize \
         libbz2-dev \
         libclang-dev \
         libffi-dev \
-        libffi7 \
         libgmp-dev \
         libgmp10 \
         libncurses-dev \
-        libncurses5 \
         libreadline-dev \
         libsqlite3-dev \
-        libtinfo5 \
         libtool \
         locales \
         lzma-dev \
@@ -333,7 +327,7 @@ RUN yes | unminimize \
     && locale-gen --purge $LANG
 
 RUN groupadd "${GNAME}" --gid "${GID}" \
-  && adduser "${UNAME}" --disabled-password --uid "${UID}" --gid "${GID}" \
+  && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
   && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers \
   && groupadd docker --gid "${DKID}" \
   && usermod -aG docker "${UNAME}"

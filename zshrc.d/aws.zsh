@@ -1,21 +1,31 @@
 export AWS_PROFILE=pd
 
 if builtin command -v aws-vault > /dev/null 2>&1; then
-    if builtin command -v pass > /dev/null 2>&1; then
-        export AWS_VAULT_BACKEND=pass
-        export AWS_VAULT_PASS_PREFIX=aws-vault
-    fi
-fi
+  if builtin command -v pass > /dev/null 2>&1; then
+    export AWS_VAULT_BACKEND=pass
+    export AWS_VAULT_PASS_PREFIX=aws-vault
+  fi
 
-if builtin command -v aws-vault > /dev/null 2>&1; then
+  function aws-check-session() {
+    aws sts get-caller-identity > /dev/null
+  }
+
   function aws-sw() {
     export AWS_PROFILE=$(aws-vault list --profiles | grep -v -E "sso|default" | sort | fzf)
   }
-fi
 
-if builtin command -v aws > /dev/null 2>&1; then
+  function aws-rg-sw() {
+    aws-check-session
+    region=$(aws ec2 describe-regions | jq -r '.Regions[].RegionName' | sort | fzf)
+    if [ -z "$region" ]; then
+      return
+    fi
+    export AWS_REGION=$region
+  }
+
+
   function dive-ecs() {
-    aws sts get-caller-identity > /dev/null
+    aws-check-session
     cluster=$(aws ecs list-clusters | jq -r ".clusterArns[]" | sed 's/.*\///g' | fzf)
     if [ -z "$cluster" ]; then
       return
@@ -39,7 +49,7 @@ if builtin command -v aws > /dev/null 2>&1; then
   }
 
   function dive-ec2() {
-    aws sts get-caller-identity > /dev/null
+    aws-check-session
     instanceId=$(aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | select(.State.Name="running") | [.InstanceId, (.Tags[] | select(.Key == "Name").Value)] | @tsv' | fzf | awk '{print $1}')
     if [ -z "$instanceId" ]; then
       return

@@ -59,6 +59,8 @@ function main() {
                 pushd $HOME/.dotfiles
                 make --always-make --makefile $HOME/.dotfiles/Makefile setup4d
                 popd
+                # TODO
+                sudo chmod 777 /var/run/docker.sock
             fi
         else
             if [[ -z $TMUX ]]; then
