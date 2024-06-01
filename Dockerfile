@@ -11,7 +11,7 @@ ARG HASKELL_GHC_VERSION=9.4.8
 ARG HASKELL_STACK_VERSION=2.15.5
 ARG LUAROCKS_VERSION=3.11.0
 ARG LUA_VERSION=5.4.6
-ARG NODEJS_VERSION=20.13.1
+ARG NODEJS_VERSION=20.14.0
 ARG PYTHON2_VERSION=2.7.18
 ARG PYTHON3_VERSION=3.12.3
 ARG PYTHON_VERSION=3.10.10
@@ -265,6 +265,9 @@ ENV TZ              Asia/Tokyo
 # hadolint ignore=DL3008
 RUN yes | unminimize \
     && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        software-properties-common \
+    && add-apt-repository -y ppa:git-core/ppa \
     && apt-get install -y --no-install-recommends \
         apache2-utils \
         autoconf \
