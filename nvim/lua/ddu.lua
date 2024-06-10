@@ -122,7 +122,7 @@ function M.ddu__grep()
       ff = {
         autoAction = { name = "preview" },
         startAutoAction = true,
-        ignoreEmpty = false,
+        ignoreEmpty = true,
       },
     },
   })
@@ -147,7 +147,7 @@ function M.ddu__grep_current_file()
           name = "preview",
         },
         startAutoAction = true,
-        ignoreEmpty = false,
+        ignoreEmpty = true,
       },
     },
   })
