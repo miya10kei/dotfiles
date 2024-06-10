@@ -33,6 +33,7 @@ fn["ddu#custom#patch_global"]({
       highlightMatched = "Search",
     },
   },
+  sync = true,
   uiParams = {
     ff = {
       autoAction = {
@@ -165,7 +166,6 @@ function M.ddu__lsp_definition()
         name = "lsp_definition",
       },
     },
-    sync = true,
     uiParams = {
       ff = {
         immediateAction = "open",
@@ -253,7 +253,6 @@ function M.ddu__filer()
         path = fn.getcwd(),
       },
     },
-    sync = true,
     ui = "filer",
     uiParams = {
       filer = {
@@ -300,7 +299,11 @@ end
 ---------------------
 api.nvim_create_user_command("Ddu", function(opts)
   local subcomand = opts.fargs[1]
+  -- TODO start
   fn["ddu#ui#do_action"]("quit")
+  M[subcomand]()
+  fn["ddu#ui#do_action"]("quit")
+  -- TODO end
   resize()
   M[subcomand]()
 end, {
