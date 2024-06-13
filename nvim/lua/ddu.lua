@@ -298,14 +298,18 @@ end
 --- User Commands ---
 ---------------------
 api.nvim_create_user_command("Ddu", function(opts)
-  local subcomand = opts.fargs[1]
+  local subcommand = opts.fargs[1]
+
   -- TODO start
-  fn["ddu#ui#do_action"]("quit")
-  M[subcomand]()
-  fn["ddu#ui#do_action"]("quit")
+  if subcommand == "ddu__filer" then
+    fn["ddu#ui#do_action"]("quit")
+    M[subcommand]()
+    fn["ddu#ui#do_action"]("quit")
+  end
   -- TODO end
+  --
   resize()
-  M[subcomand]()
+  M[subcommand]()
 end, {
   nargs = 1,
 })
