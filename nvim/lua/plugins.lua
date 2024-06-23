@@ -128,11 +128,6 @@ require("lazy").setup({
         silent = true,
       },
       {
-        "/",
-        "<ESC><CMD>Ddu ddu__grep_current_file<CR>",
-        silent = true,
-      },
-      {
         "gd",
         "<ESC><CMD>Ddu ddu__lsp_definition<CR>",
         silent = true,
