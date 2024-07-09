@@ -8,15 +8,15 @@ PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.1.16
+BUN_VERSION := 1.1.18
 DELTA_VERSION := 0.17.0
 DIVE_VERSION := 0.12.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 10.1.0
 FLUTTER_VERSION := 3.19.5
-FZF_VERSION := 0.53.0
+FZF_VERSION := 0.54.0
 GHQ_VERSION := 1.6.1
-GITHUB_CLI_VERSION := 2.50.0
+GITHUB_CLI_VERSION := 2.52.0
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
 POETRY_VERSION := 1.8.3
@@ -139,16 +139,16 @@ $(BIN_DIR)/fd:
 
 $(BIN_DIR)/fzf:
 	mkdir -p /tmp/fzf
-	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_amd64.tar.gz
+	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_amd64.tar.gz
 	tar -zxf /tmp/fzf/fzf.tar.gz -C /tmp/fzf
 	mv /tmp/fzf/fzf $(BIN_DIR)/fzf
 	chown `whoami`:`id -gn` $(BIN_DIR)/fzf
 	rm -rf /tmp/fzf
-	curl -fsLS -o $(BIN_DIR)/fzf-tmux https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/bin/fzf-tmux
+	curl -fsLS -o $(BIN_DIR)/fzf-tmux https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/bin/fzf-tmux
 	chmod +x $(BIN_DIR)/fzf-tmux
-	curl -fsLS -o $(BIN_DIR)/fzf-key-bindings.zsh https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/key-bindings.zsh
+	curl -fsLS -o $(BIN_DIR)/fzf-key-bindings.zsh https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/key-bindings.zsh
 	chmod +x $(BIN_DIR)/fzf-key-bindings.zsh
-	curl -fsLS -o $(COMPLETION_DIR)/fzf.zsh https://raw.githubusercontent.com/junegunn/fzf/${FZF_VERSION}/shell/completion.zsh
+	curl -fsLS -o $(COMPLETION_DIR)/fzf.zsh https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/completion.zsh
 
 $(BIN_DIR)/gh:
 	mkdir -p /tmp/gh
