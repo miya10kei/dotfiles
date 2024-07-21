@@ -115,6 +115,11 @@ function main() {
         source "$HOME/.bun/_bun"
     fi
 
+    if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then 
+        source $HOME/.local/src/google-cloud-sdk/path.zsh.inc
+        source $HOME/.local/src/google-cloud-sdk/completion.zsh.inc
+    fi
+
     if builtin command -v starship > /dev/null 2>&1; then
         eval "$(starship init zsh)"
     fi

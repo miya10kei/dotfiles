@@ -1,5 +1,6 @@
 ARCH := $(shell uname -m)
 BIN_DIR := $(HOME)/.local/bin
+SRC_DIR := $(HOME)/.local/src
 CARGO_BIN_DIR := $(CARGO_HOME)/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 FLUTTER_DIR := $(HOME)/.flutter
@@ -8,15 +9,16 @@ PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.1.18
+BUN_VERSION := 1.1.20
 DELTA_VERSION := 0.17.0
 DIVE_VERSION := 0.12.0
 EXA_VERSION := 0.10.1
 FD_VERSION := 10.1.0
 FLUTTER_VERSION := 3.19.5
-FZF_VERSION := 0.54.0
-GHQ_VERSION := 1.6.1
-GITHUB_CLI_VERSION := 2.52.0
+FZF_VERSION := 0.54.1
+GCLOUD_VERSION := 477.0.0
+GHQ_VERSION := 1.6.2
+GITHUB_CLI_VERSION := 2.53.0
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
 POETRY_VERSION := 1.8.3
@@ -56,7 +58,8 @@ install-bins: \
 	$(FLUTTER_DIR)/flutter \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/poetry \
-	$(PYENV_SHIMS_DIR)/sam
+	$(PYENV_SHIMS_DIR)/sam \
+	$(SRC_DIR)/google-cloud-sdk
 
 	#$(GO_BIN_DIR)/sqls \
 
@@ -149,6 +152,15 @@ $(BIN_DIR)/fzf:
 	curl -fsLS -o $(BIN_DIR)/fzf-key-bindings.zsh https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/key-bindings.zsh
 	chmod +x $(BIN_DIR)/fzf-key-bindings.zsh
 	curl -fsLS -o $(COMPLETION_DIR)/fzf.zsh https://raw.githubusercontent.com/junegunn/fzf/v${FZF_VERSION}/shell/completion.zsh
+
+$(SRC_DIR)/google-cloud-sdk:
+	mkdir -p /tmp/gcloud
+	curl -fsLS -o /tmp/gcloud/gcloud.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${GCLOUD_VERSION}-linux-x86_64.tar.gz
+	tar -zxf /tmp/gcloud/gcloud.tar.gz -C /tmp/gcloud
+	mv /tmp/gcloud/google-cloud-sdk $(SRC_DIR)/google-cloud-sdk
+	chown -R `whoami`:`id -gn` $(SRC_DIR)/google-cloud-sdk
+	rm -rf /tmp/gcloud
+	$(SRC_DIR)/google-cloud-sdk/install.sh --usage-reporting false --screen-reader true --quiet
 
 $(BIN_DIR)/gh:
 	mkdir -p /tmp/gh
@@ -252,11 +264,11 @@ $(GO_BIN_DIR)/sqls:
 	go install github.com/sqls-server/sqls@latest
 
 $(PYENV_SHIMS_DIR)/poetry:
-	pip install poetry
+	pip install --quiet poetry
 
 $(PYENV_SHIMS_DIR)/sam:
-	pip install aws-sam-cli
+	pip install --quiet aws-sam-cli
 
 $(PYENV_SHIMS_DIR)/pgcli:
-	pip install pgcli
+	pip install --quiet pgcli
 
