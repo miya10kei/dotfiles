@@ -69,8 +69,8 @@ RUN apt-get update \
 RUN groupadd "${GNAME}" --gid "${GID}" \
   && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
   && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers
-USER    ${UNAME}
-ENV     HOME /home/${UNAME}
+USER ${UNAME}
+ENV HOME=/home/${UNAME}
 WORKDIR ${HOME}
 
 
@@ -127,7 +127,7 @@ RUN curl -fsLS -o ghcup "https://downloads.haskell.org/~ghcup/${HASKELL_GHCUP_VE
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS lua
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV PATH "${HOME}/out/${HOME}/.lua/bin:${PATH}"
+ENV PATH="${HOME}/out/${HOME}/.lua/bin:${PATH}"
 
 RUN mkdir -p "${HOME}/out/${HOME}/.lua/bin"
 
@@ -158,7 +158,7 @@ RUN git clone https://github.com/neovim/neovim \
 # ------------------------------------------------------------------------------------------------------------------------
 FROM  builder-rust AS volta
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV PATH "/${HOME}/.cargo/bin:${PATH}"
+ENV PATH="/${HOME}/.cargo/bin:${PATH}"
 ARG NODEJS_VERSION
 RUN cargo install --git https://github.com/volta-cli/volta \
     && volta install "node@${NODEJS_VERSION}" \
@@ -248,7 +248,7 @@ RUN    upx --lzma --best "/out/deno${HOME}/.deno/bin/deno" \
 # hadolint ignore=DL3007
 FROM ubuntu:latest
 SHELL ["/bin/bash", "-c"]
-LABEL maintainer = "miya10kei <miya10kei@gmail.com>"
+LABEL maintainer="miya10kei <miya10kei@gmail.com>"
 
 ARG DKID
 ARG GID
@@ -256,11 +256,11 @@ ARG GNAME
 ARG UID
 ARG UNAME
 
-ENV DEBIAN_FRONTEND nointeractive
-ENV LANG            en_US.UTF-8
-ENV LANGUAGE        $LANG
-ENV LC_ALL          $LANG
-ENV TZ              Asia/Tokyo
+ENV DEBIAN_FRONTEND=nointeractive
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=$LANG
+ENV LC_ALL=$LANG
+ENV TZ=Asia/Tokyo
 
 # hadolint ignore=DL3008
 RUN yes | unminimize \
@@ -331,7 +331,7 @@ RUN groupadd "${GNAME}" --gid "${GID}" \
   && usermod -aG docker "${UNAME}"
 
 USER ${UNAME}
-ENV  HOME /home/${UNAME}
+ENV  HOME="/home/${UNAME}"
 
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/deno/   /
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/go/     /
@@ -343,18 +343,18 @@ COPY --from=packer --chown="${UNAME}:${GNAME}" /out/python/ /
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/rust/   /
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/tools/  /
 
-ENV CARGO_HOME       "${HOME}/.cargo"
-ENV CARGO_TARGET_DIR "${CARGO_HOME}/target"
-ENV PATH             "${CARGO_HOME}/bin:${PATH}"
-ENV PATH             "${HOME}/.deno/bin:${PATH}"
-ENV PATH             "${HOME}/.ghcup/bin:${PATH}"
-ENV GOPATH           "${HOME}/.go"
-ENV PATH             "${GOPATH}/bin:${PATH}"
-ENV PATH             "${HOME}/.lua/bin:${PATH}"
-ENV PATH             "${HOME}/.nvim/bin:${PATH}"
-ENV PATH             "${HOME}/.pyenv/bin:${PATH}"
-ENV VOLTA_HOME       "${HOME}/.volta"
-ENV PATH             "${VOLTA_HOME}/bin:${PATH}"
+ENV CARGO_HOME="${HOME}/.cargo"
+ENV CARGO_TARGET_DIR="${CARGO_HOME}/target"
+ENV PATH="${CARGO_HOME}/bin:${PATH}"
+ENV PATH="${HOME}/.deno/bin:${PATH}"
+ENV PATH="${HOME}/.ghcup/bin:${PATH}"
+ENV GOPATH="${HOME}/.go"
+ENV PATH="${GOPATH}/bin:${PATH}"
+ENV PATH="${HOME}/.lua/bin:${PATH}"
+ENV PATH="${HOME}/.nvim/bin:${PATH}"
+ENV PATH="${HOME}/.pyenv/bin:${PATH}"
+ENV VOLTA_HOME="${HOME}/.volta"
+ENV PATH="${VOLTA_HOME}/bin:${PATH}"
 
 COPY --chown="${UNAME}:${GNAME}" ./nvim     $HOME/.config/nvim
 COPY --chown="${UNAME}:${GNAME}" Makefile   $HOME/.dotfiles/Makefile
