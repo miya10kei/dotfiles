@@ -245,4 +245,10 @@ require("lazy").setup({
       require("pretty-fold").setup()
     end,
   },
+  {
+    "glidenote/memolist.vim",
+    config = function()
+      vim.g.memolist_path = vim.fn.expand("~/Documents/memo")
+    end,
+  },
 })

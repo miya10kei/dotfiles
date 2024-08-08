@@ -23,6 +23,7 @@ brew-install:
 		alt-tab \
 		aws-vpn-client \
 		deepl \
+		displaylink \
 		docker \
 		elgato-stream-deck \
 		firefox \
@@ -34,3 +35,8 @@ brew-install:
 		rectangle \
 		xquartz
 
+.PHONY: brew-update
+brew-update:
+	brew update \
+		&& brew upgrade \
+		&& brew upgrade --cask --greedy
