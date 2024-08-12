@@ -127,7 +127,7 @@ for _, v in pairs(used_masson_packages["lsp"]) do
       on_attach = on_attach,
       settings = {
         pylsp = {
-          root_pattern = {
+          plugins = {
             flake8 = {
               enabled = false,
             },
@@ -137,8 +137,11 @@ for _, v in pairs(used_masson_packages["lsp"]) do
             pyflakes = {
               enabled = false,
             },
-            rope_autoimport = {
+            jedi_completion = {
               enabled = false,
+            },
+            rope_autoimport = {
+              enabled = true,
             },
           },
         },

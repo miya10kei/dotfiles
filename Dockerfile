@@ -306,6 +306,7 @@ RUN yes | unminimize \
         unzip \
         wget \
         xsel \
+        zip \
         zsh \
         # add temporarily
         gdal-bin \
