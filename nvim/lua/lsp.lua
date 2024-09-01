@@ -138,7 +138,7 @@ for _, v in pairs(used_masson_packages["lsp"]) do
               enabled = false,
             },
             jedi_completion = {
-              enabled = false,
+              enabled = true,
             },
             rope_autoimport = {
               enabled = true,
