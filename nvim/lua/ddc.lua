@@ -18,6 +18,7 @@ vim.fn["ddc#custom#patch_global"]({
     },
     lsp = {
       dup = "keep",
+      --forceCompletionPattern = ".w*|:w*|->w*",
       keywordPattern = "\\k+",
       mark = "[LSP]",
       sorters = {
@@ -25,6 +26,7 @@ vim.fn["ddc#custom#patch_global"]({
       },
     },
     vsnip = {
+      forceCompletionPattern = ".w*|:w*|->w*",
       mark = "[vsnip]",
     },
   },
@@ -39,8 +41,10 @@ vim.fn["ddc#custom#patch_global"]({
       enableResolveItem = true,
       enableAdditionalTextEdit = true,
       confirmBehavior = "replace",
+      snippetEngine = vim.fn["denops#callback#register"](function(body)
+        return vim.fn["vsnip#anonymous"](body)
+      end),
     },
   },
 })
-
 vim.fn["ddc#enable"]()

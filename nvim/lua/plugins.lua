@@ -41,7 +41,7 @@ require("lazy").setup({
       "Shougo/ddc-source-lsp",
       "Shougo/ddc-ui-native",
       "hrsh7th/vim-vsnip",
-      "hrsh7th/vim-vsnip-integ",
+      --"hrsh7th/vim-vsnip-integ",
       "uga-rosa/ddc-source-lsp-setup",
       "uga-rosa/ddc-source-vsnip",
     },

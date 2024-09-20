@@ -115,7 +115,7 @@ function main() {
         source "$HOME/.bun/_bun"
     fi
 
-    if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then 
+    if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then
         source $HOME/.local/src/google-cloud-sdk/path.zsh.inc
         source $HOME/.local/src/google-cloud-sdk/completion.zsh.inc
     fi

@@ -1,3 +1,4 @@
+# Homebrew
 .PHONY: install-homebrew
 install-homebrew:
 ifeq ("$(wildcard /opt/homebrew/bin/brew)", "")
@@ -40,3 +41,10 @@ brew-update:
 	brew update \
 		&& brew upgrade \
 		&& brew upgrade --cask --greedy
+
+# Rancher Desktop
+.PHONY: setup-rancher
+setup-rancher:
+	LIMA_HOME="${HOME}/Library/Application Support/rancher-desktop/lima" \
+		"/Applications/Rancher Desktop.app/Contents/Resources/resources/darwin/lima/bin/limactl" \
+		shell 0 "sudo" "sed" "-i" "s/host.lima.internal$$/host.lima.internal lima-rancher-desktop/" "/etc/hosts"

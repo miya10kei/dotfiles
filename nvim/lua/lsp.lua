@@ -62,6 +62,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 ----------------------
 --- nvim-lspconfig ---
 ----------------------
+local capabilities = require("ddc_source_lsp").make_client_capabilities()
 local lspconfig = require("lspconfig")
 local used_masson_packages = {
   ["lsp"] = {
@@ -75,7 +76,7 @@ local used_masson_packages = {
     "json-lsp",
     "lua-language-server",
     "marksman",
-    "python-lsp-server",
+    "pyright",
     "taplo",
     "terraform-ls",
     "typescript-language-server",
@@ -102,6 +103,7 @@ for _, v in pairs(used_masson_packages["lsp"]) do
   local alias = mason_registry.get_package_aliases(v)[1] or v
   if alias == "lua_ls" then
     lspconfig[alias].setup({
+      capabilities = capabilities,
       on_attach = on_attach,
       settings = {
         Lua = {
@@ -122,33 +124,9 @@ for _, v in pairs(used_masson_packages["lsp"]) do
         },
       },
     })
-  elseif alias == "pylsp" then
-    lspconfig[alias].setup({
-      on_attach = on_attach,
-      settings = {
-        pylsp = {
-          plugins = {
-            flake8 = {
-              enabled = false,
-            },
-            pycodestyle = {
-              enabled = false,
-            },
-            pyflakes = {
-              enabled = false,
-            },
-            jedi_completion = {
-              enabled = true,
-            },
-            rope_autoimport = {
-              enabled = true,
-            },
-          },
-        },
-      },
-    })
   elseif alias == "yamlls" then
     lspconfig[alias].setup({
+      capabilities = capabilities,
       on_attach = on_attach,
       settings = {
         yaml = {
@@ -166,32 +144,11 @@ for _, v in pairs(used_masson_packages["lsp"]) do
     })
   else
     lspconfig[alias].setup({
+      capabilities = capabilities,
       on_attach = on_attach,
     })
   end
 end
-
-lspconfig["sqls"].setup({
-  cmd = {
-    "sqls",
-    "--log",
-    "/root/log.log",
-    "--trace",
-    "--config",
-    vim.env.HOME .. "/.config/sqls/config.yaml",
-  },
-  on_attach = function(client, bufnr)
-    require("sqls").on_attach(client, bufnr)
-    on_attach(client, bufnr)
-  end,
-})
-
-require("flutter-tools").setup({
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-  end,
-})
-
 ---------------
 --- null-ls ---
 ---------------

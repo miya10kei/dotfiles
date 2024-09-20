@@ -8,15 +8,17 @@ function launch_dev_env() {
     fi
 
     opts=(
-        "--add-host host.docker.internal:host-gateway"
         "--detach"
-        "--hostname=dev-env"
+        "--env DISPLAY=host.docker.internal:0"
         "--interactive"
+        "--mount type=bind,source=${HOME}/.Xauthority,target=/home/${uname}/.Xauthority"
         "--mount type=bind,source=${HOME}/.dotfiles,target=/home/${uname}/.dotfiles"
         "--mount type=bind,source=${HOME}/.dotfiles/.zshrc,target=/home/${uname}/.zshrc"
         "--mount type=bind,source=${HOME}/.ssh,target=/home/${uname}/.ssh"
+        "--mount type=bind,source=${HOME}/dev,target=/home/${uname}/dev"
         "--mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
         "--name=dev-env"
+        "--net=host"
         "--restart=always"
         "--tty"
     )
@@ -24,24 +26,14 @@ function launch_dev_env() {
     case "$os" in
         Darwin)
             opts+=(
-                "--env DISPLAY=host.rancher-desktop.internal:0"
-                "--mount type=bind,source=${HOME}/.Xauthority,target=/home/${uname}/.Xauthority"
                 "--mount type=bind,source=${HOME}/Documents,target=/home/${uname}/Documents"
-                "--mount type=bind,source=${HOME}/dev,target=/home/${uname}/dev"
                 "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
-                "--publish=3000:3000"
-                "--publish=35432:35432"
-                "--publish=4200:4200"
-                "--publish=4300:4300"
-                "--publish=8090:8090"
-                "--publish=8100:8100"
+                "--mount type=bind,source=${HOME}/Google\ Drive,target=/home/${uname}/Google\ Drive"
             )
             ;;
           Linux)
             opts+=(
-                "--mount type=bind,source=${HOME}/dev,target=/home/${uname}/dev"
                 "--mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
-                "--net=host"
             )
             ;;
     esac
