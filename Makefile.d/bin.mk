@@ -9,7 +9,6 @@ PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.1.27
 DELTA_VERSION := 0.18.2
 DIVE_VERSION := 0.12.0
 EXA_VERSION := 0.10.1
@@ -21,7 +20,6 @@ GHQ_VERSION := 1.6.2
 GITHUB_CLI_VERSION := 2.56.0
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
-POETRY_VERSION := 1.8.3
 PROCS_VERSION := 0.14.6
 RIPGREP_VERSION := 14.1.0
 SHELDON_VERSION := 0.8.0
@@ -52,6 +50,7 @@ install-bins: \
 	$(BIN_DIR)/sheldon \
 	$(BIN_DIR)/starship \
 	$(BIN_DIR)/tfenv \
+	$(BIN_DIR)/uv \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
@@ -60,8 +59,6 @@ install-bins: \
 	$(PYENV_SHIMS_DIR)/poetry \
 	$(PYENV_SHIMS_DIR)/sam \
 	$(SRC_DIR)/google-cloud-sdk
-
-	#$(GO_BIN_DIR)/sqls \
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -103,7 +100,7 @@ $(BIN_DIR)/bat:
 	rm -rf /tmp/bat
 
 $(BIN_DIR)/bun:
-	curl -fsSL https://bun.sh/install | bash -s "bun-v$(BUN_VERSION)"
+	curl -fsSL https://bun.sh/install | bash
 
 $(BIN_DIR)/delta:
 	mkdir -p /tmp/delta
@@ -235,6 +232,9 @@ $(BIN_DIR)/starship:
 $(BIN_DIR)/tfenv:
 	git clone --depth=1 https://github.com/tfutils/tfenv.git $(HOME)/.tfenv
 
+$(BIN_DIR)/uv:
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+
 $(BIN_DIR)/yq:
 	curl -fsLS -o $(BIN_DIR)/yq https://github.com/mikefarah/yq/releases/download/v$(YQ_VERSION)/yq_linux_amd64
 	chmod +x $(BIN_DIR)/yq
@@ -259,9 +259,6 @@ $(FLUTTER_DIR)/flutter:
 	mkdir $(FLUTTER_DIR)
 	mv /tmp/flutter/flutter $(FLUTTER_DIR)/
 	rm -rf /tmp/flutter
-
-$(GO_BIN_DIR)/sqls:
-	go install github.com/sqls-server/sqls@latest
 
 $(PYENV_SHIMS_DIR)/poetry:
 	pip install --quiet poetry

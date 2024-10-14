@@ -251,4 +251,19 @@ require("lazy").setup({
       vim.g.memolist_path = vim.fn.expand("~/Documents/memo")
     end,
   },
+  {
+    "jackMort/ChatGPT.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("chatgpt").setup({
+        api_key_cmd = "pass show chat-gpt-api-key 2>/dev/null",
+      })
+    end,
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "folke/trouble.nvim", -- optional
+      "nvim-telescope/telescope.nvim",
+    },
+  },
 })
