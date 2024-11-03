@@ -86,6 +86,13 @@ function main() {
     setopt inc_append_history
     setopt share_history
 
+    # ---------------
+    # --- source  ---
+    # ---------------
+    if [ -e $HOME/.dotfiles/secrets.sh ]; then
+        source $HOME/.dotfiles/secrets.sh
+    fi
+
     # --------------
     # --- plugin ---
     # --------------

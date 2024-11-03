@@ -45,6 +45,7 @@ install-bins: \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
 	$(BIN_DIR)/navi \
+	$(BIN_DIR)/op\
 	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
 	$(BIN_DIR)/sheldon \
@@ -192,6 +193,15 @@ $(BIN_DIR)/navi:
 	mv /tmp/navi/navi $(BIN_DIR)/navi
 	chown `whoami`:`id -gn` $(BIN_DIR)/navi
 	rm -rf /tmp/navi
+
+$(BIN_DIR)/op:
+	mkdir -p /tmp/op
+	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "amd64"; else echo "arm64"; fi))
+	$(eval VERSION := $(shell curl https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N -s | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'))
+	curl -fsLS -o /tmp/op/op.zip https://cache.agilebits.com/dist/1P/op2/pkg/v$(VERSION)/op_linux_$(DL_ARCH)_v$(VERSION).zip
+	unzip /tmp/op/op.zip -d /tmp/op
+	mv /tmp/op/op $(BIN_DIR)/op
+	rm -rf /tmp/op
 
 $(BIN_DIR)/rg:
 	mkdir -p /tmp/rg
