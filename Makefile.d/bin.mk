@@ -9,7 +9,6 @@ PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
 BAT_VERSION := 0.24.0
-BUN_VERSION := 1.1.29
 DELTA_VERSION := 0.18.2
 DIVE_VERSION := 0.12.0
 EXA_VERSION := 0.10.1
@@ -21,7 +20,6 @@ GHQ_VERSION := 1.7.1
 GITHUB_CLI_VERSION := 2.62.0
 JQ_VERSION := 1.7.1
 NAVI_VERSION := 2.23.0
-POETRY_VERSION := 1.8.3
 PROCS_VERSION := 0.14.8
 RIPGREP_VERSION := 14.1.0
 SHELDON_VERSION := 0.8.0
@@ -47,11 +45,13 @@ install-bins: \
 	$(BIN_DIR)/ghq \
 	$(BIN_DIR)/jq \
 	$(BIN_DIR)/navi \
+	$(BIN_DIR)/op\
 	$(BIN_DIR)/procs \
 	$(BIN_DIR)/rg \
 	$(BIN_DIR)/sheldon \
 	$(BIN_DIR)/starship \
 	$(BIN_DIR)/tfenv \
+	$(BIN_DIR)/uv \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
@@ -60,8 +60,6 @@ install-bins: \
 	$(PYENV_SHIMS_DIR)/poetry \
 	$(PYENV_SHIMS_DIR)/sam \
 	$(SRC_DIR)/google-cloud-sdk
-
-	#$(GO_BIN_DIR)/sqls \
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
@@ -103,7 +101,7 @@ $(BIN_DIR)/bat:
 	rm -rf /tmp/bat
 
 $(BIN_DIR)/bun:
-	curl -fsSL https://bun.sh/install | bash -s "bun-v$(BUN_VERSION)"
+	curl -fsSL https://bun.sh/install | bash
 
 $(BIN_DIR)/delta:
 	mkdir -p /tmp/delta
@@ -196,6 +194,16 @@ $(BIN_DIR)/navi:
 	chown `whoami`:`id -gn` $(BIN_DIR)/navi
 	rm -rf /tmp/navi
 
+$(BIN_DIR)/op:
+	mkdir -p /tmp/op
+	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "amd64"; else echo "arm64"; fi))
+	$(eval VERSION := $(shell curl https://app-updates.agilebits.com/check/1/0/CLI2/en/2.0.0/N -s | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+'))
+	curl -fsLS -o /tmp/op/op.zip https://cache.agilebits.com/dist/1P/op2/pkg/v$(VERSION)/op_linux_$(DL_ARCH)_v$(VERSION).zip
+	unzip /tmp/op/op.zip -d /tmp/op
+	mv /tmp/op/op $(BIN_DIR)/op
+	rm -rf /tmp/op
+	$(BIN_DIR)/op completion zsh > $(COMPLETION_DIR)/op.zsh
+
 $(BIN_DIR)/rg:
 	mkdir -p /tmp/rg
 	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "x86_64"; else echo "aarch64"; fi))
@@ -235,6 +243,9 @@ $(BIN_DIR)/starship:
 $(BIN_DIR)/tfenv:
 	git clone --depth=1 https://github.com/tfutils/tfenv.git $(HOME)/.tfenv
 
+$(BIN_DIR)/uv:
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+
 $(BIN_DIR)/yq:
 	curl -fsLS -o $(BIN_DIR)/yq https://github.com/mikefarah/yq/releases/download/v$(YQ_VERSION)/yq_linux_amd64
 	chmod +x $(BIN_DIR)/yq
@@ -259,9 +270,6 @@ $(FLUTTER_DIR)/flutter:
 	mkdir $(FLUTTER_DIR)
 	mv /tmp/flutter/flutter $(FLUTTER_DIR)/
 	rm -rf /tmp/flutter
-
-$(GO_BIN_DIR)/sqls:
-	go install github.com/sqls-server/sqls@latest
 
 $(PYENV_SHIMS_DIR)/poetry:
 	pip install --quiet poetry

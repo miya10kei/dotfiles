@@ -11,7 +11,6 @@ function launch_dev_env() {
         "--detach"
         "--env DISPLAY=host.docker.internal:0"
         "--interactive"
-        "--mount type=bind,source=${HOME}/.Xauthority,target=/home/${uname}/.Xauthority"
         "--mount type=bind,source=${HOME}/.dotfiles,target=/home/${uname}/.dotfiles"
         "--mount type=bind,source=${HOME}/.dotfiles/.zshrc,target=/home/${uname}/.zshrc"
         "--mount type=bind,source=${HOME}/.ssh,target=/home/${uname}/.ssh"
@@ -26,9 +25,10 @@ function launch_dev_env() {
     case "$os" in
         Darwin)
             opts+=(
+                "--mount type=bind,source=${HOME}/.Xauthority,target=/home/${uname}/.Xauthority"
                 "--mount type=bind,source=${HOME}/Documents,target=/home/${uname}/Documents"
-                "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
                 "--mount type=bind,source=${HOME}/Google\ Drive,target=/home/${uname}/Google\ Drive"
+                "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
             )
             ;;
           Linux)

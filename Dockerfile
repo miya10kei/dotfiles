@@ -344,7 +344,6 @@ COPY --from=packer --chown="${UNAME}:${GNAME}" /out/rust/   /
 COPY --from=packer --chown="${UNAME}:${GNAME}" /out/tools/  /
 
 ENV CARGO_HOME="${HOME}/.cargo"
-ENV CARGO_TARGET_DIR="${CARGO_HOME}/target"
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
 ENV PATH="${HOME}/.deno/bin:${PATH}"
 ENV PATH="${HOME}/.ghcup/bin:${PATH}"

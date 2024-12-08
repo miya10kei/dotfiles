@@ -86,6 +86,13 @@ function main() {
     setopt inc_append_history
     setopt share_history
 
+    # ---------------
+    # --- source  ---
+    # ---------------
+    if [ -e $HOME/.dotfiles/secrets.sh ]; then
+        source $HOME/.dotfiles/secrets.sh
+    fi
+
     # --------------
     # --- plugin ---
     # --------------
@@ -131,7 +138,6 @@ function main() {
     if builtin command -v xhost > /dev/null 2>&1; then
         xhost + localhost
     fi
-
     FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
     autoload bashcompinit && bashcompinit
     autoload -Uz compinit && compinit
