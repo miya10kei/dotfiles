@@ -25,14 +25,15 @@ brew-install:
 		aws-vpn-client \
 		deepl \
 		displaylink \
-		docker \
 		elgato-stream-deck \
 		firefox \
 		google-japanese-ime \
+		homerow \
 		hyper \
 		karabiner-elements \
 		kindle \
 		rancher \
+		realforce \
 		rectangle \
 		xquartz
 

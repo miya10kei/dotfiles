@@ -1,19 +1,19 @@
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
-ARG DOCKER_BUILDX_VERSION=0.17.1
-ARG DOCKER_COMPOSE_VERSION=2.29.3
-ARG DOCKER_VERSION=27.2.1
-ARG GOLANG_VERSION=1.23.1
+ARG DOCKER_BUILDX_VERSION=0.18.0
+ARG DOCKER_COMPOSE_VERSION=2.30.3
+ARG DOCKER_VERSION=27.3.1
+ARG GOLANG_VERSION=1.23.3
 ARG HASKELL_CABAL_VERSION=3.10.3.0
 ARG HASKELL_GHCUP_VERSION=0.1.30.0
 ARG HASKELL_GHC_VERSION=9.4.8
 ARG HASKELL_STACK_VERSION=3.1.1
 ARG LUAROCKS_VERSION=3.11.1
 ARG LUA_VERSION=5.4.7
-ARG NODEJS_VERSION=20.17.0
+ARG NODEJS_VERSION=20.18.0
 ARG PYTHON2_VERSION=2.7.18
-ARG PYTHON3_VERSION=3.12.4
+ARG PYTHON3_VERSION=3.12.7
 ARG PYTHON_VERSION=3.11.9
 ARG DKID
 ARG GID
@@ -24,7 +24,7 @@ ARG UNAME
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
-FROM ubuntu:latest AS builder
+FROM ubuntu:24.04 AS builder
 ARG ARCH1
 ARG ARCH2
 ARG ARCH3
@@ -246,7 +246,7 @@ RUN    upx --lzma --best "/out/deno${HOME}/.deno/bin/deno" \
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
-FROM ubuntu:latest
+FROM ubuntu:24.04
 SHELL ["/bin/bash", "-c"]
 LABEL maintainer="miya10kei <miya10kei@gmail.com>"
 
@@ -263,8 +263,7 @@ ENV LC_ALL=$LANG
 ENV TZ=Asia/Tokyo
 
 # hadolint ignore=DL3008
-RUN yes | unminimize \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         software-properties-common \
     && add-apt-repository -y ppa:git-core/ppa \
