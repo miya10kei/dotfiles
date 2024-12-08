@@ -202,6 +202,7 @@ $(BIN_DIR)/op:
 	unzip /tmp/op/op.zip -d /tmp/op
 	mv /tmp/op/op $(BIN_DIR)/op
 	rm -rf /tmp/op
+	$(BIN_DIR)/op completion zsh > $(COMPLETION_DIR)/op.zsh
 
 $(BIN_DIR)/rg:
 	mkdir -p /tmp/rg

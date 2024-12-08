@@ -77,10 +77,15 @@ local used_masson_packages = {
     "lua-language-server",
     "marksman",
     "pyright",
+    "rust-analyzer",
     "taplo",
     "terraform-ls",
     "typescript-language-server",
     "yaml-language-server",
+  },
+  ["dap"] = {
+    "codelldb",
+    "debugpy",
   },
   ["linter"] = {
     "hadolint",
@@ -124,6 +129,29 @@ for _, v in pairs(used_masson_packages["lsp"]) do
         },
       },
     })
+  elseif alias == "rust-analyzer" then
+    lspconfig[alias].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = {
+        ["rust-analyzer"] = {
+          import = {
+            granularity = {
+              group = "module",
+            },
+          },
+          prefix = "self",
+        },
+        cargo = {
+          buildScripts = {
+            enable = true,
+          },
+        },
+        procMacro = {
+          enable = true,
+        },
+      },
+    })
   elseif alias == "yamlls" then
     lspconfig[alias].setup({
       capabilities = capabilities,
@@ -149,6 +177,7 @@ for _, v in pairs(used_masson_packages["lsp"]) do
     })
   end
 end
+
 ---------------
 --- null-ls ---
 ---------------

@@ -170,13 +170,10 @@ require("lazy").setup({
     "APZelos/blamer.nvim",
   },
   {
-    "tomtom/tcomment_vim",
-    keys = {
-      {
-        "<C-_>",
-        ":<C-u>TCommentInline<CR>",
-      },
-    },
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
   },
   {
     "kylechui/nvim-surround",
@@ -184,30 +181,6 @@ require("lazy").setup({
     config = function()
       require("nvim-surround").setup({})
     end,
-  },
-  {
-    "thinca/vim-quickrun",
-    config = function()
-      vim.g.quickrun_config = {
-        ["_"] = {
-          ["runner"] = "neovim_job",
-          ["outputter"] = "error",
-          ["outputter/error/success"] = "buffer",
-          ["outputter/error/error"] = "quickfix",
-          ["outputter/buffer/opener"] = ":below new",
-          ["outputter/buffer/close_on_empty"] = 1,
-        },
-      }
-    end,
-    dependencies = {
-      "lambdalisue/vim-quickrun-neovim-job",
-    },
-    keys = {
-      {
-        "<LEADER>r",
-        ":<C-u>QuickRun<CR>",
-      },
-    },
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -252,18 +225,22 @@ require("lazy").setup({
     end,
   },
   {
-    "jackMort/ChatGPT.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("chatgpt").setup({
-        api_key_cmd = "pass show chat-gpt-api-key 2>/dev/null",
-      })
-    end,
+    "rcarriga/nvim-dap-ui",
     dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim", -- optional
-      "nvim-telescope/telescope.nvim",
+      "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",
+      "theHamsta/nvim-dap-virtual-text",
+      "mfussenegger/nvim-dap-python",
     },
+    config = function()
+      require("plugins.dap")
+    end,
+  },
+  {
+    "is0n/jaq-nvim",
+    config = function()
+      require("jaq")
+    end,
+    keys = { "<LEADER>r", ":<C-u>Jaq<CR>", silent = true },
   },
 })
