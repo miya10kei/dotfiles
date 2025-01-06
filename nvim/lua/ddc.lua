@@ -1,11 +1,12 @@
 require("ddc_source_lsp_setup").setup()
 
 vim.fn["ddc#custom#patch_global"]({
-  ui = "native",
+  ui = "pum",
   sources = {
     "around",
     "lsp",
-    "vsnip",
+    -- "vsnip",
+    "copilot",
   },
   sourceOptions = {
     _ = {
@@ -16,6 +17,11 @@ vim.fn["ddc#custom#patch_global"]({
     around = {
       mark = "[A]",
     },
+    copilot = {
+      mark = "[Copilot]",
+      matchers = {},
+      minAutoCompleteLength = 0,
+    },
     lsp = {
       dup = "keep",
       --forceCompletionPattern = ".w*|:w*|->w*",
@@ -25,15 +31,15 @@ vim.fn["ddc#custom#patch_global"]({
         "sorter_lsp-kind",
       },
     },
-    vsnip = {
-      forceCompletionPattern = ".w*|:w*|->w*",
-      mark = "[vsnip]",
-    },
+    --   vsnip = {
+    --     forceCompletionPattern = ".w*|:w*|->w*",
+    --     mark = "[vsnip]",
+    --   },
   },
   sourceParams = {
-    around = {
-      maxSize = 500,
-    },
+    -- around = {
+    --   maxSize = 500,
+    -- },
     ["lsp"] = {
       kindLabels = {
         Class = "c",
@@ -41,10 +47,18 @@ vim.fn["ddc#custom#patch_global"]({
       enableResolveItem = true,
       enableAdditionalTextEdit = true,
       confirmBehavior = "replace",
-      snippetEngine = vim.fn["denops#callback#register"](function(body)
-        return vim.fn["vsnip#anonymous"](body)
-      end),
+      -- snippetEngine = vim.fn["denops#callback#register"](function(body)
+      --   return vim.fn["vsnip#anonymous"](body)
+      -- end),
     },
   },
 })
 vim.fn["ddc#enable"]()
+
+local ddc_previewer_floating = require("ddc_previewer_floating")
+ddc_previewer_floating.setup({
+  ui = "pum",
+  max_width = 78,
+  ...,
+})
+ddc_previewer_floating.enable()
