@@ -201,6 +201,13 @@ for _, package in ipairs(mason_registry.get_installed_packages()) do
               "--remove-unused-variables",
             },
           })
+        elseif name == "black" then
+          source = source.with({
+            extra_args = {
+              "--line-length",
+              "120",
+            },
+          })
         elseif name == "prettier" then
           source = source.with({
             filetypes = {

@@ -23,6 +23,7 @@ brew-install:
 		alfred \
 		alt-tab \
 		aws-vpn-client \
+		claude \
 		deepl \
 		displaylink \
 		elgato-stream-deck \
@@ -33,6 +34,7 @@ brew-install:
 		karabiner-elements \
 		kindle \
 		rancher \
+		raycast \
 		realforce \
 		rectangle \
 		xquartz
