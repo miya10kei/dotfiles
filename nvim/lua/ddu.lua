@@ -263,6 +263,7 @@ function M.ddu__filer()
         statusline = false,
         winCol = 1,
         winWidth = fn.winwidth(0) / 3,
+        splitDirection = "botright",
       },
     },
   })

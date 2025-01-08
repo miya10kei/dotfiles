@@ -20,10 +20,8 @@ brew-install:
 	brew install --cask \
 		1password \
 		adobe-acrobat-reader \
-		alfred \
 		alt-tab \
 		aws-vpn-client \
-		claude \
 		deepl \
 		displaylink \
 		elgato-stream-deck \

@@ -54,56 +54,8 @@ require("lazy").setup({
       "uga-rosa/ddc-source-vsnip",
       "uga-rosa/ddc-previewer-floating",
     },
-    lazy = false,
-    -- keys = {
-    --   {
-    --     "<TAB>",
-    --     function()
-    --       if vim.fn["pum#visible"]() then
-    --         return vim.fn["pum#map#select_relative"](1)
-    --       else
-    --         local line = vim.api.nvim_get_current_line()
-    --         local col = vim.fn.col(".")
-    --         if col <= 1 or line:sub(col - 2):match("%s") then
-    --           return "<C-t>"
-    --         else
-    --           return vim.fn["ddc#map#manual_complete"]()
-    --         end
-    --       end
-    --     end,
-    --     mode = "i",
-    --     expr = true,
-    --     silent = true,
-    --   },
-    --   {
-    --     "<S-TAB>",
-    --     function()
-    --       if vim.fn["pum#visible"]() then
-    --         return vim.fn["pum#map#select_relative"](-1)
-    --       else
-    --         return "<C-h>"
-    --       end
-    --     end,
-    --     mode = "i",
-    --     expr = true,
-    --     silent = true,
-    --   },
-    --   -- {
-    --   --   "<CR>",
-    --   --   function()
-    --   --     print("called1")
-    --   --     if vim.fn["pum#visible"]() then
-    --   --       print("called2")
-    --   --       return vim.fn["pum#map#confirm"]()
-    --   --     else
-    --   --       return "<CR>"
-    --   --     end
-    --   --   end,
-    --   --   mode = "i",
-    --   --   expr = true,
-    --   --   silent = false,
-    --   -- },
-    -- },
+    lazy = true,
+    event = "InsertEnter",
   },
   {
     "Shougo/ddu.vim",
