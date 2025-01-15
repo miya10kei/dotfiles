@@ -17,6 +17,11 @@ gitconfig: $(HOME)/.gitconfig
 $(HOME)/.gitconfig:
 	ln -fs $(DOTDIR)/.gitconfig $(HOME)/.gitconfig
 
+.PHONY: gitattributes
+gitconfig: $(HOME)/.gitattributes
+$(HOME)/.gitattributes:
+	ln -fs $(DOTDIR)/.gitattributes $(HOME)/.gitattributes
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-gpg

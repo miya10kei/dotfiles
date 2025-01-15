@@ -88,6 +88,7 @@ local used_masson_packages = {
     "debugpy",
   },
   ["linter"] = {
+    "actionlint",
     "hadolint",
     "markdownlint",
     "tflint",
