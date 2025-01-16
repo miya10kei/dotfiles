@@ -19,6 +19,7 @@ endif
 brew-install:
 	brew install --cask \
 		1password \
+		1password-cli \
 		adobe-acrobat-reader \
 		alt-tab \
 		aws-vpn-client \
