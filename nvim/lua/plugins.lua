@@ -223,4 +223,14 @@ require("lazy").setup({
     end,
     keys = { "<LEADER>r", ":<C-u>Jaq<CR>", silent = true },
   },
+  {
+    "smoka7/hop.nvim",
+    config = function()
+      require("hop").setup()
+    end,
+    event = "BufEnter",
+    keys = {
+      { "<C-h>", ":<C-u>HopWord<CR>", silent = true },
+    },
+  },
 })
