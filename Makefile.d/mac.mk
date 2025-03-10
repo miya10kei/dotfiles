@@ -19,23 +19,26 @@ endif
 brew-install:
 	brew install --cask \
 		1password \
-		1password-cli \
 		adobe-acrobat-reader \
 		alt-tab \
 		aws-vpn-client \
+		cursor \
 		deepl \
 		displaylink \
 		elgato-stream-deck \
 		firefox \
+		ghostty \
+		google-earth-pro \
 		google-japanese-ime \
 		homerow \
 		hyper \
 		karabiner-elements \
-		kindle \
 		rancher \
 		raycast \
 		realforce \
 		rectangle \
+		slack \
+		visual-studio-code \
 		xquartz
 
 .PHONY: brew-update
