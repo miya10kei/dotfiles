@@ -44,6 +44,7 @@ build-dev-env:
 			--tag miya10kei/devenv:latest \
 			$(HOME)/.dotfiles; \
 	fi
+	docker system prune --force
 
 .PHONY: setup4d
 setup4d: \

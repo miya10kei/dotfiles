@@ -1,17 +1,17 @@
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
-ARG DOCKER_BUILDX_VERSION=0.20.0
-ARG DOCKER_COMPOSE_VERSION=2.32.4
-ARG DOCKER_VERSION=27.5.0
-ARG GOLANG_VERSION=1.23.6
+ARG DOCKER_BUILDX_VERSION=0.21.2
+ARG DOCKER_COMPOSE_VERSION=2.33.1
+ARG DOCKER_VERSION=28.0.1
+ARG GOLANG_VERSION=1.24.0
 ARG HASKELL_CABAL_VERSION=3.10.3.0
 ARG HASKELL_GHCUP_VERSION=0.1.30.0
 ARG HASKELL_GHC_VERSION=9.4.8
 ARG HASKELL_STACK_VERSION=3.1.1
 ARG LUAROCKS_VERSION=3.11.1
 ARG LUA_VERSION=5.4.7
-ARG NODEJS_VERSION=20.18.0
+ARG NODEJS_VERSION=22.14.0
 ARG PYTHON2_VERSION=2.7.18
 ARG PYTHON3_VERSION=3.12.9
 ARG PYTHON_VERSION=3.11.9
@@ -231,17 +231,17 @@ COPY --from=rust    "${HOME}/out" /out/rust
 COPY --from=tools   "${HOME}/out" /out/tools
 COPY --from=volta   "${HOME}/out" /out/volta
 
-RUN    upx --lzma --best "/out/deno${HOME}/.deno/bin/deno" \
-    && upx --lzma --best "/out/go/${HOME}/.go/bin/"* \
-    && upx --lzma --best "/out/go${HOME}/.go/pkg/tool/linux_${ARCH2}/"* \
-    && upx --lzma --best "/out/haskell${HOME}/.ghcup/bin/ghcup" \
-    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/cabal")" \
-    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/stack")" \
-    && upx --lzma --best "/out/lua${HOME}/.lua/bin/lua" \
-    && upx --lzma --best "/out/lua${HOME}/.lua/bin/luac" \
-    && upx --lzma --best "/out/neovim${HOME}/.nvim/bin/nvim" \
-    && upx --lzma --best "/out/tools${HOME}/.docker/cli-plugins/docker-compose" \
-    && upx --lzma --best "/out/tools${HOME}/.docker/bin/docker"
+#RUN    upx --lzma --best "/out/deno${HOME}/.deno/bin/deno" \
+#    && upx --lzma --best "/out/go/${HOME}/.go/bin/"* \
+#    && upx --lzma --best "/out/go${HOME}/.go/pkg/tool/linux_${ARCH2}/"* \
+#    && upx --lzma --best "/out/haskell${HOME}/.ghcup/bin/ghcup" \
+#    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/cabal")" \
+#    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/stack")" \
+#    && upx --lzma --best "/out/lua${HOME}/.lua/bin/lua" \
+#    && upx --lzma --best "/out/lua${HOME}/.lua/bin/luac" \
+#    && upx --lzma --best "/out/neovim${HOME}/.nvim/bin/nvim" \
+#    && upx --lzma --best "/out/tools${HOME}/.docker/cli-plugins/docker-compose" \
+#    && upx --lzma --best "/out/tools${HOME}/.docker/bin/docker"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -283,6 +283,7 @@ RUN apt-get update \
         libbz2-dev \
         libclang-dev \
         libffi-dev \
+        libgl1 \
         libgmp-dev \
         libgmp10 \
         libncurses-dev \
