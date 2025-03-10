@@ -40,12 +40,14 @@ brew-install:
 		slack \
 		visual-studio-code \
 		xquartz
+	brew cleanup --prune all
 
 .PHONY: brew-update
 brew-update:
 	brew update \
 		&& brew upgrade \
 		&& brew upgrade --cask --greedy
+	brew cleanup --prune all
 
 # Rancher Desktop
 .PHONY: setup-rancher
