@@ -4,7 +4,7 @@ SRC_DIR := $(HOME)/.local/src
 CARGO_BIN_DIR := $(CARGO_HOME)/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
 FLUTTER_DIR := $(HOME)/.flutter
-GO_BIN_DIR := $(HOME)/go/bin
+GO_BIN_DIR := $(HOME)/.go/bin
 PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
@@ -55,6 +55,7 @@ install-bins: \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
+	$(GO_BIN_DIR)/pinact \
 	$(FLUTTER_DIR)/flutter \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/poetry \
@@ -262,6 +263,9 @@ $(BIN_DIR)/zoxide:
 $(CARGO_BIN_DIR)/jnv:
 	cargo install jnv
 	rm -dfr $(CARGO_HOME)/target
+
+$(GO_BIN_DIR)/pinact:
+	go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
 
 $(FLUTTER_DIR)/flutter:
 	mkdir -p /tmp/flutter

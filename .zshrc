@@ -26,13 +26,12 @@ function main() {
     add_path "$HOME/.deno/bin"
     add_path "$HOME/.docker/bin"
     add_path "$HOME/.ghcup/bin"
+    add_path "$HOME/.go/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.local/share/nvim/mason/bin"
     add_path "$HOME/.rd/bin"
     add_path "$HOME/.tfenv/bin"
     add_path "$HOME/Library/Python/3.11/bin"
-    add_path "$HOME/go/bin"
-    add_path "/usr/local/go/bin"
     add_path "/usr/local/nodejs/bin"
 
     if [[ -e $HOME/.pyenv ]]; then
