@@ -40,6 +40,15 @@ function main() {
       eval "$(pyenv init -)"
     fi
 
+    # -------------
+    # --- Node.js -
+    # -------------
+    if [[ -e /opt/homebrew/opt/node@22 ]]; then
+        export LDFLAGS="-L/opt/homebrew/opt/node@22/lib"
+        export CPPFLAGS="-I/opt/homebrew/opt/node@22/include"
+        add_path "/opt/homebrew/opt/node@22/bin"
+    fi
+
     # ------------
     # --- tmux ---
     # ------------

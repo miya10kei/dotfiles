@@ -40,7 +40,10 @@ end
 -------------
 require("mason").setup({
   log_level = vim.log.levels.WARN,
-  max_concurrent_installers = 8,
+  max_concurrent_installers = 1,
+  install = {
+    install_timeout = 60000,
+  },
 })
 require("mason-lspconfig").setup()
 local mason_registry = require("mason-registry")
@@ -166,7 +169,7 @@ for _, v in pairs(used_masson_packages["lsp"]) do
             ["https://json.schemastore.org/github-action.json"] = ".github/actions/*.yaml",
             ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*.yaml",
             ["https://raw.githubusercontent.com/aws/aws-sam-cli/master/schema/samcli.json"] = "samconfig.yaml",
-            ["https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json"] = "*sam/*template.yaml",
+            ["https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json"] = "template*.yaml",
           },
         },
       },

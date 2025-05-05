@@ -24,6 +24,15 @@ $(HOME)/.gitattributes:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-github-copilot
+deploy-github-copilot: \
+	$(HOME)/.config/github-copilot
+
+$(HOME)/.config/github-copilot:
+	ln -fs $(DOTDIR)/data-volume/github-copilot $(HOME)/.config/github-copilot
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-gpg
 deploy-gpg: \
 	gpgdir

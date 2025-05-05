@@ -19,26 +19,19 @@ endif
 brew-install:
 	brew install --cask \
 		1password \
-		adobe-acrobat-reader \
 		alt-tab \
 		aws-vpn-client \
-		cursor \
+		chatgpt \
 		deepl \
 		displaylink \
-		elgato-stream-deck \
-		firefox \
 		ghostty \
-		google-earth-pro \
-		google-japanese-ime \
 		homerow \
 		hyper \
 		karabiner-elements \
 		rancher \
 		raycast \
-		realforce \
 		rectangle \
 		slack \
-		visual-studio-code \
 		xquartz
 	brew cleanup --prune all
 

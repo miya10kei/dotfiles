@@ -27,7 +27,7 @@ M.keymap("i", "<CR>", function()
   if vim.fn["pum#visible"]() then
     return vim.fn["pum#map#confirm"]()
   else
-    return "<CR>"
+    return vim.api.nvim_feedkeys(require("nvim-autopairs").autopairs_cr(), "in", true)
   end
 end, mode)
 

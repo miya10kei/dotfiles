@@ -51,6 +51,7 @@ setup4d: \
 	delete-nvimrc \
 	deploy-aws \
 	deploy-git \
+	deploy-github-copilot \
 	deploy-gpg \
 	deploy-navi \
 	deploy-nvim \

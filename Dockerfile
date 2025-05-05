@@ -1,19 +1,19 @@
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
-ARG DOCKER_BUILDX_VERSION=0.21.2
-ARG DOCKER_COMPOSE_VERSION=2.33.1
-ARG DOCKER_VERSION=28.0.1
-ARG GOLANG_VERSION=1.24.0
-ARG HASKELL_CABAL_VERSION=3.10.3.0
-ARG HASKELL_GHCUP_VERSION=0.1.30.0
-ARG HASKELL_GHC_VERSION=9.4.8
-ARG HASKELL_STACK_VERSION=3.1.1
+ARG DOCKER_BUILDX_VERSION=0.23.0
+ARG DOCKER_COMPOSE_VERSION=2.35.1
+ARG DOCKER_VERSION=28.1.1
+ARG GOLANG_VERSION=1.24.2
+ARG HASKELL_CABAL_VERSION=3.12.1.0
+ARG HASKELL_GHCUP_VERSION=0.1.50.1
+ARG HASKELL_GHC_VERSION=9.6.7
+ARG HASKELL_STACK_VERSION=3.3.1
 ARG LUAROCKS_VERSION=3.11.1
 ARG LUA_VERSION=5.4.7
-ARG NODEJS_VERSION=22.14.0
+ARG NODEJS_VERSION=22.15.0
 ARG PYTHON2_VERSION=2.7.18
-ARG PYTHON3_VERSION=3.12.9
+ARG PYTHON3_VERSION=3.13.3
 ARG PYTHON_VERSION=3.11.9
 ARG DKID
 ARG GID
@@ -156,15 +156,14 @@ RUN git clone https://github.com/neovim/neovim \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM  builder-rust AS volta
+FROM  builder AS volta
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV PATH="/${HOME}/.cargo/bin:${PATH}"
+ENV PATH="${HOME}/.volta/bin:${PATH}"
 ARG NODEJS_VERSION
-RUN cargo install --git https://github.com/volta-cli/volta \
+RUN curl https://get.volta.sh | bash \
     && volta install "node@${NODEJS_VERSION}" \
     && mkdir -p "${HOME}/out/${HOME}" \
-    && mv "${HOME}/.cargo" \
-          "${HOME}/.volta" \
+    && mv "${HOME}/.volta" \
           "${HOME}/out/${HOME}/"
 
 

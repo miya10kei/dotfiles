@@ -187,11 +187,11 @@ require("lazy").setup({
       require("colorizer").setup()
     end,
   },
-  -- {
-  --   "windwp/nvim-autopairs",
-  --   event = "InsertEnter",
-  --   config = true,
-  -- },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true,
+  },
   {
     "anuvyklack/pretty-fold.nvim",
     config = function()
