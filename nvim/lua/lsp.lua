@@ -66,6 +66,10 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 --- nvim-lspconfig ---
 ----------------------
 local capabilities = require("ddc_source_lsp").make_client_capabilities()
+capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
+}
 local lspconfig = require("lspconfig")
 local used_masson_packages = {
   ["lsp"] = {

@@ -53,6 +53,7 @@ setup4d: \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \
+	deploy-mcphub \
 	deploy-navi \
 	deploy-nvim \
 	deploy-pass \

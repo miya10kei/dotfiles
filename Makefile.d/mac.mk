@@ -32,14 +32,15 @@ brew-install:
 		raycast \
 		rectangle \
 		slack \
+		todoist \
 		xquartz
 	brew cleanup --prune all
 
 .PHONY: brew-update
 brew-update:
-	brew update \
-		&& brew upgrade \
-		&& brew upgrade --cask --greedy
+	brew update
+	brew upgrade
+	brew upgrade --cask --greedy
 	brew cleanup --prune all
 
 # Rancher Desktop

@@ -66,6 +66,23 @@ $(HOME)/.config/karabiner/karabiner.json:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-mcphub
+deploy-mcphub: \
+  mcphubdir \
+	serversjson
+
+.PHONY: mcphubdir
+mcphubdir: $(HOME)/.config/mcphub
+$(HOME)/.config/mcphub:
+	mkdir -p $(HOME)/.config/mcphub
+
+.PHONY: serversjson
+serversjson: $(HOME)/.config/mcphub/servers.json
+$(HOME)/.config/mcphub/servers.json:
+	ln -fs $(DOTDIR)/mcphub/servers.json $(HOME)/.config/mcphub/servers.json
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-navi
 deploy-navi: \
 	addmycheat

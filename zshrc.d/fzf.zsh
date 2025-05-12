@@ -11,5 +11,7 @@ export FZF_CTRL_T_OPTS="--preview=\"$FZF_CTRL_T_PREVIEW\""
 FZF_CTRL_R_PREVIEW="echo {} | awk '{ print substr(\$0, index(\$0,\$2)) }' | bat --color=always --language=sh --style=plain --theme=gruvbox-dark"
 export FZF_CTRL_R_OPTS="--preview=\"$FZF_CTRL_R_PREVIEW\""
 
-source $HOME/.local/bin/fzf-key-bindings.zsh
+if [[ -e $HOME/.local/bin/fzf-key-bindings.zsh ]]; then
+    source $HOME/.local/bin/fzf-key-bindings.zsh
+fi
 bindkey "ç" fzf-cd-widget
