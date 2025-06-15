@@ -10,15 +10,12 @@ $(HOME)/.aws:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
-	gitconfig
+	$(HOME)/.gitconfig \
+	$(HOME)/.gitattributes
 
-.PHONY: gitconfig
-gitconfig: $(HOME)/.gitconfig
 $(HOME)/.gitconfig:
 	ln -fs $(DOTDIR)/.gitconfig $(HOME)/.gitconfig
 
-.PHONY: gitattributes
-gitconfig: $(HOME)/.gitattributes
 $(HOME)/.gitattributes:
 	ln -fs $(DOTDIR)/.gitattributes $(HOME)/.gitattributes
 
@@ -35,10 +32,8 @@ $(HOME)/.config/github-copilot:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-gpg
 deploy-gpg: \
-	gpgdir
+	$(HOME)/.gnupg
 
-.PHONY: gpgdir
-gpgdir: $(HOME)/.gnupg
 $(HOME)/.gnupg:
 	ln -fs $(DOTDIR)/data-volume/gpg $(HOME)/.gnupg
 
@@ -46,10 +41,8 @@ $(HOME)/.gnupg:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-hyper
 deploy-hyper: \
-	hyperjs
+	$(HOME).hyper.js
 
-.PHONY: hyperjs
-hyperjs: $(HOME).hyper.js
 $(HOME).hyper.js:
 	ln -fs $(DOTDIR)/.hyper.js $(HOME)/.hyper.js
 
@@ -57,10 +50,8 @@ $(HOME).hyper.js:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-karabiner
 deploy-karabiner: \
-	karabinerjson
+	$(HOME)/.config/karabiner/karabiner.json
 
-.PHONY: karabinerjson
-karabinerjson: $(HOME)/.config/karabiner/karabiner.json
 $(HOME)/.config/karabiner/karabiner.json:
 	ln -fs $(DOTDIR)/karabiner.json $(HOME)/.config/karabiner/karabiner.json
 
@@ -68,27 +59,17 @@ $(HOME)/.config/karabiner/karabiner.json:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-mcphub
 deploy-mcphub: \
-  mcphubdir \
-	serversjson
+  $(HOME)/.config/mcphub
 
-.PHONY: mcphubdir
-mcphubdir: $(HOME)/.config/mcphub
 $(HOME)/.config/mcphub:
-	mkdir -p $(HOME)/.config/mcphub
-
-.PHONY: serversjson
-serversjson: $(HOME)/.config/mcphub/servers.json
-$(HOME)/.config/mcphub/servers.json:
-	ln -fs $(DOTDIR)/mcphub/servers.json $(HOME)/.config/mcphub/servers.json
+	ln -fs $(DOTDIR)/.config/mcphub $(HOME)/.config/mcphub
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-navi
 deploy-navi: \
-	addmycheat
+	$(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets
 
-.PHONY: addmycheat
-navidir: $(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets
 $(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets:
 	navi repo add https://github.com/miya10kei/navi-cheets
 
@@ -96,12 +77,10 @@ $(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-nvim
 deploy-nvim: \
-	nvimrc
+	$(HOME)/.config/nvim
 
-.PHONY: nvimrc
-nvimrc: $(HOME)/.config/nvim
 $(HOME)/.config/nvim:
-	ln -fs $(DOTDIR)/nvim/ $(HOME)/.config/
+	ln -fs $(DOTDIR)/.config/nvim/ $(HOME)/.config/nvim
 
 .PHONY: delete-nvimrc
 delete-nvimrc:
@@ -121,23 +100,13 @@ $(HOME)/.obsidian.vimrc:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-sheldon
 deploy-sheldon: \
-	sheldondir \
-	pluginstoml \
-	pluginslock
+	$(HOME)/.config/sheldon \
+	sheldonlock
 
-.PHONY: sheldondir
-sheldondir: $(HOME)/.config/sheldon
 $(HOME)/.config/sheldon:
-	mkdir -p $(HOME)/.config/sheldon
+	ln -fs $(DOTDIR)/.config/sheldon $(HOME)/.config/sheldon
 
-.PHONY: pluginstoml
-pluginstoml: $(HOME)/.config/sheldon/plugins.toml
-$(HOME)/.config/sheldon/plugins.toml:
-	ln -fs $(DOTDIR)/plugins.toml $(HOME)/.config/sheldon/plugins.toml
-
-.PHONY: pluginslock
-pluginslock: $(HOME)/.local/share/plugins.lock
-$(HOME)/.local/share/plugins.lock:
+sheldonlock:
 	sheldon lock
 
 
@@ -153,31 +122,12 @@ $(HOME)/.password-store:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-sqls
-deploy-sqls: \
-	sqlsdir \
-	configyaml
-
-.PHONY: sqlsdir
-sqlsdir: $(HOME)/.config/sqls
-$(HOME)/.config/sqls:
-	mkdir -p $(HOME)/.config/sqls
-
-.PHONY: configyaml
-configyaml: $(HOME)/.config/sqls/config.yaml
-$(HOME)/.config/sqls/config.yaml:
-	ln -s $(DOTDIR)/.config/sqls/config.yaml $(HOME)/.config/sqls/config.yaml
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-starship
 deploy-starship: \
-	starshiptoml
+	$(HOME)/.config/starship.toml
 
-.PHONY: startshiptoml
-starshiptoml: $(HOME)/.config/starship.toml
 $(HOME)/.config/starship.toml:
-	ln -fs $(DOTDIR)/starship.toml $(HOME)/.config/starship.toml
+	ln -fs $(DOTDIR)/.config/starship.toml $(HOME)/.config/starship.toml
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -194,18 +144,11 @@ $(HOME)/.tmux.conf:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-yamlfmt
 deploy-yamlfmt: \
-	yamlfmtdir \
-	yamlfmt
+	$(HOME)/.config/yamlfmt
 
-.PHONY: yamlfmtdir
-yamlfmtdir: $(HOME)/.config/yamlfmt
+
 $(HOME)/.config/yamlfmt:
-	mkdir -p $(HOME)/.config/yamlfmt
-
-.PHONY: yamlfmt
-yamlfmt: $(HOME)/.config/yamlfmt/.yamlfmt
-$(HOME)/.config/yamlfmt/.yamlfmt:
-	ln -fs $(DOTDIR)/.yamlfmt $(HOME)/.config/yamlfmt/
+	ln -fs $(DOTDIR)/.config/yamlfmt $(HOME)/.config/yamlfmt
 
 
 # ----------------------------------------------------------------------------------------------------------------------

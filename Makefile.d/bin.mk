@@ -11,21 +11,21 @@ AWS_VALUT := 7.2.0
 BAT_VERSION := 0.25.0
 DELTA_VERSION := 0.18.2
 DIVE_VERSION := 0.13.1
-EXA_VERSION := 0.10.1
+EXA_VERSION := 0.10.0
 FD_VERSION := 10.2.0
 FLUTTER_VERSION := 3.19.5
 FZF_VERSION := 0.62.0
-GCLOUD_VERSION := 477.0.0
+GCLOUD_VERSION := 526.0.1
 GHQ_VERSION := 1.8.0
-GITHUB_CLI_VERSION := 2.72.0
-JQ_VERSION := 1.7.1
+GITHUB_CLI_VERSION := 2.74.1
+JQ_VERSION := 1.8.0
 NAVI_VERSION := 2.24.0
 PROCS_VERSION := 0.14.10
-RIPGREP_VERSION := 14.1.0
-SHELDON_VERSION := 0.8.1
+RIPGREP_VERSION := 14.1.1
+SHELDON_VERSION := 0.8.2
 STARSHIP_VERSION := 1.23.0
-YQ_VERSION := 4.45.2
-ZOXIDE_VERSION := 0.9.7
+YQ_VERSION := 4.45.4
+ZOXIDE_VERSION := 0.9.8
 
 .PHONY: install-bins
 install-bins: \
@@ -55,10 +55,10 @@ install-bins: \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
-	$(GO_BIN_DIR)/pinact \
 	$(FLUTTER_DIR)/flutter \
+	$(GO_BIN_DIR)/actionlint \
+	$(GO_BIN_DIR)/pinact \
 	$(PYENV_SHIMS_DIR)/pgcli \
-	$(PYENV_SHIMS_DIR)/poetry \
 	$(PYENV_SHIMS_DIR)/sam \
 	$(SRC_DIR)/google-cloud-sdk
 
@@ -124,7 +124,8 @@ $(BIN_DIR)/dive:
 
 $(BIN_DIR)/exa:
 	mkdir -p /tmp/exa
-	curl -fsLS -o /tmp/exa/exa.zip https://github.com/ogham/exa/releases/download/v$(EXA_VERSION)/exa-linux-x86_64-musl-v$(EXA_VERSION).zip
+	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "x86_64"; else echo "x86_64"; fi))
+	curl -fsLS -o /tmp/exa/exa.zip https://github.com/ogham/exa/releases/download/v$(EXA_VERSION)/exa-linux-$(DL_ARCH)-musl-v$(EXA_VERSION).zip
 	unzip /tmp/exa/exa.zip -d /tmp/exa
 	mv /tmp/exa/bin/exa $(BIN_DIR)/exa
 	mv /tmp/exa/completions/exa.zsh $(COMPLETION_DIR)/exa.zsh
@@ -141,7 +142,8 @@ $(BIN_DIR)/fd:
 
 $(BIN_DIR)/fzf:
 	mkdir -p /tmp/fzf
-	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_amd64.tar.gz
+	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "amd64"; else echo "arm64"; fi))
+	curl -fsLS -o /tmp/fzf/fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v$(FZF_VERSION)/fzf-$(FZF_VERSION)-linux_$(DL_ARCH).tar.gz
 	tar -zxf /tmp/fzf/fzf.tar.gz -C /tmp/fzf
 	mv /tmp/fzf/fzf $(BIN_DIR)/fzf
 	chown `whoami`:`id -gn` $(BIN_DIR)/fzf
@@ -260,9 +262,14 @@ $(BIN_DIR)/zoxide:
 	chown `whoami`:`id -gn` $(BIN_DIR)/zoxide
 	rm -rf /tmp/zoxide
 
+# Cargo package
 $(CARGO_BIN_DIR)/jnv:
 	cargo install jnv
 	rm -dfr $(CARGO_HOME)/target
+
+# Go package
+$(GO_BIN_DIR)/actionlint:
+	go install github.com/rhysd/actionlint/cmd/actionlint@latest
 
 $(GO_BIN_DIR)/pinact:
 	go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
@@ -275,12 +282,9 @@ $(FLUTTER_DIR)/flutter:
 	mv /tmp/flutter/flutter $(FLUTTER_DIR)/
 	rm -rf /tmp/flutter
 
-$(PYENV_SHIMS_DIR)/poetry:
-	pip install --quiet poetry
-
+# Python package
 $(PYENV_SHIMS_DIR)/sam:
 	pip install --quiet aws-sam-cli
 
 $(PYENV_SHIMS_DIR)/pgcli:
 	pip install --quiet pgcli
-

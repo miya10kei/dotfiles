@@ -1,6 +1,7 @@
 local keymap = vim.keymap.set
 local keymap_opts_silent = {
   silent = true,
+  noremap = true,
 }
 
 vim.g.mapleader = " "
@@ -24,3 +25,4 @@ end, {
   silent = true,
 })
 keymap("n", "<SPACE><SPACE>", "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<CR>", keymap_opts_silent)
+keymap("x", "p", '"_dP', keymap_opts_silent)

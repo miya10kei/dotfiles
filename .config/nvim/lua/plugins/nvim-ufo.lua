@@ -10,14 +10,14 @@ return {
     },
     keys = {
       {
-        "<C-a>",
+        "<LEADER>a",
         function()
           require("ufo").openAllFolds()
         end,
         desc = "Open all folds",
       },
       {
-        "<C-c>",
+        "<LEADER>c",
         function()
           require("ufo").closeAllFolds()
         end,

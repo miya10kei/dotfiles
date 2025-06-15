@@ -17,35 +17,6 @@ require("lazy").setup({
     "vim-denops/denops.vim",
   },
   {
-    "Shougo/ddc.vim",
-    config = function()
-      vim.g.copilot_no_maps = true
-      vim.g.copilot_hide_during_completion = 1
-      vim.g.copilot_enabled = 0
-
-      require("pum")
-      require("ddc")
-      -- require("vsnip")
-    end,
-    dependencies = {
-      "Shougo/pum.vim",
-      "Shougo/ddc-ui-pum",
-      "Shougo/ddc-matcher_head",
-      "Shougo/ddc-sorter_rank",
-      "Shougo/ddc-source-around",
-      "Shougo/ddc-source-lsp",
-      -- "Shougo/ddc-ui-native",
-      "Shougo/ddc-source-copilot",
-      "github/copilot.vim",
-      "hrsh7th/vim-vsnip",
-      "uga-rosa/ddc-source-lsp-setup",
-      "uga-rosa/ddc-source-vsnip",
-      "uga-rosa/ddc-previewer-floating",
-    },
-    lazy = true,
-    event = "InsertEnter",
-  },
-  {
     "Shougo/ddu.vim",
     config = function()
       require("ddu")
@@ -115,23 +86,6 @@ require("lazy").setup({
         "<ESC><CMD>Ddu ddu__lsp_workspace<CR>",
         silent = true,
       },
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require("lsp")
-    end,
-    dependencies = {
-      "akinsho/flutter-tools.nvim",
-      "nanotee/sqls.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvimtools/none-ls.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "williamboman/mason.nvim",
-    },
-    opts = {
-      autoformat = false,
     },
   },
   {

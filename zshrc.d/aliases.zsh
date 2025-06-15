@@ -28,6 +28,13 @@ function pysw(){
   fi
 }
 
+function quit() {
+    if builtin command -v gpgconf > /dev/null 2>&1; then
+        gpgconf --kill gpg-agent
+    fi
+    exit
+}
+
 alias_if_exists 'cdc'       '_fzf_change_directory "ls -1D" "pwd"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'
@@ -38,7 +45,7 @@ alias_if_exists 'dk'        'docker'          'docker'
 alias_if_exists 'g'         'git'             'git'
 alias_if_exists 'll'        'exa -al --group-directories-first' 'exa' 'ls -la'
 alias_if_exists 'ls'        'exa -a --group-directories-first'  'exa' 'ls -a'
-alias_if_exists 'q'         'exit'
+alias_if_exists 'q'         'quit'
 alias_if_exists 'rm'        'rm -i'
 alias_if_exists 'rr'        'rm -ir'
 alias_if_exists 'rrf'       'rm -fr'

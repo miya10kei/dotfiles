@@ -28,10 +28,12 @@ brew-install:
 		homerow \
 		hyper \
 		karabiner-elements \
+		postman \
 		rancher \
 		raycast \
 		rectangle \
 		slack \
+		superwhisper \
 		todoist \
 		xquartz
 	brew cleanup --prune all
