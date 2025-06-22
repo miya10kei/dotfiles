@@ -17,6 +17,15 @@ $(HOME)/.claude:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-editorconfig
+deploy-editorconfig: \
+	$(HOME)/.editorconfig
+
+$(HOME)/.editorconfig:
+	ln -fs $(DOTDIR)/.editorconfig $(HOME)/.editorconfig
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
 	$(HOME)/.gitconfig \
