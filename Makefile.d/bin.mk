@@ -3,8 +3,8 @@ BIN_DIR := $(HOME)/.local/bin
 SRC_DIR := $(HOME)/.local/src
 CARGO_BIN_DIR := $(CARGO_HOME)/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
-FLUTTER_DIR := $(HOME)/.flutter
 GO_BIN_DIR := $(HOME)/.go/bin
+NODE_BIN_DIR := $(HOME)/.volta/bin
 PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
 AWS_VALUT := 7.2.0
@@ -13,7 +13,6 @@ DELTA_VERSION := 0.18.2
 DIVE_VERSION := 0.13.1
 EXA_VERSION := 0.10.0
 FD_VERSION := 10.2.0
-FLUTTER_VERSION := 3.19.5
 FZF_VERSION := 0.62.0
 GCLOUD_VERSION := 526.0.1
 GHQ_VERSION := 1.8.0
@@ -55,9 +54,9 @@ install-bins: \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
-	$(FLUTTER_DIR)/flutter \
 	$(GO_BIN_DIR)/actionlint \
 	$(GO_BIN_DIR)/pinact \
+	$(NODE_BIN_DIR)/claude \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/sam \
 	$(SRC_DIR)/google-cloud-sdk
@@ -274,13 +273,9 @@ $(GO_BIN_DIR)/actionlint:
 $(GO_BIN_DIR)/pinact:
 	go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
 
-$(FLUTTER_DIR)/flutter:
-	mkdir -p /tmp/flutter
-	curl -fsLS -o /tmp/flutter/flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$(FLUTTER_VERSION)-stable.tar.xz
-	tar -Jxf /tmp/flutter/flutter.tar.xz -C /tmp/flutter
-	mkdir $(FLUTTER_DIR)
-	mv /tmp/flutter/flutter $(FLUTTER_DIR)/
-	rm -rf /tmp/flutter
+# Node package
+$(NODE_BIN_DIR)/claude:
+	npm install -g @anthropic-ai/claude-code
 
 # Python package
 $(PYENV_SHIMS_DIR)/sam:

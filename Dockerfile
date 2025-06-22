@@ -356,7 +356,7 @@ ENV PATH="${HOME}/.pyenv/bin:${PATH}"
 ENV VOLTA_HOME="${HOME}/.volta"
 ENV PATH="${VOLTA_HOME}/bin:${PATH}"
 
-COPY --chown="${UNAME}:${GNAME}" ./.config/nvim  $HOME/.config/nvim
+COPY --chown="${UNAME}:${GNAME}" ./config/nvim  $HOME/.config/nvim
 COPY --chown="${UNAME}:${GNAME}" ./Makefile      $HOME/.dotfiles/Makefile
 COPY --chown="${UNAME}:${GNAME}" ./Makefile.d    $HOME/.dotfiles/Makefile.d
 

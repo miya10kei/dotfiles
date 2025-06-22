@@ -50,10 +50,12 @@ build-dev-env:
 setup4d: \
 	delete-nvimrc \
 	deploy-aws \
+	deploy-claude \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \
 	deploy-mcphub \
+	deploy-memolist \
 	deploy-nvim \
 	deploy-pass \
 	deploy-sheldon \

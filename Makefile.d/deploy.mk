@@ -8,6 +8,15 @@ $(HOME)/.aws:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-claude
+deploy-claude: \
+	$(HOME)/.claude
+
+$(HOME)/.claude:
+	ln -fs $(DOTDIR)/data-volume/claude $(HOME)/.claude
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
 	$(HOME)/.gitconfig \
@@ -62,7 +71,7 @@ deploy-mcphub: \
   $(HOME)/.config/mcphub
 
 $(HOME)/.config/mcphub:
-	ln -fs $(DOTDIR)/.config/mcphub $(HOME)/.config/mcphub
+	ln -fs $(DOTDIR)/config/mcphub $(HOME)/.config/mcphub
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -75,12 +84,21 @@ $(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-memolist
+deploy-memolist: \
+	$(HOME)/.config/memo
+
+$(HOME)/.config/memo:
+	ln -fs $(DOTDIR)/config/memo $(HOME)/.config/memo
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-nvim
 deploy-nvim: \
 	$(HOME)/.config/nvim
 
 $(HOME)/.config/nvim:
-	ln -fs $(DOTDIR)/.config/nvim/ $(HOME)/.config/nvim
+	ln -fs $(DOTDIR)/config/nvim/ $(HOME)/.config/nvim
 
 .PHONY: delete-nvimrc
 delete-nvimrc:
@@ -104,7 +122,7 @@ deploy-sheldon: \
 	sheldonlock
 
 $(HOME)/.config/sheldon:
-	ln -fs $(DOTDIR)/.config/sheldon $(HOME)/.config/sheldon
+	ln -fs $(DOTDIR)/config/sheldon $(HOME)/.config/sheldon
 
 sheldonlock:
 	sheldon lock
@@ -127,7 +145,7 @@ deploy-starship: \
 	$(HOME)/.config/starship.toml
 
 $(HOME)/.config/starship.toml:
-	ln -fs $(DOTDIR)/.config/starship.toml $(HOME)/.config/starship.toml
+	ln -fs $(DOTDIR)/config/starship.toml $(HOME)/.config/starship.toml
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -148,7 +166,7 @@ deploy-yamlfmt: \
 
 
 $(HOME)/.config/yamlfmt:
-	ln -fs $(DOTDIR)/.config/yamlfmt $(HOME)/.config/yamlfmt
+	ln -fs $(DOTDIR)/config/yamlfmt $(HOME)/.config/yamlfmt
 
 
 # ----------------------------------------------------------------------------------------------------------------------

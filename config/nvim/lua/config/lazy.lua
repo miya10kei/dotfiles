@@ -121,12 +121,6 @@ require("lazy").setup({
     },
   },
   {
-    "glidenote/memolist.vim",
-    config = function()
-      vim.g.memolist_path = vim.fn.expand("~/Documents/memo")
-    end,
-  },
-  {
     "rcarriga/nvim-dap-ui",
     dependencies = {
       "mfussenegger/nvim-dap",

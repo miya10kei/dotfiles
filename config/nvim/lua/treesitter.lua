@@ -18,6 +18,7 @@ local used_treesitter_packages = {
   "lua",
   "make",
   "markdown",
+  "mermaid",
   "python",
   "rust",
   "sql",

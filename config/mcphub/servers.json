@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "git": {
+      "command": "uv",
+      "args": [
+        "tool",
+        "run",
+        "mcp-server-git"
+      ]
+    },
+    "github.com/modelcontextprotocol/servers/tree/main/src/aws-kb-retrieval-server": {
+      "command": "uv",
+      "args": [
+        "tool",
+        "run",
+        "mcp-server-aws-kb-retrieval"
+      ]
+    }
+  }
+}

@@ -4,8 +4,6 @@ return {
     "neovim/nvim-lspconfig",
     main = "lsp",
     dependencies = {
-      "akinsho/flutter-tools.nvim",
-      "nanotee/sqls.nvim",
       "nvim-lua/plenary.nvim",
       "nvimtools/none-ls.nvim",
       "williamboman/mason-lspconfig.nvim",

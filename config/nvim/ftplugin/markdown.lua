@@ -1,9 +1,9 @@
 local options = {
-  expandtab = false,
+  expandtab = true,
   tabstop = 4,
   shiftwidth = 4,
 }
 
 for k, v in pairs(options) do
-  vim.opt[k] = v
+  vim.bo[k] = v
 end
