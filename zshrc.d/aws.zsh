@@ -6,6 +6,13 @@ if builtin command -v aws-vault > /dev/null 2>&1; then
     export AWS_VAULT_PASS_PREFIX=aws-vault
   fi
 
+  function exec_aws_command() {
+    cmd=$1
+    echo -e "\e[32m\$$cmd\e[m"
+    print -s $cmd
+    eval $cmd
+  }
+
   function aws-check-session() {
     aws sts get-caller-identity > /dev/null
   }
@@ -20,7 +27,7 @@ if builtin command -v aws-vault > /dev/null 2>&1; then
     if [ -z "$region" ]; then
       return
     fi
-    export AWS_REGION=$region
+    export AWS_DEFAULT_REGION=$region
   }
 
 
@@ -58,5 +65,14 @@ if builtin command -v aws-vault > /dev/null 2>&1; then
     echo -e "\e[32m\$$cmd\e[m"
     print -s $cmd
     eval $cmd
+  }
+
+  function aws-log() {
+    aws-check-session
+    logGroupName=$(aws logs list-log-groups | jq -r '.logGroups[].logGroupName' | fzf)
+    if [ -z "$logGroupName" ]; then
+      return
+    fi
+    exec_aws_command "aws logs tail --follow $logGroupName"
   }
 fi

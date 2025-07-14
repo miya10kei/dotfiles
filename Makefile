@@ -52,6 +52,7 @@ setup4d: \
 	deploy-aws \
 	deploy-claude \
 	deploy-editorconfig \
+	deploy-gemini \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \

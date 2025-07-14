@@ -1,5 +1,5 @@
 function tmux_popup() {
-  local height='80%'
+  local height='90%'
   local width='95%'
   local session=$(tmux display-message -p -F "#{session_name}")
   if [[ $session =~ 'popup' ]]; then

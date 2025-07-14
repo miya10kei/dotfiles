@@ -277,6 +277,9 @@ $(GO_BIN_DIR)/pinact:
 $(NODE_BIN_DIR)/claude:
 	npm install -g @anthropic-ai/claude-code
 
+$(NODE_BIN_DIR)/gemini:
+	npm install -g @google/gemini-cli
+
 # Python package
 $(PYENV_SHIMS_DIR)/sam:
 	pip install --quiet aws-sam-cli

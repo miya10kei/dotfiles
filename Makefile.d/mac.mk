@@ -22,6 +22,7 @@ brew-install:
 		alt-tab \
 		aws-vpn-client \
 		chatgpt \
+		claude \
 		deepl \
 		displaylink \
 		ghostty \

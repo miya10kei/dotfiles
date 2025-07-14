@@ -26,6 +26,15 @@ $(HOME)/.editorconfig:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-gemini
+deploy-gemini: \
+	$(HOME)/.gemini
+
+$(HOME)/.gemini:
+	ln -fs $(DOTDIR)/data-volume/gemini $(HOME)/.gemini
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
 	$(HOME)/.gitconfig \
