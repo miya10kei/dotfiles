@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__aws-knowledge",
+      "mcp__bedrock-knowledge",
+      "mcp__gemini-cli__googleSearch"
+    ]
+  }
+}

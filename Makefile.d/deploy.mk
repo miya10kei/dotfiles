@@ -10,10 +10,22 @@ $(HOME)/.aws:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-claude
 deploy-claude: \
-	$(HOME)/.claude
+	$(HOME)/.claude \
+	$(HOME)/.claude.json \
+	$(HOME)/.claude/settings.json \
+	install-claude-mcp-servers
 
 $(HOME)/.claude:
 	ln -fs $(DOTDIR)/data-volume/claude $(HOME)/.claude
+
+$(HOME)/.claude.json:
+	ln -fs $(DOTDIR)/data-volume/claude/.claude.json $(HOME)/.claude.json
+
+$(HOME)/.claude/settings.json:
+	ln -fs $(DOTDIR)/claude/settings.json $(HOME)/.claude/settings.json
+
+install-claude-mcp-servers:
+	bash $(DOTDIR)/claude/install-mcp-servers.sh
 
 
 # ----------------------------------------------------------------------------------------------------------------------
