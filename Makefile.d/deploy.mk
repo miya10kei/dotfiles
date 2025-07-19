@@ -25,7 +25,7 @@ $(HOME)/.claude/settings.json:
 	ln -fs $(DOTDIR)/claude/settings.json $(HOME)/.claude/settings.json
 
 install-claude-mcp-servers:
-	bash $(DOTDIR)/claude/install-mcp-servers.sh
+	-bash $(DOTDIR)/claude/install-mcp-servers.sh
 
 
 # ----------------------------------------------------------------------------------------------------------------------

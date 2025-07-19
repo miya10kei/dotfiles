@@ -16,4 +16,3 @@ claude mcp add -s user bedrock-knowledge \
 
 # https://github.com/shuymn/gh-mcp
 claude mcp add -s user github -- gh mcp
-
