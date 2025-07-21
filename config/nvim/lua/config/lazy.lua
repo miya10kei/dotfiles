@@ -18,6 +18,7 @@ require("lazy").setup({
   },
   {
     "Shougo/ddu.vim",
+    enabled = false,
     config = function()
       require("ddu")
     end,

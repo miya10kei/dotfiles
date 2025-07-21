@@ -10,8 +10,7 @@ end, {})
 ---------------------
 local vimrc_checktime_group = vim.api.nvim_create_augroup("vimrc-checktime", { clear = true })
 
-vim.api.nvim_create_autocmd("WinEnter", {
-  pattern = "*",
+vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
   command = "checktime",
   group = vimrc_checktime_group,
 })

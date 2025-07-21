@@ -28,6 +28,7 @@ local options = {
   swapfile = false,
   tabstop = 4,
   termguicolors = true,
+  updatetime = 250,
   virtualedit = "onemore",
 }
 
