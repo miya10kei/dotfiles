@@ -16,3 +16,6 @@ claude mcp add -s user bedrock-knowledge \
 
 # https://github.com/shuymn/gh-mcp
 claude mcp add -s user github -- gh mcp
+
+# https://support.atlassian.com/rovo/docs/setting-up-ides/
+claude mcp add -s user atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
