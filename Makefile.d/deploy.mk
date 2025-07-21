@@ -47,6 +47,19 @@ $(HOME)/.gemini:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-gh
+deploy-gh: \
+	$(HOME)/.config/gh \
+	$(HOME)/.config/gh/config.yml
+
+$(HOME)/.config/gh:
+	ln -fs $(DOTDIR)/data-volume/gh $(HOME)/.config/gh
+
+$(HOME)/.config/gh/config.yml:
+	ln -fs $(DOTDIR)/config/gh/config.yml $(HOME)/.config/gh/config.yml
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-git
 deploy-git: \
 	$(HOME)/.gitconfig \
@@ -93,6 +106,15 @@ deploy-karabiner: \
 
 $(HOME)/.config/karabiner/karabiner.json:
 	ln -fs $(DOTDIR)/karabiner.json $(HOME)/.config/karabiner/karabiner.json
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-mcpauth
+deploy-mcpauth: \
+  $(HOME)/.mcp-auth
+
+$(HOME)/.mcp-auth:
+	ln -fs $(DOTDIR)/data-volume/mcp-auth $(HOME)/.mcp-auth
 
 
 # ----------------------------------------------------------------------------------------------------------------------

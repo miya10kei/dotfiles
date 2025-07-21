@@ -53,9 +53,11 @@ setup4d: \
 	deploy-claude \
 	deploy-editorconfig \
 	deploy-gemini \
+	deploy-gh \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \
+	deploy-mcpauth \
 	deploy-mcphub \
 	deploy-memolist \
 	deploy-nvim \
