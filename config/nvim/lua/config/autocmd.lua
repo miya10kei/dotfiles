@@ -50,3 +50,17 @@ create_autocmd_group("OilRelPathFix", {
     },
   },
 })
+
+-- fzf-specific keymaps
+create_autocmd_group("FzfKeymaps", {
+  {
+    event = "FileType",
+    opts = {
+      pattern = "fzf",
+      callback = function()
+        vim.keymap.set("t", "<C-j>", "<Down>", { buffer = true, silent = true })
+        vim.keymap.set("t", "<C-k>", "<Up>", { buffer = true, silent = true })
+      end,
+    },
+  },
+})

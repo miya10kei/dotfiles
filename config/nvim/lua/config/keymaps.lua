@@ -26,3 +26,15 @@ end, {
 })
 keymap("n", "<SPACE><SPACE>", "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<CR>", keymap_opts_silent)
 keymap("x", "p", '"_dP', keymap_opts_silent)
+
+-- Window navigation
+keymap("n", "<C-h>", "<C-w>h", keymap_opts_silent)
+keymap("n", "<C-j>", "<C-w>j", keymap_opts_silent)
+keymap("n", "<C-k>", "<C-w>k", keymap_opts_silent)
+keymap("n", "<C-l>", "<C-w>l", keymap_opts_silent)
+
+-- Terminal mode window navigation
+keymap("t", "<C-h>", "<C-\\><C-n><C-w>h", keymap_opts_silent)
+keymap("t", "<C-j>", "<C-\\><C-n><C-w>j", keymap_opts_silent)
+keymap("t", "<C-k>", "<C-\\><C-n><C-w>k", keymap_opts_silent)
+keymap("t", "<C-l>", "<C-\\><C-n><C-w>l", keymap_opts_silent)

@@ -5,8 +5,8 @@ return {
     winopts = {
       keymap = {
         builtin = {
-          ["<C-j>"] = "down",
-          ["<C-k>"] = "up",
+          ["J"] = "down",
+          ["K"] = "up",
         },
       },
       preview = {
