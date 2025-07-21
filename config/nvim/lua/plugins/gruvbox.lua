@@ -3,7 +3,7 @@ return {
   {
     "ellisonleao/gruvbox.nvim",
     opts = {
-      contrast = "soft",
+      contrast = "hard",
     },
     config = function()
       vim.cmd([[

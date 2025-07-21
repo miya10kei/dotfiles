@@ -2,6 +2,7 @@
 return {
   {
     "Shougo/ddc.vim",
+    enabled = false,
     event = "InsertEnter",
     config = function()
       require("ddc_source_lsp_setup").setup()

@@ -2,6 +2,7 @@
 return {
   {
     "yetone/avante.nvim",
+    enabled=false,
     event = "VeryLazy",
     build = "make",
     -- build = "make BUILD_FROM_SOURCE=true",
