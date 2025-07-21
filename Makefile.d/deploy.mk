@@ -13,6 +13,7 @@ deploy-claude: \
 	$(HOME)/.claude \
 	$(HOME)/.claude.json \
 	$(HOME)/.claude/settings.json \
+	$(HOME)/.claude/CLAUDE.md \
 	install-claude-mcp-servers
 
 $(HOME)/.claude:
@@ -23,6 +24,9 @@ $(HOME)/.claude.json:
 
 $(HOME)/.claude/settings.json:
 	ln -fs $(DOTDIR)/claude/settings.json $(HOME)/.claude/settings.json
+
+$(HOME)/.claude/CLAUDE.md:
+	ln -fs $(DOTDIR)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
 
 install-claude-mcp-servers:
 	-bash $(DOTDIR)/claude/install-mcp-servers.sh
