@@ -7,7 +7,7 @@ GO_BIN_DIR := $(HOME)/.go/bin
 NODE_BIN_DIR := $(HOME)/.volta/bin
 PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
-AWS_VALUT := 7.2.0
+AWS_VALUT := 7.5.0
 BAT_VERSION := 0.25.0
 DELTA_VERSION := 0.18.2
 DIVE_VERSION := 0.13.1
