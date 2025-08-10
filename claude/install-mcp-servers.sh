@@ -19,3 +19,9 @@ claude mcp add -s user github -- gh mcp
 
 # https://support.atlassian.com/rovo/docs/setting-up-ides/
 claude mcp add -s user atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
+
+# https://github.com/oraios/serena
+claude mcp add -s user serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant
+
+# https://github.com/upstash/context7
+claude mcp add -s user --transport http context7 https://mcp.context7.com/mcp

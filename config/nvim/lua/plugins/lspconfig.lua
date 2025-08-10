@@ -3,9 +3,11 @@ return {
   {
     "neovim/nvim-lspconfig",
     main = "lsp",
+    event = { "LspAttach" },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvimtools/none-ls.nvim",
+      "saghen/blink.cmp",
       "williamboman/mason-lspconfig.nvim",
       "williamboman/mason.nvim",
     },
@@ -20,8 +22,8 @@ return {
         keymap("n", "gD", vim.lsp.buf.declaration, bufopts)
         keymap("n", "K", vim.lsp.buf.hover, bufopts)
         keymap("n", "gi", vim.lsp.buf.implementation, bufopts)
-        keymap("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-        keymap("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
+        -- keymap("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
+        -- keymap("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
         keymap("n", "<SPACE>wa", vim.lsp.buf.add_workspace_folder, bufopts)
         keymap("n", "<SPACE>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
         keymap("n", "<SPACE>wl", function()
@@ -64,11 +66,16 @@ return {
       ----------------------
       --- nvim-lspconfig ---
       ----------------------
-      local capabilities = require("ddc_source_lsp").make_client_capabilities()
-      capabilities.textDocument.foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true,
+      local capabilities = {
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+          },
+        },
       }
+
+      capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
       local lspconfig = require("lspconfig")
       local used_masson_packages = {
         ["lsp"] = {
@@ -133,6 +140,7 @@ return {
                     vim.fn.expand("$VIMRUNTIME/lua"),
                     vim.fn.expand("$VIMRUNTIME/lua/vim/lsp"),
                     vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy",
+                    vim.fn.stdpath("data") .. "/lazy/blink.cmp", -- blink.cmp用に追加
                   },
                 },
                 telemetry = {
@@ -181,6 +189,12 @@ return {
                 },
               },
             },
+          })
+        elseif alias == "bashls" then
+          lspconfig[alias].setup({
+            capabilities = capabilities,
+            on_attach = on_attach,
+            filetypes = { "sh", "bash", "zsh" }, -- .zshファイルも含める
           })
         elseif alias == "copilot-language-server" then
         else

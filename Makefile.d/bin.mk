@@ -7,23 +7,23 @@ GO_BIN_DIR := $(HOME)/.go/bin
 NODE_BIN_DIR := $(HOME)/.volta/bin
 PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
 
-AWS_VALUT := 7.5.0
+AWS_VAULT := 7.2.0
 BAT_VERSION := 0.25.0
 DELTA_VERSION := 0.18.2
-DIVE_VERSION := 0.13.1
+DIVE_VERSION := 0.14.10
 EXA_VERSION := 0.10.1
 FD_VERSION := 10.2.0
-FZF_VERSION := 0.64.0
-GCLOUD_VERSION := 530.0.0
+FZF_VERSION := 0.65.1
+GCLOUD_VERSION := 533.0.0
 GHQ_VERSION := 1.8.0
-GITHUB_CLI_VERSION := 2.76.0
+GITHUB_CLI_VERSION := 2.79.0
 JQ_VERSION := 1.8.1
 NAVI_VERSION := 2.24.0
 PROCS_VERSION := 0.14.10
 RIPGREP_VERSION := 14.1.1
 SHELDON_VERSION := 0.8.4
 STARSHIP_VERSION := 1.23.0
-YQ_VERSION := 4.46.1
+YQ_VERSION := 4.47.1
 ZOXIDE_VERSION := 0.9.8
 
 .PHONY: install-bins
@@ -86,7 +86,7 @@ aws-session-manager: /usr/local/sessionmanagerplugin
 
 $(BIN_DIR)/aws-vault:
 	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "amd64"; else echo "arm64"; fi))
-	curl -fsLS -o $(BIN_DIR)/aws-vault https://github.com/99designs/aws-vault/releases/download/v$(AWS_VALUT)/aws-vault-linux-$(DL_ARCH)
+	curl -fsLS -o $(BIN_DIR)/aws-vault https://github.com/99designs/aws-vault/releases/download/v$(AWS_VAULT)/aws-vault-linux-$(DL_ARCH)
 	chmod +x $(BIN_DIR)/aws-vault
 
 $(BIN_DIR)/bat:

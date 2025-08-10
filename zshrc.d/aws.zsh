@@ -75,4 +75,67 @@ if builtin command -v aws-vault > /dev/null 2>&1; then
     fi
     exec_aws_command "aws logs tail --follow $logGroupName"
   }
+
+  function aws-params() {
+    aws-check-session
+
+    echo "Getting parameter paths..."
+
+    # Get all parameter names and extract unique path prefixes
+    local all_params=$(aws ssm describe-parameters \
+      --query 'Parameters[].Name' \
+      --output text)
+
+    if [ -z "$all_params" ]; then
+      echo "No parameters found in current AWS account/region"
+      return 0
+    fi
+
+    # Extract unique path prefixes (up to 3 levels deep)
+    local prefixes=$(echo "$all_params" | tr '\t' '\n' | \
+      sed -E 's|(/[^/]+/[^/]+/?).*|\1|' | \
+      sort -u | \
+      grep -E '^/[^/]+(/[^/]+)?/?$')
+
+    # Let user select a prefix with fzf
+    local selected_prefix=$(echo "$prefixes" | fzf \
+      --prompt="Select parameter path: " \
+      --preview="aws ssm get-parameters-by-path --path {} --query 'Parameters[].Name' --output text | head -10" \
+      --preview-window=right:50%)
+
+    if [ -z "$selected_prefix" ]; then
+      echo "No path selected"
+      return 0
+    fi
+
+    echo "Searching for parameters with prefix: $selected_prefix"
+    echo "========================================"
+
+    # Get parameter names by prefix
+    local param_names=$(aws ssm get-parameters-by-path \
+      --path "$selected_prefix" \
+      --recursive \
+      --query 'Parameters[].Name' \
+      --output text)
+
+    if [ -z "$param_names" ]; then
+      echo "No parameters found with prefix: $selected_prefix"
+      return 0
+    fi
+
+    # Get parameter values
+    for name in ${=param_names}; do
+      local value=$(aws ssm get-parameter \
+        --name "$name" \
+        --with-decryption \
+        --query 'Parameter.Value' \
+        --output text 2>/dev/null)
+
+      if [ $? -eq 0 ]; then
+        printf "%-50s : %s\n" "$name" "$value"
+      else
+        printf "%-50s : [ERROR: Failed to retrieve]\n" "$name"
+      fi
+    done
+  }
 fi

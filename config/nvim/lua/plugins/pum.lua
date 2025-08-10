@@ -2,6 +2,7 @@
 return {
   {
     "Shougo/pum.vim",
+    enabled = false,
     config = function()
       vim.fn["pum#set_option"]({
         border = "none",

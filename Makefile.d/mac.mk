@@ -23,19 +23,18 @@ brew-install:
 		aws-vpn-client \
 		chatgpt \
 		claude \
+		cursor \
 		deepl \
 		displaylink \
 		ghostty \
 		homerow \
 		hyper \
 		karabiner-elements \
-		postman \
 		rancher \
 		raycast \
 		rectangle \
 		slack \
 		superwhisper \
-		todoist \
 		xquartz
 	brew cleanup --prune all
 

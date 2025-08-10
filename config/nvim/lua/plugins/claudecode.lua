@@ -1,4 +1,3 @@
-
 return {
   {
     "coder/claudecode.nvim",
@@ -8,13 +7,16 @@ return {
     },
     opts = {
       terminal = {
-        split_width_percentage = 0.4
+        split_width_percentage = 0.4,
       },
       diff_opts = {
-        vertical_split = false
-      }
+        auto_close_on_accept = false,
+        open_in_current_tab = false,
+        vertical_split = false,
+      },
     },
     keys = {
+      { "<leader>cn", "<cmd>ClaudeCode<cr>", desc = "New Claude" },
       { "<leader>cc", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
       { "<leader>cr", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
       { "<leader>cf", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
