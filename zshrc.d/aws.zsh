@@ -1,7 +1,6 @@
-export AWS_PROFILE=pd
+export AWS_PROFILE=inhouse
 
-if builtin command -v aws-vault > /dev/null 2>&1; then
-  if builtin command -v pass > /dev/null 2>&1; then
+if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pass > /dev/null 2>&1; then
     export AWS_VAULT_BACKEND=pass
     export AWS_VAULT_PASS_PREFIX=aws-vault
   fi
@@ -67,7 +66,7 @@ if builtin command -v aws-vault > /dev/null 2>&1; then
     eval $cmd
   }
 
-  function aws-log() {
+  function aws-logs() {
     aws-check-session
     logGroupName=$(aws logs list-log-groups | jq -r '.logGroups[].logGroupName' | fzf)
     if [ -z "$logGroupName" ]; then
@@ -138,4 +137,29 @@ if builtin command -v aws-vault > /dev/null 2>&1; then
       fi
     done
   }
+
+
+  function aws-kb-sync() {
+    aws-check-session
+    knowledgeBaseId=$(aws bedrock-agent list-knowledge-bases | jq -r '.knowledgeBaseSummaries[] | [.name, .knowledgeBaseId] | @tsv' | column -t | fzf | awk '{print $2}')
+    if [ -z "$knowledgeBaseId" ]; then
+      return
+    fi
+
+    dataSourceId=$(aws bedrock-agent list-data-sources --knowledge-base-id $knowledgeBaseId | jq -r '.dataSourceSummaries[] | [.name, .dataSourceId, .status] | @tsv' | column -t | fzf | awk '{print $2}')
+    if [ -z "$dataSourceId" ]; then
+      return
+    fi
+
+    ingestionJobId=$(aws bedrock-agent start-ingestion-job --knowledge-base-id $knowledgeBaseId --data-source-id $dataSourceId | jq -r '.ingestionJob.ingestionJobId')
+
+    if [ -z "$ingestionJobId" ]; then
+      echo "ingestionJobId is Not Found"
+      return
+    fi
+
+    watch -tcd "aws bedrock-agent get-ingestion-job --knowledge-base-id $knowledgeBaseId --data-source-id $dataSourceId --ingestion-job-id $ingestionJobId"
+  }
+
 fi
+
