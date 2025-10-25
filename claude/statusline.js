@@ -165,11 +165,21 @@ function getLatestTranscript(projectDir) {
   }
 }
 
+function getCurrentBranch() {
+  try {
+    const { execSync } = require('child_process');
+    const branch = execSync('git branch --show-current', { encoding: 'utf8', cwd: process.cwd() });
+    return branch.trim();
+  } catch (error) {
+    return null;
+  }
+}
+
 function parseTranscript(transcriptPath) {
   const data = {
-    branch: 'unknown',
+    branch: null,
     cwd: process.cwd(),
-    model: 'unknown',
+    model: null,
     totalTokens: 0,
   };
 
@@ -236,6 +246,16 @@ function parseTranscript(transcriptPath) {
     }
   } catch (error) {
     // Return default data if file reading fails
+  }
+
+  // Fallback: get branch from git command if not found in transcript
+  if (!data.branch) {
+    data.branch = getCurrentBranch() || 'unknown';
+  }
+
+  // Default model name if not found in transcript
+  if (!data.model) {
+    data.model = 'unknown';
   }
 
   return data;
