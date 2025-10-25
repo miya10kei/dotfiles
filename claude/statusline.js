@@ -51,18 +51,52 @@ function getEmojiForPercentage(percentage) {
   return '🟢';
 }
 
+function shortenBranchName(branch) {
+  // "feature/claude-statusline" -> "claude-statusline"
+  const parts = branch.split('/');
+  return parts.length > 1 ? parts[parts.length - 1] : branch;
+}
+
 function shortenPath(dir) {
+  // Replace home directory with ~
+  let path = dir;
   if (dir.startsWith(HOME)) {
-    return '~' + dir.slice(HOME.length);
+    path = '~' + dir.slice(HOME.length);
   }
-  return dir;
+
+  // Abbreviate each directory except the last one (current directory)
+  // "~/.dotfiles" -> "~/.dotfiles" (current directory is kept full)
+  // "~/dev/ghq/github.com/org/project" -> "~/d/g/g/o/project"
+  const parts = path.split('/');
+  if (parts.length === 1) {
+    return path; // Don't abbreviate if only ~
+  }
+
+  // Abbreviate all except first (~) and last (current directory name)
+  const abbreviated = parts.map((part, index) => {
+    // Keep first part (~) and last part (current directory) as is
+    if (index === 0 || index === parts.length - 1) {
+      return part;
+    }
+    // Abbreviate middle parts to first character
+    // For hidden files (.dotfiles), skip the dot and use the next character
+    if (part.startsWith('.') && part.length > 1) {
+      return '.' + part.charAt(1);
+    }
+    return part.charAt(0);
+  });
+
+  return abbreviated.join('/');
 }
 
 function shortenModelName(modelName) {
-  // "claude-sonnet-4-5-20250929" -> "sonnet-4.5"
+  // "claude-sonnet-4-5-20250929" -> "Son4.5"
+  // "claude-opus-4-0-20250101" -> "Opu4.0"
+  // "claude-haiku-4-0-20250101" -> "Hai4.0"
   const match = modelName.match(/claude-(sonnet|opus|haiku)-(\d)-(\d)/);
   if (match) {
-    return `${match[1]}-${match[2]}.${match[3]}`;
+    const type = match[1].charAt(0).toUpperCase() + match[1].slice(1, 3);
+    return `${type}${match[2]}.${match[3]}`;
   }
   return modelName;
 }
@@ -212,12 +246,11 @@ function main() {
   const emoji = getEmojiForPercentage(parseFloat(percentage));
 
   const parts = [
-    `${COLORS.cyan}${ICONS.git}${COLORS.reset} ${data.branch}`,
+    `${COLORS.cyan}${ICONS.git}${COLORS.reset} ${shortenBranchName(data.branch)}`,
     `${COLORS.cyan}${ICONS.folder}${COLORS.reset} ${shortenPath(data.cwd)}`,
-    `${COLORS.cyan}${ICONS.ide}${COLORS.reset} ${ideConnected ? 'connected' : 'disconnected'}`,
+    `${COLORS.cyan}${ICONS.ide}${COLORS.reset} ${ideConnected ? 'ON' : 'OFF'}`,
     `${COLORS.cyan}${ICONS.model}${COLORS.reset} ${shortenModelName(data.model)}`,
-    `${COLORS.cyan}${ICONS.memory}${COLORS.reset} ${formatNumber(data.totalTokens)}/${formatNumber(MAX_TOKENS)}`,
-    `${emoji} ${percentageColor}${percentage}%${COLORS.reset}`,
+    `${COLORS.cyan}${ICONS.memory}${COLORS.reset} ${formatNumber(data.totalTokens)}/${formatNumber(MAX_TOKENS)}(${percentageColor}${percentage}%${emoji}${COLORS.reset})`,
   ];
 
   console.log(parts.join('  '));
