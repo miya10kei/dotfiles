@@ -1,0 +1,23 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "~/.dotfiles/claude/statusline.js"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(uv run ruff check:*)",
+      "Bash(uv run ruff:*)",
+      "Read",
+      "List",
+      "WebFetch",
+      "WebSearch",
+      "mcp__aws-knowledge",
+      "mcp__bedrock-knowledge",
+      "mcp__gemini-cli__googleSearch",
+      "mcp__serena",
+      "mcp__context7"
+    ]
+  },
+  "alwaysThinkingEnabled": true
+}
