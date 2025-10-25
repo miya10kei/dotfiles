@@ -105,7 +105,24 @@ function isIDEConnected() {
   try {
     const files = fs.readdirSync(IDE_DIR);
     const lockFiles = files.filter(f => f.endsWith('.lock'));
-    return lockFiles.length > 0;
+
+    if (lockFiles.length === 0) {
+      return false;
+    }
+
+    // Check if any lock file was modified recently (within last 5 minutes)
+    const now = Date.now();
+    const fiveMinutesAgo = now - (5 * 60 * 1000);
+
+    for (const file of lockFiles) {
+      const filePath = path.join(IDE_DIR, file);
+      const stats = fs.statSync(filePath);
+      if (stats.mtimeMs > fiveMinutesAgo) {
+        return true;
+      }
+    }
+
+    return false;
   } catch (error) {
     return false;
   }
