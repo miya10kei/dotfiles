@@ -1,32 +1,50 @@
 #!/usr/bin/env node
 
 const fs = require("fs");
-const path = require("path");
 const os = require("os");
+const { execSync } = require("child_process");
 
-// NERD Fonts icons
-const ICONS = {
-  git: "\uE0A0",
-  folder: "\uF07C",
-  model: "\udb85\udea4",
-  memory: "\udb80\uddaa",
+// ============ 設定 ============
+
+const CONFIG = {
+  maxTokens: 200000, // Claude Sonnet 4.5 のコンテキスト制限
+
+  // 表示する項目と順序（ここで追加・削除・並び替え）
+  displayItems: ["git", "folder", "model", "memory"],
+
+  // トークン使用量の閾値
+  tokenThresholds: {
+    warning: 70, // 70%で黄色
+    critical: 85, // 85%で赤
+  },
+
+  // NERD Fonts アイコン
+  icons: {
+    git: "\uE0A0",
+    folder: "\uF07C",
+    model: "\udb85\udea4",
+    memory: "\udb80\uddaa",
+  },
+
+  // ANSI カラーコード
+  colors: {
+    reset: "\x1b[0m",
+    green: "\x1b[32m",
+    yellow: "\x1b[33m",
+    red: "\x1b[31m",
+    cyan: "\x1b[36m",
+    gray: "\x1b[90m",
+  },
+
+  // ホームディレクトリ
+  home: os.homedir(),
 };
 
-// ANSI color codes
-const COLORS = {
-  reset: "\x1b[0m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  red: "\x1b[31m",
-  cyan: "\x1b[36m",
-  gray: "\x1b[90m",
-};
+// ============ ユーティリティ関数 ============
 
-const HOME = os.homedir();
-const CLAUDE_DIR = path.join(HOME, ".claude");
-const PROJECTS_DIR = path.join(CLAUDE_DIR, "projects");
-const MAX_TOKENS = 200000; // Claude Sonnet 4.5 context limit
-
+/**
+ * 数値をK/M接尾辞でフォーマット
+ */
 function formatNumber(num) {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1) + "M";
@@ -37,45 +55,61 @@ function formatNumber(num) {
   return num.toString();
 }
 
+/**
+ * パーセンテージに基づいて色を取得
+ */
 function getColorForPercentage(percentage) {
-  if (percentage >= 85) return COLORS.red;
-  if (percentage >= 70) return COLORS.yellow;
-  return COLORS.green;
+  const { warning, critical } = CONFIG.tokenThresholds;
+  const { red, yellow, green } = CONFIG.colors;
+
+  if (percentage >= critical) return red;
+  if (percentage >= warning) return yellow;
+  return green;
 }
 
+/**
+ * パーセンテージに基づいて絵文字インジケータを取得
+ */
 function getEmojiForPercentage(percentage) {
-  if (percentage >= 85) return "🔴";
-  if (percentage >= 70) return "🟡";
+  const { warning, critical } = CONFIG.tokenThresholds;
+
+  if (percentage >= critical) return "🔴";
+  if (percentage >= warning) return "🟡";
   return "🟢";
 }
 
+/**
+ * Gitブランチ名を短縮（プレフィックスを削除）
+ */
 function shortenBranchName(branch) {
-  // "feature/claude-statusline" -> "claude-statusline"
+  if (!branch) return "unknown";
   const parts = branch.split("/");
   return parts.length > 1 ? parts[parts.length - 1] : branch;
 }
 
+/**
+ * パスを省略形で短縮
+ */
 function shortenPath(dir) {
-  // Replace home directory with ~
+  if (!dir) return "~";
+
+  // ホームディレクトリを ~ に置換
   let pathStr = dir;
-  if (dir.startsWith(HOME)) {
-    pathStr = "~" + dir.slice(HOME.length);
+  if (dir.startsWith(CONFIG.home)) {
+    pathStr = "~" + dir.slice(CONFIG.home.length);
   }
 
-  // "~/dev/ghq/github.com/org/project" -> "~/d/g/g/o/project"
   const parts = pathStr.split("/");
   if (parts.length === 1) {
-    return pathStr; // Don't abbreviate if only ~
+    return pathStr;
   }
 
-  // Abbreviate all except first (~) and last (current directory name)
+  // 最初(~)と最後(カレントディレクトリ名)以外を省略
   const abbreviated = parts.map((part, index) => {
-    // Keep first part (~) and last part (current directory) as is
     if (index === 0 || index === parts.length - 1) {
       return part;
     }
-    // Abbreviate middle parts to first character
-    // For hidden files (.dotfiles), skip the dot and use the next character
+    // 隠しファイル(.dotfiles)の場合、ドットをスキップ
     if (part.startsWith(".") && part.length > 1) {
       return "." + part.charAt(1);
     }
@@ -85,107 +119,95 @@ function shortenPath(dir) {
   return abbreviated.join("/");
 }
 
-function shortenModelName(modelName) {
-  // "claude-sonnet-4-5-20250929" -> "Son4.5"
-  // "claude-opus-4-0-20250101" -> "Opu4.0"
-  // "claude-haiku-4-0-20250101" -> "Hai4.0"
-  const match = modelName.match(/claude-(sonnet|opus|haiku)-(\d)-(\d)/);
-  if (match) {
-    const type = match[1].charAt(0).toUpperCase() + match[1].slice(1, 3);
-    return `${type}${match[2]}.${match[3]}`;
-  }
-  return modelName;
+/**
+ * メモリ使用量の表示をフォーマット
+ */
+function formatMemoryDisplay(data) {
+  const { total, percentage } = data;
+  const percentageStr = percentage.toFixed(1);
+  const color = getColorForPercentage(percentage);
+  const emoji = getEmojiForPercentage(percentage);
+
+  return `${formatNumber(total)}/${formatNumber(CONFIG.maxTokens)}(${color}${percentageStr}%${emoji}${CONFIG.colors.reset})`;
 }
 
+// ============ データ収集関数 ============
+
+/**
+ * 現在のGitブランチを取得
+ */
 function getCurrentBranch() {
   try {
-    const { execSync } = require("child_process");
     const branch = execSync("git branch --show-current", {
       encoding: "utf8",
       cwd: process.cwd(),
+      stdio: ["pipe", "pipe", "ignore"], // stderrを抑制
     });
-    return branch.trim();
+    return branch.trim() || null;
   } catch (error) {
     return null;
   }
 }
 
-function findCurrentProjectDir(cwd) {
-  // Replace /, ., and _ with -
-  const normalizedCwd = cwd.replace(/[\/._]/g, "-");
-  const projectDirName = normalizedCwd;
-  const projectDir = path.join(PROJECTS_DIR, projectDirName);
-
-  if (fs.existsSync(projectDir)) {
-    return projectDir;
-  }
-
-  return null;
-}
-
-function getLatestTranscript(projectDir) {
-  try {
-    const files = fs.readdirSync(projectDir);
-    const jsonlFiles = files.filter((f) => f.endsWith(".jsonl"));
-
-    if (jsonlFiles.length === 0) {
-      return null;
-    }
-
-    // Get the most recently modified file
-    const latestFile = jsonlFiles
-      .map((f) => ({
-        name: f,
-        mtime: fs.statSync(path.join(projectDir, f)).mtime,
-      }))
-      .sort((a, b) => b.mtime - a.mtime)[0];
-
-    return path.join(projectDir, latestFile.name);
-  } catch (error) {
-    return null;
-  }
-}
-
+/**
+ * トランスクリプトを解析してセッションのトークン使用量を計算
+ */
 function parseTranscript(transcriptPath, sessionId) {
-  const data = {
-    totalTokens: 0,
-  };
-
   try {
     const content = fs.readFileSync(transcriptPath, "utf8");
     const lines = content.trim().split("\n");
 
-    // Collect data only from the current session
+    let totalTokens = 0;
+
     for (const line of lines) {
       try {
         const entry = JSON.parse(line);
 
-        // Only process entries from the current session
+        // 現在のセッションのエントリのみ処理
         if (entry.sessionId !== sessionId) {
           continue;
         }
 
-        // Get model and tokens from assistant messages
-        if (entry.type === "assistant" && entry.message) {
-          if (entry.message.usage) {
-            const usage = entry.message.usage;
-            // Only count actual input and output tokens for context size
-            // cache_creation and cache_read are for billing, not context size
-            data.totalTokens += usage.input_tokens || 0;
-            data.totalTokens += usage.output_tokens || 0;
-          }
+        // アシスタントメッセージからトークンを取得
+        if (entry.type === "assistant" && entry.message?.usage) {
+          const usage = entry.message.usage;
+          // コンテキストサイズには実際の入出力トークンのみをカウント
+          totalTokens += usage.input_tokens || 0;
+          totalTokens += usage.output_tokens || 0;
         }
       } catch (parseError) {
-        // Skip invalid JSON lines
+        // 無効なJSON行をスキップ
       }
     }
-  } catch (error) {
-    // Return default data if file reading fails
-  }
 
-  return data;
+    return totalTokens;
+  } catch (error) {
+    return 0;
+  }
 }
 
+/**
+ * トークン使用量データを取得
+ */
+function getTokenData(context) {
+  const { transcriptPath, sessionId } = context;
+
+  if (!transcriptPath || !sessionId) {
+    return { total: 0, percentage: 0 };
+  }
+
+  const totalTokens = parseTranscript(transcriptPath, sessionId);
+  const percentage = (totalTokens / CONFIG.maxTokens) * 100;
+
+  return {
+    total: totalTokens,
+    percentage: percentage,
+  };
+}
+
+/**
+ * stdinからJSONを読み込み
+ */
 async function readStdin() {
   return new Promise((resolve) => {
     let data = "";
@@ -202,46 +224,90 @@ async function readStdin() {
   });
 }
 
+// ============ ステータス項目定義 ============
+
+const STATUS_ITEMS = {
+  git: {
+    icon: "git",
+    getData: () => getCurrentBranch(),
+    format: (data) => shortenBranchName(data),
+  },
+
+  folder: {
+    icon: "folder",
+    getData: (context) => context.cwd,
+    format: (data) => shortenPath(data),
+  },
+
+  model: {
+    icon: "model",
+    getData: (context) => context.modelName || "Unknown",
+    format: (data) => data,
+  },
+
+  memory: {
+    icon: "memory",
+    getData: (context) => getTokenData(context),
+    format: formatMemoryDisplay,
+  },
+};
+
+// ============ レンダリングエンジン ============
+
+/**
+ * 単一のステータス項目をレンダリング
+ */
+function renderItem(itemName, context) {
+  try {
+    const item = STATUS_ITEMS[itemName];
+    if (!item) {
+      return null;
+    }
+
+    const data = item.getData(context);
+    const formatted = item.format(data);
+    const icon = CONFIG.icons[item.icon] || "";
+
+    return `${CONFIG.colors.cyan}${icon}${CONFIG.colors.reset} ${formatted}`;
+  } catch (error) {
+    // 項目が失敗した場合は静かにスキップ
+    return null;
+  }
+}
+
+/**
+ * 完全なステータスラインをレンダリング
+ */
+function renderStatusLine(context) {
+  return CONFIG.displayItems
+    .map((name) => renderItem(name, context))
+    .filter(Boolean)
+    .join("  ");
+}
+
+// ============ メイン処理 ============
+
 async function main() {
-  // Read JSON from stdin
+  // stdinからJSONを読み込み
   const stdinData = await readStdin();
+  console.log(stdinData);
 
   if (!stdinData) {
     console.log("No stdin data");
     return;
   }
 
-  // Get information from stdin
-  const modelName = stdinData.model.display_name;
-  const cwd = stdinData.workspace.current_dir;
-  const sessionId = stdinData.session_id;
+  // stdinデータからコンテキストを構築
+  const context = {
+    modelName: stdinData.model?.display_name,
+    cwd: stdinData.workspace?.current_dir,
+    transcriptPath: stdinData.transcript_path,
+    sessionId: stdinData.session_id,
+  };
 
-  // Get branch from git command
-  const branch = getCurrentBranch() || "unknown";
-
-  // Calculate token usage from transcript
-  let totalTokens = 0;
-  const projectDir = findCurrentProjectDir(cwd);
-  if (projectDir && sessionId) {
-    const transcriptPath = getLatestTranscript(projectDir);
-    if (transcriptPath) {
-      const transcriptData = parseTranscript(transcriptPath, sessionId);
-      totalTokens = transcriptData.totalTokens;
-    }
-  }
-
-  const percentage = ((totalTokens / MAX_TOKENS) * 100).toFixed(1);
-  const percentageColor = getColorForPercentage(parseFloat(percentage));
-  const emoji = getEmojiForPercentage(parseFloat(percentage));
-
-  const parts = [
-    `${COLORS.cyan}${ICONS.git}${COLORS.reset} ${shortenBranchName(branch)}`,
-    `${COLORS.cyan}${ICONS.folder}${COLORS.reset} ${shortenPath(cwd)}`,
-    `${COLORS.cyan}${ICONS.model}${COLORS.reset} ${modelName}`,
-    `${COLORS.cyan}${ICONS.memory}${COLORS.reset} ${formatNumber(totalTokens)}/${formatNumber(MAX_TOKENS)}(${percentageColor}${percentage}%${emoji}${COLORS.reset})`,
-  ];
-
-  console.log(parts.join("  "));
+  // ステータスラインをレンダリングして出力
+  const statusLine = renderStatusLine(context);
+  console.log(statusLine);
 }
 
 main();
