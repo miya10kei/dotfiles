@@ -9,7 +9,7 @@ const ICONS = {
   git: '\uE0A0',      //
   folder: '\uF07C',   //
   ide: '\uF489',      //
-  model: '\uF544',    //
+  model: '\udb85\udea4',    //
   memory: '\uF85A',   //
 };
 
