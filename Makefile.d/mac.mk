@@ -22,19 +22,19 @@ brew-install:
 		alt-tab \
 		aws-vpn-client \
 		chatgpt \
+		obsidian \
 		claude \
-		cursor \
 		deepl \
 		displaylink \
+		figma \
 		ghostty \
 		homerow \
-		hyper \
+		insta360-link-controller \
 		karabiner-elements \
 		rancher \
 		raycast \
 		rectangle \
 		slack \
-		superwhisper \
 		xquartz
 	brew cleanup --prune all
 

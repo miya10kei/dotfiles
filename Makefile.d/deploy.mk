@@ -8,12 +8,22 @@ $(HOME)/.aws:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-coderabbit
+deploy-coderabbit: \
+	r(HOME)/.coderabbit/auth.json
+
+r(HOME)/.coderabbit/auth.json:
+	ln -fs $(DOTDIR)/data-volume/coderabbit/auth.json $(HOME)/.coderabbit/auth.json
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-claude
 deploy-claude: \
 	$(HOME)/.claude \
 	$(HOME)/.claude.json \
 	$(HOME)/.claude/settings.json \
 	$(HOME)/.claude/CLAUDE.md \
+	$(HOME)/.claude/commands \
 	install-claude-mcp-servers
 
 $(HOME)/.claude:
@@ -27,6 +37,9 @@ $(HOME)/.claude/settings.json:
 
 $(HOME)/.claude/CLAUDE.md:
 	ln -fs $(DOTDIR)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
+
+$(HOME)/.claude/commands:
+	ln -fs $(DOTDIR)/claude/commands/ $(HOME)/.claude/commands
 
 install-claude-mcp-servers:
 	-bash $(DOTDIR)/claude/install-mcp-servers.sh

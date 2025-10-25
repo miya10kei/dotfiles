@@ -49,6 +49,13 @@ function main() {
         add_path "/opt/homebrew/opt/node@22/bin"
     fi
 
+    # ----------------
+    # --- Safe Chain -
+    # ----------------
+    if [[ -e $HOME/.safe-chain/scripts/init-posix.sh ]]; then
+        source $HOME/.safe-chain/scripts/init-posix.sh
+    fi
+
     # ------------
     # --- tmux ---
     # ------------
@@ -159,3 +166,4 @@ if [ "$ZPROFILE_ENABLED" = true ]; then
 else
     main
 fi
+

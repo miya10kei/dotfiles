@@ -10,8 +10,8 @@ install-plugins:
 
 .PHONY: install-mason-pkg
 install-mason-pkg:
-	nvim --headless -c 'MasonInstallNeeded' -c 'qa'
+	nvim --headless -c 'lua require("lazy").load({plugins={"nvim-lspconfig"}})' -c 'MasonInstallNeeded' -c 'qa'
 
 .PHONY: install-treesitter-pkg
 install-treesitter-pkg:
-	nvim --headless -c 'TreeSitterInstall' -c 'qa'
+	nvim --headless -c 'lua require("lazy").load({plugins={"nvim-treesitter"}})' -c 'TSUpdateSync' -c 'qa'

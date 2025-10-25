@@ -1,4 +1,4 @@
-export AWS_PROFILE=inhouse
+export AWS_PROFILE=in-house
 
 if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pass > /dev/null 2>&1; then
     export AWS_VAULT_BACKEND=pass
@@ -159,6 +159,16 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
     fi
 
     watch -tcd "aws bedrock-agent get-ingestion-job --knowledge-base-id $knowledgeBaseId --data-source-id $dataSourceId --ingestion-job-id $ingestionJobId"
+  }
+
+  function aws-br-prompts() {
+    aws-check-session
+    promptIdentifier=$(aws bedrock-agent list-prompts | jq -r '.promptSummaries[] | [.name, .id] | @tsv' | column -t | fzf | awk '{print $2}')
+    if [ -z "$promptIdentifier" ]; then
+      return
+    fi
+
+    exec_aws_command "aws bedrock-agent get-prompt --prompt-identifier $promptIdentifier | jq -r '.variants[0].templateConfiguration.chat.system[0].text'"
   }
 
 fi

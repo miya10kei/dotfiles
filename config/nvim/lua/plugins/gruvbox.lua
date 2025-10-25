@@ -2,6 +2,7 @@
 return {
   {
     "ellisonleao/gruvbox.nvim",
+    enabled = false,
     opts = {
       contrast = "hard",
     },

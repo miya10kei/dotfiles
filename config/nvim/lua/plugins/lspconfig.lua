@@ -3,7 +3,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     main = "lsp",
-    event = { "LspAttach" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvimtools/none-ls.nvim",
@@ -92,7 +92,7 @@ return {
           "marksman",
           "pyright",
           "rust-analyzer",
-          "taplo",
+          --"taplo",
           "terraform-ls",
           "typescript-language-server",
           "yaml-language-server",
@@ -119,8 +119,23 @@ return {
         },
       }
 
+      -- Mason パッケージ名から lspconfig の設定名へのマッピング
+      local mason_to_lsp = {
+        ["angular-language-server"] = "angularls",
+        ["bash-language-server"] = "bashls",
+        ["docker-compose-language-service"] = "docker_compose_language_service",
+        ["dockerfile-language-server"] = "dockerls",
+        ["haskell-language-server"] = "hls",
+        ["html-lsp"] = "html",
+        ["json-lsp"] = "jsonls",
+        ["lua-language-server"] = "lua_ls",
+        ["rust-analyzer"] = "rust_analyzer",
+        ["terraform-ls"] = "terraformls",
+        ["typescript-language-server"] = "ts_ls",
+      }
+
       for _, v in pairs(used_masson_packages["lsp"]) do
-        local alias = mason_registry.get_package_aliases(v)[1] or v
+        local alias = mason_to_lsp[v] or mason_registry.get_package_aliases(v)[1] or v
         if alias == "lua_ls" then
           lspconfig[alias].setup({
             capabilities = capabilities,
@@ -149,7 +164,7 @@ return {
               },
             },
           })
-        elseif alias == "rust-analyzer" then
+        elseif alias == "rust_analyzer" then
           lspconfig[alias].setup({
             capabilities = capabilities,
             on_attach = on_attach,

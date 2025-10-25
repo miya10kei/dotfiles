@@ -25,3 +25,9 @@ claude mcp add -s user serena -- uvx --from git+https://github.com/oraios/serena
 
 # https://github.com/upstash/context7
 claude mcp add -s user --transport http context7 https://mcp.context7.com/mcp
+
+# https://github.com/winor30/mcp-server-datadog
+claude mcp add -s user datadog -- npx @winor30/mcp-server-datadog
+
+# https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/#claude-code
+claude mcp add -s user --transport http figma https://mcp.figma.com/mcp

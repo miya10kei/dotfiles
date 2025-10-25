@@ -2,6 +2,7 @@
 return {
   {
     "rcarriga/nvim-dap-ui",
+    enabled = false,
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
@@ -9,7 +10,6 @@ return {
       "mfussenegger/nvim-dap-python",
     },
     config = function()
-      print("called1")
       local dap = require("dap")
       require("dapui").setup()
 

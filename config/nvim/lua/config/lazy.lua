@@ -5,7 +5,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
+    -- "--branch=stable",
     lazypath,
   })
 end
@@ -101,25 +101,6 @@ require("lazy").setup({
     config = function()
       require("nvim-surround").setup({})
     end,
-  },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        highlight = {
-          enable = true,
-        },
-        tree_docs = {
-          enable = false,
-        },
-      })
-      require("nvim-ts-autotag").setup()
-    end,
-    dependencies = {
-      "nvim-treesitter/nvim-tree-docs",
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      "windwp/nvim-ts-autotag",
-    },
   },
   {
     "rcarriga/nvim-dap-ui",

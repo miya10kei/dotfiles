@@ -11,19 +11,20 @@ AWS_VAULT := 7.2.0
 BAT_VERSION := 0.25.0
 DELTA_VERSION := 0.18.2
 DIVE_VERSION := 0.13.1
+DUF_VERSION := 0.9.1
 EXA_VERSION := 0.10.1
 FD_VERSION := 10.3.0
-FZF_VERSION := 0.65.2
+FZF_VERSION := 0.66.0
 GCLOUD_VERSION := 536.0.1
 GHQ_VERSION := 1.8.0
-GITHUB_CLI_VERSION := 2.78.0
+GITHUB_CLI_VERSION := 2.81.0
 JQ_VERSION := 1.8.1
 NAVI_VERSION := 2.24.0
 PROCS_VERSION := 0.14.10
 RIPGREP_VERSION := 14.1.1
 SHELDON_VERSION := 0.8.5
 STARSHIP_VERSION := 1.23.0
-YQ_VERSION := 4.47.1
+YQ_VERSION := 4.48.1
 ZOXIDE_VERSION := 0.9.8
 
 .PHONY: install-bins
@@ -37,6 +38,7 @@ install-bins: \
 	$(BIN_DIR)/bun \
 	$(BIN_DIR)/delta \
 	$(BIN_DIR)/dive \
+	$(BIN_DIR)/duf \
 	$(BIN_DIR)/exa \
 	$(BIN_DIR)/fd \
 	$(BIN_DIR)/fzf \
@@ -120,6 +122,15 @@ $(BIN_DIR)/dive:
 	mv /tmp/dive/dive $(BIN_DIR)/dive
 	chown `whoami`:`id -gn` $(BIN_DIR)/dive
 	rm -rf /tmp/dive
+
+$(BIN_DIR)/duf:
+	mkdir -p /tmp/duf
+	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "amd64"; else echo "arm64"; fi))
+	curl -fsLS -o /tmp/duf/duf.tar.gz https://github.com/muesli/duf/releases/download/v${DUF_VERSION}/duf_${DUF_VERSION}_linux_$(DL_ARCH).tar.gz
+	tar -zxf /tmp/duf/duf.tar.gz -C /tmp/duf
+	mv /tmp/duf/duf $(BIN_DIR)/duf
+	chown `whoami`:`id -gn` $(BIN_DIR)/duf
+	rm -rf /tmp/duf
 
 $(BIN_DIR)/exa:
 	mkdir -p /tmp/exa
