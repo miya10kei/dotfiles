@@ -290,7 +290,6 @@ function renderStatusLine(context) {
 async function main() {
   // stdinからJSONを読み込み
   const stdinData = await readStdin();
-  console.log(stdinData);
 
   if (!stdinData) {
     console.log("No stdin data");
