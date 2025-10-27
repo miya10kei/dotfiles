@@ -158,7 +158,7 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
       return
     fi
 
-    watch -tcd "aws bedrock-agent get-ingestion-job --knowledge-base-id $knowledgeBaseId --data-source-id $dataSourceId --ingestion-job-id $ingestionJobId"
+    exec_aws_command "watch -tcd \"aws bedrock-agent get-ingestion-job --knowledge-base-id $knowledgeBaseId --data-source-id $dataSourceId --ingestion-job-id $ingestionJobId\""
   }
 
   function aws-br-prompts() {
