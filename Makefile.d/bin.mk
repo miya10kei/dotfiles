@@ -36,6 +36,8 @@ install-bins: \
 	$(BIN_DIR)/aws-vault \
 	$(BIN_DIR)/bat \
 	$(BIN_DIR)/bun \
+	$(BIN_DIR)/claude \
+	$(BIN_DIR)/coderabbit \
 	$(BIN_DIR)/delta \
 	$(BIN_DIR)/dive \
 	$(BIN_DIR)/duf \
@@ -58,7 +60,6 @@ install-bins: \
 	$(CARGO_BIN_DIR)/jnv \
 	$(GO_BIN_DIR)/actionlint \
 	$(GO_BIN_DIR)/pinact \
-	$(NODE_BIN_DIR)/claude \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/sam \
 	$(SRC_DIR)/google-cloud-sdk
@@ -104,6 +105,12 @@ $(BIN_DIR)/bat:
 
 $(BIN_DIR)/bun:
 	curl -fsSL https://bun.sh/install | bash
+
+$(BIN_DIR)/claude:
+	curl -fsSL https://claude.ai/install.sh | bash
+
+$(BIN_DIR)/coderabbit:
+	curl -fsSL https://cli.coderabbit.ai/install.sh | sh
 
 $(BIN_DIR)/delta:
 	mkdir -p /tmp/delta
@@ -285,9 +292,6 @@ $(GO_BIN_DIR)/pinact:
 	go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
 
 # Node package
-$(NODE_BIN_DIR)/claude:
-	npm install -g @anthropic-ai/claude-code
-
 $(NODE_BIN_DIR)/gemini:
 	npm install -g @google/gemini-cli
 

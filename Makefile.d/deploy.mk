@@ -10,9 +10,13 @@ $(HOME)/.aws:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-coderabbit
 deploy-coderabbit: \
-	r(HOME)/.coderabbit/auth.json
+	$(HOME)/.coderabbit \
+	$(HOME)/.coderabbit/auth.json
 
-r(HOME)/.coderabbit/auth.json:
+$(HOME)/.coderabbit:
+	mkdir -p $(HOME)/.coderabbit
+
+$(HOME)/.coderabbit/auth.json:
 	ln -fs $(DOTDIR)/data-volume/coderabbit/auth.json $(HOME)/.coderabbit/auth.json
 
 
