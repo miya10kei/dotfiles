@@ -9,6 +9,7 @@
 - AWSについての情報が必要な場合は、aws-knowledgeを使用すること
 - Park Directの情報が必要な場合は、bedrock-knowledgeを使用すること
 - Web検索をする場合は、gemini-cliを使用すること
+- ライブラリのドキュメントを参照する場合は、context7を使用すること
 
 ## Pythonプロジェクトのルール
 
