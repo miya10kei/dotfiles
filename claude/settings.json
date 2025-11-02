@@ -2,19 +2,26 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "Bash(uv run ruff check:*)",
-      "Bash(uv run ruff:*)",
       "Bash(git log:*)",
-      "Read",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(uv run ruff:*)",
       "List",
+      "Read",
+      "Search",
       "WebFetch",
       "WebSearch",
-      "mcp__aws-knowledge",
+      "mcp__awsi-knowledge",
       "mcp__bedrock-knowledge",
-      "mcp__gemini-cli__googleSearch",
-      "mcp__serena",
       "mcp__context7",
-      "mcp__pd-design-system-mcp"
+      "mcp__gemini-cli__googleSearch",
+      "mcp__ide__getDiagnostics",
+      "mcp__pd-design-system-mcp",
+      "mcp__serena"
     ]
   },
   "statusLine": {
