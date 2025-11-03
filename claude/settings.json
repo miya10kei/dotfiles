@@ -2,6 +2,9 @@
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
       "Bash(find:*)",
       "Bash(gh issue view:*)",
       "Bash(git add:*)",

@@ -297,6 +297,7 @@ RUN apt-get update \
         openssh-client \
         pass \
         postgresql-client \
+        pulseaudio \
         python3-tk \
         redis-tools \
         rlwrap \

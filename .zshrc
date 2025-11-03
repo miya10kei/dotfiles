@@ -153,6 +153,11 @@ function main() {
     if builtin command -v xhost > /dev/null 2>&1; then
         xhost + localhost
     fi
+
+    if builtin command -v pulseaudio > /dev/null 2>&1; then
+        export PULSE_SERVER=host.docker.internal
+    fi
+
     FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
     autoload bashcompinit && bashcompinit
     autoload -Uz compinit && compinit

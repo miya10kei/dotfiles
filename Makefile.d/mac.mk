@@ -22,7 +22,6 @@ brew-install:
 		alt-tab \
 		aws-vpn-client \
 		chatgpt \
-		obsidian \
 		claude \
 		deepl \
 		displaylink \
@@ -31,11 +30,20 @@ brew-install:
 		homerow \
 		insta360-link-controller \
 		karabiner-elements \
+		obsidian \
 		rancher \
 		raycast \
 		rectangle \
 		slack \
 		xquartz
+	brew install \
+		aws-sam-cli \
+		aws-vault \
+		awscli \
+		fzf \
+		node@22 \
+		pulseaudio \
+		uv
 	brew cleanup --prune all
 
 .PHONY: brew-update
