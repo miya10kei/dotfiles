@@ -192,12 +192,12 @@ $(HOME)/.obsidian.vimrc:
 .PHONY: deploy-sheldon
 deploy-sheldon: \
 	$(HOME)/.config/sheldon \
-	sheldonlock
+	$(HOME)/.local/share/sheldon/plugins.lock
 
 $(HOME)/.config/sheldon:
 	ln -fs $(DOTDIR)/config/sheldon $(HOME)/.config/sheldon
 
-sheldonlock:
+$(HOME)/.local/share/sheldon/plugins.lock:
 	sheldon lock
 
 

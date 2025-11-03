@@ -1,11 +1,18 @@
 {
   "permissions": {
     "allow": [
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
       "Bash(find:*)",
+      "Bash(gh issue view:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
       "Bash(git log:*)",
       "Bash(git log:*)",
       "Bash(git show:*)",
       "Bash(git status:*)",
+      "Bash(ls:*)",
       "Bash(npm run build:*)",
       "Bash(npm run test:*)",
       "Bash(npm run type-check:*)",
@@ -29,5 +36,29 @@
     "command": "bun x ccusage statusline"
   },
   "alwaysThinkingEnabled": true,
-  "includeCoAuthoredBy": false
+  "includeCoAuthoredBy": false,
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.dotfiles/claude/claude-hook.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python ~/.dotfiles/claude/claude-hook.py"
+          }
+        ]
+      }
+    ]
+  }
 }
