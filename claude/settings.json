@@ -41,7 +41,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.dotfiles/claude/stop-hook.py"
+            "command": "python ~/.dotfiles/claude/claude-hook.py"
           }
         ]
       }
@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.dotfiles/claude/stop-hook.py"
+            "command": "python ~/.dotfiles/claude/claude-hook.py"
           }
         ]
       }
