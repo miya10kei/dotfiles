@@ -26,6 +26,7 @@ function launch_dev_env() {
         Darwin)
             opts+=(
                 "--mount type=bind,source=${HOME}/.Xauthority,target=/home/${uname}/.Xauthority"
+                "--mount type=bind,source=${HOME}/.config/pulse,target=/home/${uname}/.config/pulse"
                 "--mount type=bind,source=${HOME}/Documents,target=/home/${uname}/Documents"
                 "--mount type=bind,source=${HOME}/Google\ Drive,target=/home/${uname}/Google\ Drive"
                 "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"

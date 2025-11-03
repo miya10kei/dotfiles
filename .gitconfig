@@ -1,5 +1,8 @@
 [alias]
   ad    = add
+  adf   = !git status --short | grep -v '^M%s' | fzf-tmux $FZF_TMUX_OPTS -m --preview 'git diff {2} | delta' | awk '{print $2}' | xargs -r git add && git status --short
+  rss   = !git status --short | grep -v '^ '   | fzf-tmux $FZF_TMUX_OPTS -m --preview 'git diff --staged {2} | delta' | awk '{print $2}' | xargs -r git restore --staged && git status --short
+  rsu   = !git status --short | grep -v '^M%s' | fzf-tmux $FZF_TMUX_OPTS -m --preview 'git diff {2} | delta' | awk '{print $2}' | xargs -r git restore && git status --short
   br    = branch
   cf    = config
   ch    = checkout
@@ -13,7 +16,7 @@
   pl    = pull -p
   ps    = push
   pull  = pull -p
-  st    = status
+  st    = status --short
   sw    = !git branch -a | grep -vE '^\\*' | fzf | sed -e 's/remotes\\/origin\\///' | xargs git switch
 [color]
   branch = auto
@@ -55,3 +58,6 @@
   helper = !/root/.local/bin/gh auth git-credential
 [credential "https://gist.github.com"]
   helper = !/root/.local/bin/gh auth git-credential
+[coderabbit]
+  machineId = cli/0b574cd1beaa428e963b5cdd1b4b76c7
+

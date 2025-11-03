@@ -119,6 +119,6 @@ require("lazy").setup({
     config = function()
       require("jaq")
     end,
-    keys = { "<LEADER>r", ":<C-u>Jaq<CR>", silent = true },
+    keys = { "<LEADER>j", ":<C-u>Jaq<CR>", silent = true },
   },
 })

@@ -3,7 +3,7 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons" },
   opts = {
     files = {
-      cmd = "rg --files --hidden --no-ignore --glob '!.git/*' --glob '!.venv/*' --glob '!node_modules/*' --glob '!.claude/*' --glob '!.serena/*' --glob '!**/__pycache__/*' --glob '!**/.ruff_cache/*' --glob '!**/.DS_Store' | sort",
+      cmd = "rg --files --hidden --no-ignore --glob '!**/.git/*' --glob '!**/.venv/*' --glob '!**/node_modules/*' --glob '!**/.claude/*' --glob '!**/.serena/*' --glob '!**/__pycache__/*' --glob '!**/.ruff_cache/*' --glob '!**/.DS_Store' --glob '!**/.aws-sam/*' --glob '!**/.next/*' | sort",
     },
     winopts = {
       keymap = {

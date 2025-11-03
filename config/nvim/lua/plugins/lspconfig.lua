@@ -76,7 +76,13 @@ return {
       }
 
       capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-      local lspconfig = require("lspconfig")
+
+      -- グローバルLSP設定
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
       local used_masson_packages = {
         ["lsp"] = {
           "angular-language-server",
@@ -137,9 +143,7 @@ return {
       for _, v in pairs(used_masson_packages["lsp"]) do
         local alias = mason_to_lsp[v] or mason_registry.get_package_aliases(v)[1] or v
         if alias == "lua_ls" then
-          lspconfig[alias].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
+          vim.lsp.config(alias, {
             settings = {
               Lua = {
                 runtime = {
@@ -165,9 +169,7 @@ return {
             },
           })
         elseif alias == "rust_analyzer" then
-          lspconfig[alias].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
+          vim.lsp.config(alias, {
             settings = {
               ["rust-analyzer"] = {
                 import = {
@@ -188,9 +190,7 @@ return {
             },
           })
         elseif alias == "yamlls" then
-          lspconfig[alias].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
+          vim.lsp.config(alias, {
             settings = {
               yaml = {
                 format = {
@@ -206,17 +206,19 @@ return {
             },
           })
         elseif alias == "bashls" then
-          lspconfig[alias].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
+          vim.lsp.config(alias, {
             filetypes = { "sh", "bash", "zsh" }, -- .zshファイルも含める
           })
         elseif alias == "copilot-language-server" then
-        else
-          lspconfig[alias].setup({
-            capabilities = capabilities,
-            on_attach = on_attach,
-          })
+          -- copilot-language-serverは設定・有効化をスキップ
+        end
+      end
+
+      -- LSPサーバーの有効化
+      for _, v in pairs(used_masson_packages["lsp"]) do
+        local alias = mason_to_lsp[v] or mason_registry.get_package_aliases(v)[1] or v
+        if alias ~= "copilot-language-server" then
+          vim.lsp.enable(alias)
         end
       end
 
