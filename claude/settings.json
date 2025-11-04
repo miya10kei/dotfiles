@@ -1,4 +1,5 @@
 {
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
       "Bash(echo:*)",
@@ -31,12 +32,6 @@
       "mcp__serena"
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bun x ccusage statusline"
-  },
-  "alwaysThinkingEnabled": true,
-  "includeCoAuthoredBy": false,
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -60,5 +55,10 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline"
+  },
+  "alwaysThinkingEnabled": false
 }

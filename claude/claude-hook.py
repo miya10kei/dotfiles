@@ -126,7 +126,7 @@ def update_tmux_window_name(status: HookStatus):
         emoji = status.value
         # 既存の絵文字を置き換え（または追加）
         emoji_pattern = HookStatus.get_emoji_pattern()
-        new_name = re.sub(rf"^[{emoji_pattern}]\s*", f"{emoji} ", current_name)
+        new_name = re.sub(rf"^[{emoji_pattern}]*", f"{emoji}", current_name)
         if not new_name.startswith(emoji):
             new_name = f"{emoji}{current_name}"
 
