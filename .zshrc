@@ -15,9 +15,9 @@ function main() {
     function add_path() {
         new_path=$1
         if [[ ! $PATH =~ $new_path ]]; then
-	    if [[ -e $new_path ]]; then
+            if [[ -e $new_path ]]; then
                 export PATH="$new_path:$PATH"
-	    fi
+            fi
         fi
     }
 
@@ -62,6 +62,17 @@ function main() {
     if builtin command -v tmux > /dev/null 2>&1; then
         if [[ ! -e $HOME/.tmux/plugins/tpm ]]; then
             git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
+        fi
+    fi
+
+    # ------------------
+    # --- pulseaudio ---
+    # ------------------
+    if builtin command -v pulseaudio > /dev/null 2>&1; then
+        if [[ ! -e /.dockerenv ]]; then
+            pulseaudio --check > /dev/null 2>&1 || pulseaudio --load=module-native-protocol-tcp --exit-idle-time=-1 --daemon
+        else
+            export PULSE_SERVER=host.docker.internal
         fi
     fi
 
@@ -152,10 +163,6 @@ function main() {
 
     if builtin command -v xhost > /dev/null 2>&1; then
         xhost + localhost
-    fi
-
-    if builtin command -v pulseaudio > /dev/null 2>&1; then
-        export PULSE_SERVER=host.docker.internal
     fi
 
     FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
