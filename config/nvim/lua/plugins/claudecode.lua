@@ -10,7 +10,6 @@ return {
       focus_after_send = true,
       terminal = {
         split_width_percentage = 0.5,
-        auto_clse = true,
       },
       diff_opts = {
         auto_close_on_accept = true,
