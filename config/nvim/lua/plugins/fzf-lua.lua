@@ -4,17 +4,17 @@ return {
   opts = {
     files = {
       cmd = "rg --files --hidden --no-ignore "
-        .. "--glob '!**/.git/*' "
-        .. "--glob '!**/.venv/*' "
-        .. "--glob '!**/node_modules/*' "
-        .. "--glob '!**/.claude/*' "
-        .. "--glob '!**/.serena/*' "
-        .. "--glob '!**/__pycache__/*' "
-        .. "--glob '!**/.ruff_cache/*' "
-        .. "--glob '!**/.DS_Store' "
         .. "--glob '!**/.aws-sam/*' "
-        .. "--glob '!**/.next/*' "
+        .. "--glob '!**/.claude/*' "
+        .. "--glob '!**/.DS_Store' "
+        .. "--glob '!**/.git/*' "
         .. "--glob '!**/.mypy_cache/*' "
+        .. "--glob '!**/.next/*' "
+        .. "--glob '!**/.ruff_cache/*' "
+        .. "--glob '!**/.serena/*' "
+        .. "--glob '!**/.venv/*' "
+        .. "--glob '!**/__pycache__/*' "
+        .. "--glob '!**/node_modules/*' "
         .. "| sort",
     },
     winopts = {
