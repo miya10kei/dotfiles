@@ -46,7 +46,10 @@ $(HOME)/.claude/commands:
 	ln -fs $(DOTDIR)/claude/commands/ $(HOME)/.claude/commands
 
 install-claude-mcp-servers:
-	-bash $(DOTDIR)/claude/install-mcp-servers.sh
+	bash $(DOTDIR)/claude/install-mcp-servers.sh
+	@if [ -f $(DOTDIR)/claude/install-mcp-servers-work.sh ]; then \
+		bash $(DOTDIR)/claude/install-mcp-servers-work.sh; \
+	fi
 
 
 # ----------------------------------------------------------------------------------------------------------------------
