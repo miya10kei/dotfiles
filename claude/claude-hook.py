@@ -27,7 +27,7 @@ def main():
     input_data = json.load(sys.stdin)
     hook_event = input_data.get("hook_event_name")
 
-    with open("/home/keisuke_miyaushiro/claude-hook.json", "a") as f:
+    with open(f"{os.environ["HOME"]}/claude-hook.json", "a") as f:
         f.write(json.dumps(input_data))
 
     handlers = {
