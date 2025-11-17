@@ -50,7 +50,6 @@ build-dev-env:
 setup4d: \
 	delete-nvimrc \
 	deploy-aws \
-	deploy-claude \
 	deploy-coderabbit \
 	deploy-editorconfig \
 	deploy-gemini \
@@ -68,6 +67,7 @@ setup4d: \
 	deploy-tmux \
 	deploy-yamlfmt \
 	deploy-zoxide \
+	deploy-claude \
 	autoenv_auth \
 	zshhistory_force
 
