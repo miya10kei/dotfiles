@@ -6,6 +6,7 @@
       "Bash(echo:*)",
       "Bash(find:*)",
       "Bash(git add:*)",
+      "Bash(git branch:*)",
       "Bash(git checkout:*)",
       "Bash(git commit:*)",
       "Bash(git log:*)",
