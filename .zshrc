@@ -130,6 +130,7 @@ function main() {
     if [[ -e $HOME/.dotfiles/zshrc.d ]]; then
         source $HOME/.dotfiles/zshrc.d/docker.zsh
         source $HOME/.dotfiles/zshrc.d/aliases.zsh
+        source $HOME/.dotfiles/zshrc.d/gtr.zsh
 
         if builtin command -v aws > /dev/null 2>&1; then
           source $HOME/.dotfiles/zshrc.d/aws.zsh
@@ -142,6 +143,7 @@ function main() {
         if builtin command -v tmux > /dev/null 2>&1; then
             source $HOME/.dotfiles/zshrc.d/tmux.zsh
         fi
+
     fi
 
     if [[ -e $HOME/.bun/_bun ]]; then

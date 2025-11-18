@@ -72,7 +72,7 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
     if [ -z "$logGroupName" ]; then
       return
     fi
-    exec_aws_command "aws logs tail --follow $logGroupName"
+    exec_aws_command "aws logs tail --since 1h --format short --follow $logGroupName"
   }
 
   function aws-params() {
