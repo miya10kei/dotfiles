@@ -21,11 +21,9 @@ brew-install:
 		1password \
 		alt-tab \
 		aws-vpn-client \
-		chatgpt \
 		claude \
 		deepl \
 		displaylink \
-		figma \
 		ghostty \
 		homerow \
 		insta360-link-controller \
