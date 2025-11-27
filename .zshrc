@@ -131,6 +131,7 @@ function main() {
         source $HOME/.dotfiles/zshrc.d/docker.zsh
         source $HOME/.dotfiles/zshrc.d/aliases.zsh
         source $HOME/.dotfiles/zshrc.d/gtr.zsh
+        source $HOME/.dotfiles/zshrc.d/nvim.zsh
 
         if builtin command -v aws > /dev/null 2>&1; then
           source $HOME/.dotfiles/zshrc.d/aws.zsh

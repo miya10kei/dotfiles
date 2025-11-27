@@ -35,3 +35,9 @@ local options = {
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
+
+-- Neovim Remote (nvr) 用のサーバー設定
+-- ターミナル内から親Neovimに接続するためのソケットを起動
+if vim.env.NVIM == nil then
+  vim.fn.serverstart('/tmp/nvim-server-' .. vim.fn.getpid() .. '.pipe')
+end

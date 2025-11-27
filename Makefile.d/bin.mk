@@ -60,6 +60,7 @@ install-bins: \
 	$(CARGO_BIN_DIR)/jnv \
 	$(GO_BIN_DIR)/actionlint \
 	$(GO_BIN_DIR)/pinact \
+	$(PYENV_SHIMS_DIR)/nvr \
 	$(PYENV_SHIMS_DIR)/pgcli \
 	$(PYENV_SHIMS_DIR)/sam \
 	$(SRC_DIR)/google-cloud-sdk
@@ -298,6 +299,9 @@ $(NODE_BIN_DIR)/gemini:
 # Python package
 $(PYENV_SHIMS_DIR)/sam:
 	pip install --quiet aws-sam-cli
+
+$(PYENV_SHIMS_DIR)/nvr:
+	pip install --quiet neovim-remote
 
 $(PYENV_SHIMS_DIR)/pgcli:
 	pip install --quiet pgcli
