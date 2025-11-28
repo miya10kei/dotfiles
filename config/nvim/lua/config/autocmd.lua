@@ -64,3 +64,14 @@ create_autocmd_group("FzfKeymaps", {
   },
 })
 
+-- Terminal auto insert mode
+create_autocmd_group("TerminalConfig", {
+  {
+    event = "TermOpen",
+    opts = {
+      pattern = "*",
+      command = "startinsert",
+    },
+  },
+})
+

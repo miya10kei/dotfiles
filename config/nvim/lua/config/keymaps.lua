@@ -37,3 +37,8 @@ keymap("t", "<C-h>", "<C-\\><C-n><C-w>h", keymap_opts_silent)
 keymap("t", "<C-j>", "<C-\\><C-n><C-w>j", keymap_opts_silent)
 keymap("t", "<C-k>", "<C-\\><C-n><C-w>k", keymap_opts_silent)
 keymap("t", "<C-l>", "<C-\\><C-n><C-w>l", keymap_opts_silent)
+
+-- Terminal
+keymap("n", "<F12>", "<CMD>botright split<CR><CMD>resize " .. math.floor(vim.o.lines / 3) .. "<CR><CMD>terminal<CR>", keymap_opts_silent)
+keymap("n", "<F11>", "<CMD>rightbelow vsplit<CR><CMD>terminal<CR>", keymap_opts_silent)
+keymap("t", "<ESC>", "<C-\\><C-n>", keymap_opts_silent)
