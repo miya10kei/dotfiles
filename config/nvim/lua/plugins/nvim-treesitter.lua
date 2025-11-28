@@ -2,7 +2,6 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    enabled = true,
     event = { "VeryLazy" },
     build = ":TSUpdate",
     main = "nvim-treesitter.configs",
@@ -65,7 +64,6 @@ return {
   },
   {
     "windwp/nvim-ts-autotag",
-    enabled = true,
     event = { "VeryLazy" },
     opts = {},
   },

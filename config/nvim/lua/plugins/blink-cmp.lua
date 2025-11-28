@@ -7,7 +7,6 @@ return {
       "moyiz/blink-emoji.nvim",
       "bydlw98/blink-cmp-env",
     },
-    enabled = true,
     event = { "InsertEnter", "CmdLineEnter" },
     version = "*",
     ---@module 'blink.cmp'

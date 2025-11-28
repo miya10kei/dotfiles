@@ -289,9 +289,9 @@ return {
             null_ls.toggle(query)
             local sources = null_ls.get_source(query)
             if sources[1]._disabled then
-              vim.cmd('echo "x disable null_ls formatter"')
+              vim.notify("null_ls formatter disabled", vim.log.levels.INFO)
             else
-              vim.cmd('echo "o enable null_ls formatter"')
+              vim.notify("null_ls formatter enabled", vim.log.levels.INFO)
             end
           end
           keymap("n", "<LEADER>t", toggle_source, {

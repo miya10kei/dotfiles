@@ -1,12 +1,7 @@
-local function create_autocmd_group(name, autocmds)
-  local group = vim.api.nvim_create_augroup(name, { clear = true })
-  for _, autocmd in ipairs(autocmds) do
-    vim.api.nvim_create_autocmd(autocmd.event, vim.tbl_extend("force", autocmd.opts, { group = group }))
-  end
-end
+local autocmd = require("utils.autocmd")
 
 -- LSP formatting on save
-create_autocmd_group("FileTypeIndent", {
+autocmd.create_group("FileTypeIndent", {
   {
     event = "BufWritePre",
     opts = {
@@ -23,14 +18,14 @@ create_autocmd_group("FileTypeIndent", {
 })
 
 -- Restore cursor position
-create_autocmd_group("Extends", {
+autocmd.create_group("Extends", {
   {
     event = "BufRead",
     opts = {
       pattern = "*",
       callback = function()
         if vim.fn.line("'\"") > 0 and vim.fn.line("'\"") <= vim.fn.line("$") then
-          vim.api.nvim_command('normal g`"')
+          vim.cmd('normal g`"')
         end
       end,
     },
@@ -38,7 +33,7 @@ create_autocmd_group("Extends", {
 })
 
 -- Oil.nvim relative path fix
-create_autocmd_group("OilRelPathFix", {
+autocmd.create_group("OilRelPathFix", {
   {
     event = "BufLeave",
     opts = {
@@ -51,7 +46,7 @@ create_autocmd_group("OilRelPathFix", {
 })
 
 -- fzf-specific keymaps
-create_autocmd_group("FzfKeymaps", {
+autocmd.create_group("FzfKeymaps", {
   {
     event = "FileType",
     opts = {
@@ -65,7 +60,7 @@ create_autocmd_group("FzfKeymaps", {
 })
 
 -- Terminal auto insert mode
-create_autocmd_group("TerminalConfig", {
+autocmd.create_group("TerminalConfig", {
   {
     event = "TermOpen",
     opts = {
