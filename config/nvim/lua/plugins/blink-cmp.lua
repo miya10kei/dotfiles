@@ -3,7 +3,6 @@ return {
   {
     "saghen/blink.cmp",
     dependencies = {
-      "fang2hou/blink-copilot",
       "mikavilpas/blink-ripgrep.nvim",
       "moyiz/blink-emoji.nvim",
       "bydlw98/blink-cmp-env",
@@ -38,14 +37,8 @@ return {
       },
       signature = { enabled = true },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "copilot", "ripgrep", "emoji", "env" },
+        default = { "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env" },
         providers = {
-          copilot = {
-            name = "copilot",
-            module = "blink-copilot",
-            score_offset = 100,
-            async = true,
-          },
           ripgrep = {
             name = "Ripgrep",
             module = "blink-ripgrep",

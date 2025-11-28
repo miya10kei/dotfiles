@@ -78,7 +78,7 @@ return {
       capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
       -- グローバルLSP設定
-      vim.lsp.config('*', {
+      vim.lsp.config("*", {
         capabilities = capabilities,
         on_attach = on_attach,
       })
@@ -87,7 +87,6 @@ return {
         ["lsp"] = {
           "angular-language-server",
           "bash-language-server",
-          "copilot-language-server",
           "docker-compose-language-service",
           "dockerfile-language-server",
           "gopls",

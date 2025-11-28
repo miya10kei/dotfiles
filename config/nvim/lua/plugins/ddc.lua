@@ -79,7 +79,6 @@ return {
       "uga-rosa/ddc-source-lsp-setup",
       "Shougo/ddc-source-lsp",
       ---- Copilot Source
-      "zbirenbaum/copilot.lua",
       "Shougo/ddc-source-copilot",
       ---- Snipeet
       "L3MON4D3/LuaSnip",
