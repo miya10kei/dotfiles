@@ -13,26 +13,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   { import = "plugins" },
-  {
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
-    end,
-  },
-  {
-    "kylechui/nvim-surround",
-    event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup({})
-    end,
-  },
-  {
-    "is0n/jaq-nvim",
-    config = function()
-      require("jaq")
-    end,
-    keys = { "<LEADER>j", ":<C-u>Jaq<CR>", silent = true },
-  },
 }, {
   change_detection = {
     notify = false,
