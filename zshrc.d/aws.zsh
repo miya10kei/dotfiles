@@ -68,7 +68,23 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
 
   function aws-logs() {
     aws-check-session
-    logGroupName=$(aws logs list-log-groups | jq -r '.logGroups[].logGroupName' | fzf)
+
+    local logGroups=""
+    local nextToken=""
+    while true; do
+      if [ -z "$nextToken" ]; then
+        result=$(aws logs describe-log-groups --output json)
+      else
+        result=$(aws logs describe-log-groups --next-token "$nextToken" --output json)
+      fi
+
+      logGroups+=$(echo "$result" | jq -r '.logGroups[].logGroupName')$'\n'
+      nextToken=$(echo "$result" | jq -r '.nextToken // empty')
+
+      [ -z "$nextToken" ] && break
+    done
+
+    logGroupName=$(echo "$logGroups" | fzf)
     if [ -z "$logGroupName" ]; then
       return
     fi
