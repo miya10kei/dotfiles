@@ -81,7 +81,7 @@ return {
         on_attach = on_attach,
       })
 
-      local used_masson_packages = {
+      local used_mason_packages = {
         ["lsp"] = {
           "angular-language-server",
           "bash-language-server",
@@ -95,7 +95,6 @@ return {
           "marksman",
           "pyright",
           "rust-analyzer",
-          --"taplo",
           "terraform-ls",
           "typescript-language-server",
           "yaml-language-server",
@@ -133,86 +132,60 @@ return {
         ["typescript-language-server"] = "ts_ls",
       }
 
-      for _, v in pairs(used_masson_packages["lsp"]) do
-        local alias = mason_to_lsp[v] or mason_registry.get_package_aliases(v)[1] or v
-        if alias == "lua_ls" then
-          vim.lsp.config(alias, {
-            settings = {
-              Lua = {
-                runtime = {
-                  version = "LuaJIT",
+      -- LSPサーバー個別設定
+      local lsp_settings = {
+        lua_ls = {
+          settings = {
+            Lua = {
+              runtime = { version = "LuaJIT" },
+              diagnostics = { globals = { "vim" } },
+              workspace = {
+                library = {
+                  vim.fn.expand("$VIMRUNTIME/lua"),
+                  vim.fn.expand("$VIMRUNTIME/lua/vim/lsp"),
+                  vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy",
+                  vim.fn.stdpath("data") .. "/lazy/blink.cmp",
                 },
-                diagnostics = {
-                  globals = {
-                    "vim",
-                  },
-                },
-                workspace = {
-                  library = {
-                    vim.fn.expand("$VIMRUNTIME/lua"),
-                    vim.fn.expand("$VIMRUNTIME/lua/vim/lsp"),
-                    vim.fn.stdpath("data") .. "/lazy/lazy.nvim/lua/lazy",
-                    vim.fn.stdpath("data") .. "/lazy/blink.cmp", -- blink.cmp用に追加
-                  },
-                },
-                telemetry = {
-                  enable = false,
-                },
+              },
+              telemetry = { enable = false },
+            },
+          },
+        },
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              import = { granularity = { group = "module" } },
+              prefix = "self",
+            },
+            cargo = { buildScripts = { enable = true } },
+            procMacro = { enable = true },
+          },
+        },
+        yamlls = {
+          settings = {
+            yaml = {
+              format = { enable = false },
+              schemas = {
+                ["https://json.schemastore.org/github-action.json"] = ".github/actions/*.yaml",
+                ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*.yaml",
+                ["https://raw.githubusercontent.com/aws/aws-sam-cli/master/schema/samcli.json"] = "samconfig.yaml",
+                ["https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json"] = "template*.yaml",
               },
             },
-          })
-        elseif alias == "rust_analyzer" then
-          vim.lsp.config(alias, {
-            settings = {
-              ["rust-analyzer"] = {
-                import = {
-                  granularity = {
-                    group = "module",
-                  },
-                },
-                prefix = "self",
-              },
-              cargo = {
-                buildScripts = {
-                  enable = true,
-                },
-              },
-              procMacro = {
-                enable = true,
-              },
-            },
-          })
-        elseif alias == "yamlls" then
-          vim.lsp.config(alias, {
-            settings = {
-              yaml = {
-                format = {
-                  enable = false,
-                },
-                schemas = {
-                  ["https://json.schemastore.org/github-action.json"] = ".github/actions/*.yaml",
-                  ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*.yaml",
-                  ["https://raw.githubusercontent.com/aws/aws-sam-cli/master/schema/samcli.json"] = "samconfig.yaml",
-                  ["https://raw.githubusercontent.com/aws/serverless-application-model/develop/samtranslator/validator/sam_schema/schema.json"] = "template*.yaml",
-                },
-              },
-            },
-          })
-        elseif alias == "bashls" then
-          vim.lsp.config(alias, {
-            filetypes = { "sh", "bash", "zsh" }, -- .zshファイルも含める
-          })
-        elseif alias == "copilot-language-server" then
-          -- copilot-language-serverは設定・有効化をスキップ
-        end
-      end
+          },
+        },
+        bashls = {
+          filetypes = { "sh", "bash", "zsh" },
+        },
+      }
 
-      -- LSPサーバーの有効化
-      for _, v in pairs(used_masson_packages["lsp"]) do
+      -- LSPサーバーの設定と有効化
+      for _, v in pairs(used_mason_packages["lsp"]) do
         local alias = mason_to_lsp[v] or mason_registry.get_package_aliases(v)[1] or v
-        if alias ~= "copilot-language-server" then
-          vim.lsp.enable(alias)
+        if lsp_settings[alias] then
+          vim.lsp.config(alias, lsp_settings[alias])
         end
+        vim.lsp.enable(alias)
       end
 
       ---------------
@@ -283,11 +256,13 @@ return {
         sources = null_sources,
         on_attach = function()
           local function toggle_source()
-            local query = {
-              method = null_ls.methods.FORMATTING,
-            }
+            local query = { method = null_ls.methods.FORMATTING }
             null_ls.toggle(query)
             local sources = null_ls.get_source(query)
+            if not sources or not sources[1] then
+              vim.notify("null_ls formatter not found", vim.log.levels.WARN)
+              return
+            end
             if sources[1]._disabled then
               vim.notify("null_ls formatter disabled", vim.log.levels.INFO)
             else
@@ -305,7 +280,7 @@ return {
       ---------------------
       vim.api.nvim_create_user_command("MasonInstallNeeded", function()
         local install_packages = {}
-        for _, packages in pairs(used_masson_packages) do
+        for _, packages in pairs(used_mason_packages) do
           local not_installed_packages = {}
           for _, package in pairs(packages) do
             if not mason_registry.is_installed(package) then
@@ -316,7 +291,7 @@ return {
           table.insert(install_packages, not_installed_packages_string)
         end
         local install_packages_string = table.concat(install_packages, " ")
-        vim.api.nvim_command(string.format("MasonInstall %s", install_packages_string))
+        vim.cmd(string.format("MasonInstall %s", install_packages_string))
       end, {})
     end,
     keys = {
@@ -341,7 +316,7 @@ return {
       },
       {
         "<SPACE>q",
-        vim.diagnostic.setloclist(),
+        vim.diagnostic.setloclist,
         desc = "Set diagnostic to loclist",
       },
     },
