@@ -33,4 +33,8 @@ require("lazy").setup({
     end,
     keys = { "<LEADER>j", ":<C-u>Jaq<CR>", silent = true },
   },
+}, {
+  change_detection = {
+    notify = false,
+  },
 })
