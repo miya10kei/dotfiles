@@ -12,6 +12,7 @@ return {
         markdown = { "markdownlint" },
         terraform = { "tfsec" },
         tf = { "tfsec" },
+        ["yaml.ghaction"] = { "actionlint" },
       }
 
       autocmd.create_group("lint", {
@@ -20,17 +21,6 @@ return {
           opts = {
             callback = function()
               lint.try_lint()
-            end,
-          },
-        },
-        {
-          event = { "BufEnter", "BufWritePost", "InsertLeave" },
-          opts = {
-            pattern = { "*.yaml", "*.yml" },
-            callback = function()
-              if vim.fn.expand("%:p"):match("/.github/workflows/") then
-                lint.try_lint({ "actionlint" })
-              end
             end,
           },
         },

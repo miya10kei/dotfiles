@@ -53,3 +53,15 @@ autocmd.create_group("TerminalConfig", {
   },
 })
 
+-- GitHub Actions workflow files
+autocmd.create_group("GitHubActionsFiletype", {
+  {
+    event = { "BufRead", "BufNewFile" },
+    opts = {
+      pattern = { "*/.github/workflows/*.yaml", "*/.github/workflows/*.yml" },
+      callback = function()
+        vim.bo.filetype = "yaml.ghaction"
+      end,
+    },
+  },
+})
