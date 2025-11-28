@@ -2,7 +2,6 @@ return {
   {
     "coder/claudecode.nvim",
     enabled = true,
-    lazy = false,
     dependencies = {
       "folke/snacks.nvim",
     },

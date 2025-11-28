@@ -10,10 +10,9 @@ create_autocmd_group("FileTypeIndent", {
   {
     event = "BufWritePre",
     opts = {
-      buffer = bufnr,
-      callback = function()
+      callback = function(args)
         vim.lsp.buf.format({
-          bufnr = bufnr,
+          bufnr = args.buf,
           filter = function(lsp_client)
             return lsp_client.name == "null-ls"
           end,
@@ -65,30 +64,3 @@ create_autocmd_group("FzfKeymaps", {
   },
 })
 
--- blink.cmp completion menu keymaps
-create_autocmd_group("BlinkCmpKeymaps", {
-  {
-    event = "User",
-    opts = {
-      pattern = "BlinkCmpMenuOpen",
-      callback = function()
-        vim.keymap.set("i", "<C-j>", function()
-          require('blink.cmp').select_next()
-        end, { buffer = true, silent = true })
-        vim.keymap.set("i", "<C-k>", function()
-          require('blink.cmp').select_prev()
-        end, { buffer = true, silent = true })
-      end,
-    },
-  },
-  {
-    event = "User",
-    opts = {
-      pattern = "BlinkCmpMenuClose",
-      callback = function()
-        pcall(vim.keymap.del, "i", "<C-j>", { buffer = true })
-        pcall(vim.keymap.del, "i", "<C-k>", { buffer = true })
-      end,
-    },
-  },
-})

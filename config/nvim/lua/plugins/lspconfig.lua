@@ -22,8 +22,6 @@ return {
         keymap("n", "gD", vim.lsp.buf.declaration, bufopts)
         keymap("n", "K", vim.lsp.buf.hover, bufopts)
         keymap("n", "gi", vim.lsp.buf.implementation, bufopts)
-        -- keymap("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-        -- keymap("i", "<C-k>", vim.lsp.buf.signature_help, bufopts)
         keymap("n", "<SPACE>wa", vim.lsp.buf.add_workspace_folder, bufopts)
         keymap("n", "<SPACE>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
         keymap("n", "<SPACE>wl", function()
@@ -101,10 +99,6 @@ return {
           "terraform-ls",
           "typescript-language-server",
           "yaml-language-server",
-        },
-        ["dap"] = {
-          "codelldb",
-          "debugpy",
         },
         ["linter"] = {
           "actionlint",
@@ -235,46 +229,49 @@ return {
             for k, _ in pairs(package.spec.bin) do
               local name = string.gsub(k, "-", "_")
               local source = null_ls.builtins.formatting[name]
-              if name == "autoflake" then
-                source = source.with({
-                  extra_args = {
-                    "--remove-rhs-for-unused-variables",
-                    "--remove-all-unused-imports",
-                    "--remove-duplicate-keys",
-                    "--remove-unused-variables",
-                  },
-                })
-              elseif name == "black" then
-                source = source.with({
-                  extra_args = {
-                    "--line-length",
-                    "120",
-                  },
-                })
-              elseif name == "prettier" then
-                source = source.with({
-                  filetypes = {
-                    "javascript",
-                    "javascriptreact",
-                    "typescript",
-                    "typescriptreact",
-                    "vue",
-                    "css",
-                    "scss",
-                    "less",
-                    "html",
-                    "markdown.mdx",
-                    "graphql",
-                    "handlebars",
-                  },
-                })
+              if source then
+                if name == "autoflake" then
+                  source = source.with({
+                    extra_args = {
+                      "--remove-rhs-for-unused-variables",
+                      "--remove-all-unused-imports",
+                      "--remove-duplicate-keys",
+                      "--remove-unused-variables",
+                    },
+                  })
+                elseif name == "black" then
+                  source = source.with({
+                    extra_args = {
+                      "--line-length",
+                      "120",
+                    },
+                  })
+                elseif name == "prettier" then
+                  source = source.with({
+                    filetypes = {
+                      "javascript",
+                      "javascriptreact",
+                      "typescript",
+                      "typescriptreact",
+                      "vue",
+                      "css",
+                      "scss",
+                      "less",
+                      "html",
+                      "markdown.mdx",
+                      "graphql",
+                      "handlebars",
+                    },
+                  })
+                end
+                table.insert(null_sources, source)
               end
-              table.insert(null_sources, source)
             end
           elseif package_category == mason_package.Cat.Linter then
             for k, _ in pairs(package.spec.bin) do
-              if k ~= "tflint" then
-                table.insert(null_sources, null_ls.builtins.diagnostics[k])
+              local source = null_ls.builtins.diagnostics[k]
+              if source and k ~= "tflint" then
+                table.insert(null_sources, source)
               end
             end
           end
