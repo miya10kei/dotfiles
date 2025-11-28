@@ -1,22 +1,5 @@
 local autocmd = require("utils.autocmd")
 
--- LSP formatting on save
-autocmd.create_group("FileTypeIndent", {
-  {
-    event = "BufWritePre",
-    opts = {
-      callback = function(args)
-        vim.lsp.buf.format({
-          bufnr = args.buf,
-          filter = function(lsp_client)
-            return lsp_client.name == "null-ls"
-          end,
-        })
-      end,
-    },
-  },
-})
-
 -- Restore cursor position
 autocmd.create_group("Extends", {
   {
