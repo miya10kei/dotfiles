@@ -4,6 +4,15 @@ return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
+      -- Masonパッケージを登録
+      vim.g.mason_packages = vim.g.mason_packages or {}
+      vim.list_extend(vim.g.mason_packages, {
+        "actionlint",
+        "hadolint",
+        "markdownlint-cli",
+        "tfsec",
+      })
+
       local autocmd = require("utils.autocmd")
       local lint = require("lint")
 

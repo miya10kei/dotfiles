@@ -31,16 +31,6 @@ return {
         keymap("n", "<SPACE>ca", vim.lsp.buf.code_action, bufopts)
       end
 
-      -------------
-      --- Mason ---
-      -------------
-      require("mason").setup({
-        log_level = vim.log.levels.WARN,
-        max_concurrent_installers = 1,
-        install = {
-          install_timeout = 60000,
-        },
-      })
       require("mason-lspconfig").setup()
       local mason_registry = require("mason-registry")
 
@@ -93,6 +83,10 @@ return {
         "typescript-language-server",
         "yaml-language-server",
       }
+
+      -- グローバルレジストリに登録
+      vim.g.mason_packages = vim.g.mason_packages or {}
+      vim.list_extend(vim.g.mason_packages, used_mason_packages)
 
       -- Mason パッケージ名から lspconfig の設定名へのマッピング
       local mason_to_lsp = {
@@ -164,23 +158,6 @@ return {
         end
         vim.lsp.enable(alias)
       end
-
-      ---------------------
-      --- User Commands ---
-      ---------------------
-      vim.api.nvim_create_user_command("MasonInstallNeeded", function()
-        local not_installed = {}
-        for _, package in ipairs(used_mason_packages) do
-          if not mason_registry.is_installed(package) then
-            table.insert(not_installed, package)
-          end
-        end
-        if #not_installed > 0 then
-          vim.cmd("MasonInstall " .. table.concat(not_installed, " "))
-        else
-          vim.notify("All Mason packages are already installed", vim.log.levels.INFO)
-        end
-      end, {})
     end,
     keys = {
       {

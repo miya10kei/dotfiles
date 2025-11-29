@@ -27,50 +27,60 @@ return {
         desc = "Toggle format on save",
       },
     },
-    ---@module "conform"
-    ---@type conform.setupOpts
-    opts = {
-      formatters_by_ft = {
-        go = { "goimports", "gofmt" },
-        javascript = { "prettier" },
-        javascriptreact = { "prettier" },
-        typescript = { "prettier" },
-        typescriptreact = { "prettier" },
-        vue = { "prettier" },
-        css = { "prettier" },
-        scss = { "prettier" },
-        less = { "prettier" },
-        html = { "prettier" },
-        graphql = { "prettier" },
-        handlebars = { "prettier" },
-        lua = { "stylua" },
-        markdown = { "markdownlint" },
-        python = { "isort", "black" },
-        terraform = { "terraform_fmt" },
-        tf = { "terraform_fmt" },
-        yaml = { "yamlfmt" },
-        ["_"] = { "trim_whitespace" },
-      },
-      default_format_opts = {
-        lsp_format = "fallback",
-      },
-      format_on_save = function()
-        if vim.g.conform_format_on_save == false then
-          return nil
-        end
-        return {
-          timeout_ms = 500,
-          lsp_format = "fallback",
-        }
-      end,
-      formatters = {
-        black = {
-          prepend_args = { "--line-length", "120" },
+    config = function()
+      -- Masonパッケージを登録
+      vim.g.mason_packages = vim.g.mason_packages or {}
+      vim.list_extend(vim.g.mason_packages, {
+        "black",
+        "isort",
+        "prettier",
+        "stylua",
+        "yamlfmt",
+      })
+
+      require("conform").setup({
+        formatters_by_ft = {
+          go = { "goimports", "gofmt" },
+          javascript = { "prettier" },
+          javascriptreact = { "prettier" },
+          typescript = { "prettier" },
+          typescriptreact = { "prettier" },
+          vue = { "prettier" },
+          css = { "prettier" },
+          scss = { "prettier" },
+          less = { "prettier" },
+          html = { "prettier" },
+          graphql = { "prettier" },
+          handlebars = { "prettier" },
+          lua = { "stylua" },
+          markdown = { "markdownlint" },
+          python = { "isort", "black" },
+          terraform = { "terraform_fmt" },
+          tf = { "terraform_fmt" },
+          yaml = { "yamlfmt" },
+          ["_"] = { "trim_whitespace" },
         },
-      },
-      notify_on_error = true,
-      notify_no_formatters = false,
-    },
+        default_format_opts = {
+          lsp_format = "fallback",
+        },
+        format_on_save = function()
+          if vim.g.conform_format_on_save == false then
+            return nil
+          end
+          return {
+            timeout_ms = 500,
+            lsp_format = "fallback",
+          }
+        end,
+        formatters = {
+          black = {
+            prepend_args = { "--line-length", "120" },
+          },
+        },
+        notify_on_error = true,
+        notify_no_formatters = false,
+      })
+    end,
     init = function()
       vim.g.conform_format_on_save = true
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
