@@ -31,9 +31,8 @@ return {
       -- Masonパッケージを登録
       vim.g.mason_packages = vim.g.mason_packages or {}
       vim.list_extend(vim.g.mason_packages, {
-        "black",
-        "isort",
         "prettier",
+        "ruff",
         "stylua",
         "yamlfmt",
       })
@@ -54,7 +53,7 @@ return {
           handlebars = { "prettier" },
           lua = { "stylua" },
           markdown = { "markdownlint" },
-          python = { "isort", "black" },
+          python = { "ruff_organize_imports", "ruff_format" },
           terraform = { "terraform_fmt" },
           tf = { "terraform_fmt" },
           yaml = { "yamlfmt" },
@@ -72,11 +71,6 @@ return {
             lsp_format = "fallback",
           }
         end,
-        formatters = {
-          black = {
-            prepend_args = { "--line-length", "120" },
-          },
-        },
         notify_on_error = true,
         notify_no_formatters = false,
       })
