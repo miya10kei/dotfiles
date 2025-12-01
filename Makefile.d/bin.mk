@@ -24,6 +24,7 @@ PROCS_VERSION := 0.14.10
 RIPGREP_VERSION := 15.1.0
 SHELDON_VERSION := 0.8.5
 STARSHIP_VERSION := 1.24.1
+XQ_VERSION := 0.3.0
 YQ_VERSION := 4.48.2
 ZOXIDE_VERSION := 0.9.8
 
@@ -55,6 +56,7 @@ install-bins: \
 	$(BIN_DIR)/starship \
 	$(BIN_DIR)/tfenv \
 	$(BIN_DIR)/uv \
+	$(BIN_DIR)/xq \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
@@ -265,6 +267,10 @@ $(BIN_DIR)/tfenv:
 
 $(BIN_DIR)/uv:
 	curl -LsSf https://astral.sh/uv/install.sh | sh
+
+$(BIN_DIR)/xq:
+	curl -fsLS -o $(BIN_DIR)/xq https://github.com/maiha/xq.cr/releases/download/v$(XQ_VERSION)/xq
+	chmod +x $(BIN_DIR)/xq
 
 $(BIN_DIR)/yq:
 	curl -fsLS -o $(BIN_DIR)/yq https://github.com/mikefarah/yq/releases/download/v$(YQ_VERSION)/yq_linux_amd64
