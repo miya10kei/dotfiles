@@ -17,8 +17,8 @@ return {
       },
     },
     keys = {
-      { "<leader>cc", "<cmd>ClaudeCode<cr>", desc = "New Claude" },
-      { "<leader>ccc", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
+      { "<leader>cc", "<cmd>ClaudeCode<cr>", desc = "[ClaudeCode] New" },
+      { "<leader>ccc", "<cmd>ClaudeCode --continue<cr>", desc = "[ClaudeCode] Continue" },
       { "<leader>cr", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
       { "<leader>cf", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
       { "<leader>ca", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },

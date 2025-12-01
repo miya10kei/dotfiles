@@ -21,14 +21,14 @@ return {
         keymap("n", "gD", vim.lsp.buf.declaration, bufopts)
         keymap("n", "K", vim.lsp.buf.hover, bufopts)
         keymap("n", "gi", vim.lsp.buf.implementation, bufopts)
-        keymap("n", "<SPACE>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-        keymap("n", "<SPACE>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-        keymap("n", "<SPACE>wl", function()
+        keymap("n", "<Leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
+        keymap("n", "<Leader>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
+        keymap("n", "<Leader>wl", function()
           print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         end, bufopts)
-        keymap("n", "<SPACE>D", vim.lsp.buf.type_definition, bufopts)
-        keymap("n", "<SPACE>rn", vim.lsp.buf.rename, bufopts)
-        keymap("n", "<SPACE>ca", vim.lsp.buf.code_action, bufopts)
+        keymap("n", "<Leader>D", vim.lsp.buf.type_definition, bufopts)
+        keymap("n", "<Leader>rn", vim.lsp.buf.rename, bufopts)
+        keymap("n", "<Leader>ca", vim.lsp.buf.code_action, bufopts)
       end
 
       require("mason-lspconfig").setup()
@@ -161,7 +161,7 @@ return {
     end,
     keys = {
       {
-        "<SPACE>e",
+        "<Leader>e",
         vim.diagnostic.open_float,
         desc = "Show diagnostics",
       },
@@ -180,7 +180,7 @@ return {
         desc = "Go to next diagnostic",
       },
       {
-        "<SPACE>q",
+        "<Leader>q",
         vim.diagnostic.setloclist,
         desc = "Set diagnostic to loclist",
       },
