@@ -2,7 +2,6 @@
 return {
   {
     "rebelot/kanagawa.nvim",
-    enabled = true,
     opts = {
       theme = "wave",
     },

@@ -48,10 +48,23 @@ vim.api.nvim_create_autocmd("VimEnter", {
     -- 2. Session file exists
     if vim.fn.argc() == 0 and vim.fn.filereadable(session_file) == 1 then
       vim.cmd("source " .. session_file)
-      vim.notify("Session restored!", vim.log.levels.INFO)
-
-      -- Delete session file after restoration
+      vim.cmd("stopinsert")
       vim.fn.delete(session_file)
+
+      -- Re-edit all buffers to trigger FileType/TreeSitter initialization
+      vim.defer_fn(function()
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          local buf = vim.api.nvim_win_get_buf(win)
+          if vim.bo[buf].buftype == "" and vim.fn.bufname(buf) ~= "" then
+            vim.api.nvim_win_call(win, function()
+              local cursor = vim.api.nvim_win_get_cursor(0)
+              vim.cmd("silent! edit")
+              pcall(vim.api.nvim_win_set_cursor, 0, cursor)
+            end)
+          end
+        end
+        vim.notify("Session restored!", vim.log.levels.INFO)
+      end, 50)
     end
   end,
 })

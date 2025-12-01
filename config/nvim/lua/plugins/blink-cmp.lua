@@ -7,7 +7,6 @@ return {
       "moyiz/blink-emoji.nvim",
       "bydlw98/blink-cmp-env",
     },
-    enabled = true,
     event = { "InsertEnter", "CmdLineEnter" },
     version = "*",
     ---@module 'blink.cmp'
@@ -29,11 +28,13 @@ return {
 
         ["<Up>"] = { "select_prev", "fallback" },
         ["<Down>"] = { "select_next", "fallback" },
+        ["<C-j>"] = { "select_next", "fallback" },
+        ["<C-k>"] = { "select_prev", "fallback" },
 
         ["<C-b>"] = { "scroll_documentation_up", "fallback" },
         ["<C-f>"] = { "scroll_documentation_down", "fallback" },
 
-        ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+        ["<C-s>"] = { "show_signature", "hide_signature", "fallback" },
       },
       signature = { enabled = true },
       sources = {

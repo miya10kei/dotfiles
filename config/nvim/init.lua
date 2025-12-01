@@ -1,8 +1,6 @@
-require("module")
 require("config.autocmd")
 require("config.command")
 require("config.keymaps")
 require("config.options")
 require("config.session")
 require("config.lazy")
-require("terminal")
