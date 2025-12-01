@@ -110,6 +110,7 @@ function main() {
     setopt hist_reduce_blanks
     setopt hist_verify
     setopt inc_append_history
+    setopt interactivecomments
     setopt share_history
 
     # ---------------
