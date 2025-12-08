@@ -40,7 +40,18 @@ add_or_update_mcp_server github --transport http github https://api.githubcopilo
   -H "Authorization: Bearer $(pass mcp/github/pat)"
 
 # https://support.atlassian.com/rovo/docs/setting-up-ides/
-add_or_update_mcp_server atlassian atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
+# add_or_update_mcp_server atlassian atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
+
+# https://github.com/sooperset/mcp-atlassian
+add_or_update_mcp_server atlassian atlassian \
+  -e CONFLUENCE_URL=$(pass mcp/atlassian/url) \
+  -e CONFLUENCE_USERNAME=$(pass mcp/atlassian/user) \
+  -e CONFLUENCE_API_TOKEN=$(pass mcp/atlassian/api_key) \
+  -- docker run -i --rm \
+    -e CONFLUENCE_URL \
+    -e CONFLUENCE_USERNAME \
+    -e CONFLUENCE_API_TOKEN \
+    ghcr.io/sooperset/mcp-atlassian:latest
 
 # https://github.com/oraios/serena
 add_or_update_mcp_server serena serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant
