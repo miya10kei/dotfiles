@@ -28,15 +28,6 @@ return {
       },
     },
     config = function()
-      -- Masonパッケージを登録
-      vim.g.mason_packages = vim.g.mason_packages or {}
-      vim.list_extend(vim.g.mason_packages, {
-        "prettier",
-        "ruff",
-        "stylua",
-        "yamlfmt",
-      })
-
       require("conform").setup({
         formatters_by_ft = {
           go = { "goimports", "gofmt" },

@@ -84,10 +84,6 @@ return {
         "yaml-language-server",
       }
 
-      -- グローバルレジストリに登録
-      vim.g.mason_packages = vim.g.mason_packages or {}
-      vim.list_extend(vim.g.mason_packages, used_mason_packages)
-
       -- Mason パッケージ名から lspconfig の設定名へのマッピング
       local mason_to_lsp = {
         ["angular-language-server"] = "angularls",

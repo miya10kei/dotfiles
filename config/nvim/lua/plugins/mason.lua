@@ -7,11 +7,41 @@ return {
     config = function()
       require("mason").setup({
         log_level = vim.log.levels.WARN,
-        max_concurrent_installers = 1,
+        max_concurrent_installers = 3,
         install = {
-          install_timeout = 60000,
+          install_timeout = 120000,
         },
       })
+
+      -- 全Masonパッケージを一元定義
+      vim.g.mason_packages = {
+        -- LSP servers
+        "angular-language-server",
+        "bash-language-server",
+        "docker-compose-language-service",
+        "docker-language-server",
+        "gopls",
+        "haskell-language-server",
+        "html-lsp",
+        "json-lsp",
+        "lua-language-server",
+        "marksman",
+        "pyright",
+        "rust-analyzer",
+        "terraform-ls",
+        "typescript-language-server",
+        "yaml-language-server",
+        -- Linters
+        "actionlint",
+        "hadolint",
+        "markdownlint",
+        "tfsec",
+        -- Formatters
+        "prettier",
+        "ruff",
+        "stylua",
+        "yamlfmt",
+      }
 
       vim.api.nvim_create_user_command("MasonInstallNeeded", function()
         local registry = require("mason-registry")
