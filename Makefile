@@ -57,6 +57,7 @@ setup4d: \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \
+	deploy-markdownlint \
 	deploy-mcpauth \
 	deploy-mcphub \
 	deploy-memolist \

@@ -137,6 +137,15 @@ $(HOME)/.config/karabiner/karabiner.json:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-markdownlint
+deploy-markdownlint: \
+	$(HOME)/.markdownlintrc
+
+$(HOME)/.markdownlintrc:
+	ln -fs $(DOTDIR)/.markdownlintrc $(HOME)/.markdownlintrc
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-mcpauth
 deploy-mcpauth: \
   $(HOME)/.mcp-auth
