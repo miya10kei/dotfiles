@@ -1,5 +1,5 @@
 {
-  "includeCoAuthoredBy": false,
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "Bash(cat:*)",
@@ -66,6 +66,22 @@
       "mcp__playwright",
       "mcp__serena",
       "mcp__atlassian__confluence_get_page"
+    ],
+    "deny": [
+      "Edit",
+      "Glob",
+      "Grep",
+      "NotebookEdit",
+      "NotebookRead",
+      "Read",
+      "Write",
+      "mcp__github__assign_copilot_to_issue",
+      "mcp__github__create_branch",
+      "mcp__github__create_or_update_file",
+      "mcp__github__create_repository",
+      "mcp__github__delete_file",
+      "mcp__github__fork_repository",
+      "mcp__github__request_copilot_review"
     ]
   },
   "hooks": {
