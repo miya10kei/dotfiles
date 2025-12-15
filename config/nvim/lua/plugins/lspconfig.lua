@@ -101,6 +101,21 @@ return {
 
       -- LSPサーバー個別設定
       local lsp_settings = {
+        -- リンティングはRuffに任せ、型チェックに特化
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                diagnosticSeverityOverrides = {
+                  reportUnusedImport = "none",
+                  reportUnusedVariable = "none",
+                  reportUnusedClass = "none",
+                  reportUnusedFunction = "none",
+                },
+              },
+            },
+          },
+        },
         lua_ls = {
           settings = {
             Lua = {
