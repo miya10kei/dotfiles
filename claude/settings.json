@@ -68,13 +68,8 @@
       "mcp__atlassian__confluence_get_page"
     ],
     "deny": [
-      "Edit",
-      "Glob",
-      "Grep",
       "NotebookEdit",
       "NotebookRead",
-      "Read",
-      "Write",
       "mcp__github__assign_copilot_to_issue",
       "mcp__github__create_branch",
       "mcp__github__create_or_update_file",

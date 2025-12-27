@@ -17,6 +17,10 @@
 
 - ライブラリやフレームワークに関する情報が必要な場合に使用すること
 
+### serena
+
+- activate/onbodingされていない場合、activate/onbodingを実行すること
+
 ## コーディングルール
 
 - クラス名、関数名、変数名が処理内容を正確に表現していること
@@ -27,9 +31,9 @@
 - コードを修正する際は、関連するコードやユニットテストを必ず確認し、必要に応じて修正を行うこと
 - コーディングスタイルやパターンはリポジトリ内で統一すること
 - コードはそのプログラミング言語のイディオムを用いて記述すること
-  - ex) Python: List Comprehension
-  - ex) JavaScript: Optional Chaining (?. )
-  - ex) Ruby: Implicit Return
+    - ex) Python: List Comprehension
+    - ex) JavaScript: Optional Chaining (?. )
+    - ex) Ruby: Implicit Return
 - コード修正後は必ず次のチェックをおこない、警告やエラーがある場合は解消すること
     1. 文字化けが発生していないこと
     2. 修正後のコードとコメントの整合性チェック
