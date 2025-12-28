@@ -12,7 +12,7 @@ end, {})
 ---------------------
 autocmd.create_group("vimrc-checktime", {
   {
-    event = { "FocusGained", "TermClose", "TermLeave" },
+    event = { "BufEnter", "FocusGained", "TermClose", "TermLeave" },
     opts = {
       command = "checktime",
     },
