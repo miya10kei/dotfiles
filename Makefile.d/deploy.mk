@@ -23,31 +23,10 @@ $(HOME)/.coderabbit/auth.json:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-claude
 deploy-claude: \
-	delete-claude-dir \
-	$(HOME)/.claude \
-	$(HOME)/.claude.json \
-	$(HOME)/.claude/settings.json \
-	$(HOME)/.claude/CLAUDE.md \
-	$(HOME)/.claude/commands \
-	install-claude-mcp-servers
+	$(HOME)/.config/claude
 
-delete-claude-dir:
-	rm -rf $(HOME)/.claude
-
-$(HOME)/.claude:
-	ln -fs $(DOTDIR)/data-volume/claude $(HOME)/.claude
-
-$(HOME)/.claude.json:
-	ln -fs $(DOTDIR)/data-volume/claude/.claude.json $(HOME)/.claude.json
-
-$(HOME)/.claude/settings.json:
-	ln -fs $(DOTDIR)/claude/settings.json $(HOME)/.claude/settings.json
-
-$(HOME)/.claude/CLAUDE.md:
-	ln -fs $(DOTDIR)/claude/CLAUDE.md $(HOME)/.claude/CLAUDE.md
-
-$(HOME)/.claude/commands:
-	ln -fs $(DOTDIR)/claude/commands/ $(HOME)/.claude/commands
+$(HOME)/.config/claude:
+	ln -fs $(DOTDIR)/config/claude $(HOME)/.config/claude
 
 install-claude-mcp-servers:
 	bash $(DOTDIR)/claude/install-mcp-servers.sh
