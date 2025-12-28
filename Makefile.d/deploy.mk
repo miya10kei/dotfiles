@@ -23,15 +23,16 @@ $(HOME)/.coderabbit/auth.json:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-claude
 deploy-claude: \
-	$(HOME)/.config/claude
+	$(HOME)/.config/claude \
+	install-claude-mcp-servers
 
 $(HOME)/.config/claude:
 	ln -fs $(DOTDIR)/config/claude $(HOME)/.config/claude
 
 install-claude-mcp-servers:
-	bash $(DOTDIR)/claude/install-mcp-servers.sh
-	@if [ -f $(DOTDIR)/claude/install-mcp-servers-work.sh ]; then \
-		bash $(DOTDIR)/claude/install-mcp-servers-work.sh; \
+	bash $(HOME)/.config/claude/scripts/install-mcp-servers.sh
+	@if [ -f $(HOME)/.config/claude/scripts/install-mcp-servers-work.sh ]; then \
+		bash $(HOME)/.config/claude/scripts/install-mcp-servers-work.sh; \
 	fi
 
 
