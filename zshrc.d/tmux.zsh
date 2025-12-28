@@ -1,3 +1,13 @@
+function _update_tmux_window_name() {
+  if [[ -n "$TMUX" ]]; then
+    local pane_index=$(tmux display-message -p '#{pane_index}')
+    if [[ "$pane_index" == "1" ]]; then
+      tmux rename-window "$(basename "$PWD")"
+    fi
+  fi
+}
+add-zsh-hook chpwd _update_tmux_window_name
+
 function tmux_popup() {
   local height="90%"
   local width="95%"
