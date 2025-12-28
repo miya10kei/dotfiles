@@ -59,12 +59,6 @@ add_or_update_mcp_server serena serena -- uvx --from git+https://github.com/orai
 # https://github.com/upstash/context7
 add_or_update_mcp_server context7 --transport http context7 https://mcp.context7.com/mcp
 
-# https://github.com/winor30/mcp-server-datadog
-add_or_update_mcp_server datadog datadog \
-  -e DATADOG_API_KEY=$(pass mcp/datadog/api_key) \
-  -e DATADOG_APP_KEY=$(pass mcp/datadog/app_key) \
-  -- npx @winor30/mcp-server-datadog
-
 # https://www.npmjs.com/package/figma-developer-mcp
 add_or_update_mcp_server figma-developer-mcp figma-developer-mcp \
   -e FIGMA_API_KEY=$(pass mcp/figma) \

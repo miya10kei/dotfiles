@@ -9,9 +9,9 @@ from pathlib import Path
 
 
 class HookStatus(Enum):
-    COMPLETED = "🟢"
-    NOTIFICATION = "🔴"
-    ONGOING = "🟡"
+    COMPLETED = "\uef0a "
+    NOTIFICATION = "\udb83\udd59 "
+    ONGOING = "\udb85\udc7d "
 
     @classmethod
     def get_emoji_pattern(cls) -> str:
@@ -27,7 +27,7 @@ def main():
     input_data = json.load(sys.stdin)
     hook_event = input_data.get("hook_event_name")
 
-    with open(f"{os.environ["HOME"]}/claude-hook.json", "a") as f:
+    with open(f"{os.environ['HOME']}/claude-hook.json", "a") as f:
         f.write(json.dumps(input_data))
 
     handlers = {
@@ -65,7 +65,10 @@ def handle_stop_hook(_: dict):
 def play_sound(sound_type: SoundType):
     try:
         subprocess.run(
-            ["paplay", str(Path.home() / ".dotfiles" / "claude" / f"{sound_type.value}.wav")],
+            [
+                "paplay",
+                str(Path.home() / ".dotfiles" / "claude" / f"{sound_type.value}.wav"),
+            ],
             check=False,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,

@@ -86,7 +86,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.dotfiles/claude/claude-hook.py"
+            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
           }
         ]
       }
@@ -97,7 +97,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.dotfiles/claude/claude-hook.py"
+            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
           }
         ]
       }
@@ -108,7 +108,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.dotfiles/claude/claude-hook.py"
+            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
           }
         ]
       }
@@ -119,7 +119,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python ~/.dotfiles/claude/claude-hook.py"
+            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
           }
         ]
       }
