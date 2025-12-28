@@ -134,7 +134,7 @@ $(BIN_DIR)/dive:
 
 $(BIN_DIR)/duf:
 	mkdir -p /tmp/duf
-	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "amd64"; else echo "arm64"; fi))
+	$(eval DL_ARCH := $(shell if [ "$(ARCH)" = "x86_64" ]; then echo "x86_64"; else echo "arm64"; fi))
 	curl -fsLS -o /tmp/duf/duf.tar.gz https://github.com/muesli/duf/releases/download/v${DUF_VERSION}/duf_${DUF_VERSION}_linux_$(DL_ARCH).tar.gz
 	tar -zxf /tmp/duf/duf.tar.gz -C /tmp/duf
 	mv /tmp/duf/duf $(BIN_DIR)/duf
