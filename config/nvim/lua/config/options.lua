@@ -1,4 +1,5 @@
 local options = {
+  autoread = true,
   background = "dark",
   backup = false,
   clipboard = "unnamedplus",
