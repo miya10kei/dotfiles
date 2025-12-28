@@ -9,9 +9,9 @@ from pathlib import Path
 
 
 class HookStatus(Enum):
-    COMPLETED = "\uef0a "
-    NOTIFICATION = "\udb83\udd59 "
-    ONGOING = "\udb85\udc7d "
+    COMPLETED = " \uef0a "
+    NOTIFICATION = " \udb83\udd59 "
+    ONGOING = " \udb85\udc7d "
 
     @classmethod
     def get_emoji_pattern(cls) -> str:
@@ -45,20 +45,22 @@ def main():
 
 def handle_notification_hook(input_data: dict):
     if input_data.get("notification_type") == "permission_prompt":
-        update_tmux_window_name(HookStatus.NOTIFICATION)
+        update_tmux_pane_title(HookStatus.NOTIFICATION)
         play_sound(SoundType.NOTIFICATION)
 
 
 def handle_post_tool_use_hook(_: dict):
-    update_tmux_window_name(HookStatus.ONGOING)
+    # update_tmux_pane_title(HookStatus.ONGOING)
+    pass
 
 
 def handle_user_prompt_submit_hook(_: dict):
-    update_tmux_window_name(HookStatus.ONGOING)
+    # update_tmux_pane_title(HookStatus.ONGOING)
+    pass
 
 
 def handle_stop_hook(_: dict):
-    update_tmux_window_name(HookStatus.COMPLETED)
+    # update_tmux_pane_title(HookStatus.COMPLETED)
     play_sound(SoundType.STOP)
 
 
@@ -77,41 +79,33 @@ def play_sound(sound_type: SoundType):
         pass
 
 
-def update_tmux_window_name(status: HookStatus):
-    """指定されたステータスでtmuxウィンドウ名を更新"""
+def update_tmux_pane_title(status: HookStatus):
+    """指定されたステータスでtmuxペインタイトルを更新"""
     try:
-        # $TMUX_PANE環境変数から実行元のペインIDを取得
         pane_id = os.environ.get("TMUX_PANE")
         if not pane_id:
             return  # tmux環境外では何もしない
 
-        # ペインが属するウィンドウIDを取得
+        # 現在のペインタイトルを取得
         result = subprocess.run(
-            ["tmux", "display-message", "-p", "-t", pane_id, "#I"],
+            ["tmux", "display-message", "-p", "-t", pane_id, "#{pane_title}"],
             capture_output=True,
             text=True,
             check=True,
         )
-        window_id = result.stdout.strip()
-
-        # 特定のウィンドウの現在の名前を取得
-        result = subprocess.run(
-            ["tmux", "display-message", "-p", "-t", window_id, "#W"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        current_name = result.stdout.strip()
+        current_title = result.stdout.strip()
 
         emoji = status.value
-        # 既存の絵文字を置き換え（または追加）
+        # 既存の絵文字を置き換え（または追加）- 末尾に付与
         emoji_pattern = HookStatus.get_emoji_pattern()
-        new_name = re.sub(rf"^[{emoji_pattern}]*", f"{emoji}", current_name)
-        if not new_name.startswith(emoji):
-            new_name = f"{emoji}{current_name}"
+        new_title = re.sub(rf"[{emoji_pattern}]*$", f"{emoji}", current_title)
+        if not new_title.endswith(emoji):
+            new_title = f"{current_title}{emoji}"
 
-        # 特定のウィンドウに対して名前を更新
-        subprocess.run(["tmux", "rename-window", "-t", window_id, new_name], check=True)
+        # ペインタイトルを更新
+        subprocess.run(
+            ["tmux", "select-pane", "-t", pane_id, "-T", new_title], check=True
+        )
     except Exception:
         pass  # tmux環境外やエラーは無視
 
