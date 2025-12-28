@@ -27,14 +27,6 @@ add_or_update_mcp_server() {
 # https://github.com/awslabs/mcp/tree/main/src/aws-knowledge-mcp-server
 add_or_update_mcp_server aws-knowledge --transport http aws-knowledge https://knowledge-mcp.global.api.aws
 
-# https://github.com/awslabs/mcp/tree/main/src/bedrock-kb-retrieval-mcp-server
-add_or_update_mcp_server bedrock-knowledge bedrock-knowledge \
-  -e AWS_PROFILE=sandbox \
-  -e AWS_REGION=us-east-1 \
-  -e BEDROCK_KB_RERANKING_ENABLED=false \
-  -e FASTMCP_LOG_LEVEL=ERROR \
-  -- uvx awslabs.bedrock-kb-retrieval-mcp-server@latest
-
 # https://github.com/github/github-mcp-server
 add_or_update_mcp_server github --transport http github https://api.githubcopilot.com/mcp \
   -H "Authorization: Bearer $(pass mcp/github/pat)"
