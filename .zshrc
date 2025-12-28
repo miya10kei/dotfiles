@@ -7,7 +7,6 @@ function main() {
         export SHELL='/usr/bin/zsh'
     fi
     export GPG_TTY=$(tty)
-    export TERM='xterm-256color'
 
     # ------------
     # --- path ---
@@ -40,6 +39,14 @@ function main() {
       eval "$(pyenv init -)"
     fi
 
+
+    # -----------------
+    # --- Claude Code -
+    # -----------------
+    if builtin command -v claude > /dev/null 2>&1; then
+        export CLAUDE_CONFIG_DIR="$HOME/.config/claude"
+    fi
+
     # -------------
     # --- Node.js -
     # -------------
@@ -61,7 +68,7 @@ function main() {
     # ------------
     if builtin command -v tmux > /dev/null 2>&1; then
         if [[ ! -e $HOME/.tmux/plugins/tpm ]]; then
-            git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/
+            git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
         fi
     fi
 

@@ -66,6 +66,7 @@ if builtin command -v docker > /dev/null 2>&1; then
       docker exec \
           --tty \
           --interactive \
+          --env TERM="${TERM:-xterm-256color}" \
           dev-env \
           /usr/bin/zsh
   }
