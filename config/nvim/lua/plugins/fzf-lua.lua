@@ -22,6 +22,7 @@ return {
         .. "--glob '!**/claude/plugins/*' "
         .. "--glob '!**/claude/projects/*' "
         .. "--glob '!**/claude/shell-snapshots/*' "
+        .. "--glob '!**/claude/stats-cache.json' "
         .. "--glob '!**/claude/statsig/*' "
         .. "--glob '!**/claude/todos/*' "
         .. "--glob '!**/node_modules/*' "
