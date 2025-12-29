@@ -22,6 +22,7 @@ end, {
 })
 keymap("n", "<SPACE><SPACE>", "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<CR>", opts.silent)
 keymap("x", "p", '"_dP', opts.silent)
+keymap("x", "P", '"_dP', opts.silent)
 
 -- Window navigation
 keymap("n", "<C-h>", "<C-w>h", opts.silent)
