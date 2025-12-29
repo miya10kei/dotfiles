@@ -132,5 +132,11 @@
     "type": "command",
     "command": "bun x ccusage statusline"
   },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true
+  },
   "alwaysThinkingEnabled": true
 }
