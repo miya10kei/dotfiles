@@ -4,9 +4,9 @@ return {
   opts = {
     files = {
       cmd = "rg --files --hidden --no-ignore "
+        .. "--glob '!**/.DS_Store' "
         .. "--glob '!**/.aws-sam/*' "
         .. "--glob '!**/.claude/*' "
-        .. "--glob '!**/.DS_Store' "
         .. "--glob '!**/.git/*' "
         .. "--glob '!**/.mypy_cache/*' "
         .. "--glob '!**/.next/*' "
@@ -14,6 +14,16 @@ return {
         .. "--glob '!**/.serena/*' "
         .. "--glob '!**/.venv/*' "
         .. "--glob '!**/__pycache__/*' "
+        .. "--glob '!**/claude/.claude.json*' "
+        .. "--glob '!**/claude/.credentials.json' "
+        .. "--glob '!**/claude/debug/*' "
+        .. "--glob '!**/claude/file-history/*' "
+        .. "--glob '!**/claude/history.jsonl' "
+        .. "--glob '!**/claude/plugins/*' "
+        .. "--glob '!**/claude/projects/*' "
+        .. "--glob '!**/claude/shell-snapshots/*' "
+        .. "--glob '!**/claude/statsig/*' "
+        .. "--glob '!**/claude/todos/*' "
         .. "--glob '!**/node_modules/*' "
         .. "| sort",
     },
