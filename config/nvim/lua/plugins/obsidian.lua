@@ -1,6 +1,6 @@
 local autocmd = require("utils.autocmd")
 
-local obsidian_dir = vim.fn.expand("$HOME/docs/obsidian")
+local obsidian_dir = vim.fn.expand("$HOME/dev/ghq/github.com/miya10kei/obsidian")
 
 local function create_knowledge_note()
   local title = vim.fn.input("Title: ")
@@ -67,7 +67,8 @@ return {
         folder = "99_templates",
       },
       note_frontmatter_func = function(note)
-        local out = { id = note.id, created_at = os.date("%Y-%m-%d %H:%M:%S"), tags = note.tags }
+        local title = note.title or note.id
+        local out = { title = title, created_at = os.date("%Y-%m-%d %H:%M:%S"), tags = note.tags }
         if note.metadata ~= nil and not vim.tbl_isempty(note.metadata) then
           for k, v in pairs(note.metadata) do
             out[k] = v
