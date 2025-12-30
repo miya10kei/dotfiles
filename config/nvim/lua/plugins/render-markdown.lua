@@ -2,9 +2,10 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
-    ft = { "markdown", "Avante" },
+    ft = { "markdown" },
     ---@module 'render-markdown'
     opts = {
+      enabled = false,
       file_types = { "markdown", "Avante" },
     },
     keys = {
