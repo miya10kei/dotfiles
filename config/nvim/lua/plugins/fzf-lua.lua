@@ -21,6 +21,8 @@ return {
         .. "--glob '!**/claude/history.jsonl' "
         .. "--glob '!**/claude/plugins/*' "
         .. "--glob '!**/claude/projects/*' "
+        .. "--glob '!**/claude/ide/*' "
+        .. "--glob '!**/claude/plans/*' "
         .. "--glob '!**/claude/shell-snapshots/*' "
         .. "--glob '!**/claude/stats-cache.json' "
         .. "--glob '!**/claude/statsig/*' "
