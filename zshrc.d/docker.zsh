@@ -18,6 +18,7 @@ if builtin command -v docker > /dev/null 2>&1; then
   }
 
   function launch_dev_env() {
+      local tag="${1:-latest}"
       name="dev-env"
       os=$(uname)
       uname=$(id -un)
@@ -57,7 +58,7 @@ if builtin command -v docker > /dev/null 2>&1; then
               )
               ;;
       esac
-      cmd="docker run $opts miya10kei/devenv:latest"
+      cmd="docker run $opts miya10kei/devenv:$tag"
       echo $cmd
       eval $cmd
   }
