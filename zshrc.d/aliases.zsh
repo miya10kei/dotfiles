@@ -22,9 +22,9 @@ function _fzf_change_directory() {
 }
 
 function pysw(){
-  selected=$(pyenv versions | grep -Ev '(\*|system)' | awk '{print $1}' | fzf)
+  selected=$(mise ls python --installed | awk 'NR>1 {print $2}' | fzf)
   if [ -n "$selected" ]; then
-    pyenv global $selected
+    mise use -g python@$selected
   fi
 }
 

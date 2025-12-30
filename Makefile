@@ -1,8 +1,9 @@
-OS     := $(shell uname -s)
-ARCH   := $(shell uname -m)
-DOTDIR := $(HOME)/.dotfiles
-UID    := $(shell id -u)
-UNAME  := $(shell id -un)
+OS              := $(shell uname -s)
+ARCH            := $(shell uname -m)
+DOTDIR          := $(HOME)/.dotfiles
+UID             := $(shell id -u)
+UNAME           := $(shell id -un)
+DOCKER_PROGRESS ?= tty
 
 ifeq ($(OS), Darwin)
 	GNAME := $(UNAME)
@@ -28,7 +29,7 @@ build-dev-env:
 			--build-arg GNAME=$(GNAME) \
 			--build-arg UID=$(UID) \
 			--build-arg UNAME=$(UNAME) \
-			--progress tty \
+			--progress $(DOCKER_PROGRESS) \
 			--tag miya10kei/devenv:latest \
 			$(HOME)/.dotfiles; \
 	else \
@@ -42,7 +43,7 @@ build-dev-env:
 			--build-arg GNAME=$(GNAME) \
 			--build-arg UID=$(UID) \
 			--build-arg UNAME=$(UNAME) \
-			--progress tty \
+			--progress $(DOCKER_PROGRESS) \
 			--tag miya10kei/devenv:latest \
 			$(HOME)/.dotfiles; \
 	fi

@@ -1,0 +1,10 @@
+[tools]
+python = ["3.13.11", "3.11.14"]
+node = "22.21.1"
+go = "1.25.5"
+deno = "latest"
+lua = "5.4.8"
+
+[settings]
+experimental = false
+not_found_auto_install = true

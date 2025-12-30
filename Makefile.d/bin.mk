@@ -3,9 +3,7 @@ BIN_DIR := $(HOME)/.local/bin
 SRC_DIR := $(HOME)/.local/src
 CARGO_BIN_DIR := $(CARGO_HOME)/bin
 COMPLETION_DIR := $(HOME)/.local/share/zsh-completion/completions
-GO_BIN_DIR := $(HOME)/.go/bin
-NODE_BIN_DIR := $(HOME)/.volta/bin
-PYENV_SHIMS_DIR := $(HOME)/.pyenv/shims
+MISE_DATA_DIR := $(HOME)/.local/share/mise
 
 AWS_VAULT := 7.2.0
 BAT_VERSION := 0.26.1
@@ -60,10 +58,9 @@ install-bins: \
 	$(BIN_DIR)/yq \
 	$(BIN_DIR)/zoxide \
 	$(CARGO_BIN_DIR)/jnv \
-	$(GO_BIN_DIR)/actionlint \
-	$(GO_BIN_DIR)/pinact \
-	$(PYENV_SHIMS_DIR)/pgcli \
-	$(PYENV_SHIMS_DIR)/sam \
+	install-go-packages \
+	install-pip-packages \
+	install-npm-packages \
 	$(SRC_DIR)/google-cloud-sdk
 
 $(BIN_DIR):
@@ -290,20 +287,18 @@ $(CARGO_BIN_DIR)/jnv:
 	cargo install jnv
 	rm -dfr $(CARGO_HOME)/target
 
-# Go package
-$(GO_BIN_DIR)/actionlint:
-	go install github.com/rhysd/actionlint/cmd/actionlint@latest
+# Go packages (via mise)
+.PHONY: install-go-packages
+install-go-packages:
+	mise exec -- go install github.com/rhysd/actionlint/cmd/actionlint@latest
+	mise exec -- go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
 
-$(GO_BIN_DIR)/pinact:
-	go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
+# Python packages (via mise)
+.PHONY: install-pip-packages
+install-pip-packages:
+	mise exec -- pip install --quiet aws-sam-cli pgcli
 
-# Node package
-$(NODE_BIN_DIR)/gemini:
-	npm install -g @google/gemini-cli
-
-# Python package
-$(PYENV_SHIMS_DIR)/sam:
-	pip install --quiet aws-sam-cli
-
-$(PYENV_SHIMS_DIR)/pgcli:
-	pip install --quiet pgcli
+# Node packages (via mise)
+.PHONY: install-npm-packages
+install-npm-packages:
+	mise exec -- npm install -g @google/gemini-cli

@@ -22,23 +22,14 @@ function main() {
 
     add_path "$HOME/.bun/bin"
     add_path "$HOME/.cargo/bin"
-    add_path "$HOME/.deno/bin"
     add_path "$HOME/.docker/bin"
     add_path "$HOME/.ghcup/bin"
-    add_path "$HOME/.go/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.local/share/nvim/mason/bin"
     add_path "$HOME/.rd/bin"
     add_path "$HOME/.tfenv/bin"
     add_path "$HOME/Library/Python/3.11/bin"
     add_path "/usr/local/nodejs/bin"
-
-    if [[ -e $HOME/.pyenv ]]; then
-      export PYENV_ROOT="$HOME/.pyenv"
-      [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-      eval "$(pyenv init -)"
-    fi
-
 
     # -----------------
     # --- Claude Code -
@@ -133,6 +124,11 @@ function main() {
 
     if builtin command -v sheldon > /dev/null 2>&1; then
         eval "$(sheldon source)"
+    fi
+
+    # mise
+    if builtin command -v mise > /dev/null 2>&1; then
+        eval "$(mise activate zsh)"
     fi
 
     if [[ -e $HOME/.dotfiles/zshrc.d ]]; then

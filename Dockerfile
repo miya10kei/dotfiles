@@ -86,27 +86,41 @@ RUN curl -fsLS https://sh.rustup.rs > rust.sh \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS deno
-ARG DENO_VERSION
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -fsSL https://deno.land/x/install/install.sh | sh \
-    && mkdir -p "${HOME}/out/${HOME}" \
-    && mv "${HOME}/.deno" "${HOME}/out/${HOME}/"
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS go
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+FROM builder AS mise
+ARG PYTHON_VERSION
+ARG PYTHON3_VERSION
+ARG NODEJS_VERSION
 ARG GOLANG_VERSION
-RUN curl -fsLOS "https://go.dev/dl/go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz" \
-    && tar -zxf "go${GOLANG_VERSION}.linux-${ARCH2}.tar.gz" \
-    && mkdir -p "${HOME}/out/${HOME}/.go" \
-    && mv \
-      "${HOME}/go/bin" \
-      "${HOME}/go/src" \
-      "${HOME}/go/pkg" \
-      "${HOME}/go/go.env" \
-      "${HOME}/out/${HOME}/.go/"
+ARG LUA_VERSION
+ARG LUAROCKS_VERSION
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# mise install
+RUN curl https://mise.run | sh
+
+ENV PATH="${HOME}/.local/bin:${PATH}"
+
+# Lua plugin (Luarocks support)
+RUN mise plugins install lua https://github.com/mise-plugins/mise-lua.git
+
+# Install runtimes
+RUN ASDF_LUA_LUAROCKS_VERSION=${LUAROCKS_VERSION} mise install lua@${LUA_VERSION} \
+    && mise install python@${PYTHON_VERSION} \
+    && mise install python@${PYTHON3_VERSION} \
+    && mise install node@${NODEJS_VERSION} \
+    && mise install go@${GOLANG_VERSION} \
+    && mise install deno@latest \
+    && mise use -g python@${PYTHON3_VERSION} \
+    && mise use -g node@${NODEJS_VERSION} \
+    && mise use -g go@${GOLANG_VERSION} \
+    && mise use -g deno@latest \
+    && mise use -g lua@${LUA_VERSION}
+
+# Output directory
+RUN mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share" "${HOME}/out/${HOME}/.config" \
+    && cp "${HOME}/.local/bin/mise" "${HOME}/out/${HOME}/.local/bin/" \
+    && mv "${HOME}/.local/share/mise" "${HOME}/out/${HOME}/.local/share/" \
+    && mv "${HOME}/.config/mise" "${HOME}/out/${HOME}/.config/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -127,59 +141,12 @@ RUN curl -fsLS -o ghcup "https://downloads.haskell.org/~ghcup/${HASKELL_GHCUP_VE
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS lua
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV PATH="${HOME}/out/${HOME}/.lua/bin:${PATH}"
-
-RUN mkdir -p "${HOME}/out/${HOME}/.lua/bin"
-
-ARG LUA_VERSION
-RUN curl -fsLSO "https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz" \
-    && tar -zxf "lua-${LUA_VERSION}.tar.gz" \
-    && pushd "lua-${LUA_VERSION}" \
-    && make INSTALL_TOP="${HOME}/out/${HOME}/.lua" all test install
-
-ARG LUAROCKS_VERSION
-RUN curl -fsLSO "https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz" \
-    && tar -zxf "luarocks-${LUAROCKS_VERSION}.tar.gz" \
-    && pushd "luarocks-${LUAROCKS_VERSION}" \
-    && ./configure --prefix="${HOME}/out/${HOME}/.lua" && make && make install
-
-
-# ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS neovim
 ARG ARCH4
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN mkdir -p "${HOME}/out/${HOME}/.nvim" \
     && curl -fsSL "https://github.com/neovim/neovim/releases/download/stable/nvim-linux-${ARCH4}.tar.gz" \
     | tar -xz -C "${HOME}/out/${HOME}/.nvim" --strip-components=1
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-FROM  builder AS volta
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV PATH="${HOME}/.volta/bin:${PATH}"
-ARG NODEJS_VERSION
-RUN curl https://get.volta.sh | bash \
-    && volta install "node@${NODEJS_VERSION}" \
-    && mkdir -p "${HOME}/out/${HOME}" \
-    && mv "${HOME}/.volta" \
-          "${HOME}/out/${HOME}/"
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS python
-ARG PYTHON_VERSION
-ARG PYTHON3_VERSION
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl https://pyenv.run | bash \
-    && export PATH="${HOME}/.pyenv/bin:$PATH" \
-    && eval "$(pyenv init -)" \
-    && pyenv install "${PYTHON_VERSION}"  \
-    && pyenv install "${PYTHON3_VERSION}" \
-    && pyenv global  "${PYTHON3_VERSION}" \
-    && mkdir -p "${HOME}/out/${HOME}" \
-    && mv "${HOME}/.pyenv" "${HOME}/out/${HOME}/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -305,27 +272,18 @@ RUN groupadd "${GNAME}" --gid "${GID}" \
 USER ${UNAME}
 ENV  HOME="/home/${UNAME}"
 
-COPY --from=deno    --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
-COPY --from=go      --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 COPY --from=haskell --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
-COPY --from=lua     --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=mise    --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 COPY --from=neovim  --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
-COPY --from=python  --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 COPY --from=rust    --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 COPY --from=tools   --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
-COPY --from=volta   --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 
 ENV CARGO_HOME="${HOME}/.cargo"
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
-ENV PATH="${HOME}/.deno/bin:${PATH}"
 ENV PATH="${HOME}/.ghcup/bin:${PATH}"
-ENV GOPATH="${HOME}/.go"
-ENV PATH="${GOPATH}/bin:${PATH}"
-ENV PATH="${HOME}/.lua/bin:${PATH}"
+ENV PATH="${HOME}/.local/bin:${PATH}"
 ENV PATH="${HOME}/.nvim/bin:${PATH}"
-ENV PATH="${HOME}/.pyenv/bin:${PATH}"
-ENV VOLTA_HOME="${HOME}/.volta"
-ENV PATH="${VOLTA_HOME}/bin:${PATH}"
+ENV MISE_DATA_DIR="${HOME}/.local/share/mise"
 
 COPY --chown="${UNAME}:${GNAME}" ./config/nvim  $HOME/.config/nvim
 COPY --chown="${UNAME}:${GNAME}" ./Makefile      $HOME/.dotfiles/Makefile
@@ -334,10 +292,10 @@ COPY --chown="${UNAME}:${GNAME}" ./Makefile.d    $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
 
-RUN eval "$(pyenv init -)" \
+RUN eval "$(mise activate bash)" \
   && pip --version
 
-RUN eval "$(pyenv init -)" \
+RUN eval "$(mise activate bash)" \
   && make --jobs=4 install4d \
   && make setup-nvim
 
