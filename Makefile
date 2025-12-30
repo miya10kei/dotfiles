@@ -22,6 +22,7 @@ build-dev-env:
 			--build-arg ARCH1=x86_64 \
 			--build-arg ARCH2=amd64 \
 			--build-arg ARCH3=x64 \
+			--build-arg ARCH4=x86_64 \
 			--build-arg DKID=$(DKID) \
 			--build-arg GID=$(GID) \
 			--build-arg GNAME=$(GNAME) \
@@ -35,6 +36,7 @@ build-dev-env:
 			--build-arg ARCH1=aarch64 \
 			--build-arg ARCH2=arm64 \
 			--build-arg ARCH3=arm64 \
+			--build-arg ARCH4=arm64 \
 			--build-arg DKID=$(DKID) \
 			--build-arg GID=$(GID) \
 			--build-arg GNAME=$(GNAME) \

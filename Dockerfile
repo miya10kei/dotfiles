@@ -1,6 +1,8 @@
+# syntax=docker/dockerfile:1
 ARG ARCH1=aarch64 # or x86_64
 ARG ARCH2=arm64 # or amd64
 ARG ARCH3=arm64 # or x64
+ARG ARCH4=arm64 # or x86_64 (for Neovim)
 ARG DOCKER_BUILDX_VERSION=0.30.1
 ARG DOCKER_COMPOSE_VERSION=5.0.0
 ARG DOCKER_VERSION=29.1.2
@@ -12,7 +14,6 @@ ARG HASKELL_STACK_VERSION=3.7.1
 ARG LUAROCKS_VERSION=3.12.2
 ARG LUA_VERSION=5.4.8
 ARG NODEJS_VERSION=22.21.1
-ARG PYTHON2_VERSION=2.7.18
 ARG PYTHON3_VERSION=3.13.11
 ARG PYTHON_VERSION=3.11.14
 ARG DKID
@@ -34,7 +35,10 @@ ARG UID
 ARG UNAME
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=DL3008
-RUN apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
@@ -63,9 +67,7 @@ RUN apt-get update \
         upx \
         uuid-dev \
         xz-utils \
-        zlib1g-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+        zlib1g-dev
 RUN groupadd "${GNAME}" --gid "${GID}" \
   && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
   && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers
@@ -146,13 +148,11 @@ RUN curl -fsLSO "https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS neovim
+ARG ARCH4
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN git clone https://github.com/neovim/neovim \
-    && pushd neovim \
-    && git checkout stable \
-    && mkdir -p "${HOME}/out/${HOME}/.nvim" \
-    && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX="${HOME}/out/${HOME}/.nvim" \
-    && make install
+RUN mkdir -p "${HOME}/out/${HOME}/.nvim" \
+    && curl -fsSL "https://github.com/neovim/neovim/releases/download/stable/nvim-linux-${ARCH4}.tar.gz" \
+    | tar -xz -C "${HOME}/out/${HOME}/.nvim" --strip-components=1
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -170,14 +170,12 @@ RUN curl https://get.volta.sh | bash \
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS python
 ARG PYTHON_VERSION
-ARG PYTHON2_VERSION
 ARG PYTHON3_VERSION
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl https://pyenv.run | bash \
     && export PATH="${HOME}/.pyenv/bin:$PATH" \
     && eval "$(pyenv init -)" \
     && pyenv install "${PYTHON_VERSION}"  \
-    && pyenv install "${PYTHON2_VERSION}" \
     && pyenv install "${PYTHON3_VERSION}" \
     && pyenv global  "${PYTHON3_VERSION}" \
     && mkdir -p "${HOME}/out/${HOME}" \
@@ -235,7 +233,10 @@ ENV LC_ALL=$LANG
 ENV TZ=Asia/Tokyo
 
 # hadolint ignore=DL3008
-RUN apt-get update \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    rm -f /etc/apt/apt.conf.d/docker-clean \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         software-properties-common \
     && add-apt-repository -y ppa:git-core/ppa \
@@ -283,7 +284,6 @@ RUN apt-get update \
         xsel \
         zip \
         zsh \
-        # add temporarily
         gdal-bin \
         libcairo2 \
         libglib2.0-dev \
@@ -294,9 +294,6 @@ RUN apt-get update \
         libxslt-dev \
         swig \
         zlib1g-dev \
-        # add temporarily
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
     && locale-gen --purge $LANG
 
 RUN groupadd "${GNAME}" --gid "${GID}" \
