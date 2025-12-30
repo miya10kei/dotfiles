@@ -2,6 +2,7 @@
 return {
   {
     "glidenote/memolist.vim",
+    enabled = false,
     config = function()
       vim.g.memolist_path = vim.fn.expand("~/Documents/memo")
       vim.g.memolist_template_dir_path = vim.fn.expand("~/.config/memo")
