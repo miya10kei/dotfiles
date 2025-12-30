@@ -217,33 +217,6 @@ RUN curl -fsLS "https://github.com/docker/buildx/releases/download/v${DOCKER_BUI
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS packer
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-COPY --from=deno    "${HOME}/out" /out/deno
-COPY --from=go      "${HOME}/out" /out/go
-COPY --from=haskell "${HOME}/out" /out/haskell
-COPY --from=lua     "${HOME}/out" /out/lua
-COPY --from=neovim  "${HOME}/out" /out/neovim
-COPY --from=python  "${HOME}/out" /out/python
-COPY --from=rust    "${HOME}/out" /out/rust
-COPY --from=tools   "${HOME}/out" /out/tools
-COPY --from=volta   "${HOME}/out" /out/volta
-
-#RUN    upx --lzma --best "/out/deno${HOME}/.deno/bin/deno" \
-#    && upx --lzma --best "/out/go/${HOME}/.go/bin/"* \
-#    && upx --lzma --best "/out/go${HOME}/.go/pkg/tool/linux_${ARCH2}/"* \
-#    && upx --lzma --best "/out/haskell${HOME}/.ghcup/bin/ghcup" \
-#    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/cabal")" \
-#    && upx --lzma --best "$(readlink -f "/out/haskell${HOME}/.ghcup/bin/stack")" \
-#    && upx --lzma --best "/out/lua${HOME}/.lua/bin/lua" \
-#    && upx --lzma --best "/out/lua${HOME}/.lua/bin/luac" \
-#    && upx --lzma --best "/out/neovim${HOME}/.nvim/bin/nvim" \
-#    && upx --lzma --best "/out/tools${HOME}/.docker/cli-plugins/docker-compose" \
-#    && upx --lzma --best "/out/tools${HOME}/.docker/bin/docker"
-
-
-# ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
 FROM ubuntu:24.04
 SHELL ["/bin/bash", "-c"]
@@ -335,15 +308,15 @@ RUN groupadd "${GNAME}" --gid "${GID}" \
 USER ${UNAME}
 ENV  HOME="/home/${UNAME}"
 
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/deno/   /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/go/     /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/haskell /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/lua     /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/neovim/ /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/volta/  /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/python/ /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/rust/   /
-COPY --from=packer --chown="${UNAME}:${GNAME}" /out/tools/  /
+COPY --from=deno    --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=go      --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=haskell --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=lua     --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=neovim  --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=python  --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=rust    --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=tools   --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=volta   --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 
 ENV CARGO_HOME="${HOME}/.cargo"
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
