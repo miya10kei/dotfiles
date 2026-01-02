@@ -36,6 +36,7 @@ setup4d: \
 	delete-nvimrc \
 	deploy-aws \
 	deploy-coderabbit \
+	deploy-docker \
 	deploy-editorconfig \
 	deploy-gemini \
 	deploy-gh \

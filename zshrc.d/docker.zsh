@@ -1,3 +1,5 @@
+export DOCKER_CONFIG="$HOME/.config/docker"
+
 if builtin command -v docker > /dev/null 2>&1; then
 
   function exec_docker_command() {

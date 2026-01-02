@@ -1,4 +1,19 @@
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-docker
+deploy-docker: \
+	$(HOME)/.config/docker/cli-plugins/docker-buildx \
+	$(HOME)/.config/docker/cli-plugins/docker-compose
+
+$(HOME)/.config/docker/cli-plugins/docker-buildx:
+	mkdir -p $(HOME)/.config/docker/cli-plugins
+	ln -sf $$(mise where aqua:docker/buildx)/docker-cli-plugin-docker-buildx $(HOME)/.config/docker/cli-plugins/docker-buildx
+
+$(HOME)/.config/docker/cli-plugins/docker-compose:
+	mkdir -p $(HOME)/.config/docker/cli-plugins
+	ln -sf $$(mise where aqua:docker/compose)/docker-cli-plugin-docker-compose $(HOME)/.config/docker/cli-plugins/docker-compose
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-mise
 deploy-mise:
 	@if [ -d $(HOME)/.config/mise ] && [ ! -L $(HOME)/.config/mise ]; then rm -rf $(HOME)/.config/mise; fi
