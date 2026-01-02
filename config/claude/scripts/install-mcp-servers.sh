@@ -28,22 +28,22 @@ add_or_update_mcp_server() {
 add_or_update_mcp_server aws-knowledge --transport http aws-knowledge https://knowledge-mcp.global.api.aws
 
 # https://github.com/github/github-mcp-server
-add_or_update_mcp_server github --transport http github https://api.githubcopilot.com/mcp \
-  -H "Authorization: Bearer $(pass mcp/github/pat)"
+# add_or_update_mcp_server github --transport http github https://api.githubcopilot.com/mcp \
+#   -H "Authorization: Bearer $(pass mcp/github/pat)"
 
 # https://support.atlassian.com/rovo/docs/setting-up-ides/
 # add_or_update_mcp_server atlassian atlassian -- npx -y mcp-remote https://mcp.atlassian.com/v1/sse
 
 # https://github.com/sooperset/mcp-atlassian
-add_or_update_mcp_server atlassian atlassian \
-  -e CONFLUENCE_URL=$(pass mcp/atlassian/url) \
-  -e CONFLUENCE_USERNAME=$(pass mcp/atlassian/user) \
-  -e CONFLUENCE_API_TOKEN=$(pass mcp/atlassian/api_key) \
-  -- docker run -i --rm \
-    -e CONFLUENCE_URL \
-    -e CONFLUENCE_USERNAME \
-    -e CONFLUENCE_API_TOKEN \
-    ghcr.io/sooperset/mcp-atlassian:latest
+# add_or_update_mcp_server atlassian atlassian \
+#   -e CONFLUENCE_URL=$(pass mcp/atlassian/url) \
+#   -e CONFLUENCE_USERNAME=$(pass mcp/atlassian/user) \
+#   -e CONFLUENCE_API_TOKEN=$(pass mcp/atlassian/api_key) \
+#   -- docker run -i --rm \
+#     -e CONFLUENCE_URL \
+#     -e CONFLUENCE_USERNAME \
+#     -e CONFLUENCE_API_TOKEN \
+#     ghcr.io/sooperset/mcp-atlassian:latest
 
 # https://github.com/oraios/serena
 add_or_update_mcp_server serena serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant
@@ -52,9 +52,9 @@ add_or_update_mcp_server serena serena -- uvx --from git+https://github.com/orai
 add_or_update_mcp_server context7 --transport http context7 https://mcp.context7.com/mcp
 
 # https://www.npmjs.com/package/figma-developer-mcp
-add_or_update_mcp_server figma-developer-mcp figma-developer-mcp \
-  -e FIGMA_API_KEY=$(pass mcp/figma) \
-  -- npx -y figma-developer-mcp --stdio
+# add_or_update_mcp_server figma-developer-mcp figma-developer-mcp \
+#   -e FIGMA_API_KEY=$(pass mcp/figma) \
+#   -- npx -y figma-developer-mcp --stdio
 
 # https://github.com/microsoft/playwright-mcp
 add_or_update_mcp_server playwright playwright -- docker run -i --rm --init --pull=always mcr.microsoft.com/playwright/mcp
