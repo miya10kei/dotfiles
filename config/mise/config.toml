@@ -21,6 +21,7 @@ python = ["3.13.11", "3.11.14"]
 "aqua:sharkdp/bat" = "latest"
 "aqua:sharkdp/fd" = "latest"
 "aqua:starship/starship" = "latest"
+"aqua:sxyazi/yazi" = "latest"
 "aqua:wagoodman/dive" = "latest"
 "aqua:x-motemen/ghq" = "latest"
 "aqua:ynqa/jnv" = "latest"
