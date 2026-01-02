@@ -1,9 +1,8 @@
 *.zwc
 .DS_Store
-lazy-lock.json
-data-volume
-.config/sqls/config.yaml
-secrets.sh
-.claude.json
 .claude
+.claude.json
+data-volume
 install-mcp-servers-work.sh
+lazy-lock.json
+secrets.sh
