@@ -11,13 +11,9 @@ install-bins: \
 	$(COMPLETION_DIR) \
 	$(BIN_DIR)/aws-cli \
 	aws-session-manager \
-	$(BIN_DIR)/bun \
 	$(BIN_DIR)/claude \
 	$(BIN_DIR)/coderabbit \
 	$(BIN_DIR)/op \
-	$(BIN_DIR)/tfenv \
-	$(BIN_DIR)/uv \
-	install-go-packages \
 	install-pip-packages \
 	install-npm-packages \
 	$(SRC_DIR)/google-cloud-sdk
@@ -45,9 +41,6 @@ aws-session-manager: /usr/local/sessionmanagerplugin
 	sudo dpkg --install /tmp/sessionmanagerplugin/session-manager-plugin.deb
 	rm -rf /tmp/sessionmanagerplugin
 
-$(BIN_DIR)/bun:
-	curl -fsSL https://bun.sh/install | bash
-
 $(BIN_DIR)/claude:
 	curl -fsSL https://claude.ai/install.sh | bash
 
@@ -72,18 +65,6 @@ $(BIN_DIR)/op:
 	mv /tmp/op/op $(BIN_DIR)/op
 	rm -rf /tmp/op
 	$(BIN_DIR)/op completion zsh > $(COMPLETION_DIR)/op.zsh
-
-$(BIN_DIR)/tfenv:
-	git clone --depth=1 https://github.com/tfutils/tfenv.git $(HOME)/.tfenv
-
-$(BIN_DIR)/uv:
-	curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Go packages (via mise)
-.PHONY: install-go-packages
-install-go-packages:
-	mise exec -- go install github.com/rhysd/actionlint/cmd/actionlint@latest
-	mise exec -- go install github.com/suzuki-shunsuke/pinact/cmd/pinact@latest
 
 # Python packages (via mise)
 .PHONY: install-pip-packages

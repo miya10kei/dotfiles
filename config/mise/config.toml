@@ -2,12 +2,15 @@
 ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
 
 [tools]
-deno   = "latest"
-go     = "1.25.5"
-lua    = "5.4.8"
-node   = "22.21.1"
-python = ["3.13.11", "3.11.14"]
+bun       = "latest"
+deno      = "latest"
+go        = "latest"
+lua       = "latest"
+node      = "22"
+python    = ["3.13", "3.11"]
+terraform = "latest"
 
+"aqua:astral-sh/uv" = "latest"
 "aqua:BurntSushi/ripgrep" = "latest"
 "aqua:ajeetdsouza/zoxide" = "latest"
 "aqua:cli/cli" = "latest"
@@ -17,10 +20,12 @@ python = ["3.13.11", "3.11.14"]
 "aqua:junegunn/fzf" = "latest"
 "aqua:mikefarah/yq" = "latest"
 "aqua:muesli/duf" = "latest"
+"aqua:rhysd/actionlint" = "latest"
 "aqua:rossmacarthur/sheldon" = "latest"
 "aqua:sharkdp/bat" = "latest"
 "aqua:sharkdp/fd" = "latest"
 "aqua:starship/starship" = "latest"
+"aqua:suzuki-shunsuke/pinact" = "latest"
 "aqua:sxyazi/yazi" = "latest"
 "aqua:wagoodman/dive" = "latest"
 "aqua:x-motemen/ghq" = "latest"
