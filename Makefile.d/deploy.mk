@@ -1,8 +1,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-mise
-deploy-mise: $(HOME)/.config/mise
-
-$(HOME)/.config/mise:
+deploy-mise:
+	@if [ -d $(HOME)/.config/mise ] && [ ! -L $(HOME)/.config/mise ]; then rm -rf $(HOME)/.config/mise; fi
 	ln -fs $(DOTDIR)/config/mise $(HOME)/.config/mise
 
 
@@ -228,12 +227,10 @@ $(HOME)/.config/starship.toml:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-tmux
 deploy-tmux: \
-	tmuxconf
+	$(HOME)/.config/tmux
 
-.PHONY: tmuxconf
-tmuxconf: $(HOME)/.tmux.conf
-$(HOME)/.tmux.conf:
-	ln -fs $(DOTDIR)/.tmux.conf $(HOME)/.tmux.conf
+$(HOME)/.config/tmux:
+	ln -fs $(DOTDIR)/config/tmux $(HOME)/.config/tmux
 
 
 # ----------------------------------------------------------------------------------------------------------------------

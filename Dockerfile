@@ -6,16 +6,10 @@ ARG ARCH4=arm64 # or x86_64 (for Neovim)
 ARG DOCKER_BUILDX_VERSION=0.30.1
 ARG DOCKER_COMPOSE_VERSION=5.0.0
 ARG DOCKER_VERSION=29.1.2
-ARG GOLANG_VERSION=1.25.5
 ARG HASKELL_CABAL_VERSION=3.16.0.0
 ARG HASKELL_GHCUP_VERSION=0.1.50.2
 ARG HASKELL_GHC_VERSION=9.6.7
 ARG HASKELL_STACK_VERSION=3.7.1
-ARG LUAROCKS_VERSION=3.12.2
-ARG LUA_VERSION=5.4.8
-ARG NODEJS_VERSION=22.21.1
-ARG PYTHON3_VERSION=3.13.11
-ARG PYTHON_VERSION=3.11.14
 ARG DKID
 ARG GID
 ARG GNAME
@@ -87,12 +81,10 @@ RUN curl -fsLS https://sh.rustup.rs > rust.sh \
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS mise
-ARG PYTHON_VERSION
-ARG PYTHON3_VERSION
-ARG NODEJS_VERSION
-ARG GOLANG_VERSION
-ARG LUA_VERSION
-ARG LUAROCKS_VERSION
+ARG UNAME
+ARG GNAME
+ARG UID
+ARG GID
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # mise install
@@ -100,21 +92,16 @@ RUN curl https://mise.run | sh
 
 ENV PATH="${HOME}/.local/bin:${PATH}"
 
+# Copy mise config (languages + CLI tools)
+COPY --chown="${UNAME}:${GNAME}" ./config/mise/config.toml ${HOME}/.config/mise/config.toml
+
 # Lua plugin (Luarocks support)
 RUN mise plugins install lua https://github.com/mise-plugins/mise-lua.git
 
-# Install runtimes
-RUN ASDF_LUA_LUAROCKS_VERSION=${LUAROCKS_VERSION} mise install lua@${LUA_VERSION} \
-    && mise install python@${PYTHON_VERSION} \
-    && mise install python@${PYTHON3_VERSION} \
-    && mise install node@${NODEJS_VERSION} \
-    && mise install go@${GOLANG_VERSION} \
-    && mise install deno@latest \
-    && mise use -g python@${PYTHON3_VERSION} \
-    && mise use -g node@${NODEJS_VERSION} \
-    && mise use -g go@${GOLANG_VERSION} \
-    && mise use -g deno@latest \
-    && mise use -g lua@${LUA_VERSION}
+# Install all tools (languages + CLI tools from config.toml)
+RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
+    export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
+    mise install
 
 # Output directory
 RUN mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share" "${HOME}/out/${HOME}/.config" \

@@ -17,6 +17,8 @@ endif
 
 .PHONY: build-dev-env
 build-dev-env:
+	@echo "GITHUB_TOKEN length in make: $${#GITHUB_TOKEN}"; \
+	if [ -z "$$GITHUB_TOKEN" ]; then echo "ERROR: GITHUB_TOKEN is not set. Run: export GITHUB_TOKEN"; exit 1; fi
 	echo "DKID=$(DKID) GID=$(GID)"; \
 	if [ "$(ARCH)" = "x86_64" ]; then \
 		docker build \
@@ -29,6 +31,7 @@ build-dev-env:
 			--build-arg GNAME=$(GNAME) \
 			--build-arg UID=$(UID) \
 			--build-arg UNAME=$(UNAME) \
+			--secret id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 			--progress $(DOCKER_PROGRESS) \
 			--tag miya10kei/devenv:latest \
 			$(HOME)/.dotfiles; \
@@ -43,6 +46,7 @@ build-dev-env:
 			--build-arg GNAME=$(GNAME) \
 			--build-arg UID=$(UID) \
 			--build-arg UNAME=$(UNAME) \
+			--secret id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 			--progress $(DOCKER_PROGRESS) \
 			--tag miya10kei/devenv:latest \
 			$(HOME)/.dotfiles; \

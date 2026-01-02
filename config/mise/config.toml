@@ -1,9 +1,37 @@
+[env]
+ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
+
 [tools]
+deno   = "latest"
+go     = "1.25.5"
+lua    = "5.4.8"
+node   = "22.21.1"
 python = ["3.13.11", "3.11.14"]
-node = "22.21.1"
-go = "1.25.5"
-deno = "latest"
-lua = "5.4.8"
+
+"aqua:BurntSushi/ripgrep" = "latest"
+"aqua:ajeetdsouza/zoxide" = "latest"
+"aqua:cli/cli" = "latest"
+"aqua:dalance/procs" = "latest"
+"aqua:dandavison/delta" = "latest"
+"aqua:jqlang/jq" = "latest"
+"aqua:junegunn/fzf" = "latest"
+"aqua:mikefarah/yq" = "latest"
+"aqua:muesli/duf" = "latest"
+"aqua:rossmacarthur/sheldon" = "latest"
+"aqua:sharkdp/bat" = "latest"
+"aqua:sharkdp/fd" = "latest"
+"aqua:starship/starship" = "latest"
+"aqua:wagoodman/dive" = "latest"
+"aqua:x-motemen/ghq" = "latest"
+"aqua:ynqa/jnv" = "latest"
+
+"github:99designs/aws-vault" = "latest"
+"github:denisidoro/navi" = "latest"
+"github:eza-community/eza" = "latest"
+
+"http:fzf-completion" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
+"http:fzf-key-bindings" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
+"http:fzf-tmux" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
 
 [settings]
 experimental = false

@@ -15,7 +15,7 @@ export FZF_CTRL_T_OPTS="--preview=\"$FZF_CTRL_T_PREVIEW\""
 FZF_CTRL_R_PREVIEW="echo {} | awk '{ print substr(\$0, index(\$0,\$2)) }' | bat --color=always --language=sh --style=plain --theme=ansi"
 export FZF_CTRL_R_OPTS="--preview=\"$FZF_CTRL_R_PREVIEW\""
 
-if [[ -e $HOME/.local/bin/fzf-key-bindings.zsh ]]; then
-    source $HOME/.local/bin/fzf-key-bindings.zsh
-fi
+FZF_MISE_DIR="$HOME/.local/share/mise/installs"
+[[ -f "$FZF_MISE_DIR/http-fzf-completion/latest/completion.zsh" ]] && source "$FZF_MISE_DIR/http-fzf-completion/latest/completion.zsh"
+[[ -f "$FZF_MISE_DIR/http-fzf-key-bindings/latest/key-bindings.zsh" ]] && source "$FZF_MISE_DIR/http-fzf-key-bindings/latest/key-bindings.zsh"
 bindkey "ç" fzf-cd-widget
