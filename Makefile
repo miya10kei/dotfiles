@@ -68,6 +68,7 @@ setup4d: \
 	deploy-mcpauth \
 	deploy-mcphub \
 	deploy-memolist \
+	deploy-mise \
 	deploy-nvim \
 	deploy-pass \
 	deploy-sheldon \
