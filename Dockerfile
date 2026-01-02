@@ -1,7 +1,4 @@
 # syntax=docker/dockerfile:1
-ARG HASKELL_CABAL_VERSION=3.16.0.0
-ARG HASKELL_GHC_VERSION=9.6.7
-ARG HASKELL_STACK_VERSION=3.7.1
 ARG DKID
 ARG GID
 ARG GNAME
@@ -78,6 +75,11 @@ COPY --chown="${UNAME}:${GNAME}" ./config/mise/ ${HOME}/.config/mise/
 # Lua plugin (Luarocks support)
 RUN mise plugins install lua https://github.com/mise-plugins/mise-lua.git
 
+# ghcup plugin (for ghc, cabal, stack)
+RUN mise plugins install ghc https://github.com/mise-plugins/mise-ghcup.git \
+    && mise plugins install cabal https://github.com/mise-plugins/mise-ghcup.git \
+    && mise plugins install stack https://github.com/mise-plugins/mise-ghcup.git
+
 # Install all tools (languages + CLI tools from config.toml)
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
     export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
@@ -89,25 +91,6 @@ RUN mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share"
     && cp "${HOME}/.local/bin/mise" "${HOME}/out/${HOME}/.local/bin/" \
     && mv "${HOME}/.local/share/mise" "${HOME}/out/${HOME}/.local/share/" \
     && mv "${HOME}/.config/mise" "${HOME}/out/${HOME}/.config/"
-
-
-# ------------------------------------------------------------------------------------------------------------------------
-FROM builder AS haskell
-ARG UNAME
-ARG GNAME
-ARG HASKELL_GHC_VERSION
-ARG HASKELL_CABAL_VERSION
-ARG HASKELL_STACK_VERSION
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-COPY --from=mise --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
-ENV PATH="${HOME}/.local/bin:${PATH}"
-ENV MISE_DATA_DIR="${HOME}/.local/share/mise"
-RUN eval "$(mise activate bash)" \
-    && ghcup install ghc "${HASKELL_GHC_VERSION}" --set \
-    && ghcup install cabal "${HASKELL_CABAL_VERSION}" --set \
-    && ghcup install stack "${HASKELL_STACK_VERSION}" --set \
-    && mkdir -p "${HOME}/out/${HOME}" \
-    && mv "${HOME}/.ghcup" "${HOME}/out/${HOME}/"
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -201,10 +184,8 @@ RUN groupadd "${GNAME}" --gid "${GID}" \
 USER ${UNAME}
 ENV  HOME="/home/${UNAME}"
 
-COPY --from=haskell --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
-COPY --from=mise    --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
+COPY --from=mise --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 
-ENV PATH="${HOME}/.ghcup/bin:${PATH}"
 ENV PATH="${HOME}/.local/bin:${PATH}"
 ENV MISE_DATA_DIR="${HOME}/.local/share/mise"
 
