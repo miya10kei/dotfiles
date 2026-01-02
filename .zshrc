@@ -54,15 +54,6 @@ function main() {
         source $HOME/.safe-chain/scripts/init-posix.sh
     fi
 
-    # ------------
-    # --- tmux ---
-    # ------------
-    if builtin command -v tmux > /dev/null 2>&1; then
-        if [[ ! -e $HOME/.tmux/plugins/tpm ]]; then
-            git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-        fi
-    fi
-
     # ------------------
     # --- pulseaudio ---
     # ------------------
@@ -130,6 +121,8 @@ function main() {
     if builtin command -v mise > /dev/null 2>&1; then
         eval "$(mise activate zsh)"
     fi
+
+    autoload -Uz add-zsh-hook
 
     if [[ -e $HOME/.dotfiles/zshrc.d ]]; then
         source $HOME/.dotfiles/zshrc.d/docker.zsh
