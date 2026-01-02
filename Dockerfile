@@ -92,8 +92,8 @@ RUN curl https://mise.run | sh
 
 ENV PATH="${HOME}/.local/bin:${PATH}"
 
-# Copy mise config (languages + CLI tools)
-COPY --chown="${UNAME}:${GNAME}" ./config/mise/config.toml ${HOME}/.config/mise/config.toml
+# Copy mise config and tasks
+COPY --chown="${UNAME}:${GNAME}" ./config/mise/ ${HOME}/.config/mise/
 
 # Lua plugin (Luarocks support)
 RUN mise plugins install lua https://github.com/mise-plugins/mise-lua.git
@@ -101,7 +101,8 @@ RUN mise plugins install lua https://github.com/mise-plugins/mise-lua.git
 # Install all tools (languages + CLI tools from config.toml)
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
     export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
-    mise install
+    mise install && \
+    mise run install-bins
 
 # Output directory
 RUN mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share" "${HOME}/out/${HOME}/.config" \
@@ -283,7 +284,6 @@ RUN eval "$(mise activate bash)" \
   && pip --version
 
 RUN eval "$(mise activate bash)" \
-  && make --jobs=4 install4d \
   && make setup-nvim
 
 WORKDIR $HOME

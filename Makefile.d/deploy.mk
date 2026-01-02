@@ -2,7 +2,7 @@
 .PHONY: deploy-mise
 deploy-mise:
 	@if [ -d $(HOME)/.config/mise ] && [ ! -L $(HOME)/.config/mise ]; then rm -rf $(HOME)/.config/mise; fi
-	ln -fs $(DOTDIR)/config/mise $(HOME)/.config/mise
+	ln -fns $(DOTDIR)/config/mise $(HOME)/.config/mise
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -11,7 +11,7 @@ deploy-aws: \
 	$(HOME)/.aws
 
 $(HOME)/.aws:
-	ln -fs $(DOTDIR)/data-volume/aws-cli $(HOME)/.aws
+	ln -fns $(DOTDIR)/data-volume/aws-cli $(HOME)/.aws
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ $(HOME)/.coderabbit:
 	mkdir -p $(HOME)/.coderabbit
 
 $(HOME)/.coderabbit/auth.json:
-	ln -fs $(DOTDIR)/data-volume/coderabbit/auth.json $(HOME)/.coderabbit/auth.json
+	ln -fns $(DOTDIR)/data-volume/coderabbit/auth.json $(HOME)/.coderabbit/auth.json
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ deploy-claude: \
 	install-claude-mcp-servers
 
 $(HOME)/.config/claude:
-	ln -fs $(DOTDIR)/config/claude $(HOME)/.config/claude
+	ln -fns $(DOTDIR)/config/claude $(HOME)/.config/claude
 
 install-claude-mcp-servers:
 	bash $(HOME)/.config/claude/scripts/install-mcp-servers.sh
@@ -49,7 +49,7 @@ deploy-editorconfig: \
 	$(HOME)/.editorconfig
 
 $(HOME)/.editorconfig:
-	ln -fs $(DOTDIR)/.editorconfig $(HOME)/.editorconfig
+	ln -fns $(DOTDIR)/.editorconfig $(HOME)/.editorconfig
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ deploy-gemini: \
 	$(HOME)/.gemini
 
 $(HOME)/.gemini:
-	ln -fs $(DOTDIR)/data-volume/gemini $(HOME)/.gemini
+	ln -fns $(DOTDIR)/data-volume/gemini $(HOME)/.gemini
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -68,10 +68,10 @@ deploy-gh: \
 	$(HOME)/.config/gh/config.yml
 
 $(HOME)/.config/gh:
-	ln -fs $(DOTDIR)/data-volume/gh $(HOME)/.config/gh
+	ln -fns $(DOTDIR)/data-volume/gh $(HOME)/.config/gh
 
 $(HOME)/.config/gh/config.yml:
-	ln -fs $(DOTDIR)/config/gh/config.yml $(HOME)/.config/gh/config.yml
+	ln -fns $(DOTDIR)/config/gh/config.yml $(HOME)/.config/gh/config.yml
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -81,10 +81,10 @@ deploy-git: \
 	$(HOME)/.gitattributes
 
 $(HOME)/.gitconfig:
-	ln -fs $(DOTDIR)/.gitconfig $(HOME)/.gitconfig
+	ln -fns $(DOTDIR)/.gitconfig $(HOME)/.gitconfig
 
 $(HOME)/.gitattributes:
-	ln -fs $(DOTDIR)/.gitattributes $(HOME)/.gitattributes
+	ln -fns $(DOTDIR)/.gitattributes $(HOME)/.gitattributes
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ deploy-github-copilot: \
 	$(HOME)/.config/github-copilot
 
 $(HOME)/.config/github-copilot:
-	ln -fs $(DOTDIR)/data-volume/github-copilot $(HOME)/.config/github-copilot
+	ln -fns $(DOTDIR)/data-volume/github-copilot $(HOME)/.config/github-copilot
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ deploy-gpg: \
 	$(HOME)/.gnupg
 
 $(HOME)/.gnupg:
-	ln -fs $(DOTDIR)/data-volume/gpg $(HOME)/.gnupg
+	ln -fns $(DOTDIR)/data-volume/gpg $(HOME)/.gnupg
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ deploy-hyper: \
 	$(HOME).hyper.js
 
 $(HOME).hyper.js:
-	ln -fs $(DOTDIR)/.hyper.js $(HOME)/.hyper.js
+	ln -fns $(DOTDIR)/.hyper.js $(HOME)/.hyper.js
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ deploy-karabiner: \
 	$(HOME)/.config/karabiner/karabiner.json
 
 $(HOME)/.config/karabiner/karabiner.json:
-	ln -fs $(DOTDIR)/karabiner.json $(HOME)/.config/karabiner/karabiner.json
+	ln -fns $(DOTDIR)/karabiner.json $(HOME)/.config/karabiner/karabiner.json
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ deploy-markdownlint: \
 	$(HOME)/.markdownlintrc
 
 $(HOME)/.markdownlintrc:
-	ln -fs $(DOTDIR)/.markdownlintrc $(HOME)/.markdownlintrc
+	ln -fns $(DOTDIR)/.markdownlintrc $(HOME)/.markdownlintrc
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ deploy-mcpauth: \
   $(HOME)/.mcp-auth
 
 $(HOME)/.mcp-auth:
-	ln -fs $(DOTDIR)/data-volume/mcp-auth $(HOME)/.mcp-auth
+	ln -fns $(DOTDIR)/data-volume/mcp-auth $(HOME)/.mcp-auth
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ deploy-mcphub: \
   $(HOME)/.config/mcphub
 
 $(HOME)/.config/mcphub:
-	ln -fs $(DOTDIR)/config/mcphub $(HOME)/.config/mcphub
+	ln -fns $(DOTDIR)/config/mcphub $(HOME)/.config/mcphub
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ deploy-memolist: \
 	$(HOME)/.config/memo
 
 $(HOME)/.config/memo:
-	ln -fs $(DOTDIR)/config/memo $(HOME)/.config/memo
+	ln -fns $(DOTDIR)/config/memo $(HOME)/.config/memo
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ deploy-nvim: \
 	$(HOME)/.config/nvim
 
 $(HOME)/.config/nvim:
-	ln -fs $(DOTDIR)/config/nvim/ $(HOME)/.config/nvim
+	ln -fns $(DOTDIR)/config/nvim $(HOME)/.config/nvim
 
 .PHONY: delete-nvimrc
 delete-nvimrc:
@@ -188,7 +188,7 @@ deploy-obsidian: \
 
 obsidianvimrc: $(HOME)/.obsidian.vimrc
 $(HOME)/.obsidian.vimrc:
-	ln -fs $(DOTDIR)/.obsidian.vimrc $(HOME)/.obsidian.vimrc
+	ln -fns $(DOTDIR)/.obsidian.vimrc $(HOME)/.obsidian.vimrc
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -198,7 +198,7 @@ deploy-sheldon: \
 	$(HOME)/.local/share/sheldon/plugins.lock
 
 $(HOME)/.config/sheldon:
-	ln -fs $(DOTDIR)/config/sheldon $(HOME)/.config/sheldon
+	ln -fns $(DOTDIR)/config/sheldon $(HOME)/.config/sheldon
 
 $(HOME)/.local/share/sheldon/plugins.lock:
 	sheldon lock
@@ -221,7 +221,7 @@ deploy-starship: \
 	$(HOME)/.config/starship.toml
 
 $(HOME)/.config/starship.toml:
-	ln -fs $(DOTDIR)/config/starship.toml $(HOME)/.config/starship.toml
+	ln -fns $(DOTDIR)/config/starship.toml $(HOME)/.config/starship.toml
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -230,7 +230,7 @@ deploy-tmux: \
 	$(HOME)/.config/tmux
 
 $(HOME)/.config/tmux:
-	ln -fs $(DOTDIR)/config/tmux $(HOME)/.config/tmux
+	ln -fns $(DOTDIR)/config/tmux $(HOME)/.config/tmux
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -240,7 +240,7 @@ deploy-yamlfmt: \
 
 
 $(HOME)/.config/yamlfmt:
-	ln -fs $(DOTDIR)/config/yamlfmt $(HOME)/.config/yamlfmt
+	ln -fns $(DOTDIR)/config/yamlfmt $(HOME)/.config/yamlfmt
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ deploy-zoxide: \
 .PHONY: zoxide
 zoxide: $(HOME)/.local/share/zoxide
 $(HOME)/.local/share/zoxide:
-	ln -fs $(DOTDIR)/data-volume/zoxide/ $(HOME)/.local/share/
+	ln -fns $(DOTDIR)/data-volume/zoxide $(HOME)/.local/share/zoxide
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -266,28 +266,28 @@ deploy-zsh: \
 .PHONY: autoenv_auth
 autoenv_auth: $(HOME)/.local/share/autoenv_auth
 $(HOME)/.local/share/autoenv_auth:
-	ln -fs $(DOTDIR)/data-volume/zsh-autoenv/autoenv_auth $(HOME)/.local/share/autoenv_auth
+	ln -fns $(DOTDIR)/data-volume/zsh-autoenv/autoenv_auth $(HOME)/.local/share/autoenv_auth
 
 
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: zprofile
 zprofile: $(HOME)/.zprofile
 $(HOME)/.zprofile:
-	ln -fs $(DOTDIR)/.zprofile $(HOME)/.zprofile
+	ln -fns $(DOTDIR)/.zprofile $(HOME)/.zprofile
 
 .PHONY: zshrc
 zshrc: $(HOME)/.zshrc
 $(HOME)/.zshrc:
-	ln -fs $(DOTDIR)/.zshrc $(HOME)/.zshrc
+	ln -fns $(DOTDIR)/.zshrc $(HOME)/.zshrc
 
 .PHONY: zshhistory
 zshhistory: $(HOME)/.zsh_history
 $(HOME)/.zsh_history:
-	ln -fs $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
+	ln -fns $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
 
 .PHONY: zshhistory_force
 zshhistory_force:
-	ln -fs $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
+	ln -fns $(DOTDIR)/data-volume/zsh-history/.zsh_history $(HOME)/.zsh_history
 
 .PHONY: delete-zshhistory
 delete-zshhistory:

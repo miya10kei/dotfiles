@@ -80,8 +80,4 @@ setup4d: \
 	autoenv_auth \
 	zshhistory_force
 
-.PHONY: install4d
-install4d: \
-	install-bins
-
 include Makefile.d/*.mk

@@ -4,13 +4,16 @@ ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
 [tools]
 bun       = "latest"
 deno      = "latest"
+gcloud    = "latest"
 go        = "latest"
 lua       = "latest"
 node      = "22"
 python    = ["3.13", "3.11"]
 terraform = "latest"
 
+"aqua:1password/cli" = "2.32.0"
 "aqua:astral-sh/uv" = "latest"
+"aqua:aws/aws-cli" = "latest"
 "aqua:BurntSushi/ripgrep" = "latest"
 "aqua:ajeetdsouza/zoxide" = "latest"
 "aqua:cli/cli" = "latest"
@@ -35,6 +38,11 @@ terraform = "latest"
 "github:denisidoro/navi" = "latest"
 "github:eza-community/eza" = "latest"
 
+"npm:@anthropic-ai/claude-code" = "latest"
+
+"pipx:aws-sam-cli" = "latest"
+"pipx:pgcli" = "latest"
+
 "http:fzf-completion" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
 "http:fzf-key-bindings" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
 "http:fzf-tmux" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
@@ -42,3 +50,7 @@ terraform = "latest"
 [settings]
 experimental = false
 not_found_auto_install = true
+
+[tasks.install-bins]
+depends = ["install-coderabbit", "install-session-manager"]
+description = "Install all script-based tools"
