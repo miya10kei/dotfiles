@@ -97,6 +97,7 @@ return {
         ["rust-analyzer"] = "rust_analyzer",
         ["terraform-ls"] = "terraformls",
         ["typescript-language-server"] = "ts_ls",
+        ["yaml-language-server"] = "yamlls",
       }
 
       -- LSPサーバー個別設定
@@ -147,6 +148,31 @@ return {
           settings = {
             yaml = {
               format = { enable = false },
+              customTags = {
+                "!And scalar",
+                "!And sequence",
+                "!Base64 scalar",
+                "!Cidr scalar",
+                "!Cidr sequence",
+                "!Condition scalar",
+                "!Equals sequence",
+                "!FindInMap sequence",
+                "!GetAZs scalar",
+                "!GetAtt scalar",
+                "!GetAtt sequence",
+                "!If sequence",
+                "!ImportValue scalar",
+                "!ImportValue mapping",
+                "!Join sequence",
+                "!Not sequence",
+                "!Or sequence",
+                "!Ref scalar",
+                "!Select sequence",
+                "!Split sequence",
+                "!Sub scalar",
+                "!Sub sequence",
+                "!Transform mapping",
+              },
               schemas = {
                 ["https://json.schemastore.org/github-action.json"] = ".github/actions/*.yaml",
                 ["https://json.schemastore.org/github-workflow.json"] = ".github/workflows/*.yaml",
