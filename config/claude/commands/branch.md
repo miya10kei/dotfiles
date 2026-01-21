@@ -21,8 +21,14 @@ mainブランチから新しいフィーチャーブランチを作成する
 
 ### 形式
 
+チケットIDがある場合:
 ```
-<type>/<ticket-id>-<keyword>
+<type>/<ticket-id>
+```
+
+チケットIDがない場合:
+```
+<type>/<keyword>
 ```
 
 ### type一覧
@@ -38,8 +44,8 @@ mainブランチから新しいフィーチャーブランチを作成する
 ### 例
 
 ```
-feature/PROJ-123-login
-fix/PROJ-456-auth
+feature/PROJ-123
+fix/PROJ-456
 feature/add-validation
 refactor/simplify-api
 ```
