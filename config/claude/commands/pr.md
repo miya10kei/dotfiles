@@ -22,14 +22,14 @@ description: Pull Requestを作成する
 ### 形式
 
 ```
-[TICKET-ID] <gitmoji> <説明>
+<TICKET-ID> <gitmoji> <説明>
 ```
 
 ### 例
 
 ```
-[PROJ-123] ✨ ログイン機能を追加
-[PROJ-456] 🐛 認証エラーを修正
+PROJ-123 ✨ ログイン機能を追加
+PROJ-456 🐛 認証エラーを修正
 ```
 
 ### ルール
