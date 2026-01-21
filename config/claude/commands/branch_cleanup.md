@@ -42,12 +42,6 @@ git branch -d <branch-name>
 git push origin --delete <branch-name>
 ```
 
-## 確認事項
-
-- マージが完了していることを確認してから実行
-- 未マージの変更がないことを確認
-- 削除前にブランチ名を確認
-
 ## 出力
 
 ```
