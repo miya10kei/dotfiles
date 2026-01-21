@@ -22,7 +22,7 @@ mainブランチから新しいフィーチャーブランチを作成する
 ### 形式
 
 ```
-<type>/<ticket-id>-<description>
+<type>/<ticket-id>-<keyword>
 ```
 
 ### type一覧
@@ -38,13 +38,15 @@ mainブランチから新しいフィーチャーブランチを作成する
 ### 例
 
 ```
-feature/PROJ-123-add-login
-fix/PROJ-456-auth-error
-refactor/PROJ-789-simplify-api
+feature/PROJ-123-login
+fix/PROJ-456-auth
+feature/add-validation
+refactor/simplify-api
 ```
 
 ### ルール
 
 - チケットIDがある場合は必ず含める
-- descriptionは短く、ケバブケース（kebab-case）で記述
+- チケットIDがない場合は、変更内容を表す適切なキーワードを使用
+- keywordは短く、ケバブケース（kebab-case）で記述
 - ユーザーからの指示がある場合は、その指示を最優先とすること

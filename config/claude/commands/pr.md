@@ -45,16 +45,11 @@ description: Pull Requestを作成する
 ```markdown
 ## Summary
 - 変更内容の要点（1-3行）
-
-## Test plan
-- [ ] テスト項目1
-- [ ] テスト項目2
 ```
 
 ### ルール
 
 - Summaryは変更の目的と内容を簡潔に
-- Test planはレビュアーが確認すべき項目
 - 関連するIssueがあればリンク
 
 ## オプション
