@@ -19,6 +19,112 @@ function tmux_popup() {
   fi
 }
 
+# ----------------------------------------------
+# Neovim server functions (for AI agent integration)
+# ----------------------------------------------
+
+# Calculate socket path from directory
+function nvim_socket_path() {
+  local dir="${1:-$PWD}"
+  dir="$(cd "$dir" 2>/dev/null && pwd -P)"
+  local hash=$(printf '%s' "$dir" | shasum -a 256 2>/dev/null | cut -c1-12 || printf '%s' "$dir" | cksum | awk '{print $1}')
+  echo "/tmp/nvim-${hash}.sock"
+}
+
+# Start nvim with socket (for remote control via nvr)
+function nvim_server() {
+  local sock=$(nvim_socket_path)
+
+  # Clean up stale socket
+  if [[ -S "$sock" ]]; then
+    if ! nvr --serverlist 2>/dev/null | grep -q "$sock"; then
+      rm -f "$sock"
+    fi
+  fi
+
+  # Start nvim with socket
+  nvim --listen "$sock" "$@"
+}
+
+# Open file in existing nvim instance via nvr
+# Supports: path, path:line, path:line:col
+function open_in_nvim() {
+  local input="$1"
+  [[ -z "$input" ]] && return 1
+
+  # Parse path:line:col format
+  local filepath line col
+  if [[ "$input" =~ ^(.+):([0-9]+):([0-9]+)$ ]]; then
+    filepath="${match[1]}"
+    line="${match[2]}"
+    col="${match[3]}"
+  elif [[ "$input" =~ ^(.+):([0-9]+)$ ]]; then
+    filepath="${match[1]}"
+    line="${match[2]}"
+  else
+    filepath="$input"
+  fi
+
+  # Resolve relative path
+  local basedir="${TMUX_PANE_PATH:-$PWD}"
+  if [[ ! "$filepath" = /* ]]; then
+    filepath="${basedir}/${filepath}"
+  fi
+
+  # Normalize path
+  filepath="$(cd "$(dirname "$filepath")" 2>/dev/null && pwd -P)/$(basename "$filepath")"
+
+  # Check if file exists
+  if [[ ! -f "$filepath" ]]; then
+    echo "File not found: $filepath" >&2
+    return 1
+  fi
+
+  # Find nvim server
+  local servers=($(nvr --serverlist 2>/dev/null))
+  if [[ ${#servers[@]} -eq 0 ]]; then
+    echo "No nvim server found" >&2
+    return 1
+  fi
+
+  # Use the first available server (or find best match by cwd)
+  local target_server="${servers[1]}"
+
+  # Open file in nvim
+  if [[ -n "$line" && -n "$col" ]]; then
+    nvr --servername "$target_server" --remote "+call cursor($line,$col)" "$filepath"
+  elif [[ -n "$line" ]]; then
+    nvr --servername "$target_server" --remote "+$line" "$filepath"
+  else
+    nvr --servername "$target_server" --remote "$filepath"
+  fi
+}
+
+# Pick path from tmux pane output using fzf
+function tmux_pick_path() {
+  # Capture pane content (last 2000 lines)
+  local content=$(tmux capture-pane -p -S -2000)
+
+  # Extract path-like strings using ripgrep
+  local paths=$(echo "$content" | rg -o '[A-Za-z0-9_./-]+\.[a-zA-Z0-9]+(?::\d+(?::\d+)?)?' | sort -u | tac)
+
+  if [[ -z "$paths" ]]; then
+    echo "No paths found in pane output"
+    return 1
+  fi
+
+  # Select with fzf
+  local selected=$(echo "$paths" | fzf --reverse --height=100% --prompt="Open in nvim> ")
+
+  if [[ -n "$selected" ]]; then
+    TMUX_PANE_PATH="$(tmux display-message -p '#{pane_current_path}')" open_in_nvim "$selected"
+  fi
+}
+
+# ----------------------------------------------
+# Development layout
+# ----------------------------------------------
+
 function tmux_dev_layout() {
   tmux split-window -v -l "35%" -c "#{pane_current_path}"
 
@@ -31,16 +137,16 @@ function tmux_dev_layout() {
   tmux select-pane -t 4
   tmux split-window -h -l "50%" -c "#{pane_current_path}"
 
-  tmux select-pane -t 1 -T " Neovim"
-  tmux select-pane -t 2 -T " Terminal"
+  tmux select-pane -t 1 -T " Neovim"
+  tmux select-pane -t 2 -T " Terminal"
   tmux select-pane -t 3 -T "󱜚 Claude (Code1)"
   tmux select-pane -t 4 -T "󱜚 Claude (Code2)"
-  tmux select-pane -t 5 -T " Claude (Q&A)"
+  tmux select-pane -t 5 -T " Claude (Q&A)"
 
   tmux select-pane -t 1
 
   sleep 1s
-  tmux send-keys -t 1 "nvim" Enter
+  tmux send-keys -t 1 "nvim_server" Enter
   tmux send-keys -t 3 "claude" Enter
   tmux send-keys -t 4 "claude" Enter
   tmux send-keys -t 5 "claude" Enter

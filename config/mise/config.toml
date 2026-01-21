@@ -49,6 +49,7 @@ stack = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 
 "pipx:aws-sam-cli" = "latest"
+"pipx:neovim-remote" = "latest"
 "pipx:pgcli" = "latest"
 
 "http:fzf-completion" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
