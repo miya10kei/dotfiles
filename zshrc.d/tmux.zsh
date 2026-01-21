@@ -52,51 +52,22 @@ function open_in_nvim() {
   local input="$1"
   [[ -z "$input" ]] && return 1
 
-  # Parse path:line:col format
-  local filepath line col
-  if [[ "$input" =~ ^(.+):([0-9]+):([0-9]+)$ ]]; then
-    filepath="${match[1]}"
-    line="${match[2]}"
-    col="${match[3]}"
-  elif [[ "$input" =~ ^(.+):([0-9]+)$ ]]; then
-    filepath="${match[1]}"
-    line="${match[2]}"
-  else
-    filepath="$input"
-  fi
+  # Parse path:line:col
+  local filepath="${input%%:*}"
+  local line="${${input#*:}%%:*}"
 
   # Resolve relative path
-  local basedir="${TMUX_PANE_PATH:-$PWD}"
-  if [[ ! "$filepath" = /* ]]; then
-    filepath="${basedir}/${filepath}"
-  fi
-
-  # Normalize path
-  filepath="$(cd "$(dirname "$filepath")" 2>/dev/null && pwd -P)/$(basename "$filepath")"
-
-  # Check if file exists
-  if [[ ! -f "$filepath" ]]; then
-    echo "File not found: $filepath" >&2
-    return 1
-  fi
+  [[ "$filepath" != /* ]] && filepath="${TMUX_PANE_PATH:-$PWD}/$filepath"
 
   # Find nvim server
-  local servers=($(nvr --serverlist 2>/dev/null))
-  if [[ ${#servers[@]} -eq 0 ]]; then
-    echo "No nvim server found" >&2
-    return 1
-  fi
+  local server=$(nvr --serverlist 2>/dev/null | head -1)
+  [[ -z "$server" ]] && { echo "No nvim server" >&2; return 1; }
 
-  # Use the first available server (or find best match by cwd)
-  local target_server="${servers[1]}"
-
-  # Open file in nvim
-  if [[ -n "$line" && -n "$col" ]]; then
-    nvr --servername "$target_server" --remote "+call cursor($line,$col)" "$filepath"
-  elif [[ -n "$line" ]]; then
-    nvr --servername "$target_server" --remote "+$line" "$filepath"
+  # Open in nvim
+  if [[ "$line" =~ ^[0-9]+$ ]]; then
+    nvr --servername "$server" --remote "+$line" "$filepath"
   else
-    nvr --servername "$target_server" --remote "$filepath"
+    nvr --servername "$server" --remote "$filepath"
   fi
 }
 
@@ -137,11 +108,11 @@ function tmux_dev_layout() {
   tmux select-pane -t 4
   tmux split-window -h -l "50%" -c "#{pane_current_path}"
 
-  tmux select-pane -t 1 -T " Neovim"
-  tmux select-pane -t 2 -T " Terminal"
+  tmux select-pane -t 1 -T " Neovim"
+  tmux select-pane -t 2 -T " Terminal"
   tmux select-pane -t 3 -T "󱜚 Claude (Code1)"
   tmux select-pane -t 4 -T "󱜚 Claude (Code2)"
-  tmux select-pane -t 5 -T " Claude (Q&A)"
+  tmux select-pane -t 5 -T " Claude (Q&A)"
 
   tmux select-pane -t 1
 
