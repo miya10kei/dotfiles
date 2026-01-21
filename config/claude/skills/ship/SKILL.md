@@ -17,89 +17,31 @@ context: fork
 
 ### Step 1: ブランチ作成
 
-1. mainブランチに移動して最新化
-   ```bash
-   git checkout main && git pull origin main
-   ```
-
-2. フィーチャーブランチを作成
-   ```bash
-   git checkout -b <type>/<ticket-id>-<description>
-   ```
-
-   - type: feature / fix / refactor / docs / chore
-   - チケットIDがあれば含める
-   - descriptionはケバブケースで簡潔に
+/branch を実行
 
 ### Step 2: コミット
 
-1. 変更を確認
-   ```bash
-   git status && git diff
-   ```
-
-2. 論理単位でステージング & コミット
-   - メッセージ形式: `<gitmoji> [TICKET-ID] <説明>`
-   - gitmojiは変更内容に最も合うものを選択
-   - 1つの論理的な変更ごとにコミット
+/commit を実行
 
 ### Step 3: PR作成
 
-1. リモートにプッシュ
-   ```bash
-   git push -u origin <branch-name>
-   ```
-
-2. PRを作成
-   ```bash
-   gh pr create --title "<title>" --body "<body>"
-   ```
-
-3. auto-mergeを有効化
-   ```bash
-   gh pr merge --auto --squash
-   ```
+/pr を実行
 
 ### Step 4: CI監視 & 修正
 
-1. CI状態を確認
-   ```bash
-   gh pr checks
-   ```
+/ci_check を実行
 
-2. 失敗時の対応（成功するまで繰り返し、最大5回）
-   - `gh run view <run-id> --log-failed` でログ取得
-   - エラーを解析して修正
-   - `🐛 fix: <内容>` でコミット & プッシュ
-   - 再度CI状態を確認
+失敗時は修正して再度 /ci_check を実行（成功するまで繰り返し、最大5回）
 
-3. 5回失敗したらユーザーに報告して中断
+5回失敗したらユーザーに報告して中断
 
 ### Step 5: マージ確認
 
-1. マージ状態を確認
-   ```bash
-   gh pr view --json state,mergedAt
-   ```
-
-2. auto-mergeが完了するまで待機
+/merge_wait を実行
 
 ### Step 6: クリーンアップ
 
-1. mainブランチに移動
-   ```bash
-   git checkout main
-   ```
-
-2. 最新化
-   ```bash
-   git pull origin main
-   ```
-
-3. 作業ブランチを削除
-   ```bash
-   git branch -d <branch-name>
-   ```
+/branch_cleanup を実行
 
 ## 完了報告
 
