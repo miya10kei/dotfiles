@@ -20,7 +20,7 @@ function tmux_popup() {
 }
 
 function tmux_dev_layout() {
-  tmux split-window -v -l "35%" -c "#{pane_current_path}"
+  tmux split-window -v -l "45%" -c "#{pane_current_path}"
 
   tmux select-pane -t 1
   tmux split-window -h -l "30%" -c "#{pane_current_path}"
