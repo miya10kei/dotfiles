@@ -13,7 +13,8 @@ description: Git Commitをおこなう
 ## タスクの詳細
 
 * コミットタイトルは「{チケットID} {gitmoji} {要約}」の形式とすること
-* チケットIDが「feature/XXXX-1234」の形式の場合のみ「XXXX-1234」を埋め込むこと。
+* ブランチ名が「<type>/XXXX-1234」の形式の場合、「XXXX-1234」を埋め込むこと
+  * type: feature, fix, refactor, docs, chore など
   * チケットIDが存在しない場合は省略すること
 * タイトルの先頭には変更内容に合わせて「gitmoji（<https://gitmoji.dev/>）」を付与すること
 * [gitmoji](https://gitmoji.dev/)は変更内容に最もあったものを1つだけ選択すること
