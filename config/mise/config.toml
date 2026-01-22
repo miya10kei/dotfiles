@@ -47,6 +47,7 @@ stack = "latest"
 "github:eza-community/eza" = "latest"
 
 "npm:@anthropic-ai/claude-code" = "latest"
+"npm:@openai/codex" = "latest"
 
 "pipx:aws-sam-cli" = "latest"
 "pipx:pgcli" = "latest"
