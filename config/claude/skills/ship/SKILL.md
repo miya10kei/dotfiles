@@ -1,7 +1,6 @@
 ---
 name: ship
 description: コード変更をブランチ作成からマージまで一貫して実行する
-context: fork
 ---
 
 # Ship Workflow
