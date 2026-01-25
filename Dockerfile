@@ -60,33 +60,15 @@ WORKDIR ${HOME}
 FROM builder AS mise
 ARG UNAME
 ARG GNAME
-ARG UID
-ARG GID
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# mise install
 RUN curl https://mise.run | sh
-
 ENV PATH="${HOME}/.local/bin:${PATH}"
 
-# Copy mise config and tasks
 COPY --chown="${UNAME}:${GNAME}" ./config/mise/ ${HOME}/.config/mise/
-
-# Lua plugin (Luarocks support)
-RUN mise plugins install lua https://github.com/mise-plugins/mise-lua.git
-
-# ghcup plugin (for ghc, cabal, stack)
-RUN mise plugins install ghc https://github.com/mise-plugins/mise-ghcup.git \
-    && mise plugins install cabal https://github.com/mise-plugins/mise-ghcup.git \
-    && mise plugins install stack https://github.com/mise-plugins/mise-ghcup.git
-
-# Install all tools (languages + CLI tools from config.toml)
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
     export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
-    mise install && \
-    mise run install-bins
+    mise install
 
-# Output directory
 RUN mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share" "${HOME}/out/${HOME}/.config" \
     && cp "${HOME}/.local/bin/mise" "${HOME}/out/${HOME}/.local/bin/" \
     && mv "${HOME}/.local/share/mise" "${HOME}/out/${HOME}/.local/share/" \
@@ -197,7 +179,7 @@ COPY --chown="${UNAME}:${GNAME}" ./Makefile.d    $HOME/.dotfiles/Makefile.d
 WORKDIR $HOME/.dotfiles
 
 RUN eval "$(mise activate bash)" \
-  && pip --version
+  && mise run install-bins
 
 RUN eval "$(mise activate bash)" \
   && make setup-nvim
