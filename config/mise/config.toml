@@ -46,7 +46,6 @@ stack = "latest"
 "github:denisidoro/navi" = "latest"
 "github:eza-community/eza" = "latest"
 
-"npm:@anthropic-ai/claude-code" = "latest"
 "npm:@openai/codex" = "latest"
 
 "pipx:aws-sam-cli" = "latest"
@@ -61,5 +60,9 @@ experimental = false
 not_found_auto_install = true
 
 [tasks.install-bins]
-depends = ["install-coderabbit", "install-session-manager"]
+depends = ["install-claude-code", "install-coderabbit", "install-session-manager"]
 description = "Install all script-based tools"
+
+[tasks.install-claude-code]
+description = "Install Claude Code CLI"
+run = "curl -fsSL https://claude.ai/install.sh | bash"
