@@ -1,6 +1,12 @@
 [env]
 ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
 
+[plugins]
+lua   = "https://github.com/mise-plugins/mise-lua.git"
+ghc   = "https://github.com/mise-plugins/mise-ghcup.git"
+cabal = "https://github.com/mise-plugins/mise-ghcup.git"
+stack = "https://github.com/mise-plugins/mise-ghcup.git"
+
 [tools]
 bun       = "latest"
 deno      = "latest"
