@@ -1,0 +1,14 @@
+*
+
+!commands
+!commands/*
+!hooks
+!hooks/*
+!scripts
+!scripts/*
+!skills
+!skills/**
+
+!.gitignore
+!CLAUDE.md
+!settings.json
