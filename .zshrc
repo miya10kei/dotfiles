@@ -71,6 +71,7 @@ function main() {
     if [[ -e /.dockerenv ]]; then
         if [[ $$ = 1 ]]; then
             if [[ -e $HOME/.dotfiles/Makefile ]]; then
+                eval "$(mise activate zsh)"
                 pushd $HOME/.dotfiles
                 make --always-make --makefile $HOME/.dotfiles/Makefile setup4d
                 popd
@@ -113,13 +114,12 @@ function main() {
     # --- plugin ---
     # --------------
 
-    if builtin command -v sheldon > /dev/null 2>&1; then
-        eval "$(sheldon source)"
-    fi
-
-    # mise
     if builtin command -v mise > /dev/null 2>&1; then
         eval "$(mise activate zsh)"
+    fi
+
+    if builtin command -v sheldon > /dev/null 2>&1; then
+        eval "$(sheldon source)"
     fi
 
     autoload -Uz add-zsh-hook
