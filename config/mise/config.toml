@@ -52,6 +52,7 @@ stack = "latest"
 "github:denisidoro/navi" = "latest"
 "github:eza-community/eza" = "latest"
 
+"npm:@githubnext/github-copilot-cli" = "latest"
 "npm:@openai/codex" = "latest"
 
 "pipx:aws-sam-cli" = "latest"
@@ -72,3 +73,7 @@ description = "Install all script-based tools"
 [tasks.install-claude-code]
 description = "Install Claude Code CLI"
 run = "curl -fsSL https://claude.ai/install.sh | bash"
+
+[tasks.install-coderabbit]
+description = "Install CodeRabbit CLI"
+run = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
