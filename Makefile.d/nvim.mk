@@ -14,4 +14,4 @@ install-mason-pkg:
 
 .PHONY: install-treesitter-pkg
 install-treesitter-pkg:
-	nvim --headless -c 'lua require("lazy").load({plugins={"nvim-treesitter"}})' -c 'TSUpdateSync' -c 'qa'
+	nvim --headless -c 'lua require("lazy").load({plugins={"nvim-treesitter"}})' -c 'TSInstallNeeded' -c 'qa'
