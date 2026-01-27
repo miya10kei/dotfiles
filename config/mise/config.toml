@@ -74,6 +74,7 @@ stack = "latest"
 [settings]
 experimental = false
 not_found_auto_install = true
+trusted_config_paths = ["~/dev"]
 
 [tasks.install-bins]
 depends = ["install-claude-code", "install-coderabbit", "install-session-manager"]
