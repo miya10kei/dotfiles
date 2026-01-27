@@ -2,8 +2,6 @@ shell = "zsh"
 
 [plugins]
 
-[plugins.zsh-autoenv]
-github = "Tarrasch/zsh-autoenv"
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 #[plugins.zsh-completions]

@@ -38,6 +38,7 @@
       "Bash(sam validate:*)",
       "Bash(uv run ruff:*)",
       "Bash(uv run pytest:*)",
+      "Bash(uv sync:*)",
       "List",
       "Read",
       "Search",
