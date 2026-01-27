@@ -10,11 +10,13 @@
       "Bash(cat:*)",
       "Bash(echo:*)",
       "Bash(find:*)",
+      "Bash(gh pr checks:*)",
       "Bash(gh pr create:*)",
       "Bash(gh pr diff:*)",
       "Bash(gh pr list:*)",
       "Bash(gh pr merge --auto --squash)",
       "Bash(gh pr view:*)",
+      "Bash(gh run view:*)",
       "Bash(git add:*)",
       "Bash(git branch:*)",
       "Bash(git checkout:*)",
@@ -145,7 +147,8 @@
     "gopls-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   },
   "language": "Japanese",
   "alwaysThinkingEnabled": true
