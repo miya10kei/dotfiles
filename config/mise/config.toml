@@ -8,59 +8,68 @@ cabal = "https://github.com/sestrella/asdf-ghcup.git"
 stack = "https://github.com/sestrella/asdf-ghcup.git"
 
 [tools]
-bun       = "latest"
-deno      = "latest"
-go        = "latest"
-lua       = "5.4.7"
-neovim    = "latest"
-node      = "22"
-python    = ["3.13", "3.11"]
-rust      = "latest"
-terraform = "latest"
+# Language runtimes
+bun         = "latest"
+deno        = "latest"
+go          = "latest"
+lua         = "5.4.7"
+neovim      = "latest"
+node        = "22"
+python      = ["3.13", "3.11"]
+rust        = "latest"
+terraform   = "latest"
+tree-sitter = "latest"
 
-"aqua:1password/cli" = "2.32.0"
-"aqua:docker/buildx" = "latest"
-"aqua:docker/cli" = "latest"
-"aqua:docker/compose" = "latest"
+# Haskell toolchain
 cabal = "latest"
 ghc   = "latest"
 stack = "latest"
-"aqua:astral-sh/uv" = "latest"
-"aqua:aws/aws-cli" = "latest"
-"aqua:BurntSushi/ripgrep" = "latest"
-"aqua:ajeetdsouza/zoxide" = "latest"
-"aqua:cli/cli" = "latest"
-"aqua:dalance/procs" = "latest"
-"aqua:dandavison/delta" = "latest"
-"aqua:jqlang/jq" = "latest"
-"aqua:junegunn/fzf" = "latest"
-"aqua:mikefarah/yq" = "latest"
-"aqua:muesli/duf" = "latest"
-"aqua:rhysd/actionlint" = "latest"
+
+# aqua packages
+"aqua:1password/cli"         = "2.32.0"
+"aqua:ajeetdsouza/zoxide"    = "latest"
+"aqua:astral-sh/uv"          = "latest"
+"aqua:aws/aws-cli"           = "latest"
+"aqua:BurntSushi/ripgrep"    = "latest"
+"aqua:cli/cli"               = "latest"
+"aqua:dalance/procs"         = "latest"
+"aqua:dandavison/delta"      = "latest"
+"aqua:docker/buildx"         = "latest"
+"aqua:docker/cli"            = "latest"
+"aqua:docker/compose"        = "latest"
+"aqua:haskell/ghcup-hs"      = "latest"
+"aqua:jqlang/jq"             = "latest"
+"aqua:junegunn/fzf"          = "latest"
+"aqua:mikefarah/yq"          = "latest"
+"aqua:muesli/duf"            = "latest"
+"aqua:rhysd/actionlint"      = "latest"
 "aqua:rossmacarthur/sheldon" = "latest"
-"aqua:sharkdp/bat" = "latest"
-"aqua:sharkdp/fd" = "latest"
-"aqua:starship/starship" = "latest"
+"aqua:sharkdp/bat"           = "latest"
+"aqua:sharkdp/fd"            = "latest"
+"aqua:starship/starship"     = "latest"
 "aqua:suzuki-shunsuke/pinact" = "latest"
-"aqua:sxyazi/yazi" = "latest"
-"aqua:wagoodman/dive" = "latest"
-"aqua:x-motemen/ghq" = "latest"
-"aqua:haskell/ghcup-hs" = "latest"
-"aqua:ynqa/jnv" = "latest"
+"aqua:sxyazi/yazi"           = "latest"
+"aqua:wagoodman/dive"        = "latest"
+"aqua:x-motemen/ghq"         = "latest"
+"aqua:ynqa/jnv"              = "latest"
 
+# github releases
 "github:99designs/aws-vault" = "latest"
-"github:denisidoro/navi" = "latest"
-"github:eza-community/eza" = "latest"
+"github:denisidoro/navi"     = "latest"
+"github:eza-community/eza"   = "latest"
 
+# npm packages
 "npm:@githubnext/github-copilot-cli" = "latest"
-"npm:@openai/codex" = "latest"
+"npm:@openai/codex"                  = "latest"
 
+# pipx packages
 "pipx:aws-sam-cli" = "latest"
-"pipx:pgcli" = "latest"
+"pipx:pgcli"       = "latest"
 
-"http:fzf-completion" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
+# http downloads
+"http:fzf-completion"   = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
 "http:fzf-key-bindings" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
-"http:fzf-tmux" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
+"http:fzf-tmux"         = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
 
 [settings]
 experimental = false
