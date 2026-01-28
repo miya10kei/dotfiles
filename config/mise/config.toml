@@ -2,10 +2,11 @@
 ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
 
 [plugins]
-lua   = "https://github.com/mise-plugins/mise-lua.git"
-ghc   = "https://github.com/sestrella/asdf-ghcup.git"
-cabal = "https://github.com/sestrella/asdf-ghcup.git"
-stack = "https://github.com/sestrella/asdf-ghcup.git"
+lua       = "https://github.com/mise-plugins/mise-lua.git"
+ghc       = "https://github.com/sestrella/asdf-ghcup.git"
+cabal     = "https://github.com/sestrella/asdf-ghcup.git"
+stack     = "https://github.com/sestrella/asdf-ghcup.git"
+terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 
 [tools]
 # Language runtimes
@@ -73,12 +74,17 @@ stack = "latest"
 
 [settings]
 experimental = false
+idiomatic_version_file_enable_tools = ["terraform"]
 not_found_auto_install = true
 trusted_config_paths = ["~/dev"]
 
 [tasks.install-bins]
-depends = ["install-claude-code", "install-coderabbit", "install-session-manager"]
+depends = ["install-claude-code", "install-coderabbit", "install-gh-extensions", "install-session-manager"]
 description = "Install all script-based tools"
+
+[tasks.install-gh-extensions]
+description = "Install GitHub CLI extensions"
+run = "gh extension install dlvhdr/gh-dash"
 
 [tasks.install-claude-code]
 description = "Install Claude Code CLI"

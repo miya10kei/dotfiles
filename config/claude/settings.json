@@ -8,8 +8,11 @@
   "permissions": {
     "allow": [
       "Bash(cat:*)",
+      "Bash(cd:*)",
       "Bash(echo:*)",
       "Bash(find:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr create:*)",
       "Bash(gh pr diff:*)",
@@ -31,6 +34,7 @@
       "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(ls:*)",
+      "Bash(mise:*)",
       "Bash(npm run build:*)",
       "Bash(npm run lint:*)",
       "Bash(npm run test:*)",
