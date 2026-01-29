@@ -84,6 +84,7 @@ return {
       { "<LEADER>mg", "<CMD>ObsidianSearch<CR>", mode = "n", desc = "Search" },
       { "<LEADER>mk", create_knowledge_note, mode = "n", desc = "New knowledge note" },
       { "<LEADER>ms", "<CMD>ObsidianQuickSwitch<CR>", mode = "n", desc = "Quick switch" },
+      { "<LEADER>mo", "<CMD>ObsidianTomorrow<CR>", mode = "n", desc = "Tomorrow" },
       { "<LEADER>mt", "<CMD>ObsidianToday<CR>", mode = "n", desc = "Today" },
       { "<LEADER>my", "<CMD>ObsidianYesterday<CR>", mode = "n", desc = "Yesterday" },
     },
