@@ -178,8 +178,10 @@ COPY --chown="${UNAME}:${GNAME}" ./Makefile.d    $HOME/.dotfiles/Makefile.d
 
 WORKDIR $HOME/.dotfiles
 
-RUN eval "$(mise activate bash)" \
-  && mise run install-bins
+RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
+    export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
+    eval "$(mise activate bash)" && \
+    mise run install-bins
 
 RUN eval "$(mise activate bash)" \
   && make setup-nvim
