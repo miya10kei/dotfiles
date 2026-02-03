@@ -3,32 +3,7 @@ return {
   dependencies = { "nvim-tree/nvim-web-devicons" },
   opts = {
     files = {
-      cmd = "rg --files --hidden --no-ignore "
-        .. "--glob '!**/.DS_Store' "
-        .. "--glob '!**/.aws-sam/*' "
-        .. "--glob '!**/.claude/*' "
-        .. "--glob '!**/.git/*' "
-        .. "--glob '!**/.mypy_cache/*' "
-        .. "--glob '!**/.next/*' "
-        .. "--glob '!**/.ruff_cache/*' "
-        .. "--glob '!**/.serena/*' "
-        .. "--glob '!**/.venv/*' "
-        .. "--glob '!**/__pycache__/*' "
-        .. "--glob '!**/claude/.claude.json*' "
-        .. "--glob '!**/claude/.credentials.json' "
-        .. "--glob '!**/claude/debug/*' "
-        .. "--glob '!**/claude/file-history/*' "
-        .. "--glob '!**/claude/history.jsonl' "
-        .. "--glob '!**/claude/plugins/*' "
-        .. "--glob '!**/claude/projects/*' "
-        .. "--glob '!**/claude/ide/*' "
-        .. "--glob '!**/claude/plans/*' "
-        .. "--glob '!**/claude/shell-snapshots/*' "
-        .. "--glob '!**/claude/stats-cache.json' "
-        .. "--glob '!**/claude/statsig/*' "
-        .. "--glob '!**/claude/todos/*' "
-        .. "--glob '!**/node_modules/*' "
-        .. "| sort",
+      cmd = "rg --files --hidden --glob '!**/.git/*' | sort",
     },
     winopts = {
       keymap = {
