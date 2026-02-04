@@ -39,25 +39,11 @@ return {
     branch = "main",
     lazy = false,
     build = ":TSUpdate",
-    keys = {
-      { "<Leader>zo", "zo", desc = "Open fold" },
-      { "<Leader>zc", "zc", desc = "Close fold" },
-      { "<Leader>za", "za", desc = "Toggle fold" },
-      { "<Leader>zO", "zO", desc = "Open all folds (recursive)" },
-      { "<Leader>zC", "zC", desc = "Close all folds (recursive)" },
-      { "<Leader>zR", "zR", desc = "Open all folds" },
-      { "<Leader>zM", "zM", desc = "Close all folds" },
-      { "<Leader>zj", "zj", desc = "Next fold" },
-      { "<Leader>zk", "zk", desc = "Previous fold" },
-    },
     config = function()
       vim.api.nvim_create_autocmd("FileType", {
         callback = function(args)
           pcall(vim.treesitter.start, args.buf)
           vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-          vim.wo[0][0].foldmethod = "expr"
-          vim.wo[0][0].foldlevel = 99
         end,
       })
 
