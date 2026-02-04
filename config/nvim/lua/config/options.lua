@@ -27,6 +27,7 @@ local options = {
   ignorecase = true,
   laststatus = 0,
   list = true,
+  number = true,
   listchars = {
     tab = "»-",
     trail = "-",
