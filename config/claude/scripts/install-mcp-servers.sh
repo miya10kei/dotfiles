@@ -45,11 +45,11 @@ add_or_update_mcp_server aws-knowledge --transport http aws-knowledge https://kn
 #     -e CONFLUENCE_API_TOKEN \
 #     ghcr.io/sooperset/mcp-atlassian:latest
 
-# https://github.com/oraios/serena
-add_or_update_mcp_server serena serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant
-
-# https://github.com/upstash/context7
-add_or_update_mcp_server context7 --transport http context7 https://mcp.context7.com/mcp
+# # https://github.com/oraios/serena
+# add_or_update_mcp_server serena serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant
+#
+# # https://github.com/upstash/context7
+# add_or_update_mcp_server context7 --transport http context7 https://mcp.context7.com/mcp
 
 # https://www.npmjs.com/package/figma-developer-mcp
 # add_or_update_mcp_server figma-developer-mcp figma-developer-mcp \
