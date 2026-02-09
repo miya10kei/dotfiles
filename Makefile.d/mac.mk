@@ -21,27 +21,20 @@ brew-install:
 		1password \
 		alt-tab \
 		aws-vpn-client \
-		claude \
-		deepl \
 		displaylink \
 		ghostty \
 		homerow \
 		insta360-link-controller \
 		karabiner-elements \
-		obsidian \
 		rancher \
 		raycast \
 		rectangle \
-		slack \
 		xquartz
 	brew install \
 		aws-sam-cli \
 		aws-vault \
 		awscli \
-		fzf \
-		node@22 \
-		pulseaudio \
-		uv
+		pulseaudio
 	brew cleanup --prune all
 
 .PHONY: brew-update
