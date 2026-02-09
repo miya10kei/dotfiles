@@ -157,7 +157,6 @@
     "superpowers@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
     "serena@claude-plugins-official": true
   },
   "language": "Japanese",
