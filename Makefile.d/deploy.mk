@@ -23,10 +23,10 @@ deploy-mise:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-aws
 deploy-aws: \
-	$(HOME)/.aws
+	$(HOME)/.config/aws
 
-$(HOME)/.aws:
-	ln -fns $(DOTDIR)/data-volume/aws-cli $(HOME)/.aws
+$(HOME)/.config/aws:
+	ln -fns $(DOTDIR)/config/aws $(HOME)/.config/aws
 
 
 # ----------------------------------------------------------------------------------------------------------------------

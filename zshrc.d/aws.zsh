@@ -1,3 +1,5 @@
+export AWS_CONFIG_FILE="$HOME/.config/aws/config"
+export AWS_SHARED_CREDENTIALS_FILE="$HOME/.config/aws/credentials"
 export AWS_PROFILE=in-house
 
 if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pass > /dev/null 2>&1; then
