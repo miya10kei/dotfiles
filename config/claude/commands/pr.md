@@ -13,9 +13,15 @@ description: Pull Requestを作成する
 ## 手順
 
 1. 現在のブランチを確認（git branch --show-current）
-2. 未プッシュのコミットがあればプッシュ（git push -u origin <branch>）
-3. PRを作成（gh pr create）
-4. auto-mergeを有効化（gh pr merge --auto --squash）
+2. baseブランチの最新変更を取り込む
+   1. baseブランチの最新を取得（git fetch origin <base-branch>）
+   2. 未取り込みのコミットを確認（git log HEAD..origin/<base-branch> --oneline）
+   3. 未取り込みがある場合、rebaseで取り込む（git rebase origin/<base-branch>）
+   4. コンフリクトが発生した場合はユーザーに報告し、指示を仰ぐ
+3. 未プッシュのコミットがあればプッシュ（git push -u origin <branch>）
+   - rebase後は --force-with-lease を使用する
+4. PRを作成（gh pr create）
+5. auto-mergeを有効化（gh pr merge --auto --squash）
 
 ## PRタイトル
 
