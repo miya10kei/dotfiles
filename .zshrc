@@ -7,6 +7,7 @@ function main() {
         export SHELL='/usr/bin/zsh'
     fi
     export GPG_TTY=$(tty)
+    export PAID_MCP_VAULT_BACKEND=pass
 
     # ------------
     # --- path ---
@@ -115,6 +116,7 @@ function main() {
     # --------------
 
     if builtin command -v mise > /dev/null 2>&1; then
+        export PATH="$HOME/.local/share/mise/shims:$PATH"
         eval "$(mise activate zsh)"
     fi
 
@@ -178,3 +180,9 @@ else
     main
 fi
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/miya10kei/.config/google-cloud-sdk/path.zsh.inc' ]; then . '/home/miya10kei/.config/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/miya10kei/.config/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/miya10kei/.config/google-cloud-sdk/completion.zsh.inc'; fi

@@ -151,6 +151,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libmagic1 \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
+        libatk-bridge2.0-0t64 \
+        libatk1.0-0t64 \
+        libcups2t64 \
+        libdrm2 \
+        libgbm1 \
+        libnspr4 \
+        libnss3 \
         libpq-dev \
         libxslt-dev \
         swig \

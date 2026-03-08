@@ -35,7 +35,7 @@ function quit() {
     exit
 }
 
-alias_if_exists 'cdc'       '_fzf_change_directory "ls -1D" "pwd"'
+alias_if_exists 'cdc'       '_fzf_change_directory "ls -1D $HOME/.config" "echo $HOME/.config"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'
 alias_if_exists 'cdot'      'cd $HOME/.dotfiles'
