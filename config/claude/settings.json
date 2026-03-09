@@ -8,65 +8,63 @@
   "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
-      "Bash(cargo add:*)",
-      "Bash(cargo build:*)",
-      "Bash(cargo clippy:*)",
-      "Bash(cargo doc:*)",
-      "Bash(cargo fmt:*)",
-      "Bash(cargo init:*)",
-      "Bash(cargo install:*)",
-      "Bash(cargo nextest:*)",
-      "Bash(cargo test:*)",
-      "Bash(cat:*)",
-      "Bash(cd:*)",
-      "Bash(echo:*)",
-      "Bash(find:*)",
-      "Bash(gh pr checks:*)",
-      "Bash(gh pr create:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(gh pr list:*)",
+      "Bash(cargo add *)",
+      "Bash(cargo build *)",
+      "Bash(cargo clippy *)",
+      "Bash(cargo check *)",
+      "Bash(cargo deny *)",
+      "Bash(cargo doc *)",
+      "Bash(cargo fmt *)",
+      "Bash(cargo init *)",
+      "Bash(cargo install *)",
+      "Bash(cargo nextest *)",
+      "Bash(cargo test *)",
+      "Bash(cat *)",
+      "Bash(cd *)",
+      "Bash(echo *)",
+      "Bash(find *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr list *)",
       "Bash(gh pr merge --auto --squash)",
-      "Bash(gh pr view:*)",
-      "Bash(gh run view:*)",
-      "Bash(git add:*)",
-      "Bash(git branch:*)",
-      "Bash(git checkout:*)",
-      "Bash(git commit:*)",
-      "Bash(git diff:*)",
-      "Bash(git fetch:*)",
-      "Bash(git log:*)",
-      "Bash(git pull:*)",
-      "Bash(git push:*)",
-      "Bash(git show:*)",
-      "Bash(git stash show:*)",
-      "Bash(git status:*)",
-      "Bash(grep:*)",
-      "Bash(head:*)",
-      "Bash(head:*)",
-      "Bash(ls:*)",
-      "Bash(mise:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm run lint:*)",
-      "Bash(npm run test:*)",
-      "Bash(npm run type-check:*)",
-      "Bash(npm test:*)",
-      "Bash(paplay:*)",
-      "Bash(sam validate:*)",
-      "Bash(tail:*)",
-      "Bash(uv run pytest:*)",
-      "Bash(uv run ruff:*)",
-      "Bash(uv sync:*)",
-      "Bash(wc:*)",
-      "List",
+      "Bash(gh pr view *)",
+      "Bash(gh run view *)",
+      "Bash(git add *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git commit *)",
+      "Bash(git diff *)",
+      "Bash(git fetch *)",
+      "Bash(git log *)",
+      "Bash(git pull *)",
+      "Bash(git push *)",
+      "Bash(git show *)",
+      "Bash(git stash show *)",
+      "Bash(git status *)",
+      "Bash(grep *)",
+      "Bash(head *)",
+      "Bash(ls *)",
+      "Bash(mise *)",
+      "Bash(npm run build *)",
+      "Bash(npm run lint *)",
+      "Bash(npm run test *)",
+      "Bash(npm run type-check *)",
+      "Bash(npm test *)",
+      "Bash(paplay *)",
+      "Bash(sam validate *)",
+      "Bash(tail *)",
+      "Bash(uv run pytest *)",
+      "Bash(uv run ruff *)",
+      "Bash(uv sync *)",
+      "Bash(wc *)",
+      "Glob",
+      "Grep",
       "Read",
-      "Search",
       "WebFetch",
       "WebSearch",
-      "mcp__atlassian__confluence_get_page",
       "mcp__aws-knowledge",
-      "mcp__bedrock-knowledge",
       "mcp__context7",
-      "mcp__gemini-cli__googleSearch",
       "mcp__github__get_commit",
       "mcp__github__get_file_contents",
       "mcp__github__get_label",
@@ -90,8 +88,6 @@
       "mcp__github__search_pull_requests",
       "mcp__github__search_repositories",
       "mcp__github__search_users",
-      "mcp__ide",
-      "mcp__pd-design-system-mcp",
       "mcp__playwright",
       "mcp__serena"
     ],
@@ -107,52 +103,46 @@
       "mcp__github__request_copilot_review"
     ]
   },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python $HOME/.config/claude/hooks/claude-hook.py"
-          }
-        ]
-      }
-    ]
-  },
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "",
+          "hooks": [
+            { "type": "command", "command": "ccargus-notify processing" }
+          ]
+        }
+      ],
+      "PermissionRequest": [
+        {
+          "matcher": "",
+          "hooks": [
+            { "type": "command", "command": "ccargus-notify permission" }
+          ]
+        }
+      ],
+      "Notification": [
+        {
+          "matcher": "idle_prompt",
+          "hooks": [
+            { "type": "command", "command": "ccargus-notify waiting_for_input" }
+          ]
+        },
+        {
+          "matcher": "elicitation_dialog",
+          "hooks": [
+            { "type": "command", "command": "ccargus-notify permission" }
+          ]
+        }
+      ],
+      "Stop": [
+        {
+          "matcher": "",
+          "hooks": [
+            { "type": "command", "command": "ccargus-notify waiting_for_input" }
+          ]
+        }
+      ]
+    },
   "statusLine": {
     "type": "command",
     "command": "bun x ccusage statusline"
