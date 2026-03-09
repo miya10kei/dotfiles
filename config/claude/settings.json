@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
@@ -103,49 +104,60 @@
       "mcp__github__request_copilot_review"
     ]
   },
-    "hooks": {
-      "PreToolUse": [
-        {
-          "matcher": "",
-          "hooks": [
-            { "type": "command", "command": "ccargus-notify processing" }
-          ]
-        }
-      ],
-      "PermissionRequest": [
-        {
-          "matcher": "",
-          "hooks": [
-            { "type": "command", "command": "ccargus-notify permission" }
-          ]
-        }
-      ],
-      "Notification": [
-        {
-          "matcher": "idle_prompt",
-          "hooks": [
-            { "type": "command", "command": "ccargus-notify waiting_for_input" }
-          ]
-        },
-        {
-          "matcher": "elicitation_dialog",
-          "hooks": [
-            { "type": "command", "command": "ccargus-notify permission" }
-          ]
-        }
-      ],
-      "Stop": [
-        {
-          "matcher": "",
-          "hooks": [
-            { "type": "command", "command": "ccargus-notify waiting_for_input" }
-          ]
-        }
-      ]
-    },
-  "statusLine": {
-    "type": "command",
-    "command": "bun x ccusage statusline"
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccargus-notify processing"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccargus-notify permission"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccargus-notify waiting_for_input"
+          }
+        ]
+      },
+      {
+        "matcher": "elicitation_dialog",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccargus-notify permission"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccargus-notify waiting_for_input"
+          }
+        ]
+      }
+    ]
   },
   "enabledPlugins": {
     "code-simplifier@claude-plugins-official": true,
@@ -160,6 +172,16 @@
     "serena@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true
   },
+  "cleanupPeriodDays": 14,
+  "sandbox": {
+    "filesystem": {
+      "denyRead": [
+        "~/.aws/credentials",
+        "~/.gnupg"
+      ]
+    }
+  },
+  "showTurnDuration": true,
   "language": "Japanese",
   "alwaysThinkingEnabled": true
 }
