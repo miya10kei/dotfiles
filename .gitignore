@@ -1,6 +1,7 @@
 *.zwc
 .DS_Store
-.claude
+.claude/*
+!.claude/settings.json
 .claude.json
 data-volume
 install-mcp-servers-work.sh
