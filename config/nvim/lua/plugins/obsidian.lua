@@ -17,7 +17,7 @@ end
 if obsidian_exists then
   autocmd.create_group("ObsidianAutoSync", {
     {
-      event = "BufDelete",
+      event = "BufWritePost",
       opts = {
         pattern = obsidian_dir .. "/*",
         callback = function()
