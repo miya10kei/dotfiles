@@ -139,6 +139,14 @@
       "Bash(gh api * --field *)",
       "Bash(gh api --input *)",
       "Bash(gh api * --input *)",
+      "Bash(git push * main)",
+      "Bash(git push * main *)",
+      "Bash(git push * master)",
+      "Bash(git push * master *)",
+      "Bash(git push * develop)",
+      "Bash(git push * develop *)",
+      "Bash(git push * staging)",
+      "Bash(git push * staging *)",
       "NotebookEdit",
       "NotebookRead"
     ]
