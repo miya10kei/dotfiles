@@ -103,6 +103,15 @@ $(HOME)/.gitattributes:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-gws
+deploy-gws: \
+	$(HOME)/.config/gws
+
+$(HOME)/.config/gws:
+	ln -fns $(DOTDIR)/config/gws $(HOME)/.config/gws
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-github-copilot
 deploy-github-copilot: \
 	$(HOME)/.config/github-copilot

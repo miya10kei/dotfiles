@@ -32,9 +32,12 @@ stack = "latest"
 "aqua:astral-sh/uv"          = "latest"
 "aqua:aws/aws-cli"           = "latest"
 "aqua:BurntSushi/ripgrep"    = "latest"
+"aqua:ClementTsang/bottom"   = "latest"
 "aqua:cli/cli"               = "latest"
 "aqua:dalance/procs"         = "latest"
 "aqua:dandavison/delta"      = "latest"
+"aqua:evilmartians/lefthook" = "latest"
+"aqua:gitleaks/gitleaks"     = "latest"
 "aqua:docker/buildx"         = "latest"
 "aqua:docker/cli"            = "latest"
 "aqua:docker/compose"        = "latest"
@@ -57,8 +60,9 @@ stack = "latest"
 
 # github releases
 "github:99designs/aws-vault" = "latest"
-"github:denisidoro/navi"     = "latest"
-"github:eza-community/eza"   = "latest"
+"github:denisidoro/navi"       = "latest"
+"github:eza-community/eza"     = "latest"
+"github:googleworkspace/cli"   = "latest"
 "github:steipete/gogcli"     = "latest"
 
 # npm packages
@@ -67,8 +71,9 @@ stack = "latest"
 "npm:pnpm"                           = "latest"
 
 # pipx packages
-"pipx:aws-sam-cli" = "latest"
-"pipx:pgcli"       = "latest"
+"pipx:aws-sam-cli"       = "latest"
+"pipx:git-filter-repo"  = "latest"
+"pipx:pgcli"             = "latest"
 
 # http downloads
 "http:fzf-completion"   = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
