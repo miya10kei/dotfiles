@@ -14,6 +14,10 @@ keymap("n", "<LEADER>p", ": <C-u>bp<CR>", opts.silent)
 keymap("n", "j", "gj", opts.silent)
 keymap("n", "k", "gk", opts.silent)
 keymap("n", "q", "<NOP>", opts.silent)
+keymap("n", "x", '"_x', opts.silent)
+keymap("n", "X", '"_X', opts.silent)
+keymap("x", "x", '"_x', opts.silent)
+keymap("x", "X", '"_X', opts.silent)
 keymap("n", "<C-n>", function()
   return vim.o.number == true and ":<C-u>set nonumber<CR>" or ":<C-u>set number<CR>"
 end, {
