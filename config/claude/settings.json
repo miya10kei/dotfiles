@@ -99,10 +99,11 @@
       "Bash(pnpm run type-check *)",
       "Bash(pnpm test *)",
       "Bash(pwd)",
+      "Bash(readlink *)",
       "Bash(sam validate *)",
       "Bash(sort *)",
-      "Bash(stylua *)",
       "Bash(split*)",
+      "Bash(stylua *)",
       "Bash(tail *)",
       "Bash(test *)",
       "Bash(tmux *)",
@@ -162,6 +163,15 @@
           {
             "type": "command",
             "command": "ccargus-notify processing"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "ccjanus"
           }
         ]
       }
