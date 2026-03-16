@@ -79,6 +79,7 @@ stack = "latest"
 "http:fzf-completion"   = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
 "http:fzf-key-bindings" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
 "http:fzf-tmux"         = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
+"ubi:miya10kei/ccjanus" = "latest"
 
 [settings]
 experimental = false

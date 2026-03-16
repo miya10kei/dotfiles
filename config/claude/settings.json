@@ -102,6 +102,7 @@
       "Bash(sam validate *)",
       "Bash(sort *)",
       "Bash(stylua *)",
+      "Bash(split*)",
       "Bash(tail *)",
       "Bash(test *)",
       "Bash(tmux *)",
