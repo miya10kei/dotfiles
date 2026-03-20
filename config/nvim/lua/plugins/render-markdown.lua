@@ -7,6 +7,7 @@ return {
     opts = {
       enabled = false,
       file_types = { "markdown", "Avante" },
+      sign = { enabled = false },
     },
     keys = {
       {
