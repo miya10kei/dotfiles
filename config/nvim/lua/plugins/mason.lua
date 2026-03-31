@@ -28,6 +28,7 @@ return {
         "marksman",
         "pyright",
         "rust-analyzer",
+        "taplo",
         "terraform-ls",
         "typescript-language-server",
         "yaml-language-server",

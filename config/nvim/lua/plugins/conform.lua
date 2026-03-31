@@ -46,6 +46,7 @@ return {
           markdown = { "markdownlint" },
           python = { "ruff_organize_imports", "ruff_format" },
           terraform = { "terraform_fmt" },
+          toml = { "taplo" },
           tf = { "terraform_fmt" },
           yaml = { "yamlfmt" },
           ["_"] = { "trim_whitespace" },

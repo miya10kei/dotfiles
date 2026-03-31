@@ -27,77 +27,79 @@ ghc   = "latest"
 stack = "latest"
 
 # aqua packages
-"aqua:1password/cli"         = "2.32.0"
-"aqua:ajeetdsouza/zoxide"    = "latest"
-"aqua:astral-sh/uv"          = "latest"
-"aqua:aws/aws-cli"           = "latest"
-"aqua:BurntSushi/ripgrep"    = "latest"
-"aqua:ClementTsang/bottom"   = "latest"
-"aqua:cli/cli"               = "latest"
-"aqua:dalance/procs"         = "latest"
-"aqua:dandavison/delta"      = "latest"
-"aqua:evilmartians/lefthook" = "latest"
-"aqua:gitleaks/gitleaks"     = "latest"
-"aqua:docker/buildx"         = "latest"
-"aqua:docker/cli"            = "latest"
-"aqua:docker/compose"        = "latest"
-"aqua:haskell/ghcup-hs"      = "latest"
-"aqua:jqlang/jq"             = "latest"
-"aqua:junegunn/fzf"          = "latest"
-"aqua:mikefarah/yq"          = "latest"
-"aqua:muesli/duf"            = "latest"
-"aqua:rhysd/actionlint"      = "latest"
-"aqua:rossmacarthur/sheldon" = "latest"
-"aqua:sharkdp/bat"           = "latest"
-"aqua:sharkdp/fd"            = "latest"
-"aqua:starship/starship"     = "latest"
+"aqua:1password/cli"          = "2.32.0"
+"aqua:ajeetdsouza/zoxide"     = "latest"
+"aqua:astral-sh/uv"           = "latest"
+"aqua:aws/aws-cli"            = "latest"
+"aqua:BurntSushi/ripgrep"     = "latest"
+"aqua:ClementTsang/bottom"    = "latest"
+"aqua:cli/cli"                = "latest"
+"aqua:dalance/procs"          = "latest"
+"aqua:dandavison/delta"       = "latest"
+"aqua:evilmartians/lefthook"  = "latest"
+"aqua:gitleaks/gitleaks"      = "latest"
+"aqua:docker/buildx"          = "latest"
+"aqua:docker/cli"             = "latest"
+"aqua:docker/compose"         = "latest"
+"aqua:haskell/ghcup-hs"       = "latest"
+"aqua:jqlang/jq"              = "latest"
+"aqua:junegunn/fzf"           = "latest"
+"aqua:mikefarah/yq"           = "latest"
+"aqua:muesli/duf"             = "latest"
+"aqua:rhysd/actionlint"       = "latest"
+"aqua:rossmacarthur/sheldon"  = "latest"
+"aqua:sharkdp/bat"            = "latest"
+"aqua:sharkdp/fd"             = "latest"
+"aqua:starship/starship"      = "latest"
 "aqua:suzuki-shunsuke/pinact" = "latest"
-"aqua:sxyazi/yazi"           = "latest"
-"aqua:vi/websocat"           = "latest"
-"aqua:wagoodman/dive"        = "latest"
-"aqua:x-motemen/ghq"         = "latest"
-"aqua:ynqa/jnv"              = "latest"
+"aqua:sxyazi/yazi"            = "latest"
+"aqua:vi/websocat"            = "latest"
+"aqua:wagoodman/dive"         = "latest"
+"aqua:x-motemen/ghq"          = "latest"
+"aqua:ynqa/jnv"               = "latest"
 
 # github releases
 "github:99designs/aws-vault" = "latest"
-"github:denisidoro/navi"       = "latest"
-"github:eza-community/eza"     = "latest"
-"github:googleworkspace/cli"   = "latest"
+"github:denisidoro/navi"     = "latest"
+"github:eza-community/eza"   = "latest"
+"github:googleworkspace/cli" = "latest"
 
 # npm packages
 "npm:@githubnext/github-copilot-cli" = "latest"
+"npm:mcp-hub"                        = "latest"
 "npm:@openai/codex"                  = "latest"
 "npm:pnpm"                           = "latest"
 
 # pipx packages
-"pipx:aws-sam-cli"       = "latest"
-"pipx:git-filter-repo"  = "latest"
-"pipx:pgcli"             = "latest"
+"pipx:aws-sam-cli"     = "latest"
+"pipx:git-filter-repo" = "latest"
+"pipx:pgcli"           = "latest"
 
 # http downloads
-"http:fzf-completion"   = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
-"http:fzf-key-bindings" = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
-"http:fzf-tmux"         = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
-"ubi:miya10kei/ccjanus" = "latest"
+"http:fzf-completion"      = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
+"http:fzf-key-bindings"    = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
+"http:fzf-tmux"            = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
+"github:miya10kei/ccargus" = "latest"
+"github:miya10kei/ccjanus" = "latest"
 
 [settings]
-experimental = false
+experimental                        = false
 idiomatic_version_file_enable_tools = ["terraform"]
-not_found_auto_install = true
-trusted_config_paths = ["~/dev"]
+not_found_auto_install              = true
+trusted_config_paths                = ["~/dev"]
 
 [tasks.install-bins]
-depends = ["install-claude-code", "install-coderabbit", "install-gh-extensions", "install-session-manager"]
+depends     = ["install-claude-code", "install-coderabbit", "install-gh-extensions", "install-session-manager"]
 description = "Install all script-based tools"
 
 [tasks.install-gh-extensions]
 description = "Install GitHub CLI extensions"
-run = "gh extension install dlvhdr/gh-dash"
+run         = "gh extension install dlvhdr/gh-dash"
 
 [tasks.install-claude-code]
 description = "Install Claude Code CLI"
-run = "curl -fsSL https://claude.ai/install.sh | bash"
+run         = "curl -fsSL https://claude.ai/install.sh | bash"
 
 [tasks.install-coderabbit]
 description = "Install CodeRabbit CLI"
-run = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
+run         = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
