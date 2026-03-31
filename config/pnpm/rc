@@ -1,0 +1,3 @@
+engine-strict=true
+progress=false
+registry=https://npm.flatt.tech/
