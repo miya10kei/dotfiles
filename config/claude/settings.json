@@ -247,5 +247,10 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "showTurnDuration": true
+  "showTurnDuration": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0
+  }
 }
