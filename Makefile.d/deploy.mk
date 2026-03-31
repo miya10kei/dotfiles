@@ -267,6 +267,15 @@ $(HOME)/.password-store:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-taplo
+deploy-taplo: \
+	$(HOME)/.config/taplo
+
+$(HOME)/.config/taplo:
+	ln -fns $(DOTDIR)/config/taplo $(HOME)/.config/taplo
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-starship
 deploy-starship: \
 	$(HOME)/.config/starship.toml

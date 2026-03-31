@@ -49,11 +49,8 @@ function main() {
     fi
     export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/.npmrc"
 
-    # ----------------
-    # --- Safe Chain -
-    # ----------------
-    if [[ -e $HOME/.safe-chain/scripts/init-posix.sh ]]; then
-        source $HOME/.safe-chain/scripts/init-posix.sh
+    if builtin command -v taplo > /dev/null 2>&1; then
+        export TAPLO_CONFIG="$HOME/.config/taplo/taplo.toml"
     fi
 
     # ------------------

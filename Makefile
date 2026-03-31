@@ -55,6 +55,7 @@ setup4d: \
 	deploy-pip \
 	deploy-sheldon \
 	deploy-starship \
+	deploy-taplo \
 	deploy-tmux \
 	deploy-uv \
 	deploy-yamlfmt \
