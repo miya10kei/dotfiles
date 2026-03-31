@@ -193,6 +193,15 @@ $(HOME)/.config/memo:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-npm
+deploy-npm: \
+	$(HOME)/.config/npm
+
+$(HOME)/.config/npm:
+	ln -fns $(DOTDIR)/config/npm $(HOME)/.config/npm
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-nvim
 deploy-nvim: \
 	$(HOME)/.config/nvim
@@ -229,6 +238,24 @@ $(HOME)/.local/share/sheldon/plugins.lock:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-pip
+deploy-pip: \
+	$(HOME)/.config/pip
+
+$(HOME)/.config/pip:
+	ln -fns $(DOTDIR)/config/pip $(HOME)/.config/pip
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-pnpm
+deploy-pnpm: \
+	$(HOME)/.config/pnpm
+
+$(HOME)/.config/pnpm:
+	ln -fns $(DOTDIR)/config/pnpm $(HOME)/.config/pnpm
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-pass
 deploy-pass: \
 	passwordstore
@@ -255,6 +282,15 @@ deploy-tmux: \
 
 $(HOME)/.config/tmux:
 	ln -fns $(DOTDIR)/config/tmux $(HOME)/.config/tmux
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-uv
+deploy-uv: \
+	$(HOME)/.config/uv
+
+$(HOME)/.config/uv:
+	ln -fns $(DOTDIR)/config/uv $(HOME)/.config/uv
 
 
 # ----------------------------------------------------------------------------------------------------------------------

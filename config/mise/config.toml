@@ -63,7 +63,6 @@ stack = "latest"
 "github:denisidoro/navi"       = "latest"
 "github:eza-community/eza"     = "latest"
 "github:googleworkspace/cli"   = "latest"
-"github:steipete/gogcli"     = "latest"
 
 # npm packages
 "npm:@githubnext/github-copilot-cli" = "latest"

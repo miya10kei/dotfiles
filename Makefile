@@ -48,11 +48,15 @@ setup4d: \
 	deploy-mcphub \
 	deploy-memolist \
 	deploy-mise \
+	deploy-npm \
 	deploy-nvim \
+	deploy-pnpm \
 	deploy-pass \
+	deploy-pip \
 	deploy-sheldon \
 	deploy-starship \
 	deploy-tmux \
+	deploy-uv \
 	deploy-yamlfmt \
 	deploy-zoxide \
 	deploy-claude \

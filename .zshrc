@@ -47,6 +47,7 @@ function main() {
         export CPPFLAGS="-I/opt/homebrew/opt/node@22/include"
         add_path "/opt/homebrew/opt/node@22/bin"
     fi
+    export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/.npmrc"
 
     # ----------------
     # --- Safe Chain -
