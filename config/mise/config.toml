@@ -62,6 +62,7 @@ stack = "latest"
 "github:99designs/aws-vault" = "latest"
 "github:denisidoro/navi"     = "latest"
 "github:eza-community/eza"   = "latest"
+"github:k1LoW/mo"            = "latest"
 "github:googleworkspace/cli" = "latest"
 
 # npm packages
@@ -83,10 +84,10 @@ stack = "latest"
 "github:miya10kei/ccjanus" = "latest"
 
 [settings]
-experimental                        = false
-idiomatic_version_file_enable_tools = ["terraform"]
-not_found_auto_install              = true
-trusted_config_paths                = ["~/dev"]
+experimental           = false
+idiomatic_version_file = true
+not_found_auto_install = true
+trusted_config_paths   = ["~/dev"]
 
 [tasks.install-bins]
 depends     = ["install-claude-code", "install-coderabbit", "install-gh-extensions", "install-session-manager"]

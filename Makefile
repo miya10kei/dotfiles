@@ -43,6 +43,7 @@ setup4d: \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \
+	deploy-gws \
 	deploy-markdownlint \
 	deploy-mcpauth \
 	deploy-mcphub \

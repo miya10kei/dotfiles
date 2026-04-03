@@ -8,6 +8,7 @@ function main() {
     fi
     export GPG_TTY=$(tty)
     export PAID_MCP_VAULT_BACKEND=pass
+    # export TAKUMI_GUARD_TOKEN=$(pass show takumi-guard/token)
 
     # ------------
     # --- path ---
@@ -116,6 +117,12 @@ function main() {
     if builtin command -v mise > /dev/null 2>&1; then
         export PATH="$HOME/.local/share/mise/shims:$PATH"
         eval "$(mise activate zsh)"
+    fi
+
+    if builtin command -v uv > /dev/null 2>&1; then
+        if [[ ! -e "$HOME/.local/share/uv/credentials/credentials.toml" ]]; then
+            # uv auth login pypi.flatt.tech --token "$TAKUMI_GUARD_TOKEN"
+        fi
     fi
 
     if builtin command -v sheldon > /dev/null 2>&1; then
