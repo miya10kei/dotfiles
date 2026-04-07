@@ -1,0 +1,74 @@
+{
+  "version": 3,
+  "lines": [
+    [
+      {
+        "id": "1",
+        "type": "model",
+        "color": "cyan"
+      },
+      {
+        "id": "2",
+        "type": "separator"
+      },
+      {
+        "id": "61d11c7e-d80c-418f-ae8c-08c3b9dec645",
+        "type": "context-percentage-usable"
+      },
+      {
+        "id": "1bdc4d14-c223-448b-bafa-03ed8f5a779e",
+        "type": "separator"
+      },
+      {
+        "id": "b821dce2-9c09-4b8b-8c54-f2bdec05ab50",
+        "type": "session-usage",
+        "color": "brightMagenta"
+      },
+      {
+        "id": "6",
+        "type": "separator"
+      },
+      {
+        "id": "89c4f718-e1fd-4c58-a2e5-8b89aae09103",
+        "type": "reset-timer",
+        "color": "brightMagenta"
+      },
+      {
+        "id": "4173b648-b3ba-47ac-830d-2f7544147fa5",
+        "type": "separator"
+      },
+      {
+        "id": "643b4528-df4c-4737-916a-13abc494416c",
+        "type": "weekly-usage",
+        "color": "brightBlue"
+      },
+      {
+        "id": "1c88d45f-f6b0-4234-836c-72e5782e2f53",
+        "type": "separator"
+      },
+      {
+        "id": "e254685b-b855-4083-ac92-ee1330ed84d1",
+        "type": "weekly-reset-timer"
+      }
+    ],
+    [],
+    []
+  ],
+  "flexMode": "full-minus-40",
+  "compactThreshold": 60,
+  "colorLevel": 2,
+  "inheritSeparatorColors": false,
+  "globalBold": false,
+  "powerline": {
+    "enabled": false,
+    "separators": [
+      ""
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
+    "startCaps": [],
+    "endCaps": [],
+    "autoAlign": false
+  }
+}

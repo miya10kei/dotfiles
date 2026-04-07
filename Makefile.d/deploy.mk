@@ -30,6 +30,15 @@ $(HOME)/.config/aws:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-ccstatusline
+deploy-ccstatusline: \
+	$(HOME)/.config/ccstatusline
+
+$(HOME)/.config/ccstatusline:
+	ln -fns $(DOTDIR)/config/ccstatusline $(HOME)/.config/ccstatusline
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-coderabbit
 deploy-coderabbit: \
 	$(HOME)/.coderabbit \
@@ -244,15 +253,6 @@ deploy-pip: \
 
 $(HOME)/.config/pip:
 	ln -fns $(DOTDIR)/config/pip $(HOME)/.config/pip
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-pnpm
-deploy-pnpm: \
-	$(HOME)/.config/pnpm
-
-$(HOME)/.config/pnpm:
-	ln -fns $(DOTDIR)/config/pnpm $(HOME)/.config/pnpm
 
 
 # ----------------------------------------------------------------------------------------------------------------------
