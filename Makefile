@@ -52,7 +52,6 @@ setup4d: \
 	deploy-mise \
 	deploy-npm \
 	deploy-nvim \
-	deploy-pnpm \
 	deploy-pass \
 	deploy-pip \
 	deploy-sheldon \

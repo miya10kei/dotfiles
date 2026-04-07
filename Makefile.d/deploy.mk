@@ -256,15 +256,6 @@ $(HOME)/.config/pip:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-pnpm
-deploy-pnpm: \
-	$(HOME)/.config/pnpm
-
-$(HOME)/.config/pnpm:
-	ln -fns $(DOTDIR)/config/pnpm $(HOME)/.config/pnpm
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-pass
 deploy-pass: \
 	passwordstore
