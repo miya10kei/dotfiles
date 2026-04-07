@@ -8,7 +8,11 @@ function main() {
     fi
     export GPG_TTY=$(tty)
     export PAID_MCP_VAULT_BACKEND=pass
-    # export TAKUMI_GUARD_TOKEN=$(pass show takumi-guard/token)
+    export TAKUMI_GUARD_TOKEN=$(pass show takumi-guard/token 2>/dev/null || echo "")
+    if [[ -n "$TAKUMI_GUARD_TOKEN" ]]; then
+        export UV_DEFAULT_INDEX="https://token:${TAKUMI_GUARD_TOKEN}@pypi.flatt.tech/simple/"
+        export PIP_INDEX_URL="https://token:${TAKUMI_GUARD_TOKEN}@pypi.flatt.tech/simple/"
+    fi
 
     # ------------
     # --- path ---
