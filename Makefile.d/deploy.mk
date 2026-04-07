@@ -30,6 +30,15 @@ $(HOME)/.config/aws:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-ccstatusline
+deploy-ccstatusline: \
+	$(HOME)/.config/ccstatusline
+
+$(HOME)/.config/ccstatusline:
+	ln -fns $(DOTDIR)/config/ccstatusline $(HOME)/.config/ccstatusline
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-coderabbit
 deploy-coderabbit: \
 	$(HOME)/.coderabbit \

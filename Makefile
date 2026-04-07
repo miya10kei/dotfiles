@@ -35,6 +35,7 @@ build-dev-env:
 setup4d: \
 	delete-nvimrc \
 	deploy-aws \
+	deploy-ccstatusline \
 	deploy-coderabbit \
 	deploy-docker \
 	deploy-editorconfig \
