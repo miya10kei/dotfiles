@@ -239,18 +239,6 @@
     "skill-creator@claude-plugins-official": true
   },
   "language": "Japanese",
-  "sandbox": {
-    "filesystem": {
-      "denyRead": [
-        "~/.aws/credentials",
-        "~/.config/gh/hosts.yml",
-        "~/.env",
-        "~/.gnupg",
-        "~/.netrc",
-        "~/.ssh"
-      ]
-    }
-  },
   "alwaysThinkingEnabled": true,
   "showTurnDuration": true
 }
