@@ -122,19 +122,27 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libbz2-dev \
         libcairo2 \
         libclang-dev \
+        libcups2t64 \
+        libdrm2 \
         libffi-dev \
+        libgbm1 \
         libgl1 \
         libglib2.0-dev \
         libgmp-dev \
         libgmp10 \
         libmagic1 \
         libncurses-dev \
+        libnspr4 \
+        libnss3 \
         libpango-1.0-0 \
         libpangocairo-1.0-0 \
+        libpq-dev \
         libreadline-dev \
         libsqlite3-dev \
         libtool \
+        libxslt-dev \
         locales \
+        lsof \
         lzma-dev \
         mandoc \
         mysql-client \
@@ -147,6 +155,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         rlwrap \
         socat \
         sudo \
+        swig \
         tk-dev \
         tmux \
         tzdata \
@@ -154,16 +163,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         wget \
         xsel \
         zip \
-        zsh \
-        libcups2t64 \
-        libdrm2 \
-        libgbm1 \
-        libnspr4 \
-        libnss3 \
-        libpq-dev \
-        libxslt-dev \
-        swig \
         zlib1g-dev \
+        zsh \
     && locale-gen --purge $LANG
 
 RUN groupadd "${GNAME}" --gid "${GID}" \
