@@ -13,52 +13,55 @@
       },
       {
         "id": "61d11c7e-d80c-418f-ae8c-08c3b9dec645",
-        "type": "context-percentage-usable"
+        "type": "context-percentage-usable",
+        "color": "cyan"
       },
       {
-        "id": "1bdc4d14-c223-448b-bafa-03ed8f5a779e",
+        "id": "10f232ca-7435-4566-b2d4-a8e37faa0c3a",
         "type": "separator"
       },
       {
-        "id": "b821dce2-9c09-4b8b-8c54-f2bdec05ab50",
+        "id": "126b1eb8-8ed2-4d9b-9db2-4c6237079058",
+        "type": "total-speed"
+      }
+    ],
+    [
+      {
+        "id": "43c9e3fe-650d-4c5b-b68f-a580447c633d",
         "type": "session-usage",
         "color": "brightMagenta"
       },
       {
-        "id": "6",
+        "id": "ada1dd12-89de-42dd-b9e8-f8bb2077f8dd",
         "type": "separator"
       },
       {
-        "id": "89c4f718-e1fd-4c58-a2e5-8b89aae09103",
+        "id": "e0951c05-a028-47a9-8a20-03314808d10f",
         "type": "reset-timer",
         "color": "brightMagenta"
-      },
-      {
-        "id": "4173b648-b3ba-47ac-830d-2f7544147fa5",
-        "type": "separator"
-      },
-      {
-        "id": "643b4528-df4c-4737-916a-13abc494416c",
-        "type": "weekly-usage",
-        "color": "brightBlue"
-      },
-      {
-        "id": "1c88d45f-f6b0-4234-836c-72e5782e2f53",
-        "type": "separator"
-      },
-      {
-        "id": "e254685b-b855-4083-ac92-ee1330ed84d1",
-        "type": "weekly-reset-timer"
       }
     ],
-    [],
-    []
+    [
+      {
+        "id": "d73c472b-a485-4ac7-a85b-956bdb229832",
+        "type": "weekly-usage"
+      },
+      {
+        "id": "2cb738d7-3f26-4c6f-af2d-c1537e0d7922",
+        "type": "separator"
+      },
+      {
+        "id": "8487ada3-09b7-494f-87a4-27fc9dea9e2d",
+        "type": "weekly-reset-timer"
+      }
+    ]
   ],
-  "flexMode": "full-minus-40",
+  "flexMode": "full",
   "compactThreshold": 60,
   "colorLevel": 2,
   "inheritSeparatorColors": false,
   "globalBold": false,
+  "minimalistMode": false,
   "powerline": {
     "enabled": false,
     "separators": [
@@ -69,6 +72,7 @@
     ],
     "startCaps": [],
     "endCaps": [],
-    "autoAlign": false
+    "autoAlign": false,
+    "continueThemeAcrossLines": false
   }
 }
