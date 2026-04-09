@@ -18,6 +18,7 @@ neovim      = "latest"
 node        = "22"
 python      = ["3.14", "3.13", "3.11"]
 rust        = "latest"
+gcloud      = "latest"
 terraform   = "latest"
 tree-sitter = "latest"
 
@@ -27,7 +28,7 @@ ghc   = "latest"
 stack = "latest"
 
 # aqua packages
-"aqua:1password/cli"          = "2.32.0"
+"aqua:1password/cli"          = "latest"
 "aqua:ajeetdsouza/zoxide"     = "latest"
 "aqua:astral-sh/uv"           = "latest"
 "aqua:aws/aws-cli"            = "latest"
@@ -66,6 +67,7 @@ stack = "latest"
 "github:googleworkspace/cli" = "latest"
 
 # npm packages
+"npm:@anthropic-ai/sandbox-runtime"  = "latest"
 "npm:@githubnext/github-copilot-cli" = "latest"
 "npm:mcp-hub"                        = "latest"
 "npm:@openai/codex"                  = "latest"

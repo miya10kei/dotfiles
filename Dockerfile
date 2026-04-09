@@ -106,6 +106,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         autoconf \
         automake \
         bsdmainutils \
+        bubblewrap \
         build-essential \
         ca-certificates \
         cloc \
@@ -113,15 +114,23 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         curl \
         dnsutils \
         ffmpeg \
+        gdal-bin \
         git \
         less \
+        libatk-bridge2.0-0t64 \
+        libatk1.0-0t64 \
         libbz2-dev \
+        libcairo2 \
         libclang-dev \
         libffi-dev \
         libgl1 \
+        libglib2.0-dev \
         libgmp-dev \
         libgmp10 \
+        libmagic1 \
         libncurses-dev \
+        libpango-1.0-0 \
+        libpangocairo-1.0-0 \
         libreadline-dev \
         libsqlite3-dev \
         libtool \
@@ -136,6 +145,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         python3-tk \
         redis-tools \
         rlwrap \
+        socat \
         sudo \
         tk-dev \
         tmux \
@@ -145,14 +155,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         xsel \
         zip \
         zsh \
-        gdal-bin \
-        libcairo2 \
-        libglib2.0-dev \
-        libmagic1 \
-        libpango-1.0-0 \
-        libpangocairo-1.0-0 \
-        libatk-bridge2.0-0t64 \
-        libatk1.0-0t64 \
         libcups2t64 \
         libdrm2 \
         libgbm1 \
