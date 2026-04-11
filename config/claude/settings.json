@@ -150,9 +150,7 @@
       "Bash(git push * develop)",
       "Bash(git push * develop *)",
       "Bash(git push * staging)",
-      "Bash(git push * staging *)",
-      "NotebookEdit",
-      "NotebookRead"
+      "Bash(git push * staging *)"
     ]
   },
   "hooks": {
@@ -172,6 +170,15 @@
           {
             "type": "command",
             "command": "ccjanus --flexible-match"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_CONFIG_DIR/hooks/rtk-rewrite.sh"
           }
         ]
       }
