@@ -65,6 +65,7 @@ stack = "latest"
 "github:eza-community/eza"   = "latest"
 "github:k1LoW/mo"            = "latest"
 "github:googleworkspace/cli" = "latest"
+"github:rtk-ai/rtk"         = "latest"
 
 # npm packages
 "npm:@anthropic-ai/sandbox-runtime"  = "latest"
