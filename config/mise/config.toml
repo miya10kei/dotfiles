@@ -69,14 +69,11 @@ stack = "latest"
 "github:eza-community/eza"   = "latest"
 "github:k1LoW/mo"            = "latest"
 "github:googleworkspace/cli" = "latest"
-"github:rtk-ai/rtk"         = "latest"
+"github:rtk-ai/rtk"          = "latest"
 
 # npm packages
-"npm:@anthropic-ai/sandbox-runtime"  = "latest"
-"npm:@githubnext/github-copilot-cli" = "latest"
-"npm:mcp-hub"                        = "latest"
-"npm:@openai/codex"                  = "latest"
-"npm:pnpm"                           = "latest"
+"npm:@anthropic-ai/sandbox-runtime" = "latest"
+"npm:pnpm"                          = "latest"
 
 # pipx packages
 "pipx:aws-sam-cli"     = "latest"

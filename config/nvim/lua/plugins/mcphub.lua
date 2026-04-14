@@ -5,6 +5,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    enabled = false,
     build = "npm install -g mcp-hub@latest",
     opts = {
       extensions = {
