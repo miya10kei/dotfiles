@@ -1,5 +1,9 @@
 export DOCKER_CONFIG="$HOME/.config/docker"
 
+if [[ -S "$HOME/.rd/docker.sock" ]]; then
+  export DOCKER_HOST="unix://$HOME/.rd/docker.sock"
+fi
+
 if builtin command -v docker > /dev/null 2>&1; then
 
   function exec_docker_command() {
