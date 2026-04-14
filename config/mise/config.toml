@@ -2,11 +2,13 @@
 ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
 
 [plugins]
-lua       = "https://github.com/mise-plugins/mise-lua.git"
-ghc       = "https://github.com/sestrella/asdf-ghcup.git"
-cabal     = "https://github.com/sestrella/asdf-ghcup.git"
-stack     = "https://github.com/sestrella/asdf-ghcup.git"
-terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
+lua             = "https://github.com/mise-plugins/mise-lua.git"
+ghc             = "https://github.com/sestrella/asdf-ghcup.git"
+cabal           = "https://github.com/sestrella/asdf-ghcup.git"
+stack           = "https://github.com/sestrella/asdf-ghcup.git"
+terraform       = "https://github.com/mise-plugins/mise-hashicorp.git"
+gcloud          = "https://github.com/mise-plugins/mise-gcloud.git"
+"1password-cli" = "https://github.com/NeoHsu/asdf-1password-cli.git"
 
 [tools]
 # Language runtimes
@@ -27,8 +29,10 @@ cabal = "latest"
 ghc   = "latest"
 stack = "latest"
 
+# asdf plugins
+"1password-cli" = "latest"
+
 # aqua packages
-"aqua:1password/cli"          = "latest"
 "aqua:ajeetdsouza/zoxide"     = "latest"
 "aqua:astral-sh/uv"           = "latest"
 "aqua:aws/aws-cli"            = "latest"
