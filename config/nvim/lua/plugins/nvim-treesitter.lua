@@ -13,6 +13,7 @@ local parsers = {
   "java",
   "javascript",
   "json",
+  "kotlin",
   "lua",
   "make",
   "markdown",

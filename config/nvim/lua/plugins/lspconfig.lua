@@ -7,6 +7,7 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "saghen/blink.cmp",
+      "folke/which-key.nvim",
       "williamboman/mason-lspconfig.nvim",
       "williamboman/mason.nvim",
     },
@@ -14,22 +15,76 @@ return {
       ---------------
       --- Keymaps ---
       ---------------
-      local keymap = vim.keymap.set
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
+        callback = function(args)
+          local bufnr = args.buf
+          require("which-key").add({
+            -- グループ
+            { "<Leader>l", group = "LSP", buffer = bufnr },
+            { "<Leader>ln", group = "Navigation", buffer = bufnr },
+            { "<Leader>lv", group = "View", buffer = bufnr },
+            { "<Leader>le", group = "Edit", buffer = bufnr },
+            -- ナビゲーション
+            { "<Leader>lnd", vim.lsp.buf.definition, desc = "Definition", buffer = bufnr, silent = true },
+            { "<Leader>lni", vim.lsp.buf.implementation, desc = "Implementation", buffer = bufnr, silent = true },
+            { "<Leader>lnt", vim.lsp.buf.type_definition, desc = "Type Definition", buffer = bufnr, silent = true },
+            { "<Leader>lnr", vim.lsp.buf.references, desc = "References", buffer = bufnr, silent = true },
+            { "<Leader>lns", vim.lsp.buf.incoming_calls, desc = "Incoming Calls", buffer = bufnr, silent = true },
+            { "<Leader>lno", vim.lsp.buf.outgoing_calls, desc = "Outgoing Calls", buffer = bufnr, silent = true },
+            -- 情報表示
+            { "<Leader>lvh", vim.lsp.buf.hover, desc = "Hover", buffer = bufnr, silent = true },
+            { "<Leader>lvs", vim.lsp.buf.signature_help, desc = "Signature Help", buffer = bufnr, silent = true },
+            { "<Leader>lve", vim.diagnostic.open_float, desc = "Diagnostic", buffer = bufnr, silent = true },
+            -- 編集
+            { "<Leader>ler", vim.lsp.buf.rename, desc = "Rename", buffer = bufnr, silent = true },
+            {
+              "<Leader>lea",
+              vim.lsp.buf.code_action,
+              desc = "Code Action",
+              buffer = bufnr,
+              silent = true,
+              mode = { "n", "v" },
+            },
+            {
+              "<Leader>lef",
+              function()
+                vim.lsp.buf.format({ async = true })
+              end,
+              desc = "Format",
+              buffer = bufnr,
+              silent = true,
+              mode = { "n", "v" },
+            },
+          })
 
-      local on_attach = function(_, bufnr)
-        local bufopts = { buffer = bufnr, silent = true }
-        keymap("n", "gD", vim.lsp.buf.declaration, bufopts)
-        keymap("n", "K", vim.lsp.buf.hover, bufopts)
-        keymap("n", "gi", vim.lsp.buf.implementation, bufopts)
-        keymap("n", "<Leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-        keymap("n", "<Leader>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-        keymap("n", "<Leader>wl", function()
-          print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, bufopts)
-        keymap("n", "<Leader>D", vim.lsp.buf.type_definition, bufopts)
-        keymap("n", "<Leader>rn", vim.lsp.buf.rename, bufopts)
-        keymap("n", "<Leader>ca", vim.lsp.buf.code_action, bufopts)
-      end
+          -- kotlin-lsp 専用：sourcePaths を再インデックス
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.name == "kotlin_lsp" then
+            require("which-key").add({
+              { "<Leader>ls", group = "Server", buffer = bufnr },
+              {
+                "<Leader>lsr",
+                function()
+                  client:exec_cmd({ command = "kotlin-lsp/reindex" })
+                end,
+                desc = "Reindex (kotlin-lsp)",
+                buffer = bufnr,
+                silent = true,
+              },
+              {
+                "<Leader>lsc",
+                function()
+                  client:exec_cmd({ command = "kotlin-lsp/clearCache" })
+                end,
+                desc = "Clear Cache (kotlin-lsp)",
+                buffer = bufnr,
+                silent = true,
+              },
+            })
+          end
+        end,
+      })
 
       require("mason-lspconfig").setup()
       local mason_registry = require("mason-registry")
@@ -63,7 +118,6 @@ return {
       -- グローバルLSP設定
       vim.lsp.config("*", {
         capabilities = capabilities,
-        on_attach = on_attach,
       })
 
       local used_mason_packages = {
@@ -196,6 +250,20 @@ return {
         end
         vim.lsp.enable(alias)
       end
+
+      -- Hessesian/kotlin-lsp（Rust製、mise の cargo:kotlin-lsp 経由）
+      -- 依存ライブラリのソースは `mise run kotlin-lsp:extract-sources` で抽出
+      vim.lsp.config("kotlin_lsp", {
+        cmd = { "kotlin-lsp" },
+        filetypes = { "kotlin" },
+        root_markers = { "settings.gradle.kts", "settings.gradle", "build.gradle.kts", "build.gradle", "pom.xml", ".git" },
+        init_options = {
+          indexingOptions = {
+            sourcePaths = { vim.fn.expand("~/.local/share/kotlin-lsp/sources") },
+          },
+        },
+      })
+      vim.lsp.enable("kotlin_lsp")
     end,
     keys = {
       {

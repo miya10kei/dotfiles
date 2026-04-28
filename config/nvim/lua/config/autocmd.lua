@@ -65,3 +65,17 @@ autocmd.create_group("GitHubActionsFiletype", {
     },
   },
 })
+
+-- LSPクライアントの強制停止（kotlin-lsp等のゾンビJVM対策）
+autocmd.create_group("LspForceStopOnExit", {
+  {
+    event = "VimLeavePre",
+    opts = {
+      callback = function()
+        for _, client in ipairs(vim.lsp.get_clients()) do
+          client:stop(true)
+        end
+      end,
+    },
+  },
+})

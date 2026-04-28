@@ -2,25 +2,25 @@
 ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
 
 [plugins]
-lua             = "https://github.com/mise-plugins/mise-lua.git"
-ghc             = "https://github.com/sestrella/asdf-ghcup.git"
-cabal           = "https://github.com/sestrella/asdf-ghcup.git"
-stack           = "https://github.com/sestrella/asdf-ghcup.git"
-terraform       = "https://github.com/mise-plugins/mise-hashicorp.git"
-gcloud          = "https://github.com/mise-plugins/mise-gcloud.git"
-"1password-cli" = "https://github.com/NeoHsu/asdf-1password-cli.git"
+lua       = "https://github.com/mise-plugins/mise-lua.git"
+ghc       = "https://github.com/sestrella/asdf-ghcup.git"
+cabal     = "https://github.com/sestrella/asdf-ghcup.git"
+stack     = "https://github.com/sestrella/asdf-ghcup.git"
+terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 
 [tools]
 # Language runtimes
 bun         = "latest"
 deno        = "latest"
 go          = "latest"
+java        = "25"
+kotlin      = "latest"
 lua         = "5.4.7"
 neovim      = "latest"
 node        = "22"
 python      = ["3.14", "3.13", "3.11"]
+quarkus     = "latest"
 rust        = "latest"
-gcloud      = "latest"
 terraform   = "latest"
 tree-sitter = "latest"
 
@@ -29,10 +29,8 @@ cabal = "latest"
 ghc   = "latest"
 stack = "latest"
 
-# asdf plugins
-"1password-cli" = "latest"
-
 # aqua packages
+"aqua:1password/cli"          = "latest"
 "aqua:ajeetdsouza/zoxide"     = "latest"
 "aqua:astral-sh/uv"           = "latest"
 "aqua:aws/aws-cli"            = "latest"
@@ -78,7 +76,11 @@ stack = "latest"
 # pipx packages
 "pipx:aws-sam-cli"     = "latest"
 "pipx:git-filter-repo" = "latest"
+"pipx:markitdown"      = { version = "latest", extras = "all" }
 "pipx:pgcli"           = "latest"
+
+# vfox packages
+"vfox:gcloud" = "latest"
 
 # http downloads
 "http:fzf-completion"      = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
@@ -87,8 +89,11 @@ stack = "latest"
 "github:miya10kei/ccargus" = "latest"
 "github:miya10kei/ccjanus" = "latest"
 
+# cargo packages
+"cargo:kotlin-lsp" = "latest"
+
 [settings]
-experimental           = false
+experimental           = true
 idiomatic_version_file = true
 not_found_auto_install = true
 trusted_config_paths   = ["~/dev"]
@@ -108,3 +113,7 @@ run         = "curl -fsSL https://claude.ai/install.sh | bash"
 [tasks.install-coderabbit]
 description = "Install CodeRabbit CLI"
 run         = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
+
+[tasks."kotlin-lsp:extract-sources"]
+description = "kotlin-lspの依存ソースを~/.local/share/kotlin-lsp/sources/に抽出"
+run         = "python3 ~/.local/share/kotlin-lsp/extract-sources.py --output ~/.local/share/kotlin-lsp/sources"
