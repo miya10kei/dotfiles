@@ -57,9 +57,9 @@
   email = miya10kei@gmail.com
   name = miya10kei
 [credential "https://github.com"]
-  helper = !/root/.local/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
-  helper = !/root/.local/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [coderabbit]
   machineId = cli/0b574cd1beaa428e963b5cdd1b4b76c7
 
