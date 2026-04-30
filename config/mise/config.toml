@@ -93,10 +93,10 @@ stack = "latest"
 "cargo:kotlin-lsp" = "latest"
 
 [settings]
-experimental           = true
-idiomatic_version_file = true
-not_found_auto_install = true
-trusted_config_paths   = ["~/dev"]
+experimental                        = true
+idiomatic_version_file_enable_tools = ["terraform"]
+not_found_auto_install              = true
+trusted_config_paths                = ["~/dev"]
 
 [tasks.install-bins]
 depends     = ["install-claude-code", "install-coderabbit", "install-gh-extensions", "install-session-manager"]

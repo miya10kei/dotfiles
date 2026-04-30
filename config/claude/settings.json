@@ -268,5 +268,6 @@
   },
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
-  "showTurnDuration": true
+  "showTurnDuration": true,
+  "skipAutoPermissionPrompt": true
 }
