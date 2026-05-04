@@ -16,9 +16,9 @@ deno        = "latest"
 go          = "latest"
 java        = "25"
 kotlin      = "latest"
-lua         = "5.5.0"
+lua         = "latest"
 neovim      = "latest"
-node        = "24"
+node        = "lts"
 python      = ["3.14", "3.13", "3.11"]
 quarkus     = "latest"
 rust        = "latest"
@@ -125,10 +125,19 @@ stack = "latest"
 
 [settings]
 experimental                        = true
-idiomatic_version_file_enable_tools = ["terraform"]
+idiomatic_version_file_enable_tools = ["bun", "deno", "go", "java", "node", "python", "rust", "terraform"]
 install_before                      = "7d"
 not_found_auto_install              = true
 trusted_config_paths                = ["~/dev"]
+
+[settings.hook_env]
+chpwd_only = true
+
+[settings.node]
+corepack = true
+
+[settings.python]
+uv_venv_auto = true
 
 [tasks.install-bins]
 depends = [
