@@ -39,19 +39,21 @@
         "id": "e0951c05-a028-47a9-8a20-03314808d10f",
         "type": "reset-timer",
         "color": "brightMagenta"
-      }
-    ],
-    [
-      {
-        "id": "d73c472b-a485-4ac7-a85b-956bdb229832",
-        "type": "weekly-usage"
       },
       {
-        "id": "2cb738d7-3f26-4c6f-af2d-c1537e0d7922",
+        "id": "c68daaa2-9c80-4a15-b677-afbab03d3457",
         "type": "separator"
       },
       {
-        "id": "8487ada3-09b7-494f-87a4-27fc9dea9e2d",
+        "id": "b22996c6-6309-4368-a09e-6997657e8baf",
+        "type": "weekly-usage"
+      },
+      {
+        "id": "8e392f64-95a2-490c-b17e-e1c547e45ca5",
+        "type": "separator"
+      },
+      {
+        "id": "7a10bf35-7a8c-4660-8cd9-934932a4b519",
         "type": "weekly-reset-timer"
       }
     ]
