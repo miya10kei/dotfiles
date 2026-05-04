@@ -2,15 +2,19 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 14,
   "env": {
+    "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "CLAUDE_CODE_NO_FLICKER": "1",
     "ENABLE_TOOL_SEARCH": "true"
   },
   "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
+      "Bash(./gradlew *)",
       "Bash(actionlint *)",
       "Bash(arch *)",
+      "Bash(awk *)",
       "Bash(aws * batch-describe-* *)",
       "Bash(aws * batch-get-* *)",
       "Bash(aws * check-* *)",
@@ -80,6 +84,9 @@
       "Bash(grep *)",
       "Bash(gws calendar events list *)",
       "Bash(gws drive files export *)",
+      "Bash(gws gmail users messages get *)",
+      "Bash(gws gmail users messages list *)",
+      "Bash(gws gmail users threads get *)",
       "Bash(head *)",
       "Bash(jq *)",
       "Bash(ls *)",
@@ -104,6 +111,7 @@
       "Bash(pnpm run test *)",
       "Bash(pnpm run type-check *)",
       "Bash(pnpm test *)",
+      "Bash(python3 */fetch-gmail/scripts/*)",
       "Bash(pwd)",
       "Bash(read *)",
       "Bash(readlink *)",
@@ -115,6 +123,7 @@
       "Bash(stat *)",
       "Bash(stylua *)",
       "Bash(tail *)",
+      "Bash(tbls *)",
       "Bash(test *)",
       "Bash(tmux *)",
       "Bash(tree *)",
@@ -127,6 +136,7 @@
       "Bash(uv run pytest *)",
       "Bash(uv run ruff *)",
       "Bash(uv sync *)",
+      "Bash(unique *)",
       "Bash(wc *)",
       "Bash(which *)",
       "Bash(xargs *)",
@@ -141,6 +151,8 @@
       "mcp__claude_ai_Slack__slack_read_*",
       "mcp__claude_ai_Slack__slack_search_*",
       "mcp__claude_ai_Slack__slack_send_message_draft",
+      "mcp__paid-mcp-servers__jira___*",
+      "mcp__paid-mcp-servers__zendesk___*",
       "mcp__playwright__*",
       "mcp__plugin_atlassian_atlassian__atlassianUserInfo",
       "mcp__plugin_atlassian_atlassian__get*",
@@ -150,41 +162,48 @@
       "mcp__plugin_serena_serena__*"
     ],
     "deny": [
-      "Bash(gh api --method *)",
-      "Bash(gh api * --method *)",
-      "Bash(gh api -X *)",
-      "Bash(gh api * -X *)",
-      "Bash(gh api -f *)",
-      "Bash(gh api * -f *)",
-      "Bash(gh api -F *)",
-      "Bash(gh api * -F *)",
-      "Bash(gh api --raw-field *)",
-      "Bash(gh api * --raw-field *)",
-      "Bash(gh api --field *)",
       "Bash(gh api * --field *)",
-      "Bash(gh api --input *)",
       "Bash(gh api * --input *)",
+      "Bash(gh api * --method *)",
+      "Bash(gh api * --raw-field *)",
+      "Bash(gh api * -F *)",
+      "Bash(gh api * -X *)",
+      "Bash(gh api * -f *)",
+      "Bash(gh api --field *)",
+      "Bash(gh api --input *)",
+      "Bash(gh api --method *)",
+      "Bash(gh api --raw-field *)",
+      "Bash(gh api -F *)",
+      "Bash(gh api -X *)",
+      "Bash(gh api -f *)",
+      "Bash(git push * --all)",
+      "Bash(git push * --all *)",
+      "Bash(git push * --mirror)",
+      "Bash(git push * develop)",
+      "Bash(git push * develop *)",
       "Bash(git push * main)",
       "Bash(git push * main *)",
       "Bash(git push * master)",
       "Bash(git push * master *)",
-      "Bash(git push * develop)",
-      "Bash(git push * develop *)",
       "Bash(git push * staging)",
-      "Bash(git push * staging *)"
+      "Bash(git push * staging *)",
+      "Bash(git push --all *)",
+      "Bash(git push --force)",
+      "Bash(git push --force origin)",
+      "Bash(git push --force-with-lease origin)",
+      "Bash(git push --force-with-lease)",
+      "Bash(git push --mirror *)",
+      "Bash(git push -f origin)",
+      "Bash(git push -f)",
+      "Bash(git push origin --force)",
+      "Bash(git push origin --force-with-lease)",
+      "Bash(git push origin -f)",
+      "Bash(terraform apply *)",
+      "Bash(terraform apply)"
     ]
   },
   "hooks": {
     "PreToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccargus-notify processing"
-          }
-        ]
-      },
       {
         "matcher": "Bash",
         "hooks": [
@@ -203,48 +222,6 @@
           }
         ]
       }
-    ],
-    "PermissionRequest": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccargus-notify permission"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "idle_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccargus-notify waiting_for_input"
-          }
-        ]
-      },
-      {
-        "matcher": "elicitation_dialog",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccargus-notify permission"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccargus-notify waiting_for_input"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
@@ -255,19 +232,27 @@
   "enabledPlugins": {
     "code-simplifier@claude-plugins-official": true,
     "coderabbit@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "gopls-lsp@claude-plugins-official": true,
     "lua-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "serena@claude-plugins-official": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "typescript-lsp@nealle-managed": true
+    "slack@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "kotlin-lsp@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true
   },
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
+  "companyAnnouncements": [
+    "個人契約のClaude Codeです"
+  ],
+  "editorMode": "normal",
   "showTurnDuration": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "effort": "high"
 }

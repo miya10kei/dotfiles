@@ -1,0 +1,43 @@
+{
+  "skill_name": "code-inspect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "CLAUDE.mdのコーディングルールを更新した。code-inspectして",
+      "expected_output": "LSP/Lint/Formatterチェック実施後、/simplifyと/coderabbit:code-review、/superpowers:requesting-code-reviewがサブエージェントで実行される",
+      "files": [],
+      "expectations": [
+        "LSP Diagnostics、Lint、Formatterのチェックが実施された",
+        "/simplifyがサブエージェント（Agent tool）で実行された",
+        "/coderabbit:code-reviewがサブエージェント（Agent tool）で実行された",
+        "/superpowers:requesting-code-reviewがサブエージェント（Agent tool）で実行された",
+        "/superpowers:requesting-code-reviewのサブエージェントに実装内容・要件が渡された",
+        "Step 1 → Step 2 → Step 3 の順序で実行された"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "settings.jsonの定義順をアルファベット順に並べ替えた。品質チェックお願い",
+      "expected_output": "チェックとレビューのフルフローが実行される。JSON設定ファイルに対してもスキルが正しく動作する",
+      "files": [],
+      "expectations": [
+        "LSP Diagnostics、Lint、Formatterのチェックが実施された",
+        "/simplifyがサブエージェント（Agent tool）で実行された",
+        "/coderabbit:code-reviewと/superpowers:requesting-code-reviewがサブエージェントで実行された",
+        "Step 1 → Step 2 → Step 3 の順序で実行された"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "新しいスキル（code-inspect）を追加した。SKILL.mdを確認して問題ないかレビューしてほしい",
+      "expected_output": "新規ファイル追加に対してもフルフローが実行される。スキル自体のレビューとcode-inspectの実行が区別される",
+      "files": [],
+      "expectations": [
+        "code-inspectスキルのワークフローに従って実行された（手動レビューではなく）",
+        "/simplifyがサブエージェント（Agent tool）で実行された",
+        "/coderabbit:code-reviewがサブエージェント（Agent tool）で実行された",
+        "Step 1 → Step 2 → Step 3 の順序で実行された"
+      ]
+    }
+  ]
+}

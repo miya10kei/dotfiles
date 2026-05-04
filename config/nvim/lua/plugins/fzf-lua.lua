@@ -47,33 +47,5 @@ return {
       end,
       desc = "Live grep",
     },
-    {
-      "gd",
-      function()
-        require("fzf-lua").lsp_definitions()
-      end,
-      desc = "LSP definitions",
-    },
-    {
-      "gh",
-      function()
-        require("fzf-lua").lsp_incoming_calls()
-      end,
-      desc = "LSP incoming calls",
-    },
-    {
-      "gr",
-      function()
-        require("fzf-lua").lsp_references()
-      end,
-      desc = "LSP references",
-    },
-    {
-      "gw",
-      function()
-        require("fzf-lua").lsp_workspace_symbols()
-      end,
-      desc = "LSP workspace symbols",
-    },
   },
 }

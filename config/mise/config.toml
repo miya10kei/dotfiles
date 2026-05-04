@@ -1,5 +1,5 @@
 [env]
-ASDF_LUA_LUAROCKS_VERSION = "3.12.2"
+ASDF_LUA_LUAROCKS_VERSION = "3.13.0"
 
 [plugins]
 lua       = "https://github.com/mise-plugins/mise-lua.git"
@@ -15,9 +15,9 @@ deno        = "latest"
 go          = "latest"
 java        = "25"
 kotlin      = "latest"
-lua         = "5.4.7"
+lua         = "5.5.0"
 neovim      = "latest"
-node        = "22"
+node        = "24"
 python      = ["3.14", "3.13", "3.11"]
 quarkus     = "latest"
 rust        = "latest"
@@ -30,7 +30,6 @@ ghc   = "latest"
 stack = "latest"
 
 # aqua packages
-"aqua:1password/cli"          = "latest"
 "aqua:ajeetdsouza/zoxide"     = "latest"
 "aqua:astral-sh/uv"           = "latest"
 "aqua:aws/aws-cli"            = "latest"
@@ -83,9 +82,9 @@ stack = "latest"
 "vfox:gcloud" = "latest"
 
 # http downloads
-"http:fzf-completion"      = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
-"http:fzf-key-bindings"    = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
-"http:fzf-tmux"            = { version = "latest", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
+"http:fzf-completion"      = { version = "master", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
+"http:fzf-key-bindings"    = { version = "master", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
+"http:fzf-tmux"            = { version = "master", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
 "github:miya10kei/ccargus" = "latest"
 "github:miya10kei/ccjanus" = "latest"
 

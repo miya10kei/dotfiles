@@ -39,16 +39,13 @@ setup4d: \
 	deploy-coderabbit \
 	deploy-docker \
 	deploy-editorconfig \
-	deploy-gemini \
 	deploy-gh \
 	deploy-git \
 	deploy-github-copilot \
 	deploy-gpg \
 	deploy-gws \
 	deploy-markdownlint \
-	deploy-mcpauth \
 	deploy-mcphub \
-	deploy-memolist \
 	deploy-mise \
 	deploy-npm \
 	deploy-nvim \
@@ -62,7 +59,6 @@ setup4d: \
 	deploy-yamlfmt \
 	deploy-zoxide \
 	deploy-claude \
-	autoenv_auth \
 	zshhistory_force
 
 include Makefile.d/*.mk

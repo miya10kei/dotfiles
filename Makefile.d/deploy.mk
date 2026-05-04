@@ -77,15 +77,6 @@ $(HOME)/.editorconfig:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-gemini
-deploy-gemini: \
-	$(HOME)/.gemini
-
-$(HOME)/.gemini:
-	ln -fns $(DOTDIR)/data-volume/gemini $(HOME)/.gemini
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-gh
 deploy-gh: \
 	$(HOME)/.config/gh \
@@ -139,15 +130,6 @@ $(HOME)/.gnupg:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-hyper
-deploy-hyper: \
-	$(HOME).hyper.js
-
-$(HOME).hyper.js:
-	ln -fns $(DOTDIR)/.hyper.js $(HOME)/.hyper.js
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-karabiner
 deploy-karabiner: \
 	$(HOME)/.config/karabiner/karabiner.json
@@ -166,15 +148,6 @@ $(HOME)/.markdownlintrc:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-mcpauth
-deploy-mcpauth: \
-  $(HOME)/.mcp-auth
-
-$(HOME)/.mcp-auth:
-	ln -fns $(DOTDIR)/data-volume/mcp-auth $(HOME)/.mcp-auth
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-mcphub
 deploy-mcphub: \
   $(HOME)/.config/mcphub
@@ -190,15 +163,6 @@ deploy-navi: \
 
 $(HOME)/.local/share/navi/cheats/miya10kei__navi-cheets:
 	navi repo add https://github.com/miya10kei/navi-cheets
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-memolist
-deploy-memolist: \
-	$(HOME)/.config/memo
-
-$(HOME)/.config/memo:
-	ln -fns $(DOTDIR)/config/memo $(HOME)/.config/memo
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -221,16 +185,6 @@ $(HOME)/.config/nvim:
 .PHONY: delete-nvimrc
 delete-nvimrc:
 	rm -rf $(HOME)/.config/nvim
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-obsidian
-deploy-obsidian: \
-	obsidianvimrc
-
-obsidianvimrc: $(HOME)/.obsidian.vimrc
-$(HOME)/.obsidian.vimrc:
-	ln -fns $(DOTDIR)/.obsidian.vimrc $(HOME)/.obsidian.vimrc
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -326,16 +280,8 @@ $(HOME)/.local/share/zoxide:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-zsh
 deploy-zsh: \
-	autoenv_auth \
 	zprofile \
 	zshrc
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-.PHONY: autoenv_auth
-autoenv_auth: $(HOME)/.local/share/autoenv_auth
-$(HOME)/.local/share/autoenv_auth:
-	ln -fns $(DOTDIR)/data-volume/zsh-autoenv/autoenv_auth $(HOME)/.local/share/autoenv_auth
 
 
 # ----------------------------------------------------------------------------------------------------------------------
