@@ -43,7 +43,7 @@ return {
           graphql = { "prettier" },
           handlebars = { "prettier" },
           lua = { "stylua" },
-          markdown = { "markdownlint" },
+          markdown = { "markdownlint-cli2" },
           python = { "ruff_organize_imports", "ruff_format" },
           terraform = { "terraform_fmt" },
           toml = { "taplo" },

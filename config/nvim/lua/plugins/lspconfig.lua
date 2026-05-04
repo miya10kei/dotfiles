@@ -9,8 +9,6 @@ return {
       "nvim-lua/plenary.nvim",
       "saghen/blink.cmp",
       "folke/which-key.nvim",
-      "williamboman/mason-lspconfig.nvim",
-      "williamboman/mason.nvim",
     },
     config = function()
       local function fzf(name)
@@ -82,9 +80,6 @@ return {
         end,
       })
 
-      require("mason-lspconfig").setup()
-      local mason_registry = require("mason-registry")
-
       ----------------
       --- nvim-lsp ---
       ----------------
@@ -116,39 +111,24 @@ return {
         capabilities = capabilities,
       })
 
-      local used_mason_packages = {
-        "angular-language-server",
-        "bash-language-server",
-        "docker-compose-language-service",
-        "docker-language-server",
+      local servers = {
+        "angularls",
+        "bashls",
+        "docker_compose_language_service",
+        "docker_language_server",
         "gopls",
-        "haskell-language-server",
-        "html-lsp",
-        "json-lsp",
-        "lua-language-server",
+        "hls",
+        "html",
+        "jsonls",
+        "kotlin_lsp",
+        "lua_ls",
         "marksman",
         "pyright",
-        "rust-analyzer",
+        "rust_analyzer",
         "taplo",
-        "terraform-ls",
-        "typescript-language-server",
-        "yaml-language-server",
-      }
-
-      -- Mason パッケージ名から lspconfig の設定名へのマッピング
-      local mason_to_lsp = {
-        ["angular-language-server"] = "angularls",
-        ["bash-language-server"] = "bashls",
-        ["docker-compose-language-service"] = "docker_compose_language_service",
-        ["docker-language-server"] = "docker_lsp",
-        ["haskell-language-server"] = "hls",
-        ["html-lsp"] = "html",
-        ["json-lsp"] = "jsonls",
-        ["lua-language-server"] = "lua_ls",
-        ["rust-analyzer"] = "rust_analyzer",
-        ["terraform-ls"] = "terraformls",
-        ["typescript-language-server"] = "ts_ls",
-        ["yaml-language-server"] = "yamlls",
+        "terraformls",
+        "ts_ls",
+        "yamlls",
       }
 
       -- LSPサーバー個別設定
@@ -236,37 +216,51 @@ return {
         bashls = {
           filetypes = { "sh", "bash", "zsh" },
         },
+        -- kotlin-lsp（Rust製、mise の cargo:kotlin-lsp 経由）
+        -- 依存ライブラリのソースは `mise run kotlin-lsp:extract-sources` で抽出
+        kotlin_lsp = {
+          cmd = { "kotlin-lsp" },
+          filetypes = { "kotlin" },
+          root_markers = {
+            "settings.gradle.kts",
+            "settings.gradle",
+            "build.gradle.kts",
+            "build.gradle",
+            "pom.xml",
+            ".git",
+          },
+          init_options = {
+            indexingOptions = {
+              sourcePaths = { vim.fn.expand("~/.local/share/kotlin-lsp/sources") },
+            },
+          },
+        },
+        -- typescript-language-server は同居する `typescript` を必要とするが、
+        -- mise では別 prefix にインストールされるため tsserver の所在を明示する
+        ts_ls = (function()
+          local mise_root = vim.fn.trim(vim.fn.system("mise where npm:typescript"))
+          if vim.v.shell_error ~= 0 or mise_root == "" then
+            vim.notify("mise where npm:typescript failed; ts_ls may not find tsserver", vim.log.levels.WARN)
+            return {}
+          end
+          return {
+            init_options = {
+              tsserver = { path = mise_root .. "/lib/node_modules/typescript/lib" },
+            },
+          }
+        end)(),
       }
 
       -- LSPサーバーの設定と有効化
-      for _, v in ipairs(used_mason_packages) do
-        local alias = mason_to_lsp[v] or mason_registry.get_package_aliases(v)[1] or v
-        if lsp_settings[alias] then
-          vim.lsp.config(alias, lsp_settings[alias])
+      for _, name in ipairs(servers) do
+        if lsp_settings[name] then
+          vim.lsp.config(name, lsp_settings[name])
         end
-        vim.lsp.enable(alias)
+        local ok, err = pcall(vim.lsp.enable, name)
+        if not ok then
+          vim.notify(string.format("Failed to enable LSP %s: %s", name, err), vim.log.levels.WARN)
+        end
       end
-
-      -- Hessesian/kotlin-lsp（Rust製、mise の cargo:kotlin-lsp 経由）
-      -- 依存ライブラリのソースは `mise run kotlin-lsp:extract-sources` で抽出
-      vim.lsp.config("kotlin_lsp", {
-        cmd = { "kotlin-lsp" },
-        filetypes = { "kotlin" },
-        root_markers = {
-          "settings.gradle.kts",
-          "settings.gradle",
-          "build.gradle.kts",
-          "build.gradle",
-          "pom.xml",
-          ".git",
-        },
-        init_options = {
-          indexingOptions = {
-            sourcePaths = { vim.fn.expand("~/.local/share/kotlin-lsp/sources") },
-          },
-        },
-      })
-      vim.lsp.enable("kotlin_lsp")
     end,
     keys = {
       {

@@ -7,10 +7,10 @@ return {
       local lint = require("lint")
       lint.linters_by_ft = {
         dockerfile = { "hadolint" },
-        markdown = { "markdownlint" },
+        markdown = { "markdownlint-cli2" },
         python = { "ruff" },
-        terraform = { "tfsec" },
-        tf = { "tfsec" },
+        terraform = { "trivy" },
+        tf = { "trivy" },
         ["yaml.ghaction"] = { "actionlint" },
       }
 
