@@ -75,8 +75,7 @@ stack = "latest"
 "npm:pnpm"                          = "latest"
 
 # language servers (npm)
-# @angular/language-server: latest (21.2.11) は npmrc の min-release-age=7 隔離期間に該当するためピン留め
-"npm:@angular/language-server"            = "21.2.10"
+"npm:@angular/language-server"            = "latest"
 "npm:@microsoft/compose-language-service" = "latest"
 "npm:bash-language-server"                = "latest"
 "npm:pyright"                             = "latest"
@@ -127,6 +126,7 @@ stack = "latest"
 [settings]
 experimental                        = true
 idiomatic_version_file_enable_tools = ["terraform"]
+install_before                      = "7d"
 not_found_auto_install              = true
 trusted_config_paths                = ["~/dev"]
 
