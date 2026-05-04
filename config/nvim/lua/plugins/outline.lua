@@ -21,6 +21,12 @@ return {
         down_and_jump = "j",
         up_and_jump = "k",
       },
+      symbols = {
+        filter = {
+          default = { "Variable", exclude = true },
+          kotlin = { "Variable", "Property", exclude = true },
+        },
+      },
     },
   },
 }

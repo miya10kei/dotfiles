@@ -5,6 +5,7 @@ return {
     main = "lsp",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
+      "ibhagwan/fzf-lua",
       "nvim-lua/plenary.nvim",
       "saghen/blink.cmp",
       "folke/which-key.nvim",
@@ -12,6 +13,12 @@ return {
       "williamboman/mason.nvim",
     },
     config = function()
+      local function fzf(name)
+        return function()
+          require("fzf-lua")[name]()
+        end
+      end
+
       ---------------
       --- Keymaps ---
       ---------------
@@ -26,26 +33,15 @@ return {
             { "<Leader>lv", group = "View", buffer = bufnr },
             { "<Leader>le", group = "Edit", buffer = bufnr },
             -- ナビゲーション
-            { "<Leader>lnd", vim.lsp.buf.definition, desc = "Definition", buffer = bufnr, silent = true },
-            { "<Leader>lni", vim.lsp.buf.implementation, desc = "Implementation", buffer = bufnr, silent = true },
-            { "<Leader>lnt", vim.lsp.buf.type_definition, desc = "Type Definition", buffer = bufnr, silent = true },
-            { "<Leader>lnr", vim.lsp.buf.references, desc = "References", buffer = bufnr, silent = true },
-            { "<Leader>lns", vim.lsp.buf.incoming_calls, desc = "Incoming Calls", buffer = bufnr, silent = true },
-            { "<Leader>lno", vim.lsp.buf.outgoing_calls, desc = "Outgoing Calls", buffer = bufnr, silent = true },
+            { "gd", fzf("lsp_definitions"), desc = "Definition", buffer = bufnr, silent = true },
+            { "gh", fzf("lsp_incoming_calls"), desc = "Incoming Calls", buffer = bufnr, silent = true },
+            { "gw", fzf("lsp_workspace_symbols"), desc = "Workspace Symbols", buffer = bufnr, silent = true },
+            { "<Leader>lns", fzf("lsp_incoming_calls"), desc = "Incoming Calls", buffer = bufnr, silent = true },
+            { "<Leader>lno", fzf("lsp_outgoing_calls"), desc = "Outgoing Calls", buffer = bufnr, silent = true },
             -- 情報表示
-            { "<Leader>lvh", vim.lsp.buf.hover, desc = "Hover", buffer = bufnr, silent = true },
             { "<Leader>lvs", vim.lsp.buf.signature_help, desc = "Signature Help", buffer = bufnr, silent = true },
             { "<Leader>lve", vim.diagnostic.open_float, desc = "Diagnostic", buffer = bufnr, silent = true },
             -- 編集
-            { "<Leader>ler", vim.lsp.buf.rename, desc = "Rename", buffer = bufnr, silent = true },
-            {
-              "<Leader>lea",
-              vim.lsp.buf.code_action,
-              desc = "Code Action",
-              buffer = bufnr,
-              silent = true,
-              mode = { "n", "v" },
-            },
             {
               "<Leader>lef",
               function()
@@ -256,7 +252,14 @@ return {
       vim.lsp.config("kotlin_lsp", {
         cmd = { "kotlin-lsp" },
         filetypes = { "kotlin" },
-        root_markers = { "settings.gradle.kts", "settings.gradle", "build.gradle.kts", "build.gradle", "pom.xml", ".git" },
+        root_markers = {
+          "settings.gradle.kts",
+          "settings.gradle",
+          "build.gradle.kts",
+          "build.gradle",
+          "pom.xml",
+          ".git",
+        },
         init_options = {
           indexingOptions = {
             sourcePaths = { vim.fn.expand("~/.local/share/kotlin-lsp/sources") },
