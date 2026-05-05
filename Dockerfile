@@ -84,7 +84,8 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
     export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
     mise install
 
-RUN mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share" "${HOME}/out/${HOME}/.config" \
+RUN rm -rf "${HOME}/.local/share/mise/downloads" \
+    && mkdir -p "${HOME}/out/${HOME}/.local/bin" "${HOME}/out/${HOME}/.local/share" "${HOME}/out/${HOME}/.config" \
     && cp "${HOME}/.local/bin/mise" "${HOME}/out/${HOME}/.local/bin/" \
     && mv "${HOME}/.local/share/mise" "${HOME}/out/${HOME}/.local/share/" \
     && mv "${HOME}/.config/mise" "${HOME}/out/${HOME}/.config/"
@@ -144,28 +145,15 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         cmake \
         curl \
         dnsutils \
-        ffmpeg \
-        gdal-bin \
         git \
         less \
-        libatk-bridge2.0-0t64 \
-        libatk1.0-0t64 \
         libbz2-dev \
-        libcairo2 \
-        libcups2t64 \
-        libdrm2 \
         libffi-dev \
-        libgbm1 \
-        libgl1 \
         libglib2.0-dev \
         libgmp-dev \
         libgmp10 \
         libmagic1 \
         libncurses-dev \
-        libnspr4 \
-        libnss3 \
-        libpango-1.0-0 \
-        libpangocairo-1.0-0 \
         libpq-dev \
         libreadline-dev \
         libsqlite3-dev \
@@ -174,18 +162,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         locales \
         lsof \
         lzma-dev \
-        mandoc \
-        mysql-client \
         openssh-client \
         pass \
-        postgresql-client \
         pulseaudio \
         python3-tk \
         redis-tools \
         rlwrap \
         socat \
         sudo \
-        swig \
         tk-dev \
         tmux \
         tzdata \
