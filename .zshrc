@@ -26,7 +26,6 @@ function main() {
         fi
     }
 
-    add_path "$HOME/.bun/bin"
     add_path "$HOME/.cargo/bin"
     add_path "$HOME/.docker/bin"
     add_path "$HOME/.local/bin"
@@ -150,10 +149,6 @@ function main() {
             source $HOME/.dotfiles/zshrc.d/tmux.zsh
         fi
 
-    fi
-
-    if [[ -e $HOME/.bun/_bun ]]; then
-        source "$HOME/.bun/_bun"
     fi
 
     if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then
