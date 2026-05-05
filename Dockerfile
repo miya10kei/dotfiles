@@ -152,7 +152,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libatk1.0-0t64 \
         libbz2-dev \
         libcairo2 \
-        libclang-dev \
         libcups2t64 \
         libdrm2 \
         libffi-dev \
@@ -196,6 +195,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         zip \
         zlib1g-dev \
         zsh \
+    && apt-get purge -y --auto-remove software-properties-common \
     && locale-gen --purge $LANG
 
 RUN groupadd "${GNAME}" --gid "${GID}" \
