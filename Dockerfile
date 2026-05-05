@@ -14,6 +14,21 @@ ARG GNAME
 ARG UID
 ARG UNAME
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://jp.archive.ubuntu.com/ubuntu/|g; \
+            s|http://security.ubuntu.com/ubuntu/|http://jp.archive.ubuntu.com/ubuntu/|g' \
+        /etc/apt/sources.list.d/ubuntu.sources \
+    && printf '%s\n' \
+        'path-exclude=/usr/share/doc/*' \
+        'path-include=/usr/share/doc/*/copyright' \
+        'path-exclude=/usr/share/man/*' \
+        'path-exclude=/usr/share/info/*' \
+        'path-exclude=/usr/share/groff/*' \
+        'path-exclude=/usr/share/lintian/*' \
+        'path-exclude=/usr/share/locale/*' \
+        'path-include=/usr/share/locale/en*' \
+        'path-include=/usr/share/locale/ja*' \
+        'path-include=/usr/share/locale/locale.alias' \
+        > /etc/dpkg/dpkg.cfg.d/01_nodoc
 # hadolint ignore=DL3008
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -92,6 +107,22 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=$LANG
 ENV LC_ALL=$LANG
 ENV TZ=Asia/Tokyo
+
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://jp.archive.ubuntu.com/ubuntu/|g; \
+            s|http://security.ubuntu.com/ubuntu/|http://jp.archive.ubuntu.com/ubuntu/|g' \
+        /etc/apt/sources.list.d/ubuntu.sources \
+    && printf '%s\n' \
+        'path-exclude=/usr/share/doc/*' \
+        'path-include=/usr/share/doc/*/copyright' \
+        'path-exclude=/usr/share/man/*' \
+        'path-exclude=/usr/share/info/*' \
+        'path-exclude=/usr/share/groff/*' \
+        'path-exclude=/usr/share/lintian/*' \
+        'path-exclude=/usr/share/locale/*' \
+        'path-include=/usr/share/locale/en*' \
+        'path-include=/usr/share/locale/ja*' \
+        'path-include=/usr/share/locale/locale.alias' \
+        > /etc/dpkg/dpkg.cfg.d/01_nodoc
 
 # hadolint ignore=DL3008
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
