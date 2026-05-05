@@ -52,7 +52,12 @@ tree-sitter = "latest"
 "aqua:ynqa/jnv"               = "latest"
 
 # ubi packages
-"ubi:dalance/procs" = "latest"
+# TODO(ubi-backend-removal): mise 2027.1.0 で ubi backend は削除予定。
+#   laio は github backend だと tarball 内の bin/ が読み取り専用で extract に失敗する。
+#   exe = "laio" はリポジトリ名 (laio-cli) とバイナリ名 (laio) の不一致を解消するため。
+#   それまでに github backend の extract が直るか aqua レジストリに登録されることを期待。
+"ubi:ck3mp3r/laio-cli" = { version = "latest", exe = "laio" }
+"ubi:dalance/procs"    = "latest"
 
 # github releases
 "github:99designs/aws-vault" = "latest"

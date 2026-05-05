@@ -139,6 +139,15 @@ $(HOME)/.config/karabiner/karabiner.json:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-laio
+deploy-laio: \
+	$(HOME)/.config/laio
+
+$(HOME)/.config/laio:
+	ln -fns $(DOTDIR)/config/laio $(HOME)/.config/laio
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-markdownlint
 deploy-markdownlint: \
 	$(HOME)/.markdownlintrc

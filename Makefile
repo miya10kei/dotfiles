@@ -44,6 +44,7 @@ setup4d: \
 	deploy-github-copilot \
 	deploy-gpg \
 	deploy-gws \
+	deploy-laio \
 	deploy-markdownlint \
 	deploy-mcphub \
 	deploy-mise \
