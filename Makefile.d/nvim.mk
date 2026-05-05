@@ -1,16 +1,11 @@
 .PHONY: setup-nvim
 setup-nvim: \
 	install-plugins \
-	install-treesitter-pkg \
-	install-hls
+	install-treesitter-pkg
 
 .PHONY: install-plugins
 install-plugins:
 	nvim --headless -c 'Lazy sync' -c 'qa'
-
-.PHONY: install-hls
-install-hls:
-	mise run install-hls
 
 .PHONY: install-treesitter-pkg
 install-treesitter-pkg:

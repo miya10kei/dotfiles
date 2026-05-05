@@ -2,10 +2,7 @@
 ASDF_LUA_LUAROCKS_VERSION = "3.13.0"
 
 [plugins]
-cabal     = "https://github.com/sestrella/asdf-ghcup.git"
-ghc       = "https://github.com/sestrella/asdf-ghcup.git"
 lua       = "https://github.com/mise-plugins/mise-lua.git"
-stack     = "https://github.com/sestrella/asdf-ghcup.git"
 terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 
 [tools]
@@ -25,11 +22,6 @@ tbls        = "latest"
 terraform   = "latest"
 tree-sitter = "latest"
 
-# Haskell toolchain
-cabal = "latest"
-ghc   = "latest"
-stack = "latest"
-
 # aqua packages
 "aqua:ajeetdsouza/zoxide"     = "latest"
 "aqua:astral-sh/uv"           = "latest"
@@ -43,7 +35,6 @@ stack = "latest"
 "aqua:docker/compose"         = "latest"
 "aqua:evilmartians/lefthook"  = "latest"
 "aqua:gitleaks/gitleaks"      = "latest"
-"aqua:haskell/ghcup-hs"       = "latest"
 "aqua:jqlang/jq"              = "latest"
 "aqua:junegunn/fzf"           = "latest"
 "aqua:mikefarah/yq"           = "latest"
@@ -88,8 +79,6 @@ stack = "latest"
 "npm:yaml-language-server"                = "latest"
 
 # language servers (aqua / go)
-# haskell-language-server: prebuilt バイナリは GHC ABI 整合性問題で動作しないため
-# ghcup 経由で別途インストール（[tasks.install-hls] 参照）
 "aqua:artempyanykh/marksman"                                             = "latest"
 "aqua:hashicorp/terraform-ls"                                            = "latest"
 "aqua:LuaLS/lua-language-server"                                         = "latest"
@@ -145,14 +134,9 @@ depends = [
   "install-claude-code",
   "install-coderabbit",
   "install-gh-extensions",
-  "install-hls",
   "install-session-manager",
 ]
 description = "Install all script-based tools"
-
-[tasks.install-hls]
-description = "Install Haskell Language Server via ghcup"
-run         = "ghcup install hls --set"
 
 [tasks.install-gh-extensions]
 description = "Install GitHub CLI extensions"

@@ -117,7 +117,6 @@ return {
         "docker_compose_language_service",
         "docker_language_server",
         "gopls",
-        "hls",
         "html",
         "jsonls",
         "kotlin_lsp",

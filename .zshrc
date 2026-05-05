@@ -29,7 +29,6 @@ function main() {
     add_path "$HOME/.bun/bin"
     add_path "$HOME/.cargo/bin"
     add_path "$HOME/.docker/bin"
-    add_path "$HOME/.ghcup/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.rd/bin"
     add_path "$HOME/.tfenv/bin"
