@@ -15,7 +15,7 @@ kotlin      = "latest"
 lua         = "latest"
 neovim      = "latest"
 node        = "lts"
-python      = ["3.14", "3.13", "3.11"]
+python      = "3.13"
 rust        = { version = "latest", profile = "minimal", components = "rustfmt,clippy" }
 tbls        = "latest"
 terraform   = "latest"
@@ -103,7 +103,6 @@ tree-sitter = "latest"
 # pipx packages
 "pipx:aws-sam-cli"     = "latest"
 "pipx:git-filter-repo" = "latest"
-"pipx:markitdown"      = { version = "latest", extras = "all" }
 "pipx:pgcli"           = "latest"
 
 # vfox packages
