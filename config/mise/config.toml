@@ -17,7 +17,7 @@ lua         = "latest"
 neovim      = "latest"
 node        = "lts"
 python      = ["3.14", "3.13", "3.11"]
-rust        = "latest"
+rust        = { version = "latest", profile = "minimal", components = "rustfmt,clippy" }
 tbls        = "latest"
 terraform   = "latest"
 tree-sitter = "latest"
