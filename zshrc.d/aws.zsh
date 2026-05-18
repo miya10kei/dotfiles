@@ -68,6 +68,22 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
     eval $cmd
   }
 
+  function dive-cognito() {
+    aws-check-session
+    poolId=$(aws cognito-idp list-user-pools --max-results 60 | jq -r '.UserPools[] | [.Name, .Id] | @tsv' | column -t | fzf | awk '{print $2}')
+    if [ -z "$poolId" ]; then
+      return
+    fi
+    username=$(aws cognito-idp list-users --user-pool-id $poolId | jq -r '.Users[] | [.Username, .UserStatus] | @tsv' | column -t | fzf | awk '{print $1}')
+    if [ -z "$username" ]; then
+      return
+    fi
+    cmd="aws cognito-idp admin-get-user --user-pool-id $poolId --username $username"
+    echo -e "\e[32m\$$cmd\e[m"
+    print -s $cmd
+    eval $cmd
+  }
+
   function aws-logs() {
     aws-check-session
 
