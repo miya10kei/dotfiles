@@ -5,7 +5,7 @@
     "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_NO_FLICKER": "1",
+    "CLAUDE_CODE_NO_FLICKER": "0",
     "ENABLE_TOOL_SEARCH": "true"
   },
   "includeCoAuthoredBy": true,
@@ -53,12 +53,13 @@
       "Bash(cargo update *)",
       "Bash(cat *)",
       "Bash(cd *)",
+      "Bash(coderabbit *)",
       "Bash(curl *)",
       "Bash(date *)",
       "Bash(diff *)",
       "Bash(dig *)",
       "Bash(dirname *)",
-      "Bash(docker build *)",
+      "Bash(docker *)",
       "Bash(echo *)",
       "Bash(find *)",
       "Bash(gh api *)",
@@ -89,6 +90,8 @@
       "Bash(gws gmail users threads get *)",
       "Bash(head *)",
       "Bash(jq *)",
+      "Bash(kotlin-lsp*)",
+      "Bash(laio *)",
       "Bash(ls *)",
       "Bash(mise *)",
       "Bash(mkdir *)",
@@ -111,8 +114,8 @@
       "Bash(pnpm run test *)",
       "Bash(pnpm run type-check *)",
       "Bash(pnpm test *)",
-      "Bash(python3 */fetch-gmail/scripts/*)",
       "Bash(pwd)",
+      "Bash(python3 */fetch-gmail/scripts/*)",
       "Bash(read *)",
       "Bash(readlink *)",
       "Bash(rtk *)",
@@ -146,22 +149,26 @@
       "WebFetch",
       "WebSearch",
       "mcp__aws-knowledge__*",
-      "mcp__claude_ai_Atlassian__*",
-      "mcp__claude_ai_Context7__*",
-      "mcp__claude_ai_Slack__slack_read_*",
-      "mcp__claude_ai_Slack__slack_search_*",
-      "mcp__claude_ai_Slack__slack_send_message_draft",
       "mcp__paid-mcp-servers__jira___*",
       "mcp__paid-mcp-servers__zendesk___*",
-      "mcp__playwright__*",
       "mcp__plugin_atlassian_atlassian__atlassianUserInfo",
       "mcp__plugin_atlassian_atlassian__get*",
       "mcp__plugin_atlassian_atlassian__lookup*",
       "mcp__plugin_atlassian_atlassian__search*",
-      "mcp__plugin_context7_context7__*",
-      "mcp__plugin_serena_serena__*"
+      "mcp__plugin_context7_context7__*"
     ],
     "deny": [
+      "Bash(docker buildx build * --push)",
+      "Bash(docker buildx build * --push *)",
+      "Bash(docker buildx imagetools push *)",
+      "Bash(docker compose push)",
+      "Bash(docker compose push *)",
+      "Bash(docker image push *)",
+      "Bash(docker manifest push *)",
+      "Bash(docker push)",
+      "Bash(docker push *)",
+      "Bash(docker trust revoke *)",
+      "Bash(docker trust sign *)",
       "Bash(gh api * --field *)",
       "Bash(gh api * --input *)",
       "Bash(gh api * --method *)",
@@ -202,6 +209,20 @@
       "Bash(terraform apply)"
     ]
   },
+  "deniedMcpServers": [
+    {
+      "serverName": "claude_ai_AWS_Knowledge_MCP_Server"
+    },
+    {
+      "serverName": "claude_ai_Context7"
+    },
+    {
+      "serverName": "claude_ai_Atlassian"
+    },
+    {
+      "serverName": "claude_ai_Slack"
+    }
+  ],
   "hooks": {
     "PreToolUse": [
       {
@@ -254,5 +275,6 @@
   "editorMode": "normal",
   "showTurnDuration": true,
   "skipAutoPermissionPrompt": true,
-  "effort": "high"
+  "effort": "high",
+  "agentPushNotifEnabled": true
 }
