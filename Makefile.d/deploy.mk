@@ -54,17 +54,10 @@ $(HOME)/.coderabbit/auth.json:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-claude
 deploy-claude: \
-	$(HOME)/.config/claude \
-	install-claude-mcp-servers
+	$(HOME)/.config/claude
 
 $(HOME)/.config/claude:
 	ln -fns $(DOTDIR)/config/claude $(HOME)/.config/claude
-
-install-claude-mcp-servers:
-	bash $(HOME)/.config/claude/scripts/install-mcp-servers.sh
-	@if [ -f $(HOME)/.config/claude/scripts/install-mcp-servers-work.sh ]; then \
-		bash $(HOME)/.config/claude/scripts/install-mcp-servers-work.sh; \
-	fi
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -112,15 +105,6 @@ $(HOME)/.config/gws:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-github-copilot
-deploy-github-copilot: \
-	$(HOME)/.config/github-copilot
-
-$(HOME)/.config/github-copilot:
-	ln -fns $(DOTDIR)/data-volume/github-copilot $(HOME)/.config/github-copilot
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-gpg
 deploy-gpg: \
 	$(HOME)/.gnupg
@@ -154,15 +138,6 @@ deploy-markdownlint: \
 
 $(HOME)/.markdownlintrc:
 	ln -fns $(DOTDIR)/.markdownlintrc $(HOME)/.markdownlintrc
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-mcphub
-deploy-mcphub: \
-  $(HOME)/.config/mcphub
-
-$(HOME)/.config/mcphub:
-	ln -fns $(DOTDIR)/config/mcphub $(HOME)/.config/mcphub
 
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -41,12 +41,10 @@ setup4d: \
 	deploy-editorconfig \
 	deploy-gh \
 	deploy-git \
-	deploy-github-copilot \
 	deploy-gpg \
 	deploy-gws \
 	deploy-laio \
 	deploy-markdownlint \
-	deploy-mcphub \
 	deploy-mise \
 	deploy-npm \
 	deploy-nvim \
