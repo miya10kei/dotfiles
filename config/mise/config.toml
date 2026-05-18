@@ -2,53 +2,54 @@
 ASDF_LUA_LUAROCKS_VERSION = "3.13.0"
 
 [plugins]
-lua       = "https://github.com/mise-plugins/mise-lua.git"
+lua = "https://github.com/mise-plugins/mise-lua.git"
 terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 
 [tools]
 # Language runtimes
-chamber     = "latest"
-deno        = "latest"
-go          = "latest"
-java        = "25"
-kotlin      = "latest"
-lua         = "latest"
-neovim      = "latest"
-node        = "lts"
-python      = "3.13"
-rust        = { version = "latest", profile = "minimal", components = "rustfmt,clippy" }
-tbls        = "latest"
-terraform   = "latest"
+chamber = "latest"
+deno = "latest"
+go = "latest"
+java = "25"
+kotlin = "latest"
+lua = "latest"
+neovim = "latest"
+node = "lts"
+python = "3.13"
+rust = { version = "latest", profile = "minimal", components = "rustfmt,clippy" }
+tbls = "latest"
+terraform = "latest"
 tree-sitter = "latest"
 
 # aqua packages
-"aqua:ajeetdsouza/zoxide"     = "latest"
-"aqua:astral-sh/uv"           = "latest"
-"aqua:aws/aws-cli"            = "latest"
-"aqua:BurntSushi/ripgrep"     = "latest"
-"aqua:ClementTsang/bottom"    = "latest"
-"aqua:cli/cli"                = "latest"
-"aqua:dandavison/delta"       = "latest"
-"aqua:docker/buildx"          = "latest"
-"aqua:docker/cli"             = "latest"
-"aqua:docker/compose"         = "latest"
-"aqua:evilmartians/lefthook"  = "latest"
-"aqua:gitleaks/gitleaks"      = "latest"
-"aqua:jqlang/jq"              = "latest"
-"aqua:junegunn/fzf"           = "latest"
-"aqua:mikefarah/yq"           = "latest"
-"aqua:muesli/duf"             = "latest"
-"aqua:rhysd/actionlint"       = "latest"
-"aqua:rossmacarthur/sheldon"  = "latest"
-"aqua:sharkdp/bat"            = "latest"
-"aqua:sharkdp/fd"             = "latest"
-"aqua:starship/starship"      = "latest"
+"aqua:ajeetdsouza/zoxide" = "latest"
+"aqua:astral-sh/uv" = "latest"
+"aqua:aws/aws-cli" = "latest"
+"aqua:BurntSushi/ripgrep" = "latest"
+"aqua:ClementTsang/bottom" = "latest"
+"aqua:cli/cli" = "latest"
+"aqua:dandavison/delta" = "latest"
+"aqua:docker/buildx" = "latest"
+"aqua:docker/cli" = "latest"
+"aqua:docker/compose" = "latest"
+"aqua:evilmartians/lefthook" = "latest"
+"aqua:gitleaks/gitleaks" = "latest"
+"aqua:jqlang/jq" = "latest"
+"aqua:junegunn/fzf" = "latest"
+"aqua:mikefarah/yq" = "latest"
+"aqua:muesli/duf" = "latest"
+"aqua:rclone/rclone" = "latest"
+"aqua:rhysd/actionlint" = "latest"
+"aqua:rossmacarthur/sheldon" = "latest"
+"aqua:sharkdp/bat" = "latest"
+"aqua:sharkdp/fd" = "latest"
+"aqua:starship/starship" = "latest"
 "aqua:suzuki-shunsuke/pinact" = "latest"
-"aqua:sxyazi/yazi"            = "latest"
-"aqua:vi/websocat"            = "latest"
-"aqua:wagoodman/dive"         = "latest"
-"aqua:x-motemen/ghq"          = "latest"
-"aqua:ynqa/jnv"               = "latest"
+"aqua:sxyazi/yazi" = "latest"
+"aqua:vi/websocat" = "latest"
+"aqua:wagoodman/dive" = "latest"
+"aqua:x-motemen/ghq" = "latest"
+"aqua:ynqa/jnv" = "latest"
 
 # ubi packages
 # TODO(ubi-backend-removal): mise 2027.1.0 で ubi backend は削除予定。
@@ -56,72 +57,80 @@ tree-sitter = "latest"
 #   exe = "laio" はリポジトリ名 (laio-cli) とバイナリ名 (laio) の不一致を解消するため。
 #   それまでに github backend の extract が直るか aqua レジストリに登録されることを期待。
 "ubi:ck3mp3r/laio-cli" = { version = "latest", exe = "laio" }
-"ubi:dalance/procs"    = "latest"
 
 # github releases
 "github:99designs/aws-vault" = "latest"
-"github:denisidoro/navi"     = "latest"
-"github:eza-community/eza"   = "latest"
+"github:denisidoro/navi" = "latest"
+"github:eza-community/eza" = "latest"
 "github:googleworkspace/cli" = "latest"
-"github:k1LoW/mo"            = "latest"
-"github:miya10kei/ccargus"   = "latest"
-"github:miya10kei/ccjanus"   = "latest"
-"github:rtk-ai/rtk"          = "latest"
+"github:k1LoW/mo" = "latest"
+"github:miya10kei/ccargus" = "latest"
+"github:miya10kei/ccjanus" = "latest"
+"github:rtk-ai/rtk" = "latest"
 
 # npm packages
 "npm:@anthropic-ai/sandbox-runtime" = "latest"
-"npm:pnpm"                          = "latest"
+"npm:@slidev/cli" = "latest"
+"npm:pnpm" = "latest"
 
 # language servers (npm)
-"npm:@angular/language-server"            = "latest"
+"npm:@angular/language-server" = "latest"
 "npm:@microsoft/compose-language-service" = "latest"
-"npm:bash-language-server"                = "latest"
-"npm:pyright"                             = "latest"
-"npm:typescript"                          = "latest"
-"npm:typescript-language-server"          = "latest"
-"npm:vscode-langservers-extracted"        = "latest"
-"npm:yaml-language-server"                = "latest"
+"npm:bash-language-server" = "latest"
+"npm:pyright" = "latest"
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+"npm:yaml-language-server" = "latest"
 
 # language servers (aqua / go)
-"aqua:artempyanykh/marksman"                                             = "latest"
-"aqua:hashicorp/terraform-ls"                                            = "latest"
-"aqua:LuaLS/lua-language-server"                                         = "latest"
-"aqua:rust-lang/rust-analyzer"                                           = "latest"
-"aqua:tamasfe/taplo"                                                     = "latest"
+"aqua:artempyanykh/marksman" = "latest"
+"aqua:hashicorp/terraform-ls" = "latest"
+"aqua:LuaLS/lua-language-server" = "latest"
+"aqua:rust-lang/rust-analyzer" = "latest"
+"aqua:tamasfe/taplo" = "latest"
 "go:github.com/docker/docker-language-server/cmd/docker-language-server" = "latest"
-"go:golang.org/x/tools/gopls"                                            = "latest"
+"go:golang.org/x/tools/gopls" = "latest"
 
 # linters / formatters
-"aqua:aquasecurity/trivy"   = "latest"
-"aqua:astral-sh/ruff"       = "latest"
-"aqua:google/yamlfmt"       = "latest"
-"aqua:hadolint/hadolint"    = "latest"
+"aqua:aquasecurity/trivy" = "latest"
+"aqua:astral-sh/ruff" = "latest"
+"aqua:google/yamlfmt" = "latest"
+"aqua:hadolint/hadolint" = "latest"
 "aqua:JohnnyMorganz/StyLua" = "latest"
-"npm:markdownlint-cli2"     = "latest"
-"npm:prettier"              = "latest"
+"aqua:pinterest/ktlint" = "latest"
+"npm:markdownlint-cli2" = "latest"
+"npm:prettier" = "latest"
 
 # pipx packages
-"pipx:aws-sam-cli"     = "latest"
+"pipx:aws-sam-cli" = "latest"
 "pipx:git-filter-repo" = "latest"
-"pipx:pgcli"           = "latest"
+"pipx:pgcli" = "latest"
 
 # vfox packages
 "vfox:gcloud" = "latest"
 
 # http downloads
-"http:fzf-completion"   = { version = "master", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh" }
-"http:fzf-key-bindings" = { version = "master", url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh" }
-"http:fzf-tmux"         = { version = "master", url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux" }
+"http:fzf-completion" = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/shell/completion.zsh" }
+"http:fzf-key-bindings" = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/shell/key-bindings.zsh" }
+"http:fzf-tmux" = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/bin/fzf-tmux" }
 
 # cargo packages
 "cargo:kotlin-lsp" = "latest"
 
 [settings]
-experimental                        = true
-idiomatic_version_file_enable_tools = ["deno", "go", "java", "node", "python", "rust", "terraform"]
-install_before                      = "7d"
-not_found_auto_install              = true
-trusted_config_paths                = ["~/dev"]
+experimental = true
+idiomatic_version_file_enable_tools = [
+  "deno",
+  "go",
+  "java",
+  "node",
+  "python",
+  "rust",
+  "terraform",
+]
+not_found_auto_install = false
+trusted_config_paths = ["~/dev"]
 
 [settings.hook_env]
 chpwd_only = true
@@ -132,27 +141,49 @@ corepack = true
 [settings.python]
 uv_venv_auto = true
 
+[tasks.install-claude-code]
+description = "Install Claude Code CLI"
+run = "curl -fsSL https://claude.ai/install.sh | bash"
+
+[tasks.install-coderabbit]
+description = "Install CodeRabbit CLI"
+run = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
+
+[tasks.install-gh-extensions]
+description = "Install GitHub CLI extensions"
+run = "gh extension install dlvhdr/gh-dash"
+
 [tasks.install-bins]
+description = "Install all script-based tools"
 depends = [
   "install-claude-code",
   "install-coderabbit",
   "install-gh-extensions",
   "install-session-manager",
 ]
-description = "Install all script-based tools"
 
-[tasks.install-gh-extensions]
-description = "Install GitHub CLI extensions"
-run         = "gh extension install dlvhdr/gh-dash"
+[tasks.install-plugins]
+description = "Install neovim plugins via lazy.nvim"
+run = "nvim --headless -c 'Lazy sync' -c 'qa'"
 
-[tasks.install-claude-code]
-description = "Install Claude Code CLI"
-run         = "curl -fsSL https://claude.ai/install.sh | bash"
+[tasks.install-treesitter-pkg]
+description = "Install tree-sitter parsers"
+run = "nvim --headless -c 'lua require(\"lazy\").load({plugins={\"nvim-treesitter\"}})' -c 'TSInstallNeeded' -c 'qa'"
 
-[tasks.install-coderabbit]
-description = "Install CodeRabbit CLI"
-run         = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
+[tasks.setup-nvim]
+description = "Setup neovim plugins and treesitter parsers"
+depends = ["install-plugins", "install-treesitter-pkg"]
 
-[tasks."kotlin-lsp:extract-sources"]
-description = "kotlin-lspの依存ソースを~/.local/share/kotlin-lsp/sources/に抽出"
-run         = "python3 ~/.local/share/kotlin-lsp/extract-sources.py --output ~/.local/share/kotlin-lsp/sources"
+[tasks.slim]
+description = "Remove docs/man/caches from mise installs to slim the tree"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+INSTALLS="${MISE_DATA_DIR:-$HOME/.local/share/mise}/installs"
+rm -rf \
+    "${MISE_DATA_DIR:-$HOME/.local/share/mise}/downloads" \
+    "$HOME/.cache" \
+    "$INSTALLS"/*/*/{share/man,share/doc,man,doc} \
+    "$INSTALLS"/vfox-gcloud/*/{platform/ext-runtime,deb,rpm,RELEASE_NOTES,README} \
+    "$INSTALLS"/java/*/jmods
+'''
