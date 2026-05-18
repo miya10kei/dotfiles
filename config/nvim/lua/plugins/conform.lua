@@ -42,6 +42,7 @@ return {
           html = { "prettier" },
           graphql = { "prettier" },
           handlebars = { "prettier" },
+          kotlin = { "ktlint" },
           lua = { "stylua" },
           markdown = { "markdownlint-cli2" },
           python = { "ruff_organize_imports", "ruff_format" },
