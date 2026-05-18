@@ -1,5 +1,4 @@
 name: dev
-path: .
 
 windows:
   - name: dev
