@@ -8,8 +8,18 @@ else
   DL_ARCH="arm64"
 fi
 
-mkdir -p /tmp/sessionmanagerplugin
-curl -fsLS -o /tmp/sessionmanagerplugin/session-manager-plugin.deb \
+INSTALL_ROOT="${HOME}/.local/share/sessionmanagerplugin"
+BIN_DIR="${HOME}/.local/bin"
+
+TMPDIR=$(mktemp -d)
+trap 'rm -rf "${TMPDIR}"' EXIT
+
+curl -fsLS -o "${TMPDIR}/session-manager-plugin.deb" \
   "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_${DL_ARCH}/session-manager-plugin.deb"
-sudo dpkg --install /tmp/sessionmanagerplugin/session-manager-plugin.deb
-rm -rf /tmp/sessionmanagerplugin
+
+rm -rf "${INSTALL_ROOT}"
+mkdir -p "${INSTALL_ROOT}" "${BIN_DIR}"
+dpkg-deb -x "${TMPDIR}/session-manager-plugin.deb" "${INSTALL_ROOT}"
+
+ln -sf "${INSTALL_ROOT}/usr/local/sessionmanagerplugin/bin/session-manager-plugin" \
+  "${BIN_DIR}/session-manager-plugin"
