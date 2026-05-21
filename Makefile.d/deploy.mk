@@ -41,14 +41,10 @@ $(HOME)/.config/ccstatusline:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-coderabbit
 deploy-coderabbit: \
-	$(HOME)/.coderabbit \
-	$(HOME)/.coderabbit/auth.json
+	$(HOME)/.coderabbit
 
 $(HOME)/.coderabbit:
-	mkdir -p $(HOME)/.coderabbit
-
-$(HOME)/.coderabbit/auth.json:
-	ln -fns $(DOTDIR)/data-volume/coderabbit/auth.json $(HOME)/.coderabbit/auth.json
+	ln -fns $(DOTDIR)/data-volume/coderabbit $(HOME)/.coderabbit
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -120,15 +116,6 @@ deploy-karabiner: \
 
 $(HOME)/.config/karabiner/karabiner.json:
 	ln -fns $(DOTDIR)/karabiner.json $(HOME)/.config/karabiner/karabiner.json
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-laio
-deploy-laio: \
-	$(HOME)/.config/laio
-
-$(HOME)/.config/laio:
-	ln -fns $(DOTDIR)/config/laio $(HOME)/.config/laio
 
 
 # ----------------------------------------------------------------------------------------------------------------------
