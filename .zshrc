@@ -126,10 +126,6 @@ function main() {
         fi
     fi
 
-    if builtin command -v sheldon > /dev/null 2>&1; then
-        eval "$(sheldon source)"
-    fi
-
     autoload -Uz add-zsh-hook
 
     if [[ -e $HOME/.dotfiles/zshrc.d ]]; then
@@ -171,6 +167,13 @@ function main() {
     FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
     autoload bashcompinit && bashcompinit
     autoload -Uz compinit && compinit
+
+    # sheldon must be sourced after compinit so fzf-tab can wrap the completion
+    # system, and before it the widget-wrapping plugins it bundles
+    if builtin command -v sheldon > /dev/null 2>&1; then
+        eval "$(sheldon source)"
+    fi
+
     complete -C "$HOME/.local/bin/aws_completer" aws
 }
 

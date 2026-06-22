@@ -16,6 +16,7 @@
   pl    = pull -p
   ps    = push
   pull  = pull -p
+  sh    = !git log --oneline --color=always | fzf-tmux $FZF_TMUX_OPTS --ansi --preview 'git show --color=always {1} | delta' | awk '{print $1}' | xargs -r git show
   st    = status --short
   sw    = !git branch -a | grep -vE '^\\*' | fzf | sed -e 's/remotes\\/origin\\///' | xargs git switch
 [color]

@@ -66,6 +66,18 @@ autocmd.create_group("GitHubActionsFiletype", {
   },
 })
 
+-- Worktree名をステータスラインへ反映
+autocmd.create_group("WorktreeStatusline", {
+  {
+    event = { "VimEnter", "DirChanged" },
+    opts = {
+      callback = function()
+        require("utils.worktree").refresh()
+      end,
+    },
+  },
+})
+
 -- LSPクライアントの強制停止（kotlin-lsp等のゾンビJVM対策）
 autocmd.create_group("LspForceStopOnExit", {
   {

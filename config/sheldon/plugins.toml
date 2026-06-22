@@ -2,6 +2,11 @@ shell = "zsh"
 
 [plugins]
 
+# fzf-tab must be sourced after compinit and before widget-wrapping plugins
+# (zsh-autosuggestions / zsh-syntax-highlighting)
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 #[plugins.zsh-completions]

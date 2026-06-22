@@ -35,6 +35,7 @@ function quit() {
     exit
 }
 
+alias_if_exists 'c'         'claude --mcp-config=$HOME/.config/claude/mcp.json' 'claude'
 alias_if_exists 'claude'    'claude --mcp-config=$HOME/.config/claude/mcp.json' 'claude'
 alias_if_exists 'cdc'       '_fzf_change_directory "ls -1D $HOME/.config" "echo $HOME/.config"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'

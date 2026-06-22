@@ -18,6 +18,8 @@ $(HOME)/.config/docker/cli-plugins/docker-compose:
 deploy-mise:
 	@if [ -d $(HOME)/.config/mise ] && [ ! -L $(HOME)/.config/mise ]; then rm -rf $(HOME)/.config/mise; fi
 	ln -fns $(DOTDIR)/config/mise $(HOME)/.config/mise
+	mkdir -p $(HOME)/.local/share/zsh-completion/completions
+	mise completion zsh > $(HOME)/.local/share/zsh-completion/completions/_mise
 
 
 # ----------------------------------------------------------------------------------------------------------------------

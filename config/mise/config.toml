@@ -34,8 +34,10 @@ tree-sitter = "latest"
 "aqua:docker/compose" = "latest"
 "aqua:evilmartians/lefthook" = "latest"
 "aqua:gitleaks/gitleaks" = "latest"
+"aqua:jdx/usage" = "latest"
 "aqua:jqlang/jq" = "latest"
 "aqua:junegunn/fzf" = "latest"
+"aqua:kayac/ecspresso" = "latest"
 "aqua:mikefarah/yq" = "latest"
 "aqua:muesli/duf" = "latest"
 "aqua:rclone/rclone" = "latest"
@@ -59,12 +61,14 @@ tree-sitter = "latest"
 "github:k1LoW/mo" = "latest"
 "github:miya10kei/ccargus" = "latest"
 "github:miya10kei/ccjanus" = "latest"
+"github:nnnkkk7/lazyactions" = "latest"
 "github:rtk-ai/rtk" = "latest"
 
 # npm packages
 "npm:@anthropic-ai/sandbox-runtime" = "latest"
 "npm:@slidev/cli" = "latest"
 "npm:pnpm" = "latest"
+"npm:twilio-cli" = "latest"
 
 # language servers (npm)
 "npm:@angular/language-server" = "latest"
@@ -114,6 +118,7 @@ tree-sitter = "latest"
 
 # cargo packages
 "cargo:kotlin-lsp" = "latest"
+"github:theseus-rs/postgresql-binaries" = { version = "latest", matching = "gnu", exe = "psql" }
 
 [settings]
 experimental = true
@@ -144,7 +149,8 @@ run = "curl -fsSL https://claude.ai/install.sh | bash"
 
 [tasks.install-coderabbit]
 description = "Install CodeRabbit CLI"
-run = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
+# CI=1 でインストール後の対話的サインイン (coderabbit auth login) をスキップする
+run = "curl -fsSL https://cli.coderabbit.ai/install.sh | CI=1 sh"
 
 [tasks.install-gh-extensions]
 description = "Install GitHub CLI extensions"
