@@ -18,6 +18,7 @@ FZF_CTRL_R_PREVIEW="echo {} | awk '{ print substr(\$0, index(\$0,\$2)) }' | bat 
 export FZF_CTRL_R_OPTS="--preview=\"$FZF_CTRL_R_PREVIEW\""
 
 FZF_MISE_DIR="$HOME/.local/share/mise/installs"
-[[ -f "$FZF_MISE_DIR/http-fzf-completion/latest/completion.zsh" ]] && source "$FZF_MISE_DIR/http-fzf-completion/latest/completion.zsh"
+# fzf's completion.zsh binds Tab to fzf-completion (** trigger), which conflicts
+# with fzf-tab. Tab completion is handled by fzf-tab; only keep fzf key-bindings.
 [[ -f "$FZF_MISE_DIR/http-fzf-key-bindings/latest/key-bindings.zsh" ]] && source "$FZF_MISE_DIR/http-fzf-key-bindings/latest/key-bindings.zsh"
 bindkey "ç" fzf-cd-widget
