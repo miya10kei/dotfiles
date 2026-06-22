@@ -30,11 +30,6 @@ brew-install:
 		raycast \
 		rectangle \
 		xquartz
-	brew install \
-		aws-sam-cli \
-		aws-vault \
-		awscli \
-		pulseaudio
 	brew cleanup --prune all
 
 .PHONY: brew-update
