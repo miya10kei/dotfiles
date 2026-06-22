@@ -3,6 +3,22 @@
   "lines": [
     [
       {
+        "id": "ae0ceaae-f065-4741-8a16-229eb5f82cbf",
+        "type": "git-worktree"
+      },
+      {
+        "id": "f3e72fe6-27ac-4d12-ba81-912fc3404df5",
+        "type": "separator"
+      },
+      {
+        "id": "9313a0b1-4335-4409-93a8-1791454603e0",
+        "type": "git-branch"
+      },
+      {
+        "id": "987b1aae-cdd8-4c6a-8341-0974c8287cd4",
+        "type": "separator"
+      },
+      {
         "id": "1",
         "type": "model",
         "color": "cyan"
@@ -63,6 +79,7 @@
   "colorLevel": 2,
   "inheritSeparatorColors": false,
   "globalBold": false,
+  "gitCacheTtlSeconds": 5,
   "minimalistMode": false,
   "powerline": {
     "enabled": false,
