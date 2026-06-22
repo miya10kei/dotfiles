@@ -35,6 +35,8 @@
       "Bash(aws * transact-get-* *)",
       "Bash(aws logs start-query *)",
       "Bash(basename *)",
+      "Bash(bc *)",
+      "Bash(break *)",
       "Bash(cargo add *)",
       "Bash(cargo bench *)",
       "Bash(cargo build *)",
@@ -54,7 +56,7 @@
       "Bash(cat *)",
       "Bash(cd *)",
       "Bash(coderabbit *)",
-      "Bash(curl *)",
+      "Bash(command *)",
       "Bash(date *)",
       "Bash(diff *)",
       "Bash(dig *)",
@@ -62,6 +64,8 @@
       "Bash(docker *)",
       "Bash(echo *)",
       "Bash(find *)",
+      "Bash(fd *)",
+      "Bash(for *)",
       "Bash(gh api *)",
       "Bash(gh issue list *)",
       "Bash(gh issue view *)",
@@ -89,8 +93,11 @@
       "Bash(gws gmail users messages list *)",
       "Bash(gws gmail users threads get *)",
       "Bash(head *)",
+      "Bash(java *)",
+      "Bash(javap *)",
       "Bash(jq *)",
-      "Bash(kotlin-lsp*)",
+      "Bash(kotlin-lsp *)",
+      "Bash(kotlinc-jvm *)",
       "Bash(ls *)",
       "Bash(mise *)",
       "Bash(mkdir *)",
@@ -105,6 +112,9 @@
       "Bash(npm test *)",
       "Bash(nvim *)",
       "Bash(paplay *)",
+      "Bash(paste *)",
+      "Bash(perl *)",
+      "Bash(pg_isready *)",
       "Bash(pinact *)",
       "Bash(pnpm add *)",
       "Bash(pnpm install *)",
@@ -117,20 +127,28 @@
       "Bash(python3 */fetch-gmail/scripts/*)",
       "Bash(read *)",
       "Bash(readlink *)",
+      "Bash(rg *)",
       "Bash(rtk *)",
       "Bash(sam validate *)",
       "Bash(sed *)",
       "Bash(sleep *)",
       "Bash(sort *)",
       "Bash(split *)",
+      "Bash(sqlfluff *)",
       "Bash(stat *)",
+      "Bash(strings *)",
       "Bash(stylua *)",
       "Bash(tail *)",
       "Bash(tbls *)",
+      "Bash(terraform *)",
       "Bash(test *)",
+      "Bash(tflint *)",
       "Bash(tmux *)",
       "Bash(tree *)",
+      "Bash(trivy *)",
       "Bash(uname *)",
+      "Bash(unique *)",
+      "Bash(unzip *)",
       "Bash(uv add *)",
       "Bash(uv init *)",
       "Bash(uv pip list *)",
@@ -139,7 +157,6 @@
       "Bash(uv run pytest *)",
       "Bash(uv run ruff *)",
       "Bash(uv sync *)",
-      "Bash(unique *)",
       "Bash(wc *)",
       "Bash(which *)",
       "Bash(xargs *)",
@@ -149,12 +166,8 @@
       "WebFetch",
       "WebSearch",
       "mcp__aws-knowledge__*",
-      "mcp__paid-mcp-servers__jira___*",
-      "mcp__paid-mcp-servers__zendesk___*",
-      "mcp__plugin_atlassian_atlassian__atlassianUserInfo",
-      "mcp__plugin_atlassian_atlassian__get*",
-      "mcp__plugin_atlassian_atlassian__lookup*",
-      "mcp__plugin_atlassian_atlassian__search*",
+      "mcp__datadog__*",
+      "mcp__paid-mcp-servers__*",
       "mcp__plugin_context7_context7__*"
     ],
     "deny": [
@@ -209,6 +222,7 @@
       "Bash(terraform apply)"
     ]
   },
+  "model": "claude-opus-4-6[1M]",
   "deniedMcpServers": [
     {
       "serverName": "claude_ai_AWS_Knowledge_MCP_Server"
@@ -231,15 +245,6 @@
           {
             "type": "command",
             "command": "ccjanus --flexible-match"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_CONFIG_DIR/hooks/rtk-rewrite.sh"
           }
         ]
       }
@@ -274,7 +279,8 @@
   ],
   "editorMode": "normal",
   "showTurnDuration": true,
+  "remoteControlAtStartup": false,
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effort": "high",
-  "agentPushNotifEnabled": true
+  "effort": "high"
 }
