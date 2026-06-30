@@ -17,7 +17,6 @@ neovim = "latest"
 node = "lts"
 python = "3.13"
 rust = { version = "latest", profile = "minimal", components = "rustfmt,clippy" }
-tbls = "latest"
 terraform = "latest"
 tree-sitter = "latest"
 
@@ -57,6 +56,7 @@ tree-sitter = "latest"
 "github:eza-community/eza" = "latest"
 "github:googleworkspace/cli" = "latest"
 "github:k1LoW/mo" = "latest"
+"github:k1LoW/tbls" = "latest"
 "github:miya10kei/ccargus" = "latest"
 "github:miya10kei/ccjanus" = "latest"
 "github:rtk-ai/rtk" = "latest"
@@ -129,6 +129,10 @@ idiomatic_version_file_enable_tools = [
 not_found_auto_install = false
 trusted_config_paths = ["~/dev"]
 
+# github:k1LoW/mo の release attestation が TSA タイムスタンプ検証に失敗するため無効化する (SLSA provenance 検証は維持)
+[settings.github]
+github_attestations = false
+
 [settings.hook_env]
 chpwd_only = true
 
@@ -144,7 +148,8 @@ run = "curl -fsSL https://claude.ai/install.sh | bash"
 
 [tasks.install-coderabbit]
 description = "Install CodeRabbit CLI"
-run = "curl -fsSL https://cli.coderabbit.ai/install.sh | sh"
+# CI=1 で非対話のサインインフローをスキップさせる (未設定だとインストール成功後に exit 2 で失敗する)
+run = "curl -fsSL https://cli.coderabbit.ai/install.sh | CI=1 sh"
 
 [tasks.install-gh-extensions]
 description = "Install GitHub CLI extensions"

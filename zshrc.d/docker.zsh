@@ -71,10 +71,15 @@ if builtin command -v docker > /dev/null 2>&1; then
   }
 
   function attach_dev_env() {
+      # コンテナに terminfo が無い TERM (例 xterm-ghostty) はそのまま渡すと端末エラーになるため既知値へ正規化する
+      local term="${TERM:-xterm-256color}"
+      case "$term" in
+          xterm-ghostty) term="xterm-256color" ;;
+      esac
       docker exec \
           --tty \
           --interactive \
-          --env TERM="${TERM:-xterm-256color}" \
+          --env TERM="$term" \
           dev-env \
           /usr/bin/zsh
   }

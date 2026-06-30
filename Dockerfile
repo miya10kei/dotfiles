@@ -45,6 +45,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libtool-bin \
         ninja-build \
         pkg-config \
+        python3 \
         sudo \
         unzip \
         upx \
