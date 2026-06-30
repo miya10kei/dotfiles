@@ -272,9 +272,11 @@
   "companyAnnouncements": [
     "個人契約のClaude Codeです"
   ],
+  "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
   "showTurnDuration": true,
   "skipAutoPermissionPrompt": true,
   "effort": "high",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "tui": "fullscreen"
 }
