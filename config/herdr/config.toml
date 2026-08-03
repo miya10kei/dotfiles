@@ -1,3 +1,4 @@
+onboarding = false
 [keys]
 prefix = "ctrl+g"
 split_vertical = "prefix+|"
@@ -11,7 +12,7 @@ key = "prefix+u"
 type = "popup"
 command = "~/.dotfiles/config/herdr/scripts/new-worktree.sh"
 width = "50%"
-height = "60%"
+height = "40%"
 
 [ui]
 sidebar_width = 36
