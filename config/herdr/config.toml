@@ -6,19 +6,26 @@ navigate_workspace_up = "k"
 navigate_workspace_down = "j"
 previous_agent = "prefix+,"
 next_agent = "prefix+."
-previous_workspace = "ctrl+alt+p"
-next_workspace = "ctrl+alt+n"
-focus_pane_left = "ctrl+alt+h"
-focus_pane_down = "ctrl+alt+j"
-focus_pane_up = "ctrl+alt+k"
-focus_pane_right = "ctrl+alt+l"
+previous_workspace = "ctrl+shift+p"
+next_workspace = "ctrl+shift+n"
+focus_pane_left = "ctrl+shift+h"
+focus_pane_down = "ctrl+shift+j"
+focus_pane_up = "ctrl+shift+k"
+focus_pane_right = "ctrl+shift+l"
 
 [[keys.command]]
 key = "prefix+u"
 type = "popup"
-command = "~/.dotfiles/config/herdr/scripts/new-worktree.sh"
+command = "~/.config/herdr/scripts/new-worktree.sh"
 width = "50%"
 height = "40%"
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "~/.config/herdr/scripts/insert-file-path.sh"
+width = "60%"
+height = "60%"
 
 [ui]
 sidebar_width = 36
@@ -26,3 +33,6 @@ sidebar_width = 36
 [experimental]
 pane_history = true
 switch_ascii_input_source_in_prefix = true
+
+[update]
+channel = "stable"
