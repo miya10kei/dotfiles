@@ -1,6 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "advisorModel": "fable",
+  "agentPushNotifEnabled": true,
+  "alwaysThinkingEnabled": true,
+  "autoMemoryEnabled": false,
   "cleanupPeriodDays": 14,
+  "companyAnnouncements": [
+    "個人契約のClaude Codeです"
+  ],
+  "disableClaudeAiConnectors": true,
+  "editorMode": "normal",
+  "effort": "high",
+  "enabledPlugins": {
+    "aws-knowledge@nealle-managed": true,
+    "datadog@nealle-managed": true,
+    "typescript-lsp@nealle-managed": true
+  },
   "env": {
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-fable-5[1m]",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-5[1m]",
@@ -9,7 +24,42 @@
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "ccjanus --flexible-match",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "$CLAUDE_CONFIG_DIR/hooks/rtk-rewrite.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash '$CLAUDE_CONFIG_DIR/hooks/herdr-agent-state.sh' session",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ]
+  },
   "includeCoAuthoredBy": true,
+  "language": "Japanese",
   "permissions": {
     "allow": [
       "Bash(./gradlew *)",
@@ -158,6 +208,7 @@
       "mcp__plugin_atlassian_atlassian__search*",
       "mcp__plugin_context7_context7__*"
     ],
+    "defaultMode": "plan",
     "deny": [
       "Bash(docker buildx build * --push)",
       "Bash(docker buildx build * --push *)",
@@ -208,54 +259,15 @@
       "Bash(git push origin -f)",
       "Bash(terraform apply *)",
       "Bash(terraform apply)"
-    ],
-    "defaultMode": "plan"
-  },
-  "disableClaudeAiConnectors": true,
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccjanus --flexible-match"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_CONFIG_DIR/hooks/rtk-rewrite.sh"
-          }
-        ]
-      }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "npx -y ccstatusline@latest",
-    "padding": 0
-  },
-  "enabledPlugins": {
-    "typescript-lsp@nealle-managed": true,
-    "datadog@nealle-managed": true,
-    "aws-knowledge@nealle-managed": true
-  },
-  "language": "Japanese",
-  "alwaysThinkingEnabled": true,
-  "advisorModel": "fable",
-  "companyAnnouncements": [
-    "個人契約のClaude Codeです"
-  ],
-  "tui": "fullscreen",
-  "autoMemoryEnabled": false,
-  "skipWorkflowUsageWarning": true,
-  "editorMode": "normal",
   "showTurnDuration": true,
-  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effort": "high"
+  "skipWorkflowUsageWarning": true,
+  "statusLine": {
+    "command": "npx -y ccstatusline@latest",
+    "padding": 0,
+    "type": "command"
+  },
+  "tui": "fullscreen"
 }
