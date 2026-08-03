@@ -101,6 +101,16 @@ $(HOME)/.config/gws:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+.PHONY: deploy-herdr
+deploy-herdr: \
+	$(HOME)/.config/herdr/config.toml
+
+$(HOME)/.config/herdr/config.toml:
+	mkdir -p $(HOME)/.config/herdr
+	ln -fns $(DOTDIR)/config/herdr/config.toml $(HOME)/.config/herdr/config.toml
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-gpg
 deploy-gpg: \
 	$(HOME)/.gnupg
