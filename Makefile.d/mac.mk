@@ -29,12 +29,8 @@ brew-install:
 		rancher \
 		raycast \
 		rectangle \
+		resolutionator \
 		xquartz
-	brew install \
-		aws-sam-cli \
-		aws-vault \
-		awscli \
-		pulseaudio
 	brew cleanup --prune all
 
 .PHONY: brew-update

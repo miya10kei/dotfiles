@@ -2,11 +2,12 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 14,
   "env": {
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-fable-5[1m]",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-5[1m]",
+    "ANTHROPIC_MODEL": "opusplan",
     "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "CLAUDE_CODE_NO_FLICKER": "0",
-    "ENABLE_TOOL_SEARCH": "true"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "includeCoAuthoredBy": true,
   "permissions": {
@@ -207,22 +208,10 @@
       "Bash(git push origin -f)",
       "Bash(terraform apply *)",
       "Bash(terraform apply)"
-    ]
+    ],
+    "defaultMode": "plan"
   },
-  "deniedMcpServers": [
-    {
-      "serverName": "claude_ai_AWS_Knowledge_MCP_Server"
-    },
-    {
-      "serverName": "claude_ai_Context7"
-    },
-    {
-      "serverName": "claude_ai_Atlassian"
-    },
-    {
-      "serverName": "claude_ai_Slack"
-    }
-  ],
+  "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
       {
@@ -251,32 +240,22 @@
     "padding": 0
   },
   "enabledPlugins": {
-    "code-simplifier@claude-plugins-official": true,
-    "coderabbit@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "gopls-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true,
-    "slack@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "kotlin-lsp@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true
+    "typescript-lsp@nealle-managed": true,
+    "datadog@nealle-managed": true,
+    "aws-knowledge@nealle-managed": true
   },
   "language": "Japanese",
   "alwaysThinkingEnabled": true,
+  "advisorModel": "fable",
   "companyAnnouncements": [
     "個人契約のClaude Codeです"
   ],
+  "tui": "fullscreen",
+  "autoMemoryEnabled": false,
   "skipWorkflowUsageWarning": true,
   "editorMode": "normal",
   "showTurnDuration": true,
-  "skipAutoPermissionPrompt": true,
-  "effort": "high",
   "agentPushNotifEnabled": true,
-  "tui": "fullscreen"
+  "skipAutoPermissionPrompt": true,
+  "effort": "high"
 }
