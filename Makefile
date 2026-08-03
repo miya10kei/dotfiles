@@ -43,6 +43,7 @@ setup4d: \
 	deploy-git \
 	deploy-gpg \
 	deploy-gws \
+	deploy-herdr \
 	deploy-markdownlint \
 	deploy-mise \
 	deploy-npm \
