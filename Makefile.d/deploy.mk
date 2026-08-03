@@ -103,11 +103,16 @@ $(HOME)/.config/gws:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-herdr
 deploy-herdr: \
-	$(HOME)/.config/herdr/config.toml
+	$(HOME)/.config/herdr/config.toml \
+	$(HOME)/.config/herdr/scripts
 
 $(HOME)/.config/herdr/config.toml:
 	mkdir -p $(HOME)/.config/herdr
 	ln -fns $(DOTDIR)/config/herdr/config.toml $(HOME)/.config/herdr/config.toml
+
+$(HOME)/.config/herdr/scripts:
+	mkdir -p $(HOME)/.config/herdr
+	ln -fns $(DOTDIR)/config/herdr/scripts $(HOME)/.config/herdr/scripts
 
 
 # ----------------------------------------------------------------------------------------------------------------------

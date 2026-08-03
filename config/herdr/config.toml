@@ -16,9 +16,16 @@ focus_pane_right = "ctrl+alt+l"
 [[keys.command]]
 key = "prefix+u"
 type = "popup"
-command = "~/.dotfiles/config/herdr/scripts/new-worktree.sh"
+command = "~/.config/herdr/scripts/new-worktree.sh"
 width = "50%"
 height = "40%"
+
+[[keys.command]]
+key = "prefix+f"
+type = "popup"
+command = "~/.config/herdr/scripts/insert-file-path.sh"
+width = "60%"
+height = "60%"
 
 [ui]
 sidebar_width = 36
