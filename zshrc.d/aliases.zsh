@@ -14,7 +14,8 @@ function alias_if_exists() {
 }
 
 function _fzf_change_directory() {
-  selected=$(eval $1 | fzf-tmux $FZF_TMUX_OPTS)
+  #selected=$(eval $1 | fzf-tmux $FZF_TMUX_OPTS)
+  selected=$(eval $1 | fzf)
   if [ -n "$selected" ]; then
     base_dir=$(eval $2)
     cd "$base_dir/$selected"
@@ -25,6 +26,18 @@ function pysw(){
   selected=$(mise ls python --installed | awk 'NR>1 {print $2}' | fzf)
   if [ -n "$selected" ]; then
     mise use -g python@$selected
+  fi
+}
+
+function mtask() {
+  local selected
+  #selected=$(mise task ls --no-header 2>/dev/null | fzf-tmux $FZF_TMUX_OPTS \
+  selected=$(mise task ls --no-header 2>/dev/null | fzf \
+    --header="mise task" \
+    --preview="mise task info {1} 2>/dev/null")
+  if [ -n "$selected" ]; then
+    local task_name=$(echo "$selected" | awk '{print $1}')
+    rlwrap mise task run "$task_name"
   fi
 }
 
@@ -58,7 +71,6 @@ alias_if_exists 'uuu'       'cd ../../../'
 alias_if_exists 'uuuu'      'cd ../../../../'
 alias_if_exists 'v'         'nvim'            'nvim' 'vim'
 alias_if_exists 'vim'       'nvim'            'nvim'
-alias_if_exists 'pgcli'     'pgcli --auto-vertical-output' 'pgcli'
 alias_if_exists 'pysw'      'pysw'
 alias_if_exists 'epochtime' 'date +%s'
 alias_if_exists 'dive-mine' 'ssh miya10kei@192.168.1.217'

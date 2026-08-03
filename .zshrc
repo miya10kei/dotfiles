@@ -80,9 +80,10 @@ function main() {
                 sudo chmod 777 /var/run/docker.sock
             fi
         else
-            if [[ -z $TMUX ]]; then
-                tmux new-session -A -s main
-            fi
+            :
+            # if [[ -z $TMUX ]]; then
+            #     tmux new-session -A -s main
+            # fi
         fi
     fi
 
