@@ -37,7 +37,7 @@ function mtask() {
     --preview="mise task info {1} 2>/dev/null")
   if [ -n "$selected" ]; then
     local task_name=$(echo "$selected" | awk '{print $1}')
-    rlwrap mise task run "$task_name"
+    mise task run "$task_name"
   fi
 }
 
