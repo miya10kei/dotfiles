@@ -6,12 +6,8 @@ navigate_workspace_up = "k"
 navigate_workspace_down = "j"
 previous_agent = "prefix+,"
 next_agent = "prefix+."
-previous_workspace = "ctrl+shift+p"
-next_workspace = "ctrl+shift+n"
-focus_pane_left = "ctrl+shift+h"
-focus_pane_down = "ctrl+shift+j"
-focus_pane_up = "ctrl+shift+k"
-focus_pane_right = "ctrl+shift+l"
+previous_workspace = "ctrl+shift+k"
+next_workspace = "ctrl+shift+j"
 
 [[keys.command]]
 key = "prefix+u"
@@ -24,6 +20,13 @@ height = "40%"
 key = "prefix+f"
 type = "popup"
 command = "~/.config/herdr/scripts/insert-file-path.sh"
+width = "60%"
+height = "60%"
+
+[[keys.command]]
+key = "prefix+t"
+type = "popup"
+command = "~/.config/herdr/scripts/tmp-shell.sh"
 width = "60%"
 height = "60%"
 
