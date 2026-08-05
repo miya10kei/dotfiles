@@ -127,6 +127,16 @@ function main() {
         fi
     fi
 
+    # fzf-tab requires compinit to have already run before it is loaded via sheldon
+    FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
+    autoload bashcompinit && bashcompinit
+    autoload -Uz compinit && compinit
+    complete -C "$HOME/.local/bin/aws_completer" aws
+
+    if builtin command -v mise > /dev/null 2>&1; then
+        eval "$(mise completion zsh)"
+    fi
+
     if builtin command -v sheldon > /dev/null 2>&1; then
         eval "$(sheldon source)"
     fi
@@ -169,10 +179,6 @@ function main() {
         xhost + localhost
     fi
 
-    FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
-    autoload bashcompinit && bashcompinit
-    autoload -Uz compinit && compinit
-    complete -C "$HOME/.local/bin/aws_completer" aws
 }
 
 if [ "$ZPROFILE_ENABLED" = true ]; then

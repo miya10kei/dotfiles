@@ -2,6 +2,10 @@ shell = "zsh"
 
 [plugins]
 
+# fzf-tab は compinit の後・他の補完ウィジェットをラップするプラグイン(zsh-autosuggestions等)より前に読み込む必要がある
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 #[plugins.zsh-completions]
