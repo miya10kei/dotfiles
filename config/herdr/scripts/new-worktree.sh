@@ -14,4 +14,6 @@ fi
 branch=$(gum input --placeholder "worktree branch name" --prompt "branch> ")
 [ -z "$branch" ] && exit 0
 
-herdr worktree create --cwd "$repo" --branch "$branch" --focus
+worktree_json=$(herdr worktree create --cwd "$repo" --branch "$branch" --path "$repo/.claude/worktrees/$branch" --focus --json)
+pane_id=$(echo "$worktree_json" | jq -r '.result.root_pane.pane_id')
+herdr pane run "$pane_id" "claude"
