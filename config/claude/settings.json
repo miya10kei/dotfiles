@@ -240,7 +240,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '$CLAUDE_CONFIG_DIR/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"$CLAUDE_CONFIG_DIR/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
           }
         ]
