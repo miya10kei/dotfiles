@@ -209,7 +209,7 @@
       "Bash(terraform apply *)",
       "Bash(terraform apply)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
   "model": "fable",
   "disableClaudeAiConnectors": true,
@@ -240,7 +240,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash '$CLAUDE_CONFIG_DIR/hooks/herdr-agent-state.sh' session",
+            "command": "bash \"$CLAUDE_CONFIG_DIR/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
           }
         ]
@@ -256,7 +256,10 @@
     "aws-knowledge@nealle-managed": true,
     "datadog@nealle-managed": true,
     "typescript-lsp@nealle-managed": true,
-    "kotlin-lsp@claude-plugins-official": true
+    "kotlin-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "atlassian@claude-plugins-official": true
   },
   "language": "Japanese",
   "alwaysThinkingEnabled": true,

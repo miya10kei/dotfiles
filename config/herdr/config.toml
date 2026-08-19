@@ -1,40 +1,53 @@
 onboarding = false
 [keys]
-prefix = "ctrl+g"
-split_vertical = "prefix+|"
-navigate_workspace_up = "k"
+prefix                  = "ctrl+g"
+split_vertical          = "prefix+|"
+navigate_workspace_up   = "k"
 navigate_workspace_down = "j"
-previous_agent = "prefix+,"
-next_agent = "prefix+."
-previous_workspace = "ctrl+shift+k"
-next_workspace = "ctrl+shift+j"
+previous_agent          = "prefix+,"
+next_agent              = "prefix+."
+previous_workspace      = "ctrl+shift+k"
+next_workspace          = "ctrl+shift+j"
 
 [[keys.command]]
-key = "prefix+u"
-type = "popup"
+key     = "prefix+u"
+type    = "popup"
 command = "~/.config/herdr/scripts/new-worktree.sh"
-width = "50%"
-height = "40%"
+width   = "50%"
+height  = "40%"
 
 [[keys.command]]
-key = "prefix+f"
-type = "popup"
+key     = "prefix+f"
+type    = "popup"
 command = "~/.config/herdr/scripts/insert-file-path.sh"
-width = "60%"
-height = "60%"
+width   = "60%"
+height  = "60%"
 
 [[keys.command]]
-key = "prefix+t"
-type = "popup"
+key     = "prefix+t"
+type    = "popup"
 command = "~/.config/herdr/scripts/tmp-shell.sh"
-width = "60%"
-height = "60%"
+width   = "60%"
+height  = "60%"
+
+[[keys.command]]
+key     = "ctrl+shift+l"
+type    = "popup"
+command = "~/.config/herdr/scripts/lazygit.sh"
+width   = "90%"
+height  = "90%"
+
+[[keys.command]]
+key         = "ctrl+shift+g"
+type        = "plugin_action"
+command     = "miya10kei.google-calendar.toggle"
+description = "toggle calendar pane"
 
 [ui]
 sidebar_width = 36
 
 [experimental]
-pane_history = true
+pane_history                        = true
 switch_ascii_input_source_in_prefix = true
 
 [update]

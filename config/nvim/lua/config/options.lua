@@ -1,12 +1,21 @@
+local osc52 = require("vim.ui.clipboard.osc52")
+
+-- herdr は OSC52 read の応答をpaneへ返送しないため、herdr内ではpasteが永久に待機する
+local function herdr_paste_fallback()
+  return { vim.fn.getreg('"', 1, true), vim.fn.getregtype('"') }
+end
+
+local in_herdr = vim.env.HERDR_ENV == "1"
+
 vim.g.clipboard = {
   name = "OSC 52",
   copy = {
-    ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+    ["+"] = osc52.copy("+"),
+    ["*"] = osc52.copy("*"),
   },
   paste = {
-    ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
-    ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+    ["+"] = in_herdr and herdr_paste_fallback or osc52.paste("+"),
+    ["*"] = in_herdr and herdr_paste_fallback or osc52.paste("*"),
   },
 }
 
