@@ -274,5 +274,6 @@
   "showTurnDuration": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effort": "high"
+  "effort": "high",
+  "outputStyle": "Concise"
 }
