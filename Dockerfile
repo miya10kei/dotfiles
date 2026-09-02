@@ -135,6 +135,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         make \
         openssh-client \
         pass \
+        postgresql-client \
         pulseaudio \
         python3-tk \
         redis-tools \
