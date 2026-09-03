@@ -37,8 +37,8 @@
         "type": "separator"
       },
       {
-        "id": "126b1eb8-8ed2-4d9b-9db2-4c6237079058",
-        "type": "total-speed"
+        "id": "b9dad670-8232-4fef-93b8-f1c19b5cdb73",
+        "type": "context-length"
       }
     ],
     [
@@ -77,6 +77,7 @@
   "flexMode": "full",
   "compactThreshold": 60,
   "colorLevel": 2,
+  "defaultPaddingSide": "both",
   "inheritSeparatorColors": false,
   "globalBold": false,
   "gitCacheTtlSeconds": 5,

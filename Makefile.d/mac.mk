@@ -30,6 +30,7 @@ brew-install:
 		raycast \
 		rectangle \
 		resolutionator \
+		stats \
 		xquartz
 	brew cleanup --prune all
 
