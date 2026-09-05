@@ -8,7 +8,7 @@ ARG UNAME
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
-FROM ubuntu:24.04 AS builder
+FROM ubuntu:26.04 AS builder
 ARG GID
 ARG GNAME
 ARG UID
@@ -89,7 +89,7 @@ RUN mise run slim \
 
 # ------------------------------------------------------------------------------------------------------------------------
 # hadolint ignore=DL3007
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 SHELL ["/bin/bash", "-c"]
 LABEL maintainer="miya10kei <miya10kei@gmail.com>"
 
