@@ -1,5 +1,8 @@
 [env]
 ASDF_LUA_LUAROCKS_VERSION = "3.13.0"
+# rust(rustup) の実体は既定で ~/.cargo, ~/.rustup に置かれ、devenv イメージの ~/.local 持ち越しから漏れるため ~/.local 配下へ寄せる
+CARGO_HOME  = "{{env.HOME}}/.local/share/cargo"
+RUSTUP_HOME = "{{env.HOME}}/.local/share/rustup"
 
 [plugins]
 lua       = "https://github.com/mise-plugins/mise-lua.git"
@@ -177,5 +180,6 @@ rm -rf \
     "$HOME/.cache" \
     "$INSTALLS"/*/*/{share/man,share/doc,man,doc} \
     "$INSTALLS"/vfox-gcloud/*/{platform/ext-runtime,deb,rpm,RELEASE_NOTES,README} \
-    "$INSTALLS"/java/*/jmods
+    "$INSTALLS"/java/*/jmods \
+    "$HOME/.local/share/rustup/toolchains"/*/share/{doc,man}
 '''
