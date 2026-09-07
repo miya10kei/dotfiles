@@ -23,8 +23,12 @@ fi
 worktree_list_json=$(herdr worktree list --cwd "$repo" --json)
 existing_branches=$(echo "$worktree_list_json" | jq -r '.result.worktrees[] | select(.is_linked_worktree) | .branch')
 
-branch=$({ [ -n "$existing_branches" ] && printf '%s\n' "$existing_branches"; true; } \
-  | gum filter --no-strict --placeholder "worktree branch name" --prompt "branch> ")
+if [ -n "$existing_branches" ]; then
+  branch=$(printf '%s\n' "$existing_branches" \
+    | gum filter --no-strict --placeholder "worktree branch name" --prompt "branch> ")
+else
+  branch=$(gum input --placeholder "worktree branch name" --prompt "branch> ")
+fi
 [ -z "$branch" ] && exit 0
 
 existing_path=$(echo "$worktree_list_json" \
