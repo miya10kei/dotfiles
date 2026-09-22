@@ -17,6 +17,13 @@ width   = "50%"
 height  = "40%"
 
 [[keys.command]]
+key     = "prefix+shift+u"
+type    = "popup"
+command = "~/.config/herdr/scripts/close-worktree.sh"
+width   = "50%"
+height  = "40%"
+
+[[keys.command]]
 key     = "prefix+f"
 type    = "popup"
 command = "~/.config/herdr/scripts/insert-file-path.sh"
