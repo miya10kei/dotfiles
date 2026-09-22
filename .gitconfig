@@ -18,6 +18,7 @@
   pull  = pull -p
   st    = status --short
   sw    = !git branch -a | grep -vE '^\\*' | fzf | sed -e 's/remotes\\/origin\\///' | xargs git switch
+  wk-erase = "!f() { cur=$(git rev-parse --show-toplevel); git worktree list --porcelain | awk -v cur=\"$cur\" '/^worktree /{p=substr($0,10); b=\"\"} /^branch /{b=substr($0,19)} /^$/{if (n++ && p != cur) print p \"\\t\" b}' | fzf --multi --delimiter='\\t' | while IFS=\"$(printf '\\t')\" read -r path branch; do git worktree remove \"$path\" && { [ -z \"$branch\" ] || git branch -D \"$branch\"; }; done; }; f"
 [color]
   branch = auto
   diff   = auto
