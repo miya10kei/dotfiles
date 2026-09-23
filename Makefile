@@ -53,7 +53,6 @@ setup4d: \
 	deploy-sheldon \
 	deploy-starship \
 	deploy-taplo \
-	deploy-tmux \
 	deploy-uv \
 	deploy-yamlfmt \
 	deploy-zoxide \

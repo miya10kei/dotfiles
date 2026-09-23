@@ -155,10 +155,6 @@ function main() {
             source $HOME/.dotfiles/zshrc.d/fzf.zsh
         fi
 
-        if builtin command -v tmux > /dev/null 2>&1; then
-            source $HOME/.dotfiles/zshrc.d/tmux.zsh
-        fi
-
     fi
 
     if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then

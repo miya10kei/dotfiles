@@ -35,7 +35,6 @@ if builtin command -v docker > /dev/null 2>&1; then
 
       opts=(
           "--detach"
-          "--env DISPLAY=host.docker.internal:0"
           "--interactive"
           "--mount type=bind,source=${HOME}/.dotfiles,target=/home/${uname}/.dotfiles"
           "--mount type=bind,source=${HOME}/.dotfiles/.zshrc,target=/home/${uname}/.zshrc"
@@ -45,7 +44,6 @@ if builtin command -v docker > /dev/null 2>&1; then
           "--name=dev-env"
           "--net=host"
           "--restart=always"
-          "--privileged"
           "--tty"
       )
 
@@ -56,12 +54,6 @@ if builtin command -v docker > /dev/null 2>&1; then
                   "--mount type=bind,source=${HOME}/.config/pulse,target=/home/${uname}/.config/pulse"
                   "--mount type=bind,source=${HOME}/Documents,target=/home/${uname}/Documents"
                   "--mount type=bind,source=${HOME}/Google\ Drive,target=/home/${uname}/Google\ Drive"
-                  "--mount type=bind,source=/private/tmp/.X11-unix,target=/tmp/.X11-unix"
-              )
-              ;;
-            Linux)
-              opts+=(
-                  "--mount type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix"
               )
               ;;
       esac

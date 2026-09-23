@@ -225,15 +225,6 @@ $(HOME)/.config/starship.toml:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-tmux
-deploy-tmux: \
-	$(HOME)/.config/tmux
-
-$(HOME)/.config/tmux:
-	ln -fns $(DOTDIR)/config/tmux $(HOME)/.config/tmux
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-uv
 deploy-uv: \
 	$(HOME)/.config/uv
