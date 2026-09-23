@@ -146,7 +146,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         tzdata \
         unzip \
         wget \
-        xsel \
         zip \
         zsh \
     && apt-get purge -y --auto-remove software-properties-common \
