@@ -45,7 +45,6 @@ if builtin command -v docker > /dev/null 2>&1; then
           "--name=dev-env"
           "--net=host"
           "--restart=always"
-          "--privileged"
           "--tty"
       )
 
