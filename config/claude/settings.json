@@ -250,12 +250,13 @@
   },
   "enabledPlugins": {
     "aws-knowledge@nealle-managed": true,
-    "datadog@nealle-managed": true,
     "typescript-lsp@nealle-managed": true,
     "kotlin-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true,
-    "atlassian@claude-plugins-official": true
+    "atlassian@claude-plugins-official": true,
+    "agent-browser@nealle-managed": true,
+    "datadog@claude-plugins-official": true
   },
   "outputStyle": "Concise",
   "language": "Japanese",
