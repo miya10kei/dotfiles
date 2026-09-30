@@ -21,14 +21,18 @@ brew-install:
 		1password \
 		alt-tab \
 		aws-vpn-client \
+		claude \
 		displaylink \
+		firefox \
 		ghostty \
 		homerow \
 		insta360-link-controller \
 		karabiner-elements \
+		obsidian \
 		rancher \
 		raycast \
 		rectangle \
+		retrace \
 		resolutionator \
 		stats \
 		xquartz
