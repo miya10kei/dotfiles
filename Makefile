@@ -30,6 +30,7 @@ build-dev-env:
 		--tag miya10kei/devenv:latest \
 		$(HOME)/.dotfiles
 	docker system prune --force
+	if command -v rdctl >/dev/null 2>&1; then rdctl shell sudo fstrim -v /mnt/data; fi
 
 .PHONY: setup4d
 setup4d: \
