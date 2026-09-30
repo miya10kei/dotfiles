@@ -14,23 +14,23 @@ local function create_knowledge_note()
   end
 end
 
-if obsidian_exists then
-  autocmd.create_group("ObsidianAutoSync", {
-    {
-      event = "BufWritePost",
-      opts = {
-        pattern = obsidian_dir .. "/*",
-        callback = function()
-          vim.fn.jobstart({
-            "bash",
-            "-c",
-            "cd " .. obsidian_dir .. " && git add -A && git commit -m 'auto: sync' ; git push origin main",
-          }, { detach = true })
-        end,
-      },
-    },
-  })
-end
+--if obsidian_exists then
+--  autocmd.create_group("ObsidianAutoSync", {
+--    {
+--      event = "BufWritePost",
+--      opts = {
+--        pattern = obsidian_dir .. "/*",
+--        callback = function()
+--          vim.fn.jobstart({
+--            "bash",
+--            "-c",
+--            "cd " .. obsidian_dir .. " && git add -A && git commit -m 'auto: sync' ; git push origin main",
+--          }, { detach = true })
+--        end,
+--      },
+--    },
+--  })
+--end
 
 ---@type LazySpec
 return {
