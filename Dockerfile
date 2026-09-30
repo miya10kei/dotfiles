@@ -128,6 +128,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         git \
         less \
         libgmp10 \
+        libicu78 \
         libmagic1 \
         libpq5 \
         locales \
