@@ -6,7 +6,7 @@
     },
     "datadog": {
       "type": "http",
-      "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp?toolsets=core,apm,dbm,error-tracking"
+      "url": "https://mcp.datadoghq.com/v1/mcp?toolsets=core,apm,dbm,error-tracking"
     }
   }
 }
