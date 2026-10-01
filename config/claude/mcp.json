@@ -7,6 +7,16 @@
     "datadog": {
       "type": "http",
       "url": "https://mcp.datadoghq.com/v1/mcp?toolsets=core,apm,dbm,error-tracking"
+    },
+    "obsidian-private": {
+      "type": "http",
+      "url": "http://host.docker.internal:3002/mcp",
+      "headersHelper": "printf '{\"Authorization\": \"Bearer %s\"}' \"$(pass mcp/obsidian/private_api_key)\""
+    },
+    "obsidian-work": {
+      "type": "http",
+      "url": "http://host.docker.internal:3001/mcp",
+      "headersHelper": "printf '{\"Authorization\": \"Bearer %s\"}' \"$(pass mcp/obsidian/work_api_key)\""
     }
   }
 }
