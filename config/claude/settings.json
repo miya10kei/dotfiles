@@ -91,7 +91,6 @@
       "Bash(npm run type-check *)",
       "Bash(npm test *)",
       "Bash(nvim *)",
-      "Bash(paplay *)",
       "Bash(pinact *)",
       "Bash(pnpm add *)",
       "Bash(pnpm install *)",
@@ -208,6 +207,29 @@
             "type": "command",
             "command": "bash \"$CLAUDE_CONFIG_DIR/hooks/herdr-agent-state.sh\" session",
             "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "paplay \"$CLAUDE_CONFIG_DIR/hooks/notification.wav\" || true",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "paplay \"$CLAUDE_CONFIG_DIR/hooks/stop.wav\" || true",
+            "async": true
           }
         ]
       }
