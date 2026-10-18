@@ -125,7 +125,7 @@ tree-sitter = "latest"
 experimental                        = true
 idiomatic_version_file_enable_tools = ["deno", "go", "java", "node", "python", "rust", "terraform"]
 not_found_auto_install              = false
-trusted_config_paths                = ["~/dev"]
+trusted_config_paths                = ["~/dev/ghq/github.com/miya10kei", "~/dev/ghq/github.com/nealle"]
 
 # github:k1LoW/mo の release attestation が TSA タイムスタンプ検証に失敗するため無効化する (SLSA provenance 検証は維持)
 [settings.github]

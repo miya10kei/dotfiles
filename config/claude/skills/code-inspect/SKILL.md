@@ -30,16 +30,25 @@ Agent tool で `subagent_type: "code-simplifier:code-simplifier"` を指定し�
 
 ### Step 4: コードレビュー
 
-以下を別々のサブエージェントで実行する:
+以下を1つのメッセージで Agent tool を複数呼び出し、並列に実行する。
+各サブエージェントのプロンプトには、レビュー対象の差分の範囲（ブランチ・ファイル）と変更概要を含めること。
 
-- Agent tool でサブエージェントを起動し、プロンプト内で `/coderabbit:code-review` を Skill tool で実行させる
-- Agent tool でサブエージェントを起動し、プロンプト内で `/superpowers:requesting-code-review` を Skill tool で実行させる
+Skill をサブエージェント内で実行させるもの:
+
+- `/coderabbit:code-review`
+- `/superpowers:requesting-code-review`
     - 実装内容・要件・変更概要をサブエージェントのプロンプトに含めて渡すこと
-- Agent tool でサブエージェントを起動し、プロンプト内で `/security-review` を Skill tool で実行させる
-- Agent tool でサブエージェントを起動し、以下を Skill tool で並列実行させる:
-    - `/pr-review-toolkit:silent-failure-hunter`（エラーハンドリング・ログ漏れ検出）
-    - `/pr-review-toolkit:test-analyzer`（テストカバレッジのギャップ検出）
-    - `/pr-review-toolkit:type-design-analyzer`（型設計・カプセル化評価）
+- `/security-review`
+
+`subagent_type` を直接指定して起動するもの:
+
+- `pr-review-toolkit:silent-failure-hunter`（エラーハンドリング・ログ漏れ検出）
+- `pr-review-toolkit:pr-test-analyzer`（テストカバレッジのギャップ検出）
+- `pr-review-toolkit:type-design-analyzer`（型設計・カプセル化評価）
+
+差分に該当する対象がないレビューは省略してよい。
+例: 型定義のない変更での type-design-analyzer、設定ファイルのみの変更での pr-test-analyzer。
+省略した場合はその理由を Step 5 で報告すること。
 
 ### Step 5: レビュー結果の確認
 

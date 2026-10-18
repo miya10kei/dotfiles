@@ -4,39 +4,41 @@
     {
       "id": 1,
       "prompt": "CLAUDE.mdのコーディングルールを更新した。code-inspectして",
-      "expected_output": "LSP/Lint/Formatterチェック実施後、/simplifyと/coderabbit:code-review、/superpowers:requesting-code-reviewがサブエージェントで実行される",
+      "expected_output": "チェック、コメント監査、コード簡易化の後、Step 4 のレビューがサブエージェントで並列実行される",
       "files": [],
       "expectations": [
-        "LSP Diagnostics、Lint、Formatterのチェックが実施された",
-        "/simplifyがサブエージェント（Agent tool）で実行された",
-        "/coderabbit:code-reviewがサブエージェント（Agent tool）で実行された",
-        "/superpowers:requesting-code-reviewがサブエージェント（Agent tool）で実行された",
+        "コードとドキュメントの整合性確認、LSP Diagnostics、Lint、Formatterのチェックが実施された",
+        "/comment-reviewがSkill toolで実行された",
+        "code-simplifier:code-simplifierがAgent toolのsubagent_typeで実行された",
+        "/coderabbit:code-review、/superpowers:requesting-code-review、/security-reviewがそれぞれサブエージェント内で実行された",
         "/superpowers:requesting-code-reviewのサブエージェントに実装内容・要件が渡された",
-        "Step 1 → Step 2 → Step 3 の順序で実行された"
+        "Step 4 のサブエージェントが1つのメッセージで並列に起動された",
+        "Step 1 → Step 2 → Step 3 → Step 4 → Step 5 の順序で実行された"
       ]
     },
     {
       "id": 2,
       "prompt": "settings.jsonの定義順をアルファベット順に並べ替えた。品質チェックお願い",
-      "expected_output": "チェックとレビューのフルフローが実行される。JSON設定ファイルに対してもスキルが正しく動作する",
+      "expected_output": "JSON設定ファイルに対してもフローが実行され、該当しないレビューは理由付きで省略される",
       "files": [],
       "expectations": [
         "LSP Diagnostics、Lint、Formatterのチェックが実施された",
-        "/simplifyがサブエージェント（Agent tool）で実行された",
+        "code-simplifier:code-simplifierがAgent toolのsubagent_typeで実行された",
         "/coderabbit:code-reviewと/superpowers:requesting-code-reviewがサブエージェントで実行された",
-        "Step 1 → Step 2 → Step 3 の順序で実行された"
+        "pr-review-toolkit:type-design-analyzerとpr-review-toolkit:pr-test-analyzerは省略され、その理由がStep 5で報告された",
+        "Step 1 → Step 2 → Step 3 → Step 4 → Step 5 の順序で実行された"
       ]
     },
     {
       "id": 3,
-      "prompt": "新しいスキル（code-inspect）を追加した。SKILL.mdを確認して問題ないかレビューしてほしい",
-      "expected_output": "新規ファイル追加に対してもフルフローが実行される。スキル自体のレビューとcode-inspectの実行が区別される",
+      "prompt": "TypeScriptのAPIクライアントにリトライ処理とユニットテストを追加した。code-inspectして",
+      "expected_output": "コード変更に対して pr-review-toolkit の3エージェントを含む全レビューが実行される",
       "files": [],
       "expectations": [
-        "code-inspectスキルのワークフローに従って実行された（手動レビューではなく）",
-        "/simplifyがサブエージェント（Agent tool）で実行された",
-        "/coderabbit:code-reviewがサブエージェント（Agent tool）で実行された",
-        "Step 1 → Step 2 → Step 3 の順序で実行された"
+        "pr-review-toolkit:silent-failure-hunter、pr-review-toolkit:pr-test-analyzer、pr-review-toolkit:type-design-analyzerがAgent toolのsubagent_typeで起動された（Skill toolではない）",
+        "/security-reviewがサブエージェント内で実行された",
+        "指摘がある場合、AskUserQuestionで各指摘の対応方針が確認された",
+        "修正後にStep 1から再実行された"
       ]
     }
   ]
