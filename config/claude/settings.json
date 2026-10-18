@@ -103,7 +103,6 @@
       "Bash(python3 */fetch-gmail/scripts/*)",
       "Bash(read *)",
       "Bash(readlink *)",
-      "Bash(rtk *)",
       "Bash(sam validate *)",
       "Bash(sleep *)",
       "Bash(split *)",
@@ -191,15 +190,6 @@
   "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "ccjanus --flexible-match"
-          }
-        ]
-      },
       {
         "matcher": "Bash",
         "hooks": [
