@@ -42,6 +42,12 @@ function main() {
     fi
 
     # -------------
+    # --- herdr ---
+    # -------------
+    # ~/.config/herdrはbind mount上のdotfilesを指すため、socketはコンテナローカルに置く
+    export HERDR_SOCKET_PATH="/tmp/herdr/herdr.sock"
+
+    # -------------
     # --- Node.js -
     # -------------
     if [[ -e /opt/homebrew/opt/node@22 ]]; then
