@@ -37,7 +37,6 @@ if builtin command -v docker > /dev/null 2>&1; then
           "--detach"
           "--interactive"
           "--mount type=bind,source=${HOME}/.dotfiles,target=/home/${uname}/.dotfiles"
-          "--mount type=bind,source=${HOME}/.dotfiles/.zshrc,target=/home/${uname}/.zshrc"
           "--mount type=bind,source=${HOME}/.ssh,target=/home/${uname}/.ssh"
           "--mount type=bind,source=${HOME}/dev,target=/home/${uname}/dev"
           "--mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"
