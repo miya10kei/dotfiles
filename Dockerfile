@@ -170,6 +170,8 @@ COPY --chown="${UNAME}:${GNAME}" ./config/nvim  $HOME/.config/nvim
 COPY --chown="${UNAME}:${GNAME}" ./Makefile      $HOME/.dotfiles/Makefile
 COPY --chown="${UNAME}:${GNAME}" ./Makefile.d    $HOME/.dotfiles/Makefile.d
 
+# 単一ファイルのbind mountはgit pull等でinodeが置き換わると追従しないため、マウントされる~/.dotfiles配下へのsymlinkにする
+RUN ln -fns "${HOME}/.dotfiles/.zshrc" "${HOME}/.zshrc"
 
 WORKDIR $HOME
 

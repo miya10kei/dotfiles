@@ -34,8 +34,7 @@ brew-install:
 		rectangle \
 		retrace \
 		resolutionator \
-		stats \
-		xquartz
+		stats
 	brew cleanup --prune all
 
 .PHONY: brew-update

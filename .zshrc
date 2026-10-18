@@ -176,10 +176,6 @@ function main() {
         eval "$(zoxide init zsh)"
     fi
 
-    if builtin command -v xhost > /dev/null 2>&1; then
-        xhost + localhost
-    fi
-
 }
 
 if [ "$ZPROFILE_ENABLED" = true ]; then

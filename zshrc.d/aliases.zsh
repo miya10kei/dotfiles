@@ -75,3 +75,10 @@ alias_if_exists 'pysw'      'pysw'
 alias_if_exists 'epochtime' 'date +%s'
 alias_if_exists 'dive-mine' 'ssh miya10kei@192.168.1.217'
 alias_if_exists 'env'       'env | sort'
+
+# pbcopyがないコンテナ内でも、OSC52でターミナル経由のクリップボードへコピーできるようにする
+if ! (( $+commands[pbcopy] )); then
+    function pbcopy() {
+        printf '\e]52;c;%s\a' "$(base64 | tr -d '\n')" > /dev/tty
+    }
+fi
