@@ -5,7 +5,6 @@
     "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "Bash(./gradlew *)",
@@ -182,10 +181,9 @@
       "Bash(git push origin -f)",
       "Bash(terraform apply *)",
       "Bash(terraform apply)"
-    ],
-    "defaultMode": "auto"
+    ]
   },
-  "model": "opus[1m]",
+  "model": "opus",
   "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
@@ -237,8 +235,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "npx -y ccstatusline@latest",
-    "padding": 0
+    "command": "npx -y ccstatusline@latest"
   },
   "enabledPlugins": {
     "kotlin-lsp@claude-plugins-official": true,
@@ -260,7 +257,6 @@
   },
   "outputStyle": "Concise",
   "language": "Japanese",
-  "alwaysThinkingEnabled": true,
   "advisorModel": "fable",
   "companyAnnouncements": [
     "個人契約のClaude Codeです"
@@ -268,11 +264,9 @@
   "tui": "fullscreen",
   "autoMemoryEnabled": false,
   "skipWorkflowUsageWarning": true,
-  "editorMode": "normal",
-  "showTurnDuration": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "effort": "high",
+  "effortLevel": "high",
   "extraKnownMarketplaces": {
     "claude-recap-plus": {
       "source": {
