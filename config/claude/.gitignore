@@ -8,6 +8,8 @@
 !scripts/*
 !skills
 !skills/**
+# claude.ai から同期されるスキル（再同期で復元され、自分で管理しない）
+skills/synced/
 
 !.gitignore
 !CLAUDE.md

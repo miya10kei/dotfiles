@@ -11,7 +11,8 @@ terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 [tools]
 # Language runtimes
 chamber     = "latest"
-deno        = "latest"
+cloudflared = "latest"
+deno       = "latest"
 go          = "latest"
 java        = "25"
 kotlin      = "latest"
@@ -60,6 +61,7 @@ tree-sitter = "latest"
 "github:denisidoro/navi"     = "latest"
 "github:eza-community/eza"   = "latest"
 "github:googleworkspace/cli" = "latest"
+"github:Hessesian/kmp-lsp"   = "latest"
 "github:k1LoW/mo"            = "latest"
 "github:k1LoW/tbls"          = "latest"
 "github:miya10kei/ccargus"   = "latest"
@@ -71,6 +73,9 @@ tree-sitter = "latest"
 "npm:@anthropic-ai/sandbox-runtime" = "latest"
 "npm:@slidev/cli"                   = "latest"
 "npm:pnpm"                          = "latest"
+# @twilio/cli-core 9.0.0 だけ trusted publisher で公開され、9.0.1 以降はトークン公開に戻ったため no-downgrade に掛かる (provenance は twilio/twilio-cli-core の main で確認済み)
+# 除外は twilio-cli 7.2.0 が依存する版に限定している。twilio-cli が新しい cli-core に上がったら除外する版も更新する
+"npm:twilio-cli"                    = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.2.0"] }
 
 # language servers (npm)
 "npm:@angular/language-server"            = "latest"
@@ -111,15 +116,14 @@ tree-sitter = "latest"
 "pipx:yamllint"        = "latest"
 
 # vfox packages
-"vfox:gcloud" = "latest"
+# mise 2026.10.21 の内蔵 vfox-gcloud は python.lua を解決できず壊れているため、修正済みの git 版を使う (jdx/mise#15034)
+"vfox:mise-plugins/vfox-gcloud" = "latest"
 
 # http downloads
 "http:fzf-completion"   = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/shell/completion.zsh" }
 "http:fzf-key-bindings" = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/shell/key-bindings.zsh" }
 "http:fzf-tmux"         = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/bin/fzf-tmux" }
-
-# cargo packages
-"cargo:kotlin-lsp" = "latest"
+"http:kotlin-lsp"       = { version = "latest", version_order = "semver", version_list_url = "https://api.github.com/repos/Kotlin/kotlin-lsp/releases?per_page=100", version_regex = 'kotlin-lsp/v(\d+\.\d+\.\d+)', url = "https://download.jetbrains.com/language-server/kotlin-server/{{version}}/kotlin-server-{{version}}-aarch64.tar.gz", postinstall = "ln -sf intellij-server $MISE_TOOL_INSTALL_PATH/bin/kotlin-lsp" }
 
 [settings]
 experimental                        = true
@@ -179,7 +183,7 @@ rm -rf \
     "${MISE_DATA_DIR:-$HOME/.local/share/mise}/downloads" \
     "$HOME/.cache" \
     "$INSTALLS"/*/*/{share/man,share/doc,man,doc} \
-    "$INSTALLS"/vfox-gcloud/*/{platform/ext-runtime,deb,rpm,RELEASE_NOTES,README} \
+    "$INSTALLS"/vfox-mise-plugins-vfox-gcloud/*/{platform/ext-runtime,deb,rpm,RELEASE_NOTES,README} \
     "$INSTALLS"/java/*/jmods \
     "$HOME/.local/share/rustup/toolchains"/*/share/{doc,man}
 '''

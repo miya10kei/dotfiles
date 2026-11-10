@@ -53,7 +53,7 @@ return {
             },
           })
 
-          -- kotlin-lsp 専用：sourcePaths を再インデックス
+          -- kmp-lsp 専用：sourcePaths を再インデックス
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if client and client.name == "kotlin_lsp" then
             require("which-key").add({
@@ -61,22 +61,22 @@ return {
               {
                 "<Leader>lsr",
                 function()
-                  client:exec_cmd({ command = "kotlin-lsp/reindex" })
+                  client:exec_cmd({ command = "kmp-lsp/reindex" })
                 end,
-                desc = "Reindex (kotlin-lsp)",
+                desc = "Reindex (kmp-lsp)",
                 buffer = bufnr,
                 silent = true,
               },
               {
                 "<Leader>lsc",
                 function()
-                  client:exec_cmd({ command = "kotlin-lsp/clearCache" })
+                  client:exec_cmd({ command = "kmp-lsp/clearCache" })
                 end,
-                desc = "Clear Cache (kotlin-lsp)",
+                desc = "Clear Cache (kmp-lsp)",
                 buffer = bufnr,
                 silent = true,
               },
-              -- kotlin-lsp は型推論を持たず textDocument/implementation が空になりがち。
+              -- kmp-lsp は型推論を持たず textDocument/implementation が空になりがち。
               -- 空のときだけ ripgrep で `override fun <cword>` を引いて補う。
               -- 件数による分岐: 1 件→直接ジャンプ（picker 不表示）/ 2+ 件→fzf-lua picker。
               {
@@ -97,7 +97,7 @@ return {
                     for _, res in pairs(results or {}) do
                       if res.err then
                         vim.notify(
-                          ("kotlin-lsp implementation error: %s"):format(res.err.message or vim.inspect(res.err)),
+                          ("kmp-lsp implementation error: %s"):format(res.err.message or vim.inspect(res.err)),
                           vim.log.levels.WARN
                         )
                       end
@@ -112,7 +112,7 @@ return {
                       return
                     end
                     if #items > 1 then
-                      vim.fn.setqflist({}, " ", { title = "kotlin-lsp implementations", items = items })
+                      vim.fn.setqflist({}, " ", { title = "kmp-lsp implementations", items = items })
                       require("fzf-lua").quickfix()
                       return
                     end
@@ -286,10 +286,10 @@ return {
         bashls = {
           filetypes = { "sh", "bash", "zsh" },
         },
-        -- kotlin-lsp（Rust製、mise の cargo:kotlin-lsp 経由）
-        -- 依存ライブラリのソースは `mise run kotlin-lsp:extract-sources` で抽出
+        -- kmp-lsp（Rust製、mise の github:Hessesian/kmp-lsp 経由）
+        -- 依存ライブラリのソースは `mise run kmp-lsp:extract-sources` で抽出
         kotlin_lsp = {
-          cmd = { "kotlin-lsp" },
+          cmd = { "kmp-lsp" },
           filetypes = { "kotlin" },
           root_markers = {
             "settings.gradle.kts",
@@ -301,7 +301,7 @@ return {
           },
           init_options = {
             indexingOptions = {
-              sourcePaths = { vim.fn.expand("~/.local/share/kotlin-lsp/sources") },
+              sourcePaths = { vim.fn.expand("~/.local/share/kmp-lsp/sources") },
             },
           },
         },
