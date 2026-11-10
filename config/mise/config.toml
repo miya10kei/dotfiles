@@ -12,7 +12,7 @@ terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 # Language runtimes
 chamber     = "latest"
 cloudflared = "latest"
-deno       = "latest"
+deno        = "latest"
 go          = "latest"
 java        = "25"
 kotlin      = "latest"
@@ -75,7 +75,7 @@ tree-sitter = "latest"
 "npm:pnpm"                          = "latest"
 # @twilio/cli-core 9.0.0 だけ trusted publisher で公開され、9.0.1 以降はトークン公開に戻ったため no-downgrade に掛かる (provenance は twilio/twilio-cli-core の main で確認済み)
 # 除外は twilio-cli 7.2.0 が依存する版に限定している。twilio-cli が新しい cli-core に上がったら除外する版も更新する
-"npm:twilio-cli"                    = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.2.0"] }
+"npm:twilio-cli" = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.2.0"] }
 
 # language servers (npm)
 "npm:@angular/language-server"            = "latest"
