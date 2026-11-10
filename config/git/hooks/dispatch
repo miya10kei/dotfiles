@@ -1,0 +1,21 @@
+#!/bin/sh
+# core.hooksPath から呼ばれる共通フック。org-git-hooks があれば先に実行し、リポジトリに lefthook 設定があれば lefthook を実行する
+hook=$(basename "$0")
+
+org_hook="$HOME/.config/org-git-hooks/hooks/$hook"
+if [ -x "$org_hook" ]; then
+  "$org_hook" "$@" || exit $?
+fi
+
+root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+for config in lefthook.yml lefthook.yaml .lefthook.yml .lefthook.yaml; do
+  if [ -f "$root/$config" ]; then
+    exec lefthook run --no-auto-install "$hook" "$@"
+  fi
+done
+
+# lefthook を使わないリポジトリでは従来どおり .git/hooks を実行する
+repo_hook="$(git rev-parse --git-common-dir)/hooks/$hook"
+if [ -x "$repo_hook" ]; then
+  exec "$repo_hook" "$@"
+fi

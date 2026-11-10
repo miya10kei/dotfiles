@@ -82,7 +82,12 @@ $(HOME)/.config/gh/config.yml:
 .PHONY: deploy-git
 deploy-git: \
 	$(HOME)/.gitconfig \
-	$(HOME)/.gitattributes
+	$(HOME)/.gitattributes \
+	$(HOME)/.config/git/hooks
+
+$(HOME)/.config/git/hooks:
+	mkdir -p $(HOME)/.config/git
+	ln -fns $(DOTDIR)/config/git/hooks $(HOME)/.config/git/hooks
 
 $(HOME)/.gitconfig:
 	ln -fns $(DOTDIR)/.gitconfig $(HOME)/.gitconfig
