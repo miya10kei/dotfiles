@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "cleanupPeriodDays": 14,
+  "cleanupPeriodDays": 183,
   "env": {
     "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
@@ -180,7 +180,9 @@
       "Bash(git push origin --force-with-lease)",
       "Bash(git push origin -f)",
       "Bash(terraform apply *)",
-      "Bash(terraform apply)"
+      "Bash(terraform apply)",
+      "Bash(pass)",
+      "Bash(pass *)"
     ]
   },
   "model": "opus",
