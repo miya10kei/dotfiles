@@ -6,7 +6,14 @@ return {
     ---@type Flash.Config
     opts = {},
     keys = {
-      { "<C-u>", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      {
+        "<C-u>",
+        mode = { "n", "x", "o" },
+        function()
+          require("flash").jump()
+        end,
+        desc = "Flash",
+      },
     },
   },
 }
