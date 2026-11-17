@@ -1,7 +1,4 @@
-local autocmd = require("utils.autocmd")
-
 local obsidian_dir = vim.fn.expand("$HOME/dev/ghq/github.com/miya10kei/obsidian")
-local obsidian_exists = vim.fn.isdirectory(obsidian_dir) == 1
 
 local function create_knowledge_note()
   local title = vim.fn.input("Title: ")
@@ -13,24 +10,6 @@ local function create_knowledge_note()
     client:write_note_to_buffer(note, { template = "knowledge_note.md" })
   end
 end
-
---if obsidian_exists then
---  autocmd.create_group("ObsidianAutoSync", {
---    {
---      event = "BufWritePost",
---      opts = {
---        pattern = obsidian_dir .. "/*",
---        callback = function()
---          vim.fn.jobstart({
---            "bash",
---            "-c",
---            "cd " .. obsidian_dir .. " && git add -A && git commit -m 'auto: sync' ; git push origin main",
---          }, { detach = true })
---        end,
---      },
---    },
---  })
---end
 
 ---@type LazySpec
 return {
@@ -57,9 +36,6 @@ return {
       },
       picker = {
         name = "fzf-lua",
-      },
-      completion = {
-        nvim_cmp = true,
       },
       mappings = {},
       ui = {

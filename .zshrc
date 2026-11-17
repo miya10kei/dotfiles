@@ -86,11 +86,6 @@ function main() {
                 # TODO
                 sudo chmod 777 /var/run/docker.sock
             fi
-        else
-            :
-            # if [[ -z $TMUX ]]; then
-            #     tmux new-session -A -s main
-            # fi
         fi
     fi
 
@@ -126,12 +121,6 @@ function main() {
     if builtin command -v mise > /dev/null 2>&1; then
         export PATH="$HOME/.local/share/mise/shims:$PATH"
         eval "$(mise activate zsh)"
-    fi
-
-    if builtin command -v uv > /dev/null 2>&1; then
-        if [[ ! -e "$HOME/.local/share/uv/credentials/credentials.toml" ]]; then
-            # uv auth login pypi.flatt.tech --token "$TAKUMI_GUARD_TOKEN"
-        fi
     fi
 
     # fzf-tab requires compinit to have already run before it is loaded via sheldon

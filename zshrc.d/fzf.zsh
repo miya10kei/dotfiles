@@ -7,7 +7,6 @@ FZF_COLOR="bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8,fg:#CDD6F4,header:#
 
 export FZF_DEFAULT_OPTS="--color=$FZF_COLOR --layout=reverse --info=inline --preview-window='down,50%,wrap'"
 export FZF_TMUX=1
-#export FZF_TMUX_OPTS='-p -h "80%" -w "95%"'
 export FZF_TMUX_OPTS='-p 90%'
 export FZF_DEFAULT_OPTS="--color=$FZF_COLOR --layout=reverse --info=inline --preview-window='down,50%,wrap'"
 

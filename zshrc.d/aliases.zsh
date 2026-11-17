@@ -14,7 +14,6 @@ function alias_if_exists() {
 }
 
 function _fzf_change_directory() {
-  #selected=$(eval $1 | fzf-tmux $FZF_TMUX_OPTS)
   selected=$(eval $1 | fzf)
   if [ -n "$selected" ]; then
     base_dir=$(eval $2)
@@ -31,7 +30,6 @@ function pysw(){
 
 function mtask() {
   local selected
-  #selected=$(mise task ls --no-header 2>/dev/null | fzf-tmux $FZF_TMUX_OPTS \
   selected=$(mise task ls --no-header 2>/dev/null | fzf \
     --header="mise task" \
     --preview="mise task info {1} 2>/dev/null")
