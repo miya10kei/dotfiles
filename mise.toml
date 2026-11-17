@@ -28,3 +28,43 @@ min_version = "2026.9.13"
 "~/.markdownlintrc"       = { mode = "absent" }
 "~/.password-store"       = { source = "data-volume/pass" }
 "~/.zsh_history"          = { source = "data-volume/zsh-history/.zsh_history" }
+
+# symlinkだけでは表せない配置。pre-dotfilesはsymlinkの配置に依存しないため、配置が競合で失敗しても実行される
+[bootstrap.hooks.pre-dotfiles]
+description = "data-volumeの用意、置き換える実体の削除、coderabbit・docker cli-plugins・ghの配置"
+run = '''
+set -eu
+dotdir="{{ config_root }}"
+
+# miseはsourceが1つでも欠けると何も配置しないため、永続化用のdata-volumeを先に用意する
+mkdir -p "$dotdir/data-volume/gh" "$dotdir/data-volume/pass" "$dotdir/data-volume/zoxide" "$dotdir/data-volume/zsh-history"
+mkdir -p -m 700 "$dotdir/data-volume/gpg"
+touch "$dotdir/data-volume/zsh-history/.zsh_history"
+
+# --forceは配置先の実体をデータごと消すため使わず、置き換えてよい実体だけを消す
+if [ -e "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then rm -rf "$HOME/.config/nvim"; fi
+if [ -f "$HOME/.zsh_history" ] && [ ! -L "$HOME/.zsh_history" ]; then rm -f "$HOME/.zsh_history"; fi
+
+# CodeRabbit CLIはログディレクトリまでのパスにsymlinkがあると起動しないため、ディレクトリは実体にし、
+# 永続化するファイルだけをdata-volumeへリンクする
+if [ -L "$HOME/.coderabbit" ]; then rm "$HOME/.coderabbit"; fi
+mkdir -p "$HOME/.coderabbit/logs" "$dotdir/data-volume/coderabbit/reviews"
+chmod 700 "$HOME/.coderabbit" "$HOME/.coderabbit/logs"
+for f in auth.json doctor.json rate-limit-cooldown.json stats.json reviews; do
+  ln -fns "$dotdir/data-volume/coderabbit/$f" "$HOME/.coderabbit/$f"
+done
+
+# リンク先がmiseのインストール先で決まるため、[dotfiles]では表せない
+mkdir -p "$HOME/.config/docker/cli-plugins"
+ln -sf "$(mise where aqua:docker/buildx)/docker-cli-plugin-docker-buildx" "$HOME/.config/docker/cli-plugins/docker-buildx"
+ln -sf "$(mise where aqua:docker/compose)/docker-cli-plugin-docker-compose" "$HOME/.config/docker/cli-plugins/docker-compose"
+
+# ~/.config/ghとその中のconfig.ymlは、親子関係にあるため[dotfiles]で同時に定義できない
+mkdir -p "$HOME/.config"
+ln -fns "$dotdir/data-volume/gh" "$HOME/.config/gh"
+ln -fns "$dotdir/config/gh/config.yml" "$HOME/.config/gh/config.yml"
+'''
+
+[bootstrap.hooks.post-dotfiles]
+description = "sheldonのプラグインを取得する（~/.config/sheldonのリンクが必要）"
+run         = "mise exec -- sheldon lock"
