@@ -12,22 +12,24 @@ mainブランチから新しいフィーチャーブランチを作成する
 
 ## 手順
 
-1. 現在のブランチを確認（git branch --show-current）
-2. mainブランチに移動（git checkout main）
-3. 最新の状態に更新（git pull origin main）
-4. 新しいブランチを作成して移動（git checkout -b <branch-name>）
+1. 現在のブランチを確認（`git branch --show-current`）
+2. mainブランチに移動（`git checkout main`）
+3. 最新の状態に更新（`git pull origin main`）
+4. 新しいブランチを作成して移動（`git checkout -b <branch-name>`）
 
 ## ブランチ命名規則
 
 ### 形式
 
 チケットIDがある場合:
-```
+
+```text
 <type>/<ticket-id>
 ```
 
 チケットIDがない場合:
-```
+
+```text
 <type>/<keyword>
 ```
 
@@ -43,7 +45,7 @@ mainブランチから新しいフィーチャーブランチを作成する
 
 ### 例
 
-```
+```text
 feature/PROJ-123
 fix/PROJ-456
 feature/add-validation

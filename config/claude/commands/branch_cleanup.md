@@ -109,7 +109,7 @@ git push origin --delete <branch-name>
 
 通常チェックアウト時:
 
-```
+```text
 ✅ mainブランチに移動しました
 ✅ 最新の状態に更新しました
 ✅ ブランチ <branch-name> を削除しました
@@ -117,7 +117,7 @@ git push origin --delete <branch-name>
 
 worktree内の時:
 
-```
+```text
 ✅ worktreeブランチ <worktree-branch> に戻りました
 ✅ origin/main の最新へrebaseしました
 ✅ ブランチ <branch-name> を削除しました

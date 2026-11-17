@@ -9,6 +9,7 @@ created_at: {{date:YYYY-MM-DD}} {{time:HH:mm:ss}}
 
 %%
 記入ルール
+
 - ファイル名: フルネーム.md（姓名の間に空白を入れない）、置き場所: People/
 - reading は読みをひらがなで、姓と名の間は半角スペース
 - aliases に姓は入れない（同姓の人と区別できなくなるため）
