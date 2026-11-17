@@ -35,10 +35,10 @@ build-dev-env:
 .PHONY: setup4d
 setup4d: \
 	deploy-mise \
-	deploy-dotfiles \
 	deploy-coderabbit \
 	deploy-docker \
 	deploy-gh \
+	deploy-dotfiles \
 	deploy-sheldon
 
 include Makefile.d/*.mk
