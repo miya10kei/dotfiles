@@ -12,7 +12,6 @@ terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
 # Language runtimes
 chamber     = "latest"
 cloudflared = "latest"
-deno       = "latest"
 go          = "latest"
 java        = "25"
 kotlin      = "latest"
@@ -127,7 +126,7 @@ tree-sitter = "latest"
 
 [settings]
 experimental                        = true
-idiomatic_version_file_enable_tools = ["deno", "go", "java", "node", "python", "rust", "terraform"]
+idiomatic_version_file_enable_tools = ["go", "java", "node", "python", "rust", "terraform"]
 not_found_auto_install              = false
 trusted_config_paths                = ["~/dev/ghq/github.com/miya10kei", "~/dev/ghq/github.com/nealle"]
 
