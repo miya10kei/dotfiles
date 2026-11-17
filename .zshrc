@@ -30,9 +30,6 @@ function main() {
     add_path "$HOME/.docker/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.rd/bin"
-    add_path "$HOME/.tfenv/bin"
-    add_path "$HOME/Library/Python/3.11/bin"
-    add_path "/usr/local/nodejs/bin"
 
     # -----------------
     # --- Claude Code -
@@ -50,11 +47,6 @@ function main() {
     # -------------
     # --- Node.js -
     # -------------
-    if [[ -e /opt/homebrew/opt/node@22 ]]; then
-        export LDFLAGS="-L/opt/homebrew/opt/node@22/lib"
-        export CPPFLAGS="-I/opt/homebrew/opt/node@22/include"
-        add_path "/opt/homebrew/opt/node@22/bin"
-    fi
     export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/.npmrc"
 
     if builtin command -v taplo > /dev/null 2>&1; then
@@ -153,11 +145,6 @@ function main() {
 
     fi
 
-    if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then
-        source $HOME/.local/src/google-cloud-sdk/path.zsh.inc
-        source $HOME/.local/src/google-cloud-sdk/completion.zsh.inc
-    fi
-
     if builtin command -v starship > /dev/null 2>&1; then
         eval "$(starship init zsh)"
     fi
@@ -175,10 +162,3 @@ if [ "$ZPROFILE_ENABLED" = true ]; then
 else
     main
 fi
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/miya10kei/.config/google-cloud-sdk/path.zsh.inc' ]; then . '/home/miya10kei/.config/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/miya10kei/.config/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/miya10kei/.config/google-cloud-sdk/completion.zsh.inc'; fi
