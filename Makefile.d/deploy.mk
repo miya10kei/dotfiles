@@ -22,14 +22,17 @@ deploy-mise:
 
 # ----------------------------------------------------------------------------------------------------------------------
 # symlinkの配置は mise.toml の [dotfiles] で定義する。miseはsourceが1つでも欠けると何も配置しないため、
-# 永続化用のdata-volumeを先に用意する。--force はイメージにCOPYされた ~/.config/nvim などの実体を置き換えるため
+# 永続化用のdata-volumeを先に用意する。--force は配置先の実体をデータごと消すため使わず、
+# 置き換えてよい実体（イメージにCOPYされた ~/.config/nvim、zshが作った ~/.zsh_history）だけを先に消す
 .PHONY: deploy-dotfiles
 deploy-dotfiles:
 	mkdir -p $(DOTDIR)/data-volume/pass $(DOTDIR)/data-volume/zoxide $(DOTDIR)/data-volume/zsh-history
 	mkdir -p -m 700 $(DOTDIR)/data-volume/gpg
 	touch $(DOTDIR)/data-volume/zsh-history/.zsh_history
+	if [ -e $(HOME)/.config/nvim ] && [ ! -L $(HOME)/.config/nvim ]; then rm -rf $(HOME)/.config/nvim; fi
+	if [ -f $(HOME)/.zsh_history ] && [ ! -L $(HOME)/.zsh_history ]; then rm -f $(HOME)/.zsh_history; fi
 	mise trust --quiet $(DOTDIR)/mise.toml
-	mise --cd $(DOTDIR) dotfiles apply --yes --force
+	mise --cd $(DOTDIR) dotfiles apply --yes
 
 
 # ----------------------------------------------------------------------------------------------------------------------

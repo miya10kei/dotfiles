@@ -1,6 +1,9 @@
 # このリポジトリのdotfilesの配置定義。コンテナ起動時に `make setup4d` から `mise dot apply` で適用する
 # 相対パスのsourceはこのファイルのディレクトリ（~/.dotfiles）から解決され、絶対パスのsymlinkになる
 
+# mode = "absent" が使えるようになったバージョン
+min_version = "2026.9.13"
+
 [dotfiles]
 "~/.config/aws"           = { source = "config/aws" }
 "~/.config/ccstatusline"  = { source = "config/ccstatusline" }
