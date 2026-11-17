@@ -26,7 +26,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 - 配置は `mise.toml` に定義し、`setup4d` の `deploy-dotfiles` が `mise dot apply` で適用する。`setup4d` でMakeに残っている配置は、`~/.config/mise` 自体を置く `deploy-mise` だけ
     - 単純なsymlinkは `[dotfiles]` に追加する
     - コマンドの実行や `mise where` の結果が必要な配置、親子関係にあるtarget（例: `~/.config/gh` と `~/.config/gh/config.yml`。miseは同時に定義できない）は `[bootstrap.hooks.pre-dotfiles]` に書く。symlinkの配置後でないと動かないもの（例: `sheldon lock`）は `post-dotfiles` に書く
-    - フックはmise自身の環境で動くので、miseで入れたツールは `mise exec --` 経由で呼ぶ
+    - フックでは、ツールを `mise exec --` 経由で呼ばない。`exec_auto_install` が既定で有効で、起動のたびに未インストールのツールを入れようとするため。起動時は `.zshrc` が `mise activate` してから `make` を呼ぶので、PATHから直接呼べる
 - `mise dot apply` は `--force` なしで実行しており、targetに実体のファイルやディレクトリがあると止まって起動時の配置が失敗する。イメージにCOPYされるものなど置き換えてよい実体は、`pre-dotfiles` で事前に消す（`~/.config/nvim` と同じ書き方）
 - `config/mise` と `config/nvim` はイメージのビルド時にCOPYされる。ツールを追加しても `make build-dev-env` で再ビルドするまで入らない
 - `data-volume/` は永続化用の実データ（gitignore対象）。設定ファイルを置かないこと

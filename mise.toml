@@ -67,4 +67,4 @@ ln -fns "$dotdir/config/gh/config.yml" "$HOME/.config/gh/config.yml"
 
 [bootstrap.hooks.post-dotfiles]
 description = "sheldonのプラグインを取得する（~/.config/sheldonのリンクが必要）"
-run         = "mise exec -- sheldon lock"
+run         = "sheldon lock"
