@@ -45,5 +45,5 @@ OSやアーキの違いは、次の優先順で吸収する。
     - `mise where` と `sheldon` は、PATHの先頭に置いたスタブで置き換える
 - シェル: `zsh -n <file>`、`shellcheck <file>`
 - Dockerfile: `hadolint Dockerfile`
-- Markdown: リポジトリのルートで `markdownlint-cli2 <file>` を実行する（設定はカレントディレクトリから探される）。指摘はファイル内の既存の書き方より優先して直し、入れ子のリストは4スペースでインデントする
+- Markdown: リポジトリのルートで `markdownlint-cli2 <file>` を実行する（設定はカレントディレクトリから探される）。指摘はファイル内の既存の書き方より優先して直し、入れ子の箇条書き（`-`・`*`）は4スペースでインデントする（番号付きリストの子は親の本文の位置に揃える）
 - TOML: `taplo check`、YAML: `yamlfmt -lint`
