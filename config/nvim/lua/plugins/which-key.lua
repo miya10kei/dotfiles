@@ -7,7 +7,6 @@ return {
     opts = {
       preset = "modern",
       spec = {
-        { "<Leader>m", icon = "󱓩 ", group = "Obsidian" },
         { "<Leader>u", group = "[ufo]" },
         { "<Leader>w", group = "Workspace" },
         { "<Leader>z", icon = " ", group = "TS_Fold" },
