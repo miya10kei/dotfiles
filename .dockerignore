@@ -1,0 +1,8 @@
+# ビルドコンテキストはDockerfileがCOPYするものだけに絞る(data-volume/や.git/を送らない)
+# DockerfileにCOPYを追加したら、ここにも除外解除を追加すること
+*
+!config/dpkg/
+!config/mise/
+!config/nvim/
+!Makefile
+!Makefile.d/
