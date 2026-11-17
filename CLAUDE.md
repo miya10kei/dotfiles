@@ -22,11 +22,11 @@ OSやアーキの違いは、次の優先順で吸収する。
 ## 反映の仕組み
 
 - 実行環境は開発コンテナ（`miya10kei/devenv`）。ホストの `~/.dotfiles` をbind mountして設定を配置する
-- コンテナのPID 1のzshが起動時に `make --always-make setup4d` を実行する
-- 配置は `mise.toml` に定義し、`setup4d` の `deploy-dotfiles` が `mise dot apply` で適用する。`setup4d` でMakeに残っている配置は、`~/.config/mise` 自体を置く `deploy-mise` だけ
+- コンテナのPID 1のzshが、起動時に `.zshrc` から `mise --cd ~/.dotfiles dotfiles apply` を実行する
+- 配置はすべて `mise.toml` に定義する（`~/.config/mise` 自体も `[dotfiles]` で配置する）
     - 単純なsymlinkは `[dotfiles]` に追加する
     - コマンドの実行や `mise where` の結果が必要な配置、親子関係にあるtarget（例: `~/.config/gh` と `~/.config/gh/config.yml`。miseは同時に定義できない）は `[bootstrap.hooks.pre-dotfiles]` に書く。symlinkの配置後でないと動かないもの（例: `sheldon lock`）は `post-dotfiles` に書く
-    - フックでは、ツールを `mise exec --` 経由で呼ばない。`exec_auto_install` が既定で有効で、起動のたびに未インストールのツールを入れようとするため。起動時は `.zshrc` が `mise activate` してから `make` を呼ぶので、PATHから直接呼べる
+    - フックでは、ツールを `mise exec --` 経由で呼ばない。`exec_auto_install` が既定で有効で、起動のたびに未インストールのツールを入れようとするため。起動時は `.zshrc` が `mise activate` してから `dot apply` を呼ぶので、PATHから直接呼べる
 - `mise dot apply` は `--force` なしで実行しており、targetに実体のファイルやディレクトリがあると止まって起動時の配置が失敗する。イメージにCOPYされるものなど置き換えてよい実体は、`pre-dotfiles` で事前に消す（`~/.config/nvim` と同じ書き方）
 - `config/mise` と `config/nvim` はイメージのビルド時にCOPYされる。ツールを追加しても `make build-dev-env` で再ビルドするまで入らない
 - `data-volume/` は永続化用の実データ（gitignore対象）。設定ファイルを置かないこと
@@ -40,8 +40,9 @@ OSやアーキの違いは、次の優先順で吸収する。
 ## 検証
 
 - dotfiles: `mise dot apply --dry-run` で配置内容とフックのコマンドを、`mise dot status` で適用状態を確認する（dry-runはフックを実行しない）
-- 起動時の配置（`setup4d`、`mise.toml`）を変えたら、実際のHOMEやdata-volumeでは試さず、リポジトリのコピーと一時HOMEで確かめる
-    - `make --always-make HOME=<一時HOME> DOTDIR=<リポジトリのコピー> setup4d` を2回実行し、origin/mainで同じことをした結果とHOME配下のsymlink・権限を比べる
+- 起動時の配置（`mise.toml`、`.zshrc`）を変えたら、実際のHOMEやdata-volumeでは試さず、リポジトリのコピーと一時HOMEで確かめる
+    - `HOME=<一時HOME> mise -C <リポジトリのコピー> dot apply --yes` を2回実行し、origin/mainで同じことをした結果とHOME配下のsymlink・権限を比べる。一時HOMEには、イメージと同じく実体の `~/.config/mise` と `~/.config/nvim` を置いておく
+    - `.zshrc` の起動処理まで確かめるときは、本番Dockerfileの最終段を最小化したイメージを作り、zshをPID 1で起動する
     - `mise where` と `sheldon` は、PATHの先頭に置いたスタブで置き換える
 - シェル: `zsh -n <file>`、`shellcheck <file>`
 - Dockerfile: `hadolint Dockerfile`
