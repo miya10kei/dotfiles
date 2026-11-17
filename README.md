@@ -20,4 +20,4 @@ make build-dev-env
 make setup4d
 ```
 
-symlinkで配置する設定は `mise.toml` の `[dotfiles]` で定義している。個別に配置するときは対象を指定する（例: `mise -C ~/.dotfiles dot apply ~/.config/nvim`）。
+配置は `mise.toml` の `[dotfiles]` と、その前後に走るフック（`[bootstrap.hooks]`）で定義している。個別に配置するときは対象を指定する。フックも毎回走るため、不要なら `--no-hooks` を付ける（例: `mise -C ~/.dotfiles --no-hooks dot apply ~/.config/nvim`）。
