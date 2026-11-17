@@ -36,8 +36,10 @@ return {
               if vim.bo[args.buf].buftype == "" and vim.api.nvim_buf_get_name(args.buf) ~= "" then
                 lint.try_lint("typos")
               end
-              if vim.bo[args.buf].filetype == "sql" and vim.fs.root(args.buf, sqlfluff_config_files) then
-                lint.try_lint("sqlfluff")
+              -- sqlfluffはstdinで受け取ると作業ディレクトリから設定を探すため、設定のあるディレクトリで実行する
+              local sqlfluff_root = vim.bo[args.buf].filetype == "sql" and vim.fs.root(args.buf, sqlfluff_config_files)
+              if sqlfluff_root then
+                lint.try_lint("sqlfluff", { cwd = sqlfluff_root })
               end
             end,
           },
