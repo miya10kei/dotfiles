@@ -56,6 +56,8 @@ return {
           lua = { "stylua" },
           markdown = { "markdownlint-cli2" },
           python = { "ruff_organize_imports", "ruff_format" },
+          -- sqlfluffはdialectの設定ファイル（.sqlfluffなど）があるプロジェクトでだけ動く（conform既定のrequire_cwd）
+          sql = { "sqlfluff" },
           terraform = { "terraform_fmt" },
           toml = { "taplo" },
           tf = { "terraform_fmt" },
