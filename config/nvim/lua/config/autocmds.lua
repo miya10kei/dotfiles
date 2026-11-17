@@ -1,16 +1,26 @@
 local autocmd = require("utils.autocmd")
 
--- Restore cursor position
-autocmd.create_group("Extends", {
+-- 前回のカーソル位置を復元する
+autocmd.create_group("RestoreCursor", {
   {
-    event = "BufRead",
+    event = "BufReadPost",
     opts = {
-      pattern = "*",
-      callback = function()
-        if vim.fn.line("'\"") > 0 and vim.fn.line("'\"") <= vim.fn.line("$") then
-          vim.cmd('normal g`"')
+      callback = function(args)
+        local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
+        if mark[1] > 0 and mark[1] <= vim.api.nvim_buf_line_count(args.buf) then
+          pcall(vim.api.nvim_win_set_cursor, 0, mark)
         end
       end,
+    },
+  },
+})
+
+-- 外部で変更されたファイルを読み直す
+autocmd.create_group("Checktime", {
+  {
+    event = { "BufEnter", "FocusGained", "TermClose", "TermLeave" },
+    opts = {
+      command = "checktime",
     },
   },
 })
@@ -47,21 +57,7 @@ autocmd.create_group("TerminalConfig", {
   {
     event = "TermOpen",
     opts = {
-      pattern = "*",
       command = "startinsert",
-    },
-  },
-})
-
--- GitHub Actions workflow files
-autocmd.create_group("GitHubActionsFiletype", {
-  {
-    event = { "BufRead", "BufNewFile" },
-    opts = {
-      pattern = { "*/.github/workflows/*.yaml", "*/.github/workflows/*.yml" },
-      callback = function()
-        vim.bo.filetype = "yaml.ghaction"
-      end,
     },
   },
 })

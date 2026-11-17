@@ -1,10 +1,11 @@
-local osc52 = require("vim.ui.clipboard.osc52")
+vim.g.mapleader = " "
 
 -- herdr は OSC52 read の応答をpaneへ返送しないため、herdr内ではpasteが永久に待機する
 local function herdr_paste_fallback()
   return { vim.fn.getreg('"', 1, true), vim.fn.getregtype('"') }
 end
 
+local osc52 = require("vim.ui.clipboard.osc52")
 local in_herdr = vim.env.HERDR_ENV == "1"
 
 vim.g.clipboard = {
@@ -19,43 +20,41 @@ vim.g.clipboard = {
   },
 }
 
-local options = {
-  autoread = true,
-  background = "dark",
-  backup = false,
-  clipboard = "unnamedplus",
-  cmdheight = 2,
-  encoding = "utf-8",
-  expandtab = true,
-  fileencoding = "utf-8",
-  fileformats = "unix,mac,dos",
-  foldcolumn = "1",
-  foldlevel = 99,
-  foldlevelstart = 99,
-  foldenable = true,
-  ignorecase = true,
-  laststatus = 3,
-  list = true,
-  statusline = "%!v:lua.require'utils.worktree'.statusline()",
-  number = true,
-  listchars = {
-    tab = "»-",
-    trail = "-",
-    eol = "↲",
-    extends = "»",
-    precedes = "«",
-    nbsp = "%",
-  },
-  shiftwidth = 4,
-  showtabline = 2,
-  smartcase = true,
-  swapfile = false,
-  tabstop = 4,
-  termguicolors = true,
-  updatetime = 250,
-  virtualedit = "onemore",
-}
+local opt = vim.opt
 
-for k, v in pairs(options) do
-  vim.opt[k] = v
-end
+opt.clipboard = "unnamedplus"
+opt.cmdheight = 2
+opt.expandtab = true
+opt.fileformats = "unix,mac,dos"
+opt.foldcolumn = "1"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.ignorecase = true
+opt.laststatus = 3
+opt.list = true
+opt.listchars = {
+  tab = "»-",
+  trail = "-",
+  eol = "↲",
+  extends = "»",
+  precedes = "«",
+  nbsp = "%",
+}
+opt.number = true
+opt.shiftwidth = 4
+opt.showtabline = 2
+opt.smartcase = true
+opt.statusline = "%!v:lua.require'utils.worktree'.statusline()"
+opt.swapfile = false
+opt.tabstop = 4
+opt.updatetime = 250
+opt.virtualedit = "onemore"
+
+-- GitHub Actionsのワークフローはactionlintとyamllsで扱えるよう専用のfiletypeにする
+vim.filetype.add({
+  pattern = {
+    [".*/%.github/workflows/.*%.ya?ml"] = "yaml.ghaction",
+  },
+})
+
+vim.api.nvim_create_user_command("Jq", "%!jq '.'", { desc = "Format the buffer as JSON with jq" })

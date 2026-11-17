@@ -1,100 +1,62 @@
-local keymap = vim.keymap.set
-local opts = require("utils.keymap")
+local map = vim.keymap.set
+local silent = { silent = true }
 
-vim.g.mapleader = " "
+map("i", "<C-h>", "<C-o>h", silent)
+map("i", "<C-j>", "<C-o>j", silent)
+map("i", "<C-k>", "<C-o>k", silent)
+map("i", "<C-l>", "<C-o>l", silent)
+map("i", "jj", "<ESC>", silent)
+map("n", "<ESC><ESC>", "<Cmd>nohlsearch<CR>", silent)
+map("n", "<LEADER>n", "<Cmd>bnext<CR>", silent)
+map("n", "<LEADER>p", "<Cmd>bprevious<CR>", silent)
+map("n", "j", "gj", silent)
+map("n", "k", "gk", silent)
+map("n", "q", "<NOP>", silent)
+map({ "n", "x" }, "x", '"_x', silent)
+map({ "n", "x" }, "X", '"_X', silent)
+map("n", "<C-n>", "<Cmd>set number!<CR>", silent)
+map("n", "<SPACE><SPACE>", "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<CR>", silent)
+map("x", "p", '"_dP', silent)
+map("x", "P", '"_dP', silent)
 
-keymap("i", "<C-h>", "<C-o>h", opts.silent)
-keymap("i", "<C-j>", "<C-o>j", opts.silent)
-keymap("i", "<C-k>", "<C-o>k", opts.silent)
-keymap("i", "<C-l>", "<C-o>l", opts.silent)
-keymap("i", "jj", "<ESC>", opts.silent)
-keymap("n", "<ESC><ESC>", " :<C-u>nohlsearch<CR>", opts.silent)
-keymap("n", "<LEADER>n", ": <C-u>bn<CR>", opts.silent)
-keymap("n", "<LEADER>p", ": <C-u>bp<CR>", opts.silent)
-keymap("n", "j", "gj", opts.silent)
-keymap("n", "k", "gk", opts.silent)
-keymap("n", "q", "<NOP>", opts.silent)
-keymap("n", "x", '"_x', opts.silent)
-keymap("n", "X", '"_X', opts.silent)
-keymap("x", "x", '"_x', opts.silent)
-keymap("x", "X", '"_X', opts.silent)
-keymap("n", "<C-n>", function()
-  return vim.o.number == true and ":<C-u>set nonumber<CR>" or ":<C-u>set number<CR>"
-end, {
-  expr = true,
-  silent = true,
-})
-keymap("n", "<SPACE><SPACE>", "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<CR>", opts.silent)
-keymap("x", "p", '"_dP', opts.silent)
-keymap("x", "P", '"_dP', opts.silent)
+-- 現在のセッションを保存して再起動し、復元する
+map("n", "<F5>", "<Cmd>restart<CR>", { silent = true, desc = "Restart Neovim" })
 
 -- Window navigation
-keymap("n", "<C-h>", "<C-w>h", opts.silent)
-keymap("n", "<C-j>", "<C-w>j", opts.silent)
-keymap("n", "<C-k>", "<C-w>k", opts.silent)
-keymap("n", "<C-l>", "<C-w>l", opts.silent)
+map("n", "<C-h>", "<C-w>h", silent)
+map("n", "<C-j>", "<C-w>j", silent)
+map("n", "<C-k>", "<C-w>k", silent)
+map("n", "<C-l>", "<C-w>l", silent)
 
 -- Terminal mode window navigation
-keymap("t", "<C-h>", "<C-\\><C-n><C-w>h", opts.silent)
-keymap("t", "<C-j>", "<C-\\><C-n><C-w>j", opts.silent)
-keymap("t", "<C-k>", "<C-\\><C-n><C-w>k", opts.silent)
-keymap("t", "<C-l>", "<C-\\><C-n><C-w>l", opts.silent)
+map("t", "<C-h>", "<C-\\><C-n><C-w>h", silent)
+map("t", "<C-j>", "<C-\\><C-n><C-w>j", silent)
+map("t", "<C-k>", "<C-\\><C-n><C-w>k", silent)
+map("t", "<C-l>", "<C-\\><C-n><C-w>l", silent)
 
 -- Terminal
-keymap(
-  "n",
-  "<F12>",
-  "<CMD>botright split<CR><CMD>resize " .. math.floor(vim.o.lines / 3) .. "<CR><CMD>terminal<CR>",
-  opts.silent
-)
-keymap("n", "<F11>", "<CMD>rightbelow vsplit<CR><CMD>terminal<CR>", opts.silent)
-keymap("t", "<ESC>", "<C-\\><C-n>", opts.silent)
+map("n", "<F12>", function()
+  vim.cmd("botright split")
+  vim.cmd.resize(math.floor(vim.o.lines / 3))
+  vim.cmd.terminal()
+end, silent)
+map("n", "<F11>", "<Cmd>rightbelow vsplit | terminal<CR>", silent)
+map("t", "<ESC>", "<C-\\><C-n>", silent)
 
--- Build file reference (@path/to/file, @path/to/file#L1-5)
-local function build_file_reference(start_line, end_line)
-  local filepath = vim.fn.expand("%:.")
-  local text = "@" .. filepath
+-- ファイル参照（@path/to/file、@path/to/file#L1-5）をクリップボードへコピーする
+local function copy_file_reference(start_line, end_line)
+  local text = "@" .. vim.fn.expand("%:.")
   if start_line then
     text = text .. "#L" .. start_line .. (start_line ~= end_line and "-" .. end_line or "")
   end
-  return text
-end
-
-local function copy_file_reference(start_line, end_line)
-  local text = build_file_reference(start_line, end_line)
   vim.fn.setreg("+", text)
   vim.notify("Copied: " .. text, vim.log.levels.INFO)
 end
 
-local function send_file_reference_to_tmux(start_line, end_line)
-  local text = build_file_reference(start_line, end_line)
-  local panes = vim.fn.systemlist("tmux list-panes -F '#{pane_index} #{pane_title}' -f '#{?pane_active,0,1}'")
-  if vim.v.shell_error ~= 0 then
-    return vim.notify("tmux is not running", vim.log.levels.ERROR)
-  end
-  require("fzf-lua").fzf_exec(panes, {
-    prompt = "Pane> ",
-    preview = "tmux capture-pane -t {1} -p -e -S - | tail -20",
-    fzf_opts = { ["--ansi"] = "" },
-    actions = {
-      ["default"] = function(selected)
-        local target = selected[1]:match("^(%S+)")
-        vim.fn.system(
-          string.format("tmux send-keys -t %s %s && tmux select-pane -t %s", target, vim.fn.shellescape(text), target)
-        )
-        vim.notify("Sent to pane " .. target .. ": " .. text, vim.log.levels.INFO)
-      end,
-    },
-  })
-end
-
-keymap("n", "<LEADER>yf", copy_file_reference, opts.silent)
-keymap("x", "<LEADER>yf", function()
+map("n", "<LEADER>yf", function()
+  copy_file_reference()
+end, { silent = true, desc = "Copy file reference" })
+map("x", "<LEADER>yf", function()
   local s, e = vim.fn.line("v"), vim.fn.line(".")
   copy_file_reference(math.min(s, e), math.max(s, e))
-end, opts.silent)
-keymap("n", "<LEADER>sf", send_file_reference_to_tmux, opts.silent)
-keymap("x", "<LEADER>sf", function()
-  local s, e = vim.fn.line("v"), vim.fn.line(".")
-  send_file_reference_to_tmux(math.min(s, e), math.max(s, e))
-end, opts.silent)
+end, { silent = true, desc = "Copy file reference with lines" })
