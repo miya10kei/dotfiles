@@ -25,6 +25,7 @@ task.run_auto_install = false
 "~/.config/taplo"         = { source = "config/taplo" }
 "~/.config/uv"            = { source = "config/uv" }
 "~/.config/yamlfmt"       = { source = "config/yamlfmt" }
+"~/.config/yamllint"      = { source = "config/yamllint" }
 "~/.editorconfig"         = { source = ".editorconfig" }
 "~/.gitattributes"        = { source = ".gitattributes" }
 "~/.gitconfig"            = { source = ".gitconfig" }
