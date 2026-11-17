@@ -78,6 +78,8 @@ function main() {
     if [[ -e /.dockerenv ]]; then
         if [[ $$ = 1 ]]; then
             if [[ -e $HOME/.dotfiles/Makefile ]]; then
+                # ~/.dotfilesへ移動した時点でmise.tomlが未trustだと、activateのフックが警告を出すため先にtrustする
+                mise trust --quiet $HOME/.dotfiles/mise.toml
                 eval "$(mise activate zsh)"
                 pushd $HOME/.dotfiles
                 make --always-make --makefile $HOME/.dotfiles/Makefile setup4d
