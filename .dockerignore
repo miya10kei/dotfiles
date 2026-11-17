@@ -4,5 +4,3 @@
 !config/dpkg/
 !config/mise/
 !config/nvim/
-!Makefile
-!Makefile.d/
