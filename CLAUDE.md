@@ -2,11 +2,23 @@
 
 ## 必須要件: OS・アーキテクチャ非依存
 
-macOS / Linux × arm64（Apple Silicon・aarch64）/ x86_64 のすべての組み合わせで動くこと。Dockerイメージもホストに合わせてarm64とamd64の両方でビルドされる。
+次の4環境すべてで動くこと。Dockerイメージはホストのアーキでビルドされるため、linux/arm64とlinux/amd64の両方で動く必要がある。
 
-- OSやアーキで処理が変わる箇所は `uname -s` / `uname -m` で分岐する（Makefileは既存の `OS` 変数、Dockerfileは `TARGETARCH`）
-- ダウンロードURLやパッケージ名にアーキ（`aarch64`、`amd64` など）を直書きしない
-- GNU/BSDで挙動が違うコマンド（`sed -i`、`date -d`、`readlink -f`、`grep -P` など）は、macOSのホスト側で動くコードで使わない。使うなら分岐する
+- macOS arm64（Apple Silicon）
+- macOS x86_64（Intel）
+- Linux arm64（aarch64）
+- Linux x86_64
+
+OSやアーキの違いは、次の優先順で吸収する。
+
+1. 分岐を書かない。アーキの解決はツールに任せる
+    - mise: aquaバックエンドを優先する。httpバックエンドは `{{ os() }}` / `{{ arch() }}` テンプレートか `platforms.<os>-<arch>` を使い、URLにアーキ名を直書きしない
+    - Dockerfile: aptとマルチアーキのベースイメージを使う
+2. OSではなく機能で判定する。コマンドの有無は `command -v`（zshは `(( $+commands[x] ))`）で確かめる。GNU/BSDで挙動が違うコマンド（`sed -i`、`date -d`、`readlink -f`、`grep -P` など）は、POSIXの範囲のオプションだけを使う
+3. 分岐が避けられない場合は、場所ごとに次の値を使う
+    - Dockerfile: `ARG TARGETARCH`（`amd64` / `arm64`）。`uname -m` はビルド対象ではなく実行環境を返すので使わない
+    - zsh: `$OSTYPE`（`darwin*` / `linux*`）
+    - sh・Makefile: `uname -s` / `uname -m`。`uname -m` はmacOSで `arm64`、Linuxで `aarch64` を返すので、両方を同じ値に正規化してから使う
 
 ## 反映の仕組み
 
