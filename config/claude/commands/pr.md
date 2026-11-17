@@ -12,13 +12,13 @@ description: Pull Requestを作成する
 
 ## 手順
 
-1. 現在のブランチを確認（git branch --show-current）
+1. 現在のブランチを確認（`git branch --show-current`）
 2. baseブランチの最新変更を取り込む
-   1. baseブランチの最新を取得（git fetch origin <base-branch>）
-   2. 未取り込みのコミットを確認（git log HEAD..origin/<base-branch> --oneline）
-   3. 未取り込みがある場合、rebaseで取り込む（git rebase origin/<base-branch>）
+   1. baseブランチの最新を取得（`git fetch origin <base-branch>`）
+   2. 未取り込みのコミットを確認（`git log HEAD..origin/<base-branch> --oneline`）
+   3. 未取り込みがある場合、rebaseで取り込む（`git rebase origin/<base-branch>`）
    4. コンフリクトが発生した場合はユーザーに報告し、指示を仰ぐ
-3. 未プッシュのコミットがあればプッシュ（git push -u origin <branch>）
+3. 未プッシュのコミットがあればプッシュ（`git push -u origin <branch>`）
    - rebase後は --force-with-lease を使用する
 4. PRを作成（gh pr create）
 5. auto-mergeを有効化（gh pr merge --auto --squash）
@@ -27,13 +27,13 @@ description: Pull Requestを作成する
 
 ### 形式
 
-```
+```text
 <TICKET-ID> <gitmoji> <説明>
 ```
 
 ### 例
 
-```
+```text
 PROJ-123 ✨ ログイン機能を追加
 PROJ-456 🐛 認証エラーを修正
 ```

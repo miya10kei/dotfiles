@@ -40,7 +40,10 @@ OSやアーキの違いは、次の優先順で吸収する。
 ## 検証
 
 - dotfiles: `mise dot apply --dry-run` で配置内容とフックのコマンドを、`mise dot status` で適用状態を確認する（dry-runはフックを実行しない）
+- 起動時の配置（`setup4d`、`mise.toml`）を変えたら、実際のHOMEやdata-volumeでは試さず、リポジトリのコピーと一時HOMEで確かめる
+    - `make --always-make HOME=<一時HOME> DOTDIR=<リポジトリのコピー> setup4d` を2回実行し、origin/mainで同じことをした結果とHOME配下のsymlink・権限を比べる
+    - `mise where` と `sheldon` は、PATHの先頭に置いたスタブで置き換える
 - シェル: `zsh -n <file>`、`shellcheck <file>`
 - Dockerfile: `hadolint Dockerfile`
-- Markdown: `markdownlint-cli2 <file>`
+- Markdown: リポジトリのルートで `markdownlint-cli2 <file>` を実行する（設定はカレントディレクトリから探される）。指摘はファイル内の既存の書き方より優先して直し、入れ子の箇条書き（`-`・`*`）は4スペースでインデントする（番号付きリストの子は親の本文の位置に揃える）
 - TOML: `taplo check`、YAML: `yamlfmt -lint`

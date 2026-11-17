@@ -21,6 +21,7 @@ gh pr checks
 ### 2. 失敗時の対応
 
 1. 失敗したジョブのログを取得
+
    ```bash
    gh run view <run-id> --log-failed
    ```
