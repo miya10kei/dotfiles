@@ -2,10 +2,9 @@
 
 ## 必須要件: OS・アーキテクチャ非依存
 
-次の4環境すべてで動くこと。Dockerイメージはホストのアーキでビルドされるため、linux/arm64とlinux/amd64の両方で動く必要がある。
+次の3環境すべてで動くこと。開発コンテナのイメージはホストのアーキでビルドされるため、linux/arm64とlinux/amd64の両方で動く必要がある。コンテナランタイムはDocker（Desktop・Engine）やRancher Desktopなど環境ごとに異なるため、特定のランタイムを前提にしない。
 
 - macOS arm64（Apple Silicon）
-- macOS x86_64（Intel）
 - Linux arm64（aarch64）
 - Linux x86_64
 
@@ -14,7 +13,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 1. 分岐を書かない。アーキの解決はツールに任せる
     - mise: aquaバックエンドを優先する。httpバックエンドは `{{ os() }}` / `{{ arch() }}` テンプレートか `platforms.<os>-<arch>` を使い、URLにアーキ名を直書きしない
     - Dockerfile: aptとマルチアーキのベースイメージを使う
-2. OSではなく機能で判定する。コマンドの有無は `command -v`（zshは `(( $+commands[x] ))`）で確かめる。GNU/BSDで挙動が違うコマンド（`sed -i`、`date -d`、`readlink -f`、`grep -P` など）は、POSIXの範囲のオプションだけを使う
+2. OSではなく機能で判定する。コマンドの有無は `command -v`（zshは `(( $+commands[x] ))`）で確かめる。`rdctl` などランタイム固有のコマンドも同様に、存在を確かめてから使う。GNU/BSDで挙動が違うコマンド（`sed -i`、`date -d`、`readlink -f`、`grep -P` など）は、POSIXの範囲のオプションだけを使う
 3. 分岐が避けられない場合は、場所ごとに次の値を使う
     - Dockerfile: `ARG TARGETARCH`（`amd64` / `arm64`）。`uname -m` はビルド対象ではなく実行環境を返すので使わない
     - zsh: `$OSTYPE`（`darwin*` / `linux*`）
@@ -22,7 +21,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 
 ## 反映の仕組み
 
-- 実行環境はDockerの開発コンテナ（`miya10kei/devenv`）。ホストの `~/.dotfiles` をbind mountし、各設定は `Makefile.d/deploy.mk` の `deploy-<tool>` が `ln -fns $(DOTDIR)/...` でsymlinkする
+- 実行環境は開発コンテナ（`miya10kei/devenv`）。ホストの `~/.dotfiles` をbind mountし、各設定は `Makefile.d/deploy.mk` の `deploy-<tool>` が `ln -fns $(DOTDIR)/...` でsymlinkする
 - コンテナのPID 1のzshが起動時に `make --always-make setup4d` を実行する。新しい `deploy-<tool>` を追加したら `Makefile` の `setup4d` にも加えること
 - `config/mise` と `config/nvim` はイメージのビルド時にCOPYされる。ツールを追加しても `make build-dev-env` で再ビルドするまで入らない
 - `data-volume/` は永続化用の実データ（gitignore対象）。設定ファイルを置かないこと
