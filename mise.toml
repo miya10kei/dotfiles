@@ -114,14 +114,6 @@ docker system prune --force
 if command -v rdctl >/dev/null 2>&1; then rdctl shell sudo fstrim -v /mnt/data; fi
 """
 
-[tasks.start-bg-job]
-description = "バックグラウンドのジョブをまとめて起動する"
-depends     = ["start-gopls"]
-
-[tasks.start-gopls]
-description = "goplsをデーモンとして起動する"
-run         = "nohup gopls -listen=:37374 -logfile=auto -debug=:0 > /dev/null 2>&1 &"
-
 [tasks.backup-sshkey]
 description = "SSH鍵をバックアップする（鍵がなければ何もしない）"
 run = """

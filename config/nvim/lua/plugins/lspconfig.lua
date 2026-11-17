@@ -187,7 +187,6 @@ return {
         "bashls",
         "docker_compose_language_service",
         "docker_language_server",
-        "gopls",
         "html",
         "jsonls",
         "kotlin_lsp",

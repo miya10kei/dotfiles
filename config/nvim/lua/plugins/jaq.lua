@@ -13,7 +13,6 @@ return {
           vim = "source %",
         },
         external = {
-          go = "go run %",
           python = "python %",
           sh = "sh %",
           rust = "cargo run %",
