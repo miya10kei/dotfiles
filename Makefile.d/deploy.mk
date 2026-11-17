@@ -39,12 +39,18 @@ $(HOME)/.config/ccstatusline:
 
 
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-coderabbit
-deploy-coderabbit: \
-	$(HOME)/.coderabbit
+# CodeRabbit CLI はログディレクトリまでのパスに symlink があると起動しないため、ディレクトリは実体にし、
+# 永続化するファイルだけを data-volume へリンクする
+CODERABBIT_PERSISTENT_FILES := auth.json doctor.json rate-limit-cooldown.json stats.json reviews
 
-$(HOME)/.coderabbit:
-	ln -fns $(DOTDIR)/data-volume/coderabbit $(HOME)/.coderabbit
+.PHONY: deploy-coderabbit
+deploy-coderabbit:
+	if [ -L $(HOME)/.coderabbit ]; then rm $(HOME)/.coderabbit; fi
+	mkdir -p $(HOME)/.coderabbit/logs $(DOTDIR)/data-volume/coderabbit/reviews
+	chmod 700 $(HOME)/.coderabbit $(HOME)/.coderabbit/logs
+	for f in $(CODERABBIT_PERSISTENT_FILES); do \
+		ln -fns $(DOTDIR)/data-volume/coderabbit/$$f $(HOME)/.coderabbit/$$f; \
+	done
 
 
 # ----------------------------------------------------------------------------------------------------------------------
