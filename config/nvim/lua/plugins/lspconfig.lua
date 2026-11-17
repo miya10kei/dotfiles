@@ -52,102 +52,6 @@ return {
               mode = { "n", "v" },
             },
           })
-
-          -- kmp-lsp 専用：sourcePaths を再インデックス
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client and client.name == "kotlin_lsp" then
-            require("which-key").add({
-              { "<Leader>ls", group = "Server", buffer = bufnr },
-              {
-                "<Leader>lsr",
-                function()
-                  client:exec_cmd({ command = "kmp-lsp/reindex" })
-                end,
-                desc = "Reindex (kmp-lsp)",
-                buffer = bufnr,
-                silent = true,
-              },
-              {
-                "<Leader>lsc",
-                function()
-                  client:exec_cmd({ command = "kmp-lsp/clearCache" })
-                end,
-                desc = "Clear Cache (kmp-lsp)",
-                buffer = bufnr,
-                silent = true,
-              },
-              -- kmp-lsp は型推論を持たず textDocument/implementation が空になりがち。
-              -- 空のときだけ ripgrep で `override fun <cword>` を引いて補う。
-              -- 件数による分岐: 1 件→直接ジャンプ（picker 不表示）/ 2+ 件→fzf-lua picker。
-              {
-                "gi",
-                function()
-                  -- async callback 中にカーソルが動いている可能性があるので cword は先に確保
-                  local word = vim.fn.expand("<cword>")
-                  local enc = client.offset_encoding or "utf-16"
-                  local params = vim.lsp.util.make_position_params(0, enc)
-
-                  local function jump_to(filename, lnum, col)
-                    vim.cmd.edit(filename)
-                    vim.api.nvim_win_set_cursor(0, { lnum, math.max(0, col - 1) })
-                  end
-
-                  vim.lsp.buf_request_all(0, "textDocument/implementation", params, function(results)
-                    local items = {}
-                    for _, res in pairs(results or {}) do
-                      if res.err then
-                        vim.notify(
-                          ("kmp-lsp implementation error: %s"):format(res.err.message or vim.inspect(res.err)),
-                          vim.log.levels.WARN
-                        )
-                      end
-                      if res.result and not vim.tbl_isempty(res.result) then
-                        local locs = vim.islist(res.result) and res.result or { res.result }
-                        vim.list_extend(items, vim.lsp.util.locations_to_items(locs, enc))
-                      end
-                    end
-
-                    if #items == 1 then
-                      jump_to(items[1].filename, items[1].lnum, items[1].col)
-                      return
-                    end
-                    if #items > 1 then
-                      vim.fn.setqflist({}, " ", { title = "kmp-lsp implementations", items = items })
-                      require("fzf-lua").quickfix()
-                      return
-                    end
-
-                    -- LSP 0 件 → rg fallback
-                    if not word:match("^[%w_]+$") then
-                      vim.notify("kotlin gi: cursor is not on an identifier", vim.log.levels.INFO)
-                      return
-                    end
-                    local pattern = "override fun " .. word .. "\\b"
-                    local rg_lines = vim.fn.systemlist({ "rg", "--vimgrep", "--no-heading", pattern })
-                    if #rg_lines == 0 then
-                      vim.notify("kotlin gi: no implementations found", vim.log.levels.INFO)
-                      return
-                    end
-                    if #rg_lines == 1 then
-                      local file, lnum, col = rg_lines[1]:match("^(.-):(%d+):(%d+):")
-                      if file then
-                        jump_to(file, tonumber(lnum), tonumber(col))
-                        return
-                      end
-                    end
-                    require("fzf-lua").grep({
-                      search = pattern,
-                      no_esc = true,
-                      prompt = "Kotlin impls (rg)> ",
-                    })
-                  end)
-                end,
-                desc = "Implementation (LSP → rg fallback)",
-                buffer = bufnr,
-                silent = true,
-              },
-            })
-          end
         end,
       })
 
@@ -285,24 +189,9 @@ return {
         bashls = {
           filetypes = { "sh", "bash", "zsh" },
         },
-        -- kmp-lsp（Rust製、mise の github:Hessesian/kmp-lsp 経由）
-        -- 依存ライブラリのソースは `mise run kmp-lsp:extract-sources` で抽出
+        -- JetBrains公式のkotlin-lsp（mise の http:kotlin-lsp）。Claude Codeのkotlin-lspプラグインと同じバイナリを使う
         kotlin_lsp = {
-          cmd = { "kmp-lsp" },
-          filetypes = { "kotlin" },
-          root_markers = {
-            "settings.gradle.kts",
-            "settings.gradle",
-            "build.gradle.kts",
-            "build.gradle",
-            "pom.xml",
-            ".git",
-          },
-          init_options = {
-            indexingOptions = {
-              sourcePaths = { vim.fn.expand("~/.local/share/kmp-lsp/sources") },
-            },
-          },
+          cmd = { "kotlin-lsp", "--stdio" },
         },
         -- typescript-language-server は同居する `typescript` を必要とするが、
         -- mise では別 prefix にインストールされるため tsserver の所在を明示する
