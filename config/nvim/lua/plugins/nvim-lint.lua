@@ -14,6 +14,11 @@ return {
         ["yaml.ghaction"] = { "actionlint" },
       }
 
+      local markdownlint_config = vim.fn.expand("~/.markdownlint.jsonc")
+      if vim.fn.filereadable(markdownlint_config) == 1 then
+        lint.linters["markdownlint-cli2"].args = { "--config", markdownlint_config, "-" }
+      end
+
       local autocmd = require("utils.autocmd")
       autocmd.create_group("lint", {
         {

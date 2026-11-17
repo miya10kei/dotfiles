@@ -141,10 +141,12 @@ $(HOME)/.config/karabiner/karabiner.json:
 # ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-markdownlint
 deploy-markdownlint: \
-	$(HOME)/.markdownlintrc
+	$(HOME)/.markdownlint.jsonc
 
-$(HOME)/.markdownlintrc:
-	ln -fns $(DOTDIR)/.markdownlintrc $(HOME)/.markdownlintrc
+# markdownlint-cli2は ~/.markdownlintrc を読まないため、jsoncにしてnvimから --config で渡す
+$(HOME)/.markdownlint.jsonc:
+	rm -f $(HOME)/.markdownlintrc
+	ln -fns $(DOTDIR)/.markdownlint.jsonc $(HOME)/.markdownlint.jsonc
 
 
 # ----------------------------------------------------------------------------------------------------------------------

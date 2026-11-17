@@ -46,8 +46,8 @@ Google APIへのアクセスはすべて `gws` (Google Workspace CLI) を使用�
 直近1週間の範囲で全文検索する。`timeMin` と `timeMax` は RFC3339 UTC。
 
 ```bash
-TIME_MIN=$(date -d '7 days ago' -u +"%Y-%m-%dT%H:%M:%SZ")
-TIME_MAX=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+TIME_MIN=$(jq -nr '(now - 7 * 86400) | strftime("%Y-%m-%dT%H:%M:%SZ")')
+TIME_MAX=$(jq -nr 'now | strftime("%Y-%m-%dT%H:%M:%SZ")')
 
 gws calendar events list --params "$(cat <<EOF
 {

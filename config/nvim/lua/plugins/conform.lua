@@ -28,7 +28,18 @@ return {
       },
     },
     config = function()
+      local markdownlint_config = vim.fn.expand("~/.markdownlint.jsonc")
+      local markdownlint_args = {}
+      if vim.fn.filereadable(markdownlint_config) == 1 then
+        markdownlint_args = { "--config", markdownlint_config }
+      end
+
       require("conform").setup({
+        formatters = {
+          ["markdownlint-cli2"] = {
+            prepend_args = markdownlint_args,
+          },
+        },
         formatters_by_ft = {
           go = { "goimports", "gofmt" },
           javascript = { "prettier" },
