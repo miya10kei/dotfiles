@@ -20,4 +20,4 @@ make build-dev-env
 make setup4d
 ```
 
-各設定は `make deploy-<tool>` で個別にデプロイ可能（例: `make deploy-nvim`）。
+symlinkで配置する設定は `mise.toml` の `[dotfiles]` で定義している。個別に配置するときは対象を指定する（例: `mise -C ~/.dotfiles dot apply ~/.config/nvim`）。

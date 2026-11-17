@@ -34,30 +34,11 @@ build-dev-env:
 
 .PHONY: setup4d
 setup4d: \
-	delete-nvimrc \
-	deploy-aws \
-	deploy-ccstatusline \
+	deploy-mise \
 	deploy-coderabbit \
 	deploy-docker \
-	deploy-editorconfig \
 	deploy-gh \
-	deploy-git \
-	deploy-gpg \
-	deploy-gws \
-	deploy-herdr \
-	deploy-markdownlint \
-	deploy-mise \
-	deploy-npm \
-	deploy-nvim \
-	deploy-pass \
-	deploy-pip \
-	deploy-sheldon \
-	deploy-starship \
-	deploy-taplo \
-	deploy-uv \
-	deploy-yamlfmt \
-	deploy-zoxide \
-	deploy-claude \
-	zshhistory_force
+	deploy-dotfiles \
+	deploy-sheldon
 
 include Makefile.d/*.mk

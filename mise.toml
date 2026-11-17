@@ -1,0 +1,30 @@
+# このリポジトリのdotfilesの配置定義。コンテナ起動時に `make setup4d` から `mise dot apply` で適用する
+# 相対パスのsourceはこのファイルのディレクトリ（~/.dotfiles）から解決され、絶対パスのsymlinkになる
+
+# mode = "absent" が使えるようになったバージョン
+min_version = "2026.9.13"
+
+[dotfiles]
+"~/.config/aws"           = { source = "config/aws" }
+"~/.config/ccstatusline"  = { source = "config/ccstatusline" }
+"~/.config/claude"        = { source = "config/claude" }
+"~/.config/git/hooks"     = { source = "config/git/hooks" }
+"~/.config/gws"           = { source = "config/gws" }
+"~/.config/herdr"         = { source = "config/herdr" }
+"~/.config/npm"           = { source = "config/npm" }
+"~/.config/nvim"          = { source = "config/nvim" }
+"~/.config/pip"           = { source = "config/pip" }
+"~/.config/sheldon"       = { source = "config/sheldon" }
+"~/.config/starship.toml" = { source = "config/starship.toml" }
+"~/.config/taplo"         = { source = "config/taplo" }
+"~/.config/uv"            = { source = "config/uv" }
+"~/.config/yamlfmt"       = { source = "config/yamlfmt" }
+"~/.editorconfig"         = { source = ".editorconfig" }
+"~/.gitattributes"        = { source = ".gitattributes" }
+"~/.gitconfig"            = { source = ".gitconfig" }
+"~/.gnupg"                = { source = "data-volume/gpg" }
+"~/.local/share/zoxide"   = { source = "data-volume/zoxide" }
+"~/.markdownlint.jsonc"   = { source = ".markdownlint.jsonc" }
+"~/.markdownlintrc"       = { mode = "absent" }
+"~/.password-store"       = { source = "data-volume/pass" }
+"~/.zsh_history"          = { source = "data-volume/zsh-history/.zsh_history" }

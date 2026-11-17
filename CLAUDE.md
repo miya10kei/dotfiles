@@ -21,8 +21,11 @@ OSやアーキの違いは、次の優先順で吸収する。
 
 ## 反映の仕組み
 
-- 実行環境は開発コンテナ（`miya10kei/devenv`）。ホストの `~/.dotfiles` をbind mountし、各設定は `Makefile.d/deploy.mk` の `deploy-<tool>` が `ln -fns $(DOTDIR)/...` でsymlinkする
-- コンテナのPID 1のzshが起動時に `make --always-make setup4d` を実行する。新しい `deploy-<tool>` を追加したら `Makefile` の `setup4d` にも加えること
+- 実行環境は開発コンテナ（`miya10kei/devenv`）。ホストの `~/.dotfiles` をbind mountして設定を配置する
+- コンテナのPID 1のzshが起動時に `make --always-make setup4d` を実行する
+- 単純なsymlinkは `mise.toml` の `[dotfiles]` に追加する（`setup4d` の `deploy-dotfiles` が `mise dot apply` で適用する）。コマンドの実行や `mise where` の結果が必要な配置だけ、`Makefile.d/deploy.mk` に `deploy-<tool>` を作り `setup4d` に加える
+- miseは親子関係にある2つのtargetを同時に定義できない（例: `~/.config/gh` と `~/.config/gh/config.yml`）。こうした配置はMakeに残す
+- `mise dot apply` は `--force` なしで実行しており、targetに実体のファイルやディレクトリがあると止まって起動時の配置が失敗する。イメージにCOPYされるものなど置き換えてよい実体は、`deploy-dotfiles` で事前に消す（`~/.config/nvim` と同じ書き方）
 - `config/mise` と `config/nvim` はイメージのビルド時にCOPYされる。ツールを追加しても `make build-dev-env` で再ビルドするまで入らない
 - `data-volume/` は永続化用の実データ（gitignore対象）。設定ファイルを置かないこと
 
@@ -34,6 +37,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 
 ## 検証
 
+- dotfiles: `mise dot apply --dry-run` で配置内容を、`mise dot status` で適用状態を確認する
 - Makefile: `make -n deploy-<tool>` で実行内容を確認する（ファイルが既にあるターゲットはスキップされる）
 - シェル: `zsh -n <file>`、`shellcheck <file>`
 - Dockerfile: `hadolint Dockerfile`
