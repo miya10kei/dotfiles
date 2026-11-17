@@ -122,10 +122,6 @@ depends     = ["start-gopls"]
 description = "goplsをデーモンとして起動する"
 run         = "nohup gopls -listen=:37374 -logfile=auto -debug=:0 > /dev/null 2>&1 &"
 
-[tasks.start-denops]
-description = "denopsの共有サーバを起動する"
-run         = "deno run --v8-flags=--max-old-space-size=8192 --no-lock --unstable -A /root/.local/share/nvim/lazy/denops.vim/denops/@denops-private/cli.ts --identity --port 32123"
-
 [tasks.backup-sshkey]
 description = "SSH鍵をバックアップする（鍵がなければ何もしない）"
 run = """
