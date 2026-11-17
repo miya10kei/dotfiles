@@ -1,4 +1,4 @@
-# このリポジトリのdotfilesの配置定義。コンテナ起動時に `make setup4d` から `mise dot apply` で適用する
+# このリポジトリのdotfilesの配置定義。コンテナ起動時に .zshrc から `mise dot apply` で適用する
 # 相対パスのsourceはこのファイルのディレクトリ（~/.dotfiles）から解決され、絶対パスのsymlinkになる
 
 # mode = "absent" が使えるようになったバージョン
@@ -11,6 +11,7 @@ min_version = "2026.9.13"
 "~/.config/git/hooks"     = { source = "config/git/hooks" }
 "~/.config/gws"           = { source = "config/gws" }
 "~/.config/herdr"         = { source = "config/herdr" }
+"~/.config/mise"          = { source = "config/mise" }
 "~/.config/npm"           = { source = "config/npm" }
 "~/.config/nvim"          = { source = "config/nvim" }
 "~/.config/pip"           = { source = "config/pip" }
@@ -41,7 +42,8 @@ mkdir -p "$dotdir/data-volume/gh" "$dotdir/data-volume/pass" "$dotdir/data-volum
 mkdir -p -m 700 "$dotdir/data-volume/gpg"
 touch "$dotdir/data-volume/zsh-history/.zsh_history"
 
-# --forceは配置先の実体をデータごと消すため使わず、置き換えてよい実体だけを消す
+# --forceは配置先の実体をデータごと消すため使わず、置き換えてよい実体（イメージにCOPYされたもの、zshが作った履歴）だけを消す
+if [ -e "$HOME/.config/mise" ] && [ ! -L "$HOME/.config/mise" ]; then rm -rf "$HOME/.config/mise"; fi
 if [ -e "$HOME/.config/nvim" ] && [ ! -L "$HOME/.config/nvim" ]; then rm -rf "$HOME/.config/nvim"; fi
 if [ -f "$HOME/.zsh_history" ] && [ ! -L "$HOME/.zsh_history" ]; then rm -f "$HOME/.zsh_history"; fi
 

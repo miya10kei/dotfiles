@@ -32,9 +32,4 @@ build-dev-env:
 	docker system prune --force
 	if command -v rdctl >/dev/null 2>&1; then rdctl shell sudo fstrim -v /mnt/data; fi
 
-.PHONY: setup4d
-setup4d: \
-	deploy-mise \
-	deploy-dotfiles
-
 include Makefile.d/*.mk

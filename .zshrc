@@ -77,13 +77,12 @@ function main() {
     # -----------------
     if [[ -e /.dockerenv ]]; then
         if [[ $$ = 1 ]]; then
-            if [[ -e $HOME/.dotfiles/Makefile ]]; then
-                # ~/.dotfilesへ移動した時点でmise.tomlが未trustだと、activateのフックが警告を出すため先にtrustする
+            if [[ -e $HOME/.dotfiles/mise.toml ]]; then
+                # mise.tomlが未trustだと、activateのフックやdot applyが警告を出すため先にtrustする
                 mise trust --quiet $HOME/.dotfiles/mise.toml
                 eval "$(mise activate zsh)"
-                pushd $HOME/.dotfiles
-                make --always-make --makefile $HOME/.dotfiles/Makefile setup4d
-                popd
+                # 配置はmise.tomlの[dotfiles]と前後のフックで定義している
+                mise --cd $HOME/.dotfiles dotfiles apply --yes
                 # TODO
                 sudo chmod 777 /var/run/docker.sock
             fi

@@ -1,19 +1,4 @@
 # ----------------------------------------------------------------------------------------------------------------------
-.PHONY: deploy-mise
-deploy-mise:
-	@if [ -d $(HOME)/.config/mise ] && [ ! -L $(HOME)/.config/mise ]; then rm -rf $(HOME)/.config/mise; fi
-	ln -fns $(DOTDIR)/config/mise $(HOME)/.config/mise
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-# 配置は mise.toml の [dotfiles] と、その前後に走る pre-dotfiles / post-dotfiles フックで定義する
-.PHONY: deploy-dotfiles
-deploy-dotfiles:
-	mise trust --quiet $(DOTDIR)/mise.toml
-	mise --cd $(DOTDIR) dotfiles apply --yes
-
-
-# ----------------------------------------------------------------------------------------------------------------------
 .PHONY: deploy-karabiner
 deploy-karabiner: \
 	$(HOME)/.config/karabiner/karabiner.json
