@@ -245,7 +245,6 @@
     "typescript-lsp@claude-plugins-official": true,
     "atlassian@claude-plugins-official": true,
     "datadog@claude-plugins-official": true,
-    "recap-plus@claude-recap-plus": true,
     "code-review@anthropic-plugin-directory": true,
     "superpowers@anthropic-plugin-directory": true,
     "context7@anthropic-plugin-directory": true,
@@ -255,10 +254,12 @@
     "skill-creator@anthropic-plugin-directory": true,
     "claude-md-management@anthropic-plugin-directory": true,
     "claude-security@anthropic-plugin-directory": true,
-    "playwright@anthropic-plugin-directory": true
+    "playwright@anthropic-plugin-directory": true,
+    "datadog@nealle-managed": true
   },
   "outputStyle": "Concise",
   "language": "Japanese",
+  "effortLevel": "high",
   "advisorModel": "fable",
   "companyAnnouncements": [
     "個人契約のClaude Codeです"
@@ -267,14 +268,5 @@
   "autoMemoryEnabled": false,
   "skipWorkflowUsageWarning": true,
   "agentPushNotifEnabled": true,
-  "skipAutoPermissionPrompt": true,
-  "effortLevel": "high",
-  "extraKnownMarketplaces": {
-    "claude-recap-plus": {
-      "source": {
-        "source": "github",
-        "repo": "skanehira/claude-recap-plus"
-      }
-    }
-  }
+  "skipAutoPermissionPrompt": true
 }
