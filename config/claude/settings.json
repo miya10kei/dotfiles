@@ -210,29 +210,6 @@
           }
         ]
       }
-    ],
-    "Notification": [
-      {
-        "matcher": "permission_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "paplay \"$CLAUDE_CONFIG_DIR/hooks/notification.wav\" || true",
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "paplay \"$CLAUDE_CONFIG_DIR/hooks/stop.wav\" || true",
-            "async": true
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
