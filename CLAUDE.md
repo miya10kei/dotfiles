@@ -1,5 +1,13 @@
 # dotfiles
 
+## 必須要件: OS・アーキテクチャ非依存
+
+macOS / Linux × arm64（Apple Silicon・aarch64）/ x86_64 のすべての組み合わせで動くこと。Dockerイメージもホストに合わせてarm64とamd64の両方でビルドされる。
+
+- OSやアーキで処理が変わる箇所は `uname -s` / `uname -m` で分岐する（Makefileは既存の `OS` 変数、Dockerfileは `TARGETARCH`）
+- ダウンロードURLやパッケージ名にアーキ（`aarch64`、`amd64` など）を直書きしない
+- GNU/BSDで挙動が違うコマンド（`sed -i`、`date -d`、`readlink -f`、`grep -P` など）は、macOSのホスト側で動くコードで使わない。使うなら分岐する
+
 ## 反映の仕組み
 
 - 実行環境はDockerの開発コンテナ（`miya10kei/devenv`）。ホストの `~/.dotfiles` をbind mountし、各設定は `Makefile.d/deploy.mk` の `deploy-<tool>` が `ln -fns $(DOTDIR)/...` でsymlinkする
