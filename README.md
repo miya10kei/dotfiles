@@ -1,7 +1,5 @@
 # dotfiles
 
-![Docker Image CI](https://github.com/miya10kei/dotfiles/workflows/Docker%20Image%20CI/badge.svg)
-
 個人用の開発環境設定ファイル（dotfiles）を管理するリポジトリ。
 
 ## 前提条件

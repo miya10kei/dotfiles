@@ -62,6 +62,8 @@ WORKDIR ${HOME}
 
 # ------------------------------------------------------------------------------------------------------------------------
 FROM builder AS mise
+# builderのSHELL（pipefail付き）を引き継ぐが、hadolintはステージをまたいで追えないため明示する
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG UNAME
 ARG GNAME
 
@@ -70,11 +72,11 @@ ENV PATH="${HOME}/.local/bin:${PATH}"
 
 COPY --chown="${UNAME}:${GNAME}" ./config/mise/ ${HOME}/.config/mise/
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
-    export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
+    GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN)" && export GITHUB_TOKEN && \
     mise install
 
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
-    export GITHUB_TOKEN=$(cat /run/secrets/GITHUB_TOKEN) && \
+    GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN)" && export GITHUB_TOKEN && \
     eval "$(mise activate bash)" && \
     mise run install-bins
 

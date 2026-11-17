@@ -6,7 +6,6 @@ return {
       "mikavilpas/blink-ripgrep.nvim",
       "moyiz/blink-emoji.nvim",
       "bydlw98/blink-cmp-env",
-      { "saghen/blink.compat", version = "2.*", lazy = true, opts = {} },
     },
     event = { "InsertEnter", "CmdLineEnter" },
     version = "*",
@@ -39,7 +38,7 @@ return {
       },
       signature = { enabled = true },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env", "obsidian" },
+        default = { "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env" },
         providers = {
           ripgrep = {
             name = "Ripgrep",
@@ -65,10 +64,6 @@ return {
               show_braces = false,
               show_documentation_window = true,
             },
-          },
-          obsidian = {
-            name = "obsidian",
-            module = "blink.compat.source",
           },
         },
       },

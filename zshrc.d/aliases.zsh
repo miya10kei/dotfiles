@@ -14,7 +14,6 @@ function alias_if_exists() {
 }
 
 function _fzf_change_directory() {
-  #selected=$(eval $1 | fzf-tmux $FZF_TMUX_OPTS)
   selected=$(eval $1 | fzf)
   if [ -n "$selected" ]; then
     base_dir=$(eval $2)
@@ -31,7 +30,6 @@ function pysw(){
 
 function mtask() {
   local selected
-  #selected=$(mise task ls --no-header 2>/dev/null | fzf-tmux $FZF_TMUX_OPTS \
   selected=$(mise task ls --no-header 2>/dev/null | fzf \
     --header="mise task" \
     --preview="mise task info {1} 2>/dev/null")
@@ -54,7 +52,6 @@ alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'
 alias_if_exists 'cdot'      'cd $HOME/.dotfiles'
 alias_if_exists 'cdr'       'cd -'
-alias_if_exists 'cdocs'     'cd $HOME/docs/obsidian'
 alias_if_exists 'cdw'       '_fzf_change_directory "ls -1D $HOME/dev/workspaces" "echo $HOME/dev/workspaces"'
 alias_if_exists 'dk'        'docker'          'docker'
 alias_if_exists 'g'         'git'             'git'
@@ -73,7 +70,7 @@ alias_if_exists 'v'         'nvim'            'nvim' 'vim'
 alias_if_exists 'vim'       'nvim'            'nvim'
 alias_if_exists 'pysw'      'pysw'
 alias_if_exists 'epochtime' 'date +%s'
-alias_if_exists 'dive-mine' 'ssh miya10kei@192.168.1.217'
+alias_if_exists 'dive-mine' 'ssh miya10kei@192.168.1.216'
 alias_if_exists 'env'       'env | sort'
 
 # pbcopyがないコンテナ内でも、OSC52でターミナル経由のクリップボードへコピーできるようにする

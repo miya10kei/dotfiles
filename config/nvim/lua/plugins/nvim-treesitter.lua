@@ -13,7 +13,6 @@ local parsers = {
   "json",
   "kotlin",
   "lua",
-  "make",
   "markdown",
   "markdown_inline",
   "python",
