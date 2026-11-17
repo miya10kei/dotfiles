@@ -6,8 +6,6 @@ local parsers = {
   "diff",
   "dockerfile",
   "gitcommit",
-  "go",
-  "gomod",
   "hcl",
   "html",
   "java",
