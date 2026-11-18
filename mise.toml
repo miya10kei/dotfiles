@@ -138,10 +138,6 @@ ssh-keygen -t ed25519 -C "$email"
 # ホスト（macOS）向けの配置。[dotfiles]に入れるとコンテナ起動のたびに配置されるため、タスクにしている
 # 既にあるファイルは置き換えない（元のMakefileのファイルターゲットと同じ挙動）
 
-[tasks.deploy-navi]
-description = "naviのチートシートを追加する"
-run         = '[ -e "$HOME/.local/share/navi/cheats/miya10kei__navi-cheets" ] || navi repo add https://github.com/miya10kei/navi-cheets'
-
 [tasks.deploy-zsh]
 description = "zshの設定を配置する"
 depends     = ["zprofile", "zshrc"]

@@ -49,27 +49,20 @@ tree-sitter = "latest"
 "aqua:sharkdp/fd"             = "latest"
 "aqua:starship/starship"      = "latest"
 "aqua:suzuki-shunsuke/pinact" = "latest"
-"aqua:sxyazi/yazi"            = "latest"
 "aqua:vi/websocat"            = "latest"
 "aqua:wagoodman/dive"         = "latest"
 "aqua:x-motemen/ghq"          = "latest"
-"aqua:ynqa/jnv"               = "latest"
 
 # github releases
 "github:99designs/aws-vault" = "latest"
-"github:denisidoro/navi"     = "latest"
 "github:eza-community/eza"   = "latest"
 "github:googleworkspace/cli" = "latest"
-"github:k1LoW/mo"            = "latest"
 "github:k1LoW/tbls"          = "latest"
-"github:miya10kei/ccargus"   = "latest"
-"github:miya10kei/ccjanus"   = "latest"
 "github:ogulcancelik/herdr"  = "latest"
 "github:rtk-ai/rtk"          = "latest"
 
 # npm packages
-"npm:@anthropic-ai/sandbox-runtime" = "latest"
-"npm:pnpm"                          = "latest"
+"npm:pnpm" = "latest"
 # @twilio/cli-core 9.0.0 だけ trusted publisher で公開され、9.0.1 以降はトークン公開に戻ったため no-downgrade に掛かる (provenance は twilio/twilio-cli-core の main で確認済み)
 # 除外は twilio-cli 7.3.0 が依存する版に限定している。twilio-cli が新しい cli-core に上がったら除外する版も更新する
 # (更新しないと mise install が失敗し、イメージのビルドが止まる)
@@ -104,11 +97,10 @@ tree-sitter = "latest"
 "npm:prettier"              = "latest"
 
 # pipx packages
-"pipx:aws-sam-cli"     = "latest"
-"pipx:git-filter-repo" = "latest"
-"pipx:pgcli"           = "latest"
-"pipx:sqlfluff"        = "latest"
-"pipx:yamllint"        = "latest"
+"pipx:aws-sam-cli" = "latest"
+"pipx:pgcli"       = "latest"
+"pipx:sqlfluff"    = "latest"
+"pipx:yamllint"    = "latest"
 
 # vfox packages
 # mise 2026.10.21 の内蔵 vfox-gcloud は python.lua を解決できず壊れているため、修正済みの git 版を使う (jdx/mise#15034)
