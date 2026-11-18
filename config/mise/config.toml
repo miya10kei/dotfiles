@@ -121,7 +121,8 @@ tree-sitter = "latest"
 [settings]
 experimental                        = true
 idiomatic_version_file_enable_tools = ["java", "node", "python", "rust", "terraform"]
-# 公開から7日未満の版は入れない。npmのmin-release-ageと揃えないと、miseが選んだ版をnpmが拒否する
+# 公開から7日未満の版は入れない（npmのmin-release-age、uvのexclude-newerと揃える）
+# miseはnpm:ツールをnpmではなく内蔵のaubeで入れるため、.npmrcの設定は効かず、ここで指定する必要がある
 # 急ぎで入れるときは `mise install --minimum-release-age 0d <tool>` を使う
 minimum_release_age    = "7d"
 not_found_auto_install = false
