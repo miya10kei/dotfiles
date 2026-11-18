@@ -1,7 +1,6 @@
 -- サーバーの既定値は nvim-lspconfig の lsp/<name>.lua、上書きは after/lsp/<name>.lua に置く
 -- 補完のcapabilitiesは blink.cmp が vim.lsp.config("*") へ自動で登録する
 local servers = {
-  "angularls",
   "bashls",
   "docker_compose_language_service",
   "docker_language_server",

@@ -76,7 +76,6 @@ tree-sitter = "latest"
 "npm:twilio-cli" = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.3.0"] }
 
 # language servers (npm)
-"npm:@angular/language-server"            = "latest"
 "npm:@microsoft/compose-language-service" = "latest"
 "npm:bash-language-server"                = "latest"
 "npm:pyright"                             = "latest"
