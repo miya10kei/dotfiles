@@ -17,18 +17,10 @@ function main() {
     # ------------
     # --- path ---
     # ------------
-    function add_path() {
-        new_path=$1
-        if [[ ! $PATH =~ $new_path ]]; then
-            if [[ -e $new_path ]]; then
-                export PATH="$new_path:$PATH"
-            fi
-        fi
-    }
-
-    add_path "$HOME/.docker/bin"
-    add_path "$HOME/.local/bin"
-    add_path "$HOME/.rd/bin"
+    # path は PATH と連動する配列。-U で重複を除き、(N-/) で存在するディレクトリだけを先頭に足す
+    # main の中で宣言するため、-g を付けて関数ローカルにしない
+    typeset -gU path
+    path=("$HOME/.rd/bin"(N-/) "$HOME/.local/bin"(N-/) "$HOME/.docker/bin"(N-/) $path)
 
     # -----------------
     # --- Claude Code -
