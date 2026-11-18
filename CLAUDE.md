@@ -40,7 +40,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 
 ## 検証
 
-- コミット時に lefthook（`lefthook.yml`）が、ステージしたファイルに下記の lint をかける。失敗したらコミットされないので、指摘を直してからコミットし直す
+- コミット時に lefthook が、ステージしたファイルに lint をかける（対象と内容は `lefthook.yml`）。失敗したらコミットされないので、指摘を直してからコミットし直す
 - dotfiles: `mise dot apply --dry-run` で配置内容とフックのコマンドを、`mise dot status` で適用状態を確認する（dry-runはフックを実行しない）
 - 起動時の配置（`mise.toml`、`.zshrc`）を変えたら、実際のHOMEやdata-volumeでは試さず、リポジトリのコピーと一時HOMEで確かめる
     - `HOME=<一時HOME> mise -C <リポジトリのコピー> dot apply --yes` を2回実行し、origin/mainで同じことをした結果とHOME配下のsymlink・権限を比べる。一時HOMEには、イメージと同じく実体の `~/.config/mise` と `~/.config/nvim` を置いておく
@@ -49,4 +49,4 @@ OSやアーキの違いは、次の優先順で吸収する。
 - シェル: `zsh -n <file>`、`shellcheck <file>`
 - Dockerfile: `hadolint Dockerfile`
 - Markdown: リポジトリのルートで `markdownlint-cli2 <file>` を実行する（設定はカレントディレクトリから探される）。指摘はファイル内の既存の書き方より優先して直し、入れ子の箇条書き（`-`・`*`）は4スペースでインデントする（番号付きリストの子は親の本文の位置に揃える）
-- TOML: `taplo check`、YAML: `yamlfmt -lint`
+- TOML: `taplo check`、YAML: `yamllint`、`yamlfmt -lint`

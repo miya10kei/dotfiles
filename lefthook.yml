@@ -1,6 +1,8 @@
 # コミット時に、ステージしたファイルだけをlintする
 # config/git/hooks/dispatch（core.hooksPath）が、このファイルがあるリポジトリでは lefthook を呼ぶ
 # ツールはすべて config/mise/config.toml で入れている
+# glob_matcher が使えるのは 2.0.4 から。古いと ** の一致範囲が変わり、ルート直下のファイルを黙って見落とす
+min_version: 2.0.4
 glob_matcher: doublestar
 
 pre-commit:
