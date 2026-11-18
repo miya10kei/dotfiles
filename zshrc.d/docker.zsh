@@ -80,5 +80,5 @@ if builtin command -v docker > /dev/null 2>&1; then
   alias lde='launch_dev_env'
   alias ade='attach_dev_env'
   alias tde='terminate_dev_env'
-  alias dki="docker inspect \$(docker ps --format '{{.ID}}\t{{.Names}}\t{{.Image}}' | column -t -s $'\t' | fzf | awk '{print($1)}')"
+  alias dki="docker inspect \$(docker ps --format '{{.ID}}\t{{.Names}}\t{{.Image}}' | column -t -s $'\t' | fzf | awk '{print(\$1)}')"
 fi
