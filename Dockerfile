@@ -7,7 +7,6 @@ ARG UNAME
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-# hadolint ignore=DL3007
 FROM ubuntu:26.04 AS builder
 ARG GID
 ARG GNAME
@@ -27,7 +26,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         ca-certificates \
         cmake \
         curl \
-        g++ \
         gettext \
         git \
         libbz2-dev \
@@ -35,10 +33,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         libffi-dev \
         libgdbm-dev \
         libgmp-dev \
-        libgmp10 \
         liblzma-dev \
         libncurses-dev \
-        libncursesw5-dev \
         libreadline-dev  \
         libsqlite3-dev \
         libssl-dev \
@@ -69,7 +65,7 @@ ARG GNAME
 ARG UID
 ARG UNAME
 
-RUN curl https://mise.run | sh
+RUN curl -fsSL https://mise.run | sh
 ENV PATH="${HOME}/.local/bin:${PATH}"
 
 COPY --chown="${UNAME}:${GNAME}" ./config/mise/ ${HOME}/.config/mise/
@@ -98,7 +94,6 @@ RUN mise run slim \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-# hadolint ignore=DL3007
 FROM ubuntu:26.04
 SHELL ["/bin/bash", "-c"]
 LABEL maintainer="miya10kei <miya10kei@gmail.com>"
