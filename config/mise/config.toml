@@ -3,6 +3,9 @@ ASDF_LUA_LUAROCKS_VERSION = "3.13.0"
 # rust(rustup) の実体は既定で ~/.cargo, ~/.rustup に置かれ、devenv イメージの ~/.local 持ち越しから漏れるため ~/.local 配下へ寄せる
 CARGO_HOME  = "{{env.HOME}}/.local/share/cargo"
 RUSTUP_HOME = "{{env.HOME}}/.local/share/rustup"
+# gcloud同梱のPythonはslimで消すため、miseのPython（[tools]のpythonと同じ3.13）を使わせる
+# PATHのpython3に任せると、uv_venv_autoで有効になったプロジェクトのvenvのPythonで動いてしまう
+CLOUDSDK_PYTHON = "{{env.HOME}}/.local/share/mise/installs/python/3.13/bin/python3"
 
 [plugins]
 lua = "https://github.com/mise-plugins/mise-lua.git"
@@ -40,7 +43,6 @@ tree-sitter = "latest"
 "aqua:junegunn/fzf"           = "latest"
 "aqua:mikefarah/yq"           = "latest"
 "aqua:muesli/duf"             = "latest"
-"aqua:rclone/rclone"          = "latest"
 "aqua:rhysd/actionlint"       = "latest"
 "aqua:rossmacarthur/sheldon"  = "latest"
 "aqua:sharkdp/bat"            = "latest"
@@ -67,11 +69,11 @@ tree-sitter = "latest"
 
 # npm packages
 "npm:@anthropic-ai/sandbox-runtime" = "latest"
-"npm:@slidev/cli"                   = "latest"
 "npm:pnpm"                          = "latest"
 # @twilio/cli-core 9.0.0 だけ trusted publisher で公開され、9.0.1 以降はトークン公開に戻ったため no-downgrade に掛かる (provenance は twilio/twilio-cli-core の main で確認済み)
-# 除外は twilio-cli 7.2.0 が依存する版に限定している。twilio-cli が新しい cli-core に上がったら除外する版も更新する
-"npm:twilio-cli" = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.2.0"] }
+# 除外は twilio-cli 7.3.0 が依存する版に限定している。twilio-cli が新しい cli-core に上がったら除外する版も更新する
+# (更新しないと mise install が失敗し、イメージのビルドが止まる)
+"npm:twilio-cli" = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.3.0"] }
 
 # language servers (npm)
 "npm:@angular/language-server"            = "latest"
@@ -180,7 +182,10 @@ rm -rf \
     "${MISE_DATA_DIR:-$HOME/.local/share/mise}/downloads" \
     "$HOME/.cache" \
     "$INSTALLS"/*/*/{share/man,share/doc,man,doc} \
-    "$INSTALLS"/vfox-mise-plugins-vfox-gcloud/*/{platform/ext-runtime,deb,rpm,RELEASE_NOTES,README} \
-    "$INSTALLS"/java/*/jmods \
+    "$INSTALLS"/vfox-mise-plugins-vfox-gcloud/*/{platform/ext-runtime,platform/bundledpythonunix,deb,rpm,RELEASE_NOTES,README} \
+    "$INSTALLS"/java/*/{jmods,lib/src.zip} \
+    "$INSTALLS"/node/*/include \
     "$HOME/.local/share/rustup/toolchains"/*/share/{doc,man}
+# docker/cliは静的バンドル一式（dockerd・containerdなど）で入る。コンテナはホストのdocker.sockを使うため、dockerだけ残す
+rm -f "$INSTALLS"/aqua-docker-cli/*/docker/{dockerd,containerd,containerd-shim-runc-v2,ctr,docker-init,docker-proxy,runc}
 '''
