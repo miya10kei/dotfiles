@@ -49,22 +49,16 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
     if [ -z "$container" ]; then
       return
     fi
-    cmd="aws ecs execute-command --cluster $cluster --task $task --container $container --interactive --command bash"
-    echo -e "\e[32m\$$cmd\e[m"
-    print -s $cmd
-    eval $cmd
+    exec_aws_command "aws ecs execute-command --cluster $cluster --task $task --container $container --interactive --command bash"
   }
 
   function dive-ec2() {
     aws-check-session
-    instanceId=$(aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | select(.State.Name="running") | [.InstanceId, (.Tags[] | select(.Key == "Name").Value)] | @tsv' | fzf | awk '{print $1}')
+    instanceId=$(aws ec2 describe-instances | jq -r '.Reservations[].Instances[] | select(.State.Name == "running") | [.InstanceId, (.Tags[] | select(.Key == "Name").Value)] | @tsv' | fzf | awk '{print $1}')
     if [ -z "$instanceId" ]; then
       return
     fi
-    cmd="aws ssm start-session --target $instanceId"
-    echo -e "\e[32m\$$cmd\e[m"
-    print -s $cmd
-    eval $cmd
+    exec_aws_command "aws ssm start-session --target $instanceId"
   }
 
   function dive-cognito() {
@@ -77,31 +71,13 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
     if [ -z "$username" ]; then
       return
     fi
-    cmd="aws cognito-idp admin-get-user --user-pool-id $poolId --username $username"
-    echo -e "\e[32m\$$cmd\e[m"
-    print -s $cmd
-    eval $cmd
+    exec_aws_command "aws cognito-idp admin-get-user --user-pool-id $poolId --username $username"
   }
 
   function aws-logs() {
     aws-check-session
-
-    local logGroups=""
-    local nextToken=""
-    while true; do
-      if [ -z "$nextToken" ]; then
-        result=$(aws logs describe-log-groups --output json)
-      else
-        result=$(aws logs describe-log-groups --next-token "$nextToken" --output json)
-      fi
-
-      logGroups+=$(echo "$result" | jq -r '.logGroups[].logGroupName')$'\n'
-      nextToken=$(echo "$result" | jq -r '.nextToken // empty')
-
-      [ -z "$nextToken" ] && break
-    done
-
-    logGroupName=$(echo "$logGroups" | fzf)
+    # AWS CLI v2 は自動でページ送りして全件を返す
+    logGroupName=$(aws logs describe-log-groups --query 'logGroups[].logGroupName' --output text | tr '\t' '\n' | fzf)
     if [ -z "$logGroupName" ]; then
       return
     fi
@@ -143,32 +119,22 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
     echo "Searching for parameters with prefix: $selected_prefix"
     echo "========================================"
 
-    # Get parameter names by prefix
-    local param_names=$(aws ssm get-parameters-by-path \
+    # 名前と値を1回のAPI呼び出し（自動ページ送り）でまとめて取得する
+    local params
+    params=$(aws ssm get-parameters-by-path \
       --path "$selected_prefix" \
       --recursive \
-      --query 'Parameters[].Name' \
-      --output text)
+      --with-decryption \
+      --query 'Parameters[].[Name,Value]' \
+      --output json) || return 1
 
-    if [ -z "$param_names" ]; then
+    if [[ $(jq length <<< "$params") -eq 0 ]]; then
       echo "No parameters found with prefix: $selected_prefix"
       return 0
     fi
 
-    # Get parameter values
-    for name in ${=param_names}; do
-      local value=$(aws ssm get-parameter \
-        --name "$name" \
-        --with-decryption \
-        --query 'Parameter.Value' \
-        --output text 2>/dev/null)
-
-      if [ $? -eq 0 ]; then
-        printf "%-50s : %s\n" "$name" "$value"
-      else
-        printf "%-50s : [ERROR: Failed to retrieve]\n" "$name"
-      fi
-    done
+    # @tsv は値の \ や改行をエスケープしてしまうため、値はそのまま出力する
+    jq -r '.[] | "\(.[0] | . + " " * ([50 - length, 0] | max)) : \(.[1])"' <<< "$params"
   }
 
 

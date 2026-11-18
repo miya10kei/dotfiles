@@ -13,7 +13,9 @@ export FZF_CTRL_T_OPTS="--preview=\"$FZF_CTRL_T_PREVIEW\""
 FZF_CTRL_R_PREVIEW="echo {} | awk '{ print substr(\$0, index(\$0,\$2)) }' | bat --color=always --language=sh --style=plain --theme=ansi"
 export FZF_CTRL_R_OPTS="--preview=\"$FZF_CTRL_R_PREVIEW\""
 
-FZF_MISE_DIR="$HOME/.local/share/mise/installs"
-[[ -f "$FZF_MISE_DIR/http-fzf-completion/latest/completion.zsh" ]] && source "$FZF_MISE_DIR/http-fzf-completion/latest/completion.zsh"
-[[ -f "$FZF_MISE_DIR/http-fzf-key-bindings/latest/key-bindings.zsh" ]] && source "$FZF_MISE_DIR/http-fzf-key-bindings/latest/key-bindings.zsh"
+# キーバインド（Ctrl-T / Ctrl-R / Alt-C）と補完（**<Tab>）は fzf 本体が出力する（fzf 0.48以降）
+if fzf_zsh=$(fzf --zsh 2>/dev/null); then
+  eval "$fzf_zsh"
+fi
+unset fzf_zsh
 bindkey "ç" fzf-cd-widget
