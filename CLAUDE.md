@@ -40,6 +40,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 
 ## 検証
 
+- コミット時に lefthook（`lefthook.yml`）が、ステージしたファイルに下記の lint をかける。失敗したらコミットされないので、指摘を直してからコミットし直す
 - dotfiles: `mise dot apply --dry-run` で配置内容とフックのコマンドを、`mise dot status` で適用状態を確認する（dry-runはフックを実行しない）
 - 起動時の配置（`mise.toml`、`.zshrc`）を変えたら、実際のHOMEやdata-volumeでは試さず、リポジトリのコピーと一時HOMEで確かめる
     - `HOME=<一時HOME> mise -C <リポジトリのコピー> dot apply --yes` を2回実行し、origin/mainで同じことをした結果とHOME配下のsymlink・権限を比べる。一時HOMEには、イメージと同じく実体の `~/.config/mise` と `~/.config/nvim` を置いておく

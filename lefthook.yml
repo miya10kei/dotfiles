@@ -1,0 +1,50 @@
+# コミット時に、ステージしたファイルだけをlintする
+# config/git/hooks/dispatch（core.hooksPath）が、このファイルがあるリポジトリでは lefthook を呼ぶ
+# ツールはすべて config/mise/config.toml で入れている
+glob_matcher: doublestar
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: hadolint
+      glob: "**/Dockerfile"
+      run: hadolint {staged_files}
+
+    - name: markdownlint
+      glob: "**/*.md"
+      run: markdownlint-cli2 {staged_files}
+
+    - name: mise tasks
+      glob:
+        - "mise.toml"
+        - "config/mise/**"
+      run: mise tasks validate
+
+    - name: shellcheck
+      glob:
+        - "**/*.sh"
+        - "config/git/hooks/*"
+        - "config/aws/aws-vault-credential-process"
+      run: shellcheck {staged_files}
+
+    - name: stylua
+      glob: "**/*.lua"
+      run: stylua --check {staged_files}
+
+    - name: taplo
+      glob: "**/*.toml"
+      run: taplo fmt --config config/taplo/taplo.toml --check {staged_files}
+
+    - name: typos
+      run: typos --force-exclude {staged_files}
+
+    - name: yamllint
+      glob: "**/*.{yml,yaml}"
+      run: yamllint -c config/yamllint/config {staged_files}
+
+    - name: zsh
+      glob:
+        - "**/*.zsh"
+        - ".zshrc"
+        - ".zprofile"
+      run: for f in {staged_files}; do zsh -n "$f" || exit 1; done
