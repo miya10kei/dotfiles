@@ -7,20 +7,32 @@ ARG UNAME
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM ubuntu:26.04 AS builder
+# builderと最終ステージに共通する設定（aptのミラー、ドキュメントを入れない設定、ユーザー）
+FROM ubuntu:26.04 AS base
 ARG GID
 ARG GNAME
 ARG UID
 ARG UNAME
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 COPY ./config/dpkg/01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
+# docker-cleanはaptのキャッシュを消すため、キャッシュマウントを効かせるよう外す
 RUN sed -i -E 's#http://(archive|security)\.ubuntu\.com/ubuntu/#mirror+http://mirrors.ubuntu.com/mirrors.txt#' \
-        /etc/apt/sources.list.d/ubuntu.sources
+        /etc/apt/sources.list.d/ubuntu.sources \
+    && rm -f /etc/apt/apt.conf.d/docker-clean
+# sudoはステージごとにaptで入れるため、ここではsudoersの置き場所だけ作る
+RUN groupadd "${GNAME}" --gid "${GID}" \
+    && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
+    && mkdir -p /etc/sudoers.d \
+    && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers
+
+
+# ------------------------------------------------------------------------------------------------------------------------
+FROM base AS builder
+ARG UNAME
 # hadolint ignore=DL3008
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    rm -f /etc/apt/apt.conf.d/docker-clean \
-    && apt-get update \
+    apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
@@ -48,9 +60,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         uuid-dev \
         xz-utils \
         zlib1g-dev
-RUN groupadd "${GNAME}" --gid "${GID}" \
-  && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
-  && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers
 USER ${UNAME}
 ENV HOME=/home/${UNAME}
 WORKDIR ${HOME}
@@ -94,8 +103,7 @@ RUN mise run slim \
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-FROM ubuntu:26.04
-SHELL ["/bin/bash", "-c"]
+FROM base
 LABEL maintainer="miya10kei <miya10kei@gmail.com>"
 
 ARG DKID
@@ -110,15 +118,10 @@ ENV LANGUAGE=$LANG
 ENV LC_ALL=$LANG
 ENV TZ=Asia/Tokyo
 
-COPY ./config/dpkg/01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
-RUN sed -i -E 's#http://(archive|security)\.ubuntu\.com/ubuntu/#mirror+http://mirrors.ubuntu.com/mirrors.txt#' \
-        /etc/apt/sources.list.d/ubuntu.sources
-
 # hadolint ignore=DL3008
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    rm -f /etc/apt/apt.conf.d/docker-clean \
-    && apt-get update \
+    apt-get update \
     && apt-get install -y --no-install-recommends \
         bsdmainutils \
         bubblewrap \
@@ -149,11 +152,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         zsh \
     && locale-gen --purge $LANG
 
-RUN groupadd "${GNAME}" --gid "${GID}" \
-  && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
-  && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers \
-  && groupadd docker --gid "${DKID}" \
-  && usermod -aG docker "${UNAME}"
+RUN groupadd docker --gid "${DKID}" \
+    && usermod -aG docker "${UNAME}"
 
 USER ${UNAME}
 ENV  HOME="/home/${UNAME}"

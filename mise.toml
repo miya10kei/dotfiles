@@ -108,9 +108,12 @@ docker build \
   --build-arg UID="$user_id" \
   --build-arg UNAME="$user_name" \
   --secret id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+  --no-cache-filter mise \
   --progress "${DOCKER_PROGRESS:-tty}" \
   --tag miya10kei/devenv:latest \
   "{{ config_root }}"
+# miseステージは毎回作り直す（--no-cache-filter）。latest指定のツールとmise本体は、
+# RUNの層がキャッシュされると設定を変えない限り更新されないため。aptの層はキャッシュを使う
 # ビルドキャッシュ（キャッシュマウントを含む）は次回のビルドで再利用するため残し、不要になったイメージだけ消す
 docker image prune --force
 if command -v rdctl >/dev/null 2>&1; then rdctl shell sudo fstrim -v /mnt/data; fi
