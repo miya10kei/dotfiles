@@ -42,7 +42,7 @@ OSやアーキの違いは、次の優先順で吸収する。
 ## 誤解しやすい箇所
 
 - `config/claude/` はこのリポジトリ用ではなく、全プロジェクト共通のユーザー設定（`CLAUDE_CONFIG_DIR=~/.config/claude`）。このリポジトリ専用の指示は `./CLAUDE.md` か `./.claude/` に置くこと
-- `.gitignore` は `.claude/*` を無視し、`settings.json` だけを除外している。`.claude/` 配下に別のファイルを追加するときは、除外ルールも追加すること
+- `.gitignore` は `.claude/*` を無視し、`settings.json` と `skills/` だけを除外している。`.claude/` 配下に別のファイルを追加するときは、除外ルールも追加すること（`.claude/worktrees/` は無視したままにする）
 - git hookは `core.hooksPath` から `config/git/hooks/dispatch` 経由で実行される。lefthookの設定があるリポジトリでは、lefthookに委譲される
 
 ## 検証
