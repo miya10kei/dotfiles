@@ -51,6 +51,10 @@ pre-commit:
     - name: typos
       run: typos --force-exclude {staged_files}
 
+    - name: yamlfmt
+      glob: "**/*.{yml,yaml}"
+      run: yamlfmt -conf config/yamlfmt/.yamlfmt -lint {staged_files}
+
     - name: yamllint
       glob: "**/*.{yml,yaml}"
       run: yamllint -c config/yamllint/config {staged_files}
