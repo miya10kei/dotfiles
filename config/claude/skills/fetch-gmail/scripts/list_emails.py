@@ -12,6 +12,7 @@ def gws(*args: str) -> dict:
         ["gws", *args],
         capture_output=True,
         text=True,
+        check=False,
     )
     lines = result.stdout.strip().split("\n")
     # skip "Using keyring backend: keyring"
@@ -26,27 +27,39 @@ def gws(*args: str) -> dict:
 
 def search(query: str, max_results: int) -> list[dict]:
     data = gws(
-        "gmail", "users", "messages", "list",
-        "--params", json.dumps({
-            "userId": "me",
-            "q": query,
-            "maxResults": max_results,
-            "fields": "messages(id,threadId)",
-        }),
+        "gmail",
+        "users",
+        "messages",
+        "list",
+        "--params",
+        json.dumps(
+            {
+                "userId": "me",
+                "q": query,
+                "maxResults": max_results,
+                "fields": "messages(id,threadId)",
+            }
+        ),
     )
     return data.get("messages", [])
 
 
 def get_thread_metadata(thread_id: str) -> dict:
     data = gws(
-        "gmail", "users", "threads", "get",
-        "--params", json.dumps({
-            "userId": "me",
-            "id": thread_id,
-            "format": "metadata",
-            "metadataHeaders": ["Subject", "From", "Date"],
-            "fields": "id,messages(id,payload/headers)",
-        }),
+        "gmail",
+        "users",
+        "threads",
+        "get",
+        "--params",
+        json.dumps(
+            {
+                "userId": "me",
+                "id": thread_id,
+                "format": "metadata",
+                "metadataHeaders": ["Subject", "From", "Date"],
+                "fields": "id,messages(id,payload/headers)",
+            }
+        ),
     )
     return data
 
