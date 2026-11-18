@@ -121,6 +121,8 @@ function main() {
     local stale_zcompdump=( "$zcompdump"(N.mh+24) )
     if [[ ! -s "$zcompdump" ]] || (( ${#stale_zcompdump} )); then
         compinit -d "$zcompdump"
+        # compinit は補完関数の数が変わらないと .zcompdump を書き直さないため、確認した時刻を残す
+        touch "$zcompdump"
     else
         compinit -C -d "$zcompdump"
     fi
