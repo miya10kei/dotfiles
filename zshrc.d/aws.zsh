@@ -133,9 +133,8 @@ if builtin command -v aws-vault > /dev/null 2>&1; then if builtin command -v pas
       return 0
     fi
 
-    jq -r '.[] | @tsv' <<< "$params" | while IFS=$'\t' read -r name value; do
-      printf "%-50s : %s\n" "$name" "$value"
-    done
+    # @tsv は値の \ や改行をエスケープしてしまうため、値はそのまま出力する
+    jq -r '.[] | "\(.[0] | . + " " * ([50 - length, 0] | max)) : \(.[1])"' <<< "$params"
   }
 
 
