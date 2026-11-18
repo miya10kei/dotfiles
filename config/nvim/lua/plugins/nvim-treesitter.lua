@@ -57,9 +57,4 @@ return {
       end, { desc = "Install all needed treesitter parsers" })
     end,
   },
-  {
-    "windwp/nvim-ts-autotag",
-    event = "VeryLazy",
-    opts = {},
-  },
 }
