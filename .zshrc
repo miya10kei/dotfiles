@@ -56,12 +56,13 @@ function main() {
     # ------------------
     # --- pulseaudio ---
     # ------------------
-    if builtin command -v pulseaudio > /dev/null 2>&1; then
-        if [[ ! -e /.dockerenv ]]; then
-            pulseaudio --check > /dev/null 2>&1 || pulseaudio --load=module-native-protocol-tcp --exit-idle-time=-1 --daemon
-        else
+    # コンテナには paplay（pulseaudio-utils）だけを入れ、ホストの PulseAudio サーバーで鳴らす
+    if [[ -e /.dockerenv ]]; then
+        if builtin command -v paplay > /dev/null 2>&1; then
             export PULSE_SERVER=host.docker.internal
         fi
+    elif builtin command -v pulseaudio > /dev/null 2>&1; then
+        pulseaudio --check > /dev/null 2>&1 || pulseaudio --load=module-native-protocol-tcp --exit-idle-time=-1 --daemon
     fi
 
     # -----------------

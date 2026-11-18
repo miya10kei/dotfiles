@@ -64,24 +64,32 @@ WORKDIR ${HOME}
 FROM builder AS mise
 # builderのSHELL（pipefail付き）を引き継ぐが、hadolintはステージをまたいで追えないため明示する
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ARG UNAME
+ARG GID
 ARG GNAME
+ARG UID
+ARG UNAME
 
 RUN curl https://mise.run | sh
 ENV PATH="${HOME}/.local/bin:${PATH}"
 
 COPY --chown="${UNAME}:${GNAME}" ./config/mise/ ${HOME}/.config/mise/
+# ~/.cache（miseのダウンロードキャッシュやuvのキャッシュ）と ~/.npm はキャッシュマウントにし、次回のビルドで再利用する
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
+    --mount=type=cache,target=/home/${UNAME}/.cache,uid=${UID},gid=${GID} \
+    --mount=type=cache,target=/home/${UNAME}/.npm,uid=${UID},gid=${GID} \
     GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN)" && export GITHUB_TOKEN && \
     mise install
 
 RUN --mount=type=secret,id=GITHUB_TOKEN,mode=0444 \
+    --mount=type=cache,target=/home/${UNAME}/.cache,uid=${UID},gid=${GID} \
+    --mount=type=cache,target=/home/${UNAME}/.npm,uid=${UID},gid=${GID} \
     GITHUB_TOKEN="$(cat /run/secrets/GITHUB_TOKEN)" && export GITHUB_TOKEN && \
     eval "$(mise activate bash)" && \
     mise run install-bins
 
 COPY --chown="${UNAME}:${GNAME}" ./config/nvim ${HOME}/.config/nvim
-RUN eval "$(mise activate bash)" \
+RUN --mount=type=cache,target=/home/${UNAME}/.cache,uid=${UID},gid=${GID} \
+    eval "$(mise activate bash)" \
     && mise run setup-nvim
 
 RUN mise run slim \
@@ -117,14 +125,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     rm -f /etc/apt/apt.conf.d/docker-clean \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-        software-properties-common \
-    && add-apt-repository -y ppa:git-core/ppa \
-    && apt-get install -y --no-install-recommends \
-        apache2-utils \
         bsdmainutils \
         bubblewrap \
         ca-certificates \
-        cloc \
         curl \
         dnsutils \
         git \
@@ -139,8 +142,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         openssh-client \
         pass \
         postgresql-client \
-        pulseaudio \
-        python3-tk \
+        pulseaudio-utils \
         redis-tools \
         rlwrap \
         socat \
@@ -150,7 +152,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         wget \
         zip \
         zsh \
-    && apt-get purge -y --auto-remove software-properties-common \
     && locale-gen --purge $LANG
 
 RUN groupadd "${GNAME}" --gid "${GID}" \
@@ -166,8 +167,6 @@ COPY --from=mise --chown="${UNAME}:${GNAME}" "${HOME}/out/" /
 
 ENV PATH="${HOME}/.local/bin:${PATH}"
 ENV MISE_DATA_DIR="${HOME}/.local/share/mise"
-
-COPY --chown="${UNAME}:${GNAME}" ./config/nvim  $HOME/.config/nvim
 
 # 単一ファイルのbind mountはgit pull等でinodeが置き換わると追従しないため、マウントされる~/.dotfiles配下へのsymlinkにする
 RUN ln -fns "${HOME}/.dotfiles/.zshrc" "${HOME}/.zshrc"

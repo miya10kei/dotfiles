@@ -111,7 +111,8 @@ docker build \
   --progress "${DOCKER_PROGRESS:-tty}" \
   --tag miya10kei/devenv:latest \
   "{{ config_root }}"
-docker system prune --force
+# ビルドキャッシュ（キャッシュマウントを含む）は次回のビルドで再利用するため残し、不要になったイメージだけ消す
+docker image prune --force
 if command -v rdctl >/dev/null 2>&1; then rdctl shell sudo fstrim -v /mnt/data; fi
 """
 
