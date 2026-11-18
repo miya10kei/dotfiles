@@ -15,12 +15,27 @@ def gws(*args: str) -> dict:
         text=True,
         check=False,
     )
+    # 認証エラーなどを「0件」や空の本文に見せないよう、失敗はそのまま伝えて終了する
+    if result.returncode != 0:
+        exit_with_gws_error(result.stderr, result.stdout, result.returncode)
     lines = result.stdout.strip().split("\n")
+    # skip "Using keyring backend: keyring"
     json_start = next(
         (i for i, l in enumerate(lines) if l.strip().startswith("{")),
-        0,
+        -1,
     )
-    return json.loads("\n".join(lines[json_start:]))
+    if json_start < 0:
+        return {}
+    data = json.loads("\n".join(lines[json_start:]))
+    if "error" in data:
+        exit_with_gws_error(json.dumps(data["error"], ensure_ascii=False), "", 1)
+    return data
+
+
+def exit_with_gws_error(stderr: str, stdout: str, code: int) -> None:
+    message = "\n".join(s.strip() for s in (stderr, stdout) if s.strip())
+    print(f"gws failed: {message}", file=sys.stderr)
+    sys.exit(code)
 
 
 class HTMLTextExtractor(HTMLParser):
