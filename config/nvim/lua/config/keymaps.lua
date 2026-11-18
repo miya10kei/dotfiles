@@ -19,6 +19,11 @@ map("n", "<SPACE><SPACE>", "\"zyiw:let @/ = '\\<' . @z . '\\>'<CR>:set hlsearch<
 map("x", "p", '"_dP', silent)
 map("x", "P", '"_dP', silent)
 
+-- treesitterのノード単位で選択範囲を広げる・狭める（Neovim標準の an / in を使う）
+map("n", "<M-j>", "van", { remap = true, desc = "Select treesitter node" })
+map("x", "<M-j>", "an", { remap = true, desc = "Expand to parent node" })
+map("x", "<M-k>", "in", { remap = true, desc = "Shrink to child node" })
+
 -- 現在のセッションを保存して再起動し、復元する
 map("n", "<F5>", "<Cmd>restart<CR>", { silent = true, desc = "Restart Neovim" })
 

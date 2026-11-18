@@ -29,6 +29,8 @@ opt.fileformats = "unix,mac,dos"
 opt.foldcolumn = "1"
 opt.foldlevel = 99
 opt.foldlevelstart = 99
+-- 折り畳んだ行は、その行の内容をハイライト付きで表示する
+opt.foldtext = ""
 opt.ignorecase = true
 opt.laststatus = 3
 opt.list = true

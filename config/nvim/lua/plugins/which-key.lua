@@ -6,9 +6,6 @@ return {
     event = "VeryLazy",
     opts = {
       preset = "modern",
-      spec = {
-        { "<Leader>u", group = "[ufo]" },
-      },
       win = {
         row = 0.5,
         col = 0.5,
