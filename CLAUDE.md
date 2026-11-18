@@ -32,6 +32,13 @@ OSやアーキの違いは、次の優先順で吸収する。
 - `config/mise` と `config/nvim` はイメージのビルド時にCOPYされる。ツールを追加しても `mise run build-dev-env` で再ビルドするまで入らない
 - `data-volume/` は永続化用の実データ（gitignore対象）。設定ファイルを置かないこと
 
+## パッケージの取得（サプライチェーン対策）
+
+- uv・npm・miseは、公開から7日未満の版を入れない。設定は `config/uv/uv.toml` の `exclude-newer`、`config/npm/.npmrc` の `min-release-age`、`config/mise/config.toml` の `minimum_release_age`。パッケージマネージャーを追加するときも同じ制限をかける
+- miseは `npm:` ツールをnpmではなく内蔵のaubeで入れるため、`.npmrc` の設定は効かない。npm側に設定があるからといって、mise側の設定を外さないこと
+- 7日未満の版がどうしても必要なときは、設定を変えずにコマンドで一時的に外す（`mise install --minimum-release-age 0d <tool>`、`npm install --min-release-age=0`）
+- PyPIとnpmの取得元はTakumi Guard（`pypi.flatt.tech`・`npm.flatt.tech`）。トークン `TAKUMI_GUARD_TOKEN` は `.zshrc` が `pass` から読む
+
 ## 誤解しやすい箇所
 
 - `config/claude/` はこのリポジトリ用ではなく、全プロジェクト共通のユーザー設定（`CLAUDE_CONFIG_DIR=~/.config/claude`）。このリポジトリ専用の指示は `./CLAUDE.md` か `./.claude/` に置くこと
