@@ -15,7 +15,7 @@ function alias_if_exists() {
 
 # ディレクトリ直下のサブディレクトリ名を返す（symlinkのディレクトリも含める）
 function _list_subdirs() {
-  find -L "$1" -mindepth 1 -maxdepth 1 -type d | sed 's|.*/||' | sort
+  print -rl -- "$1"/*(ND-/:t)
 }
 
 function _fzf_change_directory() {
