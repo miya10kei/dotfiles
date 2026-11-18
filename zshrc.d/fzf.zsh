@@ -6,9 +6,6 @@
 FZF_COLOR="bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8,fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC,marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8,selected-bg:#45475A,border:#6C7086,label:#CDD6F4"
 
 export FZF_DEFAULT_OPTS="--color=$FZF_COLOR --layout=reverse --info=inline --preview-window='down,50%,wrap'"
-export FZF_TMUX=1
-export FZF_TMUX_OPTS='-p 90%'
-export FZF_DEFAULT_OPTS="--color=$FZF_COLOR --layout=reverse --info=inline --preview-window='down,50%,wrap'"
 
 FZF_CTRL_T_PREVIEW="bat --color=always --style=numbers --theme=ansi {}"
 export FZF_CTRL_T_OPTS="--preview=\"$FZF_CTRL_T_PREVIEW\""
