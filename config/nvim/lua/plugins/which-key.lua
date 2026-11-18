@@ -6,11 +6,6 @@ return {
     event = "VeryLazy",
     opts = {
       preset = "modern",
-      spec = {
-        { "<Leader>u", group = "[ufo]" },
-        { "<Leader>w", group = "Workspace" },
-        { "<Leader>z", icon = " ", group = "TS_Fold" },
-      },
       win = {
         row = 0.5,
         col = 0.5,

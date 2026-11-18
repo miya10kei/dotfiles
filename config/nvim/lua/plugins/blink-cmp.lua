@@ -7,7 +7,7 @@ return {
       "moyiz/blink-emoji.nvim",
       "bydlw98/blink-cmp-env",
     },
-    event = { "InsertEnter", "CmdLineEnter" },
+    event = { "InsertEnter", "CmdlineEnter" },
     version = "*",
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -38,8 +38,14 @@ return {
       },
       signature = { enabled = true },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env" },
+        default = { "lazydev", "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env" },
         providers = {
+          -- require("...") のモジュール名や ---@module の補完（lazydev.nvim）
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 100,
+          },
           ripgrep = {
             name = "Ripgrep",
             module = "blink-ripgrep",

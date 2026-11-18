@@ -71,10 +71,8 @@ return {
           if vim.g.conform_format_on_save == false then
             return nil
           end
-          return {
-            timeout_ms = 500,
-            lsp_format = "fallback",
-          }
+          -- lsp_format は default_format_opts の "fallback" が使われる
+          return { timeout_ms = 500 }
         end,
         notify_on_error = true,
         notify_no_formatters = false,

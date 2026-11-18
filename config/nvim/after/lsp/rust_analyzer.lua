@@ -1,0 +1,11 @@
+---@type vim.lsp.Config
+return {
+  settings = {
+    ["rust-analyzer"] = {
+      imports = {
+        granularity = { group = "module" },
+        prefix = "self",
+      },
+    },
+  },
+}
