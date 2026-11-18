@@ -41,7 +41,6 @@ return {
           },
         },
         formatters_by_ft = {
-          go = { "goimports", "gofmt" },
           javascript = { "prettier" },
           javascriptreact = { "prettier" },
           typescript = { "prettier" },
@@ -57,6 +56,8 @@ return {
           lua = { "stylua" },
           markdown = { "markdownlint-cli2" },
           python = { "ruff_organize_imports", "ruff_format" },
+          -- sqlfluffはdialectの設定ファイル（.sqlfluffなど）があるプロジェクトでだけ動く（conform既定のrequire_cwd）
+          sql = { "sqlfluff" },
           terraform = { "terraform_fmt" },
           toml = { "taplo" },
           tf = { "terraform_fmt" },
@@ -70,10 +71,8 @@ return {
           if vim.g.conform_format_on_save == false then
             return nil
           end
-          return {
-            timeout_ms = 500,
-            lsp_format = "fallback",
-          }
+          -- lsp_format は default_format_opts の "fallback" が使われる
+          return { timeout_ms = 500 }
         end,
         notify_on_error = true,
         notify_no_formatters = false,

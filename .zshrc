@@ -26,13 +26,9 @@ function main() {
         fi
     }
 
-    add_path "$HOME/.cargo/bin"
     add_path "$HOME/.docker/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.rd/bin"
-    add_path "$HOME/.tfenv/bin"
-    add_path "$HOME/Library/Python/3.11/bin"
-    add_path "/usr/local/nodejs/bin"
 
     # -----------------
     # --- Claude Code -
@@ -50,11 +46,6 @@ function main() {
     # -------------
     # --- Node.js -
     # -------------
-    if [[ -e /opt/homebrew/opt/node@22 ]]; then
-        export LDFLAGS="-L/opt/homebrew/opt/node@22/lib"
-        export CPPFLAGS="-I/opt/homebrew/opt/node@22/include"
-        add_path "/opt/homebrew/opt/node@22/bin"
-    fi
     export NPM_CONFIG_USERCONFIG="$HOME/.config/npm/.npmrc"
 
     if builtin command -v taplo > /dev/null 2>&1; then
@@ -64,12 +55,13 @@ function main() {
     # ------------------
     # --- pulseaudio ---
     # ------------------
-    if builtin command -v pulseaudio > /dev/null 2>&1; then
-        if [[ ! -e /.dockerenv ]]; then
-            pulseaudio --check > /dev/null 2>&1 || pulseaudio --load=module-native-protocol-tcp --exit-idle-time=-1 --daemon
-        else
+    # コンテナには paplay（pulseaudio-utils）だけを入れ、ホストの PulseAudio サーバーで鳴らす
+    if [[ -e /.dockerenv ]]; then
+        if builtin command -v paplay > /dev/null 2>&1; then
             export PULSE_SERVER=host.docker.internal
         fi
+    elif builtin command -v pulseaudio > /dev/null 2>&1; then
+        pulseaudio --check > /dev/null 2>&1 || pulseaudio --load=module-native-protocol-tcp --exit-idle-time=-1 --daemon
     fi
 
     # -----------------
@@ -86,11 +78,6 @@ function main() {
                 # TODO
                 sudo chmod 777 /var/run/docker.sock
             fi
-        else
-            :
-            # if [[ -z $TMUX ]]; then
-            #     tmux new-session -A -s main
-            # fi
         fi
     fi
 
@@ -99,16 +86,15 @@ function main() {
     # --- history ---
     # ---------------
     export HISTFILE=${HOME}/.zsh_history
-    export HISTSIZE=10000
+    # Ctrl-R などで検索できるのはメモリ上の HISTSIZE 件だけなので、保存件数と揃える
+    export HISTSIZE=100000
     export SAVEHIST=100000
-    setopt append_history
+    # share_history は追記も行うため inc_append_history は併用しない（zshのドキュメントの指示）
     setopt extended_history
     setopt hist_ignore_all_dups
-    setopt hist_ignore_dups
     setopt hist_ignore_space
     setopt hist_reduce_blanks
     setopt hist_verify
-    setopt inc_append_history
     setopt interactivecomments
     setopt share_history
 
@@ -128,17 +114,22 @@ function main() {
         eval "$(mise activate zsh)"
     fi
 
-    if builtin command -v uv > /dev/null 2>&1; then
-        if [[ ! -e "$HOME/.local/share/uv/credentials/credentials.toml" ]]; then
-            # uv auth login pypi.flatt.tech --token "$TAKUMI_GUARD_TOKEN"
-        fi
-    fi
-
     # fzf-tab requires compinit to have already run before it is loaded via sheldon
-    FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
+    # 補完の初期化は、.zcompdump が無いか24時間以上古いときだけ再生成し、それ以外は確認を省いて読み込む
+    autoload -Uz compinit
+    local zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+    local stale_zcompdump=( "$zcompdump"(N.mh+24) )
+    if [[ ! -s "$zcompdump" ]] || (( ${#stale_zcompdump} )); then
+        compinit -d "$zcompdump"
+        # compinit は補完関数の数が変わらないと .zcompdump を書き直さないため、確認した時刻を残す
+        touch "$zcompdump"
+    else
+        compinit -C -d "$zcompdump"
+    fi
     autoload bashcompinit && bashcompinit
-    autoload -Uz compinit && compinit
-    complete -C "$HOME/.local/bin/aws_completer" aws
+    if builtin command -v aws_completer > /dev/null 2>&1; then
+        complete -C aws_completer aws
+    fi
 
     if builtin command -v mise > /dev/null 2>&1; then
         eval "$(mise completion zsh)"
@@ -164,11 +155,6 @@ function main() {
 
     fi
 
-    if [[ -e "$HOME/.local/src/google-cloud-sdk" ]]; then
-        source $HOME/.local/src/google-cloud-sdk/path.zsh.inc
-        source $HOME/.local/src/google-cloud-sdk/completion.zsh.inc
-    fi
-
     if builtin command -v starship > /dev/null 2>&1; then
         eval "$(starship init zsh)"
     fi
@@ -186,10 +172,3 @@ if [ "$ZPROFILE_ENABLED" = true ]; then
 else
     main
 fi
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/miya10kei/.config/google-cloud-sdk/path.zsh.inc' ]; then . '/home/miya10kei/.config/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/miya10kei/.config/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/miya10kei/.config/google-cloud-sdk/completion.zsh.inc'; fi

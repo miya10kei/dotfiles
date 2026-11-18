@@ -1,0 +1,15 @@
+# yamllintのユーザー共通設定（~/.config/yamllint/config）。プロジェクトに .yamllint があればそちらが使われる
+extends: default
+
+rules:
+  # yamlfmtの既定（行末コメントの前は空白1つ）に合わせる
+  comments:
+    min-spaces-from-content: 1
+  # yamlfmtの既定では先頭に --- を付けない
+  document-start: disable
+  # .editorconfig の max_line_length に合わせる
+  line-length:
+    max: 120
+  # GitHub Actionsの `on:` のように、キーとして書いたyes/no/onは警告しない
+  truthy:
+    check-keys: false

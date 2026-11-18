@@ -6,9 +6,8 @@ return {
       "mikavilpas/blink-ripgrep.nvim",
       "moyiz/blink-emoji.nvim",
       "bydlw98/blink-cmp-env",
-      { "saghen/blink.compat", version = "2.*", lazy = true, opts = {} },
     },
-    event = { "InsertEnter", "CmdLineEnter" },
+    event = { "InsertEnter", "CmdlineEnter" },
     version = "*",
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -39,8 +38,14 @@ return {
       },
       signature = { enabled = true },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env", "obsidian" },
+        default = { "lazydev", "lsp", "path", "snippets", "buffer", "ripgrep", "emoji", "env" },
         providers = {
+          -- require("...") のモジュール名や ---@module の補完（lazydev.nvim）
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 100,
+          },
           ripgrep = {
             name = "Ripgrep",
             module = "blink-ripgrep",
@@ -65,10 +70,6 @@ return {
               show_braces = false,
               show_documentation_window = true,
             },
-          },
-          obsidian = {
-            name = "obsidian",
-            module = "blink.compat.source",
           },
         },
       },

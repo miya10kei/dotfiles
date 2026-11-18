@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
   {
-    'stevearc/oil.nvim',
+    "stevearc/oil.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     ---@module 'oil'
@@ -16,11 +16,11 @@ return {
       view_options = {
         show_hidden = true,
       },
-      float  = {
-          border = "rounded",
-          preview_split =  "below",
-          max_width = 0.8,
-          max_height = 0.8,
+      float = {
+        border = "rounded",
+        preview_split = "below",
+        max_width = 0.8,
+        max_height = 0.8,
       },
       keymaps = {
         [".."] = "actions.parent",
@@ -38,12 +38,12 @@ return {
             preview = {
               vertical = false,
               horizontal = true,
-              split = "belowright"
-            }
+              split = "belowright",
+            },
           })
         end,
         desc = "Toggle oil floating window",
       },
     },
-  }
+  },
 }

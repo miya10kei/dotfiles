@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
@@ -6,7 +7,6 @@ return {
     ---@module 'render-markdown'
     opts = {
       enabled = false,
-      file_types = { "markdown", "Avante" },
       sign = { enabled = false },
     },
     keys = {

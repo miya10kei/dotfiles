@@ -1,8 +1,13 @@
-# このリポジトリのdotfilesの配置定義。コンテナ起動時に .zshrc から `mise dot apply` で適用する
+# このリポジトリのdotfilesの配置定義とタスク。配置はコンテナ起動時に .zshrc から `mise dot apply` で適用する
+# タスクは `mise -C ~/.dotfiles run <task>` で実行する
 # 相対パスのsourceはこのファイルのディレクトリ（~/.dotfiles）から解決され、絶対パスのsymlinkになる
 
 # mode = "absent" が使えるようになったバージョン
 min_version = "2026.9.13"
+
+[settings]
+# グローバル設定（config/mise）の約100ツールのうち未インストールのものを、タスク実行のたびに入れようとしないようにする
+task.run_auto_install = false
 
 [dotfiles]
 "~/.config/aws"           = { source = "config/aws" }
@@ -20,6 +25,7 @@ min_version = "2026.9.13"
 "~/.config/taplo"         = { source = "config/taplo" }
 "~/.config/uv"            = { source = "config/uv" }
 "~/.config/yamlfmt"       = { source = "config/yamlfmt" }
+"~/.config/yamllint"      = { source = "config/yamllint" }
 "~/.editorconfig"         = { source = ".editorconfig" }
 "~/.gitattributes"        = { source = ".gitattributes" }
 "~/.gitconfig"            = { source = ".gitconfig" }
@@ -70,3 +76,151 @@ ln -fns "$dotdir/config/gh/config.yml" "$HOME/.config/gh/config.yml"
 [bootstrap.hooks.post-dotfiles]
 description = "sheldonのプラグインを取得する（~/.config/sheldonのリンクが必要）"
 run         = "sheldon lock"
+
+# ----------------------------------------------------------------------------------------------------------------------
+# タスク。run はTeraテンプレートとして展開されるため、`{#` や `{{` を含むシェル記法は使わない
+
+[tasks.build-dev-env]
+description = "開発コンテナのイメージをビルドする（GITHUB_TOKENが必要）"
+run = """
+set -eu
+if [ -z "${GITHUB_TOKEN:-}" ]; then echo "ERROR: GITHUB_TOKEN is not set. Run: export GITHUB_TOKEN" >&2; exit 1; fi
+echo "GITHUB_TOKEN length: $(printf '%s' "$GITHUB_TOKEN" | wc -c | tr -d ' ')"
+user_name=$(id -un)
+user_id=$(id -u)
+case "$(uname -s)" in
+  Darwin)
+    group_name=$user_name
+    group_id=1001
+    docker_gid=1002
+    ;;
+  *)
+    group_name=$(id -gn)
+    group_id=$(id -g)
+    docker_gid=$(getent group docker | cut -d: -f3)
+    ;;
+esac
+echo "DKID=$docker_gid GID=$group_id"
+docker build \
+  --build-arg DKID="$docker_gid" \
+  --build-arg GID="$group_id" \
+  --build-arg GNAME="$group_name" \
+  --build-arg UID="$user_id" \
+  --build-arg UNAME="$user_name" \
+  --secret id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+  --progress "${DOCKER_PROGRESS:-tty}" \
+  --tag miya10kei/devenv:latest \
+  "{{ config_root }}"
+# ビルドキャッシュ（キャッシュマウントを含む）は次回のビルドで再利用するため残し、不要になったイメージだけ消す
+docker image prune --force
+if command -v rdctl >/dev/null 2>&1; then rdctl shell sudo fstrim -v /mnt/data; fi
+"""
+
+[tasks.backup-sshkey]
+description = "SSH鍵をバックアップする（鍵がなければ何もしない）"
+run = """
+set -eu
+if [ ! -e "$HOME/.ssh/id_ed25519" ]; then echo "no ssh key to back up"; exit 0; fi
+cp -f "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_ed25519.bk"
+cp -f "$HOME/.ssh/id_ed25519.pub" "$HOME/.ssh/id_ed25519.pub.bk"
+"""
+
+[tasks.generate-sshkey]
+description = "既存の鍵をバックアップしてからed25519のSSH鍵を作る（コメントはこのリポジトリの.gitconfigのuser.email）"
+depends = ["backup-sshkey"]
+run = """
+set -eu
+email=$(git config --file "{{ config_root }}/.gitconfig" --get user.email)
+if [ -z "$email" ]; then echo "ERROR: user.email is not set in .gitconfig" >&2; exit 1; fi
+ssh-keygen -t ed25519 -C "$email"
+"""
+
+# ホスト（macOS）向けの配置。[dotfiles]に入れるとコンテナ起動のたびに配置されるため、タスクにしている
+# 既にあるファイルは置き換えない（元のMakefileのファイルターゲットと同じ挙動）
+
+[tasks.deploy-karabiner]
+description = "karabiner.jsonを配置する"
+run         = '[ -e "$HOME/.config/karabiner/karabiner.json" ] || ln -fns "{{ config_root }}/karabiner.json" "$HOME/.config/karabiner/karabiner.json"'
+
+[tasks.deploy-navi]
+description = "naviのチートシートを追加する"
+run         = '[ -e "$HOME/.local/share/navi/cheats/miya10kei__navi-cheets" ] || navi repo add https://github.com/miya10kei/navi-cheets'
+
+[tasks.deploy-zsh]
+description = "zshの設定を配置する"
+depends     = ["zprofile", "zshrc"]
+
+[tasks.zprofile]
+description = ".zprofileを配置する"
+run         = '[ -e "$HOME/.zprofile" ] || ln -fns "{{ config_root }}/.zprofile" "$HOME/.zprofile"'
+
+[tasks.zshrc]
+description = ".zshrcを配置する"
+run         = '[ -e "$HOME/.zshrc" ] || ln -fns "{{ config_root }}/.zshrc" "$HOME/.zshrc"'
+
+[tasks.zshhistory]
+description = ".zsh_historyをdata-volumeへリンクする"
+run         = '[ -e "$HOME/.zsh_history" ] || ln -fns "{{ config_root }}/data-volume/zsh-history/.zsh_history" "$HOME/.zsh_history"'
+
+[tasks.delete-zshhistory]
+description = ".zsh_historyを削除する"
+run         = 'rm -rf "$HOME/.zsh_history"'
+
+# macOSホスト向け
+
+[tasks.install-homebrew]
+description = "Homebrewをインストールする"
+run = """
+if [ -e /opt/homebrew/bin/brew ]; then echo "Homebrew is already installed"; exit 0; fi
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+"""
+
+[tasks.uninstall-homebrew]
+description = "Homebrewをアンインストールする"
+run = """
+if [ ! -e /opt/homebrew/bin/brew ]; then echo "Homebrew is not installed"; exit 0; fi
+NONINTERACTIVE=1 curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh | bash
+"""
+
+[tasks.brew-install]
+description = "Homebrewのcaskをインストールする"
+run = """
+set -eu
+brew install --cask \
+  1password \
+  alt-tab \
+  aws-vpn-client \
+  claude \
+  displaylink \
+  firefox \
+  ghostty \
+  homerow \
+  insta360-link-controller \
+  karabiner-elements \
+  obsidian \
+  rancher \
+  raycast \
+  rectangle \
+  retrace \
+  resolutionator \
+  stats
+brew cleanup --prune all
+"""
+
+[tasks.brew-update]
+description = "Homebrewと全パッケージを更新する"
+run = """
+set -eu
+brew update
+brew upgrade
+brew upgrade --cask --greedy
+brew cleanup --prune all
+"""
+
+[tasks.setup-rancher]
+description = "Rancher DesktopのVMのhostsにlima-rancher-desktopを追加する"
+run = """
+LIMA_HOME="$HOME/Library/Application Support/rancher-desktop/lima" \
+  "/Applications/Rancher Desktop.app/Contents/Resources/resources/darwin/lima/bin/limactl" \
+  shell 0 "sudo" "sed" "-i" "s/host.lima.internal$/host.lima.internal lima-rancher-desktop/" "/etc/hosts"
+"""

@@ -26,7 +26,6 @@ if builtin command -v docker > /dev/null 2>&1; then
   function launch_dev_env() {
       local tag="${1:-latest}"
       name="dev-env"
-      os=$(uname)
       uname=$(id -un)
 
       if [ -n "$(docker container ls -q -f name=$name)" ]; then
@@ -46,8 +45,8 @@ if builtin command -v docker > /dev/null 2>&1; then
           "--tty"
       )
 
-      case "$os" in
-          Darwin)
+      case "$OSTYPE" in
+          darwin*)
               opts+=(
                   "--mount type=bind,source=${HOME}/.config/pulse,target=/home/${uname}/.config/pulse"
                   "--mount type=bind,source=${HOME}/Documents,target=/home/${uname}/Documents"

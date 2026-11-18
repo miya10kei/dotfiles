@@ -1,0 +1,8 @@
+# typos（lefthookのpre-commitで実行）の設定
+[files]
+# 音声ファイルの中身を単語として読んでしまうため対象外にする
+extend-exclude = ["*.wav"]
+
+[default.extend-words]
+# Pythonのパッケージ名
+certifi = "certifi"

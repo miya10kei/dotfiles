@@ -13,6 +13,7 @@ def gws(*args: str) -> dict:
         ["gws", *args],
         capture_output=True,
         text=True,
+        check=False,
     )
     lines = result.stdout.strip().split("\n")
     json_start = next(
@@ -83,7 +84,9 @@ def extract_headers(payload: dict) -> dict:
     return headers
 
 
-def format_message(payload: dict, index: int | None = None, total: int | None = None) -> str:
+def format_message(
+    payload: dict, index: int | None = None, total: int | None = None
+) -> str:
     headers = extract_headers(payload)
     body = extract_body(payload)
 
@@ -103,26 +106,38 @@ def format_message(payload: dict, index: int | None = None, total: int | None = 
 
 def read_message(message_id: str) -> None:
     data = gws(
-        "gmail", "users", "messages", "get",
-        "--params", json.dumps({
-            "userId": "me",
-            "id": message_id,
-            "format": "full",
-            "fields": "id,payload(headers,body,parts,mimeType)",
-        }),
+        "gmail",
+        "users",
+        "messages",
+        "get",
+        "--params",
+        json.dumps(
+            {
+                "userId": "me",
+                "id": message_id,
+                "format": "full",
+                "fields": "id,payload(headers,body,parts,mimeType)",
+            }
+        ),
     )
     print(format_message(data.get("payload", {})))
 
 
 def read_thread(thread_id: str) -> None:
     data = gws(
-        "gmail", "users", "threads", "get",
-        "--params", json.dumps({
-            "userId": "me",
-            "id": thread_id,
-            "format": "full",
-            "fields": "id,messages(id,payload(headers,body,parts,mimeType))",
-        }),
+        "gmail",
+        "users",
+        "threads",
+        "get",
+        "--params",
+        json.dumps(
+            {
+                "userId": "me",
+                "id": thread_id,
+                "format": "full",
+                "fields": "id,messages(id,payload(headers,body,parts,mimeType))",
+            }
+        ),
     )
     messages = data.get("messages", [])
     total = len(messages)

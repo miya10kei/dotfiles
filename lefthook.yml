@@ -1,0 +1,67 @@
+# コミット時に、ステージしたファイルだけをlintする
+# config/git/hooks/dispatch（core.hooksPath）が、このファイルがあるリポジトリでは lefthook を呼ぶ
+# ツールはすべて config/mise/config.toml で入れている
+# glob_matcher が使えるのは 2.0.4 から。古いと ** の一致範囲が変わり、ルート直下のファイルを黙って見落とす
+min_version: 2.0.4
+glob_matcher: doublestar
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: gitleaks
+      run: gitleaks git --pre-commit --staged --redact --no-banner
+
+    - name: hadolint
+      glob: "**/Dockerfile"
+      run: hadolint {staged_files}
+
+    - name: json
+      glob: "**/*.json"
+      run: for f in {staged_files}; do jq empty "$f" || exit 1; done
+
+    - name: markdownlint
+      glob: "**/*.md"
+      run: markdownlint-cli2 {staged_files}
+
+    - name: mise tasks
+      glob:
+        - "mise.toml"
+        - "config/mise/**"
+      run: mise tasks validate
+
+    - name: ruff
+      glob: "**/*.py"
+      run: ruff check {staged_files} && ruff format --check {staged_files}
+
+    - name: shellcheck
+      glob:
+        - "**/*.sh"
+        - "config/git/hooks/*"
+        - "config/aws/aws-vault-credential-process"
+      run: shellcheck {staged_files}
+
+    - name: stylua
+      glob: "**/*.lua"
+      run: stylua --check {staged_files}
+
+    - name: taplo
+      glob: "**/*.toml"
+      run: taplo fmt --config config/taplo/taplo.toml --check {staged_files}
+
+    - name: typos
+      run: typos --force-exclude {staged_files}
+
+    - name: yamlfmt
+      glob: "**/*.{yml,yaml}"
+      run: yamlfmt -conf config/yamlfmt/.yamlfmt -lint {staged_files}
+
+    - name: yamllint
+      glob: "**/*.{yml,yaml}"
+      run: yamllint -c config/yamllint/config {staged_files}
+
+    - name: zsh
+      glob:
+        - "**/*.zsh"
+        - ".zshrc"
+        - ".zprofile"
+      run: for f in {staged_files}; do zsh -n "$f" || exit 1; done

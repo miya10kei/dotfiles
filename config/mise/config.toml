@@ -5,15 +5,12 @@ CARGO_HOME  = "{{env.HOME}}/.local/share/cargo"
 RUSTUP_HOME = "{{env.HOME}}/.local/share/rustup"
 
 [plugins]
-lua       = "https://github.com/mise-plugins/mise-lua.git"
-terraform = "https://github.com/mise-plugins/mise-hashicorp.git"
+lua = "https://github.com/mise-plugins/mise-lua.git"
 
 [tools]
 # Language runtimes
 chamber     = "latest"
 cloudflared = "latest"
-deno       = "latest"
-go          = "latest"
 java        = "25"
 kotlin      = "latest"
 lua         = "latest"
@@ -61,7 +58,6 @@ tree-sitter = "latest"
 "github:denisidoro/navi"     = "latest"
 "github:eza-community/eza"   = "latest"
 "github:googleworkspace/cli" = "latest"
-"github:Hessesian/kmp-lsp"   = "latest"
 "github:k1LoW/mo"            = "latest"
 "github:k1LoW/tbls"          = "latest"
 "github:miya10kei/ccargus"   = "latest"
@@ -75,7 +71,7 @@ tree-sitter = "latest"
 "npm:pnpm"                          = "latest"
 # @twilio/cli-core 9.0.0 だけ trusted publisher で公開され、9.0.1 以降はトークン公開に戻ったため no-downgrade に掛かる (provenance は twilio/twilio-cli-core の main で確認済み)
 # 除外は twilio-cli 7.2.0 が依存する版に限定している。twilio-cli が新しい cli-core に上がったら除外する版も更新する
-"npm:twilio-cli"                    = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.2.0"] }
+"npm:twilio-cli" = { version = "latest", trust_policy_excludes = ["@twilio/cli-core@9.2.0"] }
 
 # language servers (npm)
 "npm:@angular/language-server"            = "latest"
@@ -87,14 +83,12 @@ tree-sitter = "latest"
 "npm:vscode-langservers-extracted"        = "latest"
 "npm:yaml-language-server"                = "latest"
 
-# language servers (aqua / go)
-"aqua:artempyanykh/marksman"                                             = "latest"
-"aqua:hashicorp/terraform-ls"                                            = "latest"
-"aqua:LuaLS/lua-language-server"                                         = "latest"
-"aqua:rust-lang/rust-analyzer"                                           = "latest"
-"aqua:tamasfe/taplo"                                                     = "latest"
-"go:github.com/docker/docker-language-server/cmd/docker-language-server" = "latest"
-"go:golang.org/x/tools/gopls"                                            = "latest"
+# language servers (aqua)
+"aqua:artempyanykh/marksman"     = "latest"
+"aqua:hashicorp/terraform-ls"    = "latest"
+"aqua:LuaLS/lua-language-server" = "latest"
+"aqua:rust-lang/rust-analyzer"   = "latest"
+"aqua:tamasfe/taplo"             = "latest"
 
 # linters / formatters
 "aqua:aquasecurity/trivy"   = "latest"
@@ -120,14 +114,13 @@ tree-sitter = "latest"
 "vfox:mise-plugins/vfox-gcloud" = "latest"
 
 # http downloads
-"http:fzf-completion"   = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/shell/completion.zsh" }
-"http:fzf-key-bindings" = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/shell/key-bindings.zsh" }
-"http:fzf-tmux"         = { version = "latest", version_list_url = "https://api.github.com/repos/junegunn/fzf/releases", version_json_path = ".[].tag_name", url = "https://raw.githubusercontent.com/junegunn/fzf/v{{version}}/bin/fzf-tmux" }
-"http:kotlin-lsp"       = { version = "latest", version_order = "semver", version_list_url = "https://api.github.com/repos/Kotlin/kotlin-lsp/releases?per_page=100", version_regex = 'kotlin-lsp/v(\d+\.\d+\.\d+)', platforms = { linux-x64 = { url = "https://download.jetbrains.com/language-server/kotlin-server/{{version}}/kotlin-server-{{version}}.tar.gz" }, linux-arm64 = { url = "https://download.jetbrains.com/language-server/kotlin-server/{{version}}/kotlin-server-{{version}}-aarch64.tar.gz" } }, postinstall = "ln -sf intellij-server $MISE_TOOL_INSTALL_PATH/bin/kotlin-lsp" }
+"http:kotlin-lsp" = { version = "latest", version_order = "semver", version_list_url = "https://api.github.com/repos/Kotlin/kotlin-lsp/releases?per_page=100", version_regex = 'kotlin-lsp/v(\d+\.\d+\.\d+)', platforms = { linux-x64 = { url = "https://download.jetbrains.com/language-server/kotlin-server/{{ version }}/kotlin-server-{{ version }}.tar.gz" }, linux-arm64 = { url = "https://download.jetbrains.com/language-server/kotlin-server/{{ version }}/kotlin-server-{{ version }}-aarch64.tar.gz" } }, postinstall = "ln -sf intellij-server $MISE_TOOL_INSTALL_PATH/bin/kotlin-lsp" }
+# docker-language-serverは単一バイナリを配布している。Goでビルドしないようhttpで入れる
+"http:docker-language-server" = { version = "latest", version_order = "semver", version_list_url = "https://api.github.com/repos/docker/docker-language-server/releases?per_page=100", version_regex = 'releases/download/v(\d+\.\d+\.\d+)/docker-language-server-', url = "https://github.com/docker/docker-language-server/releases/download/v{{ version }}/docker-language-server-{{ os(macos=\"darwin\") }}-{{ arch(x64=\"amd64\") }}-v{{ version }}", bin = "docker-language-server" }
 
 [settings]
 experimental                        = true
-idiomatic_version_file_enable_tools = ["deno", "go", "java", "node", "python", "rust", "terraform"]
+idiomatic_version_file_enable_tools = ["java", "node", "python", "rust", "terraform"]
 not_found_auto_install              = false
 trusted_config_paths                = ["~/dev/ghq/github.com/miya10kei", "~/dev/ghq/github.com/nealle"]
 

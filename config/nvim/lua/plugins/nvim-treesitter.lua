@@ -6,8 +6,6 @@ local parsers = {
   "diff",
   "dockerfile",
   "gitcommit",
-  "go",
-  "gomod",
   "hcl",
   "html",
   "java",
@@ -15,7 +13,6 @@ local parsers = {
   "json",
   "kotlin",
   "lua",
-  "make",
   "markdown",
   "markdown_inline",
   "python",
@@ -42,9 +39,16 @@ return {
     build = ":TSUpdate",
     config = function()
       vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("TreesitterStart", { clear = true }),
         callback = function(args)
-          pcall(vim.treesitter.start, args.buf)
-          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          -- パーサがある filetype は treesitter でインデントと折り畳みを行い、ない filetype はインデントで折り畳む
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+            vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.wo[0][0].foldmethod = "expr"
+          else
+            vim.wo[0][0].foldmethod = "indent"
+          end
         end,
       })
 
@@ -52,10 +56,5 @@ return {
         require("nvim-treesitter").install(parsers):wait(300000)
       end, { desc = "Install all needed treesitter parsers" })
     end,
-  },
-  {
-    "windwp/nvim-ts-autotag",
-    event = "VeryLazy",
-    opts = {},
   },
 }

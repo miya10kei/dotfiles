@@ -1,8 +1,8 @@
 [alias]
   ad    = add
-  adf   = !git status --short | grep -v '^M%s' | fzf-tmux $FZF_TMUX_OPTS -m --preview 'git diff {2} | delta' | awk '{print $2}' | xargs -r git add && git status --short
-  rss   = !git status --short | grep -v '^ '   | fzf-tmux $FZF_TMUX_OPTS -m --preview 'git diff --staged {2} | delta' | awk '{print $2}' | xargs -r git restore --staged && git status --short
-  rsu   = !git status --short | grep -v '^M%s' | fzf-tmux $FZF_TMUX_OPTS -m --preview 'git diff {2} | delta' | awk '{print $2}' | xargs -r git restore && git status --short
+  adf   = !git status --short | grep -v '^M%s' | fzf -m --preview 'git diff {2} | delta' | awk '{print $2}' | xargs -r git add && git status --short
+  rss   = !git status --short | grep -v '^ '   | fzf -m --preview 'git diff --staged {2} | delta' | awk '{print $2}' | xargs -r git restore --staged && git status --short
+  rsu   = !git status --short | grep -v '^M%s' | fzf -m --preview 'git diff {2} | delta' | awk '{print $2}' | xargs -r git restore && git status --short
   br    = branch
   cf    = config
   ch    = checkout
@@ -10,23 +10,15 @@
   df    = diff
   er    = erase
   erase = !git branch | grep -vE '^\\*' | fzf --multi | xargs git branch -D
-  fetch = fetch -p
   graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
   lg    = log --name-status
-  pl    = pull -p
+  pl    = pull
   ps    = push
-  pull  = pull -p
   st    = status --short
   sw    = !git branch -a | grep -vE '^\\*' | fzf | sed -e 's/remotes\\/origin\\///' | xargs git switch
   wk-erase = "!f() { cur=$(git rev-parse --show-toplevel); git worktree list --porcelain | awk -v cur=\"$cur\" '/^worktree /{p=substr($0,10); b=\"\"} /^branch /{b=substr($0,19)} /^$/{if (n++ && p != cur) print p \"\\t\" b}' | fzf --multi --delimiter='\\t' | while IFS=\"$(printf '\\t')\" read -r path branch; do git worktree remove \"$path\" && { [ -z \"$branch\" ] || git branch -D \"$branch\"; }; done; }; f"
-[color]
-  branch = auto
-  diff   = auto
-  status = auto
-  ui     = auto
 [core]
-  editor       = nvim -c \"set fenc=utf-8\"
-  excludesfile = ~/.gitignore_global
+  editor       = nvim
   hooksPath    = ~/.config/git/hooks
   ignorecase   = false
   pager        = delta
@@ -51,8 +43,6 @@
   show   = delta
 [pull]
   rebase = false
-[push]
-  default = simple
 [user]
   email = miya10kei@gmail.com
   name = miya10kei
