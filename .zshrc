@@ -26,7 +26,6 @@ function main() {
         fi
     }
 
-    add_path "$HOME/.cargo/bin"
     add_path "$HOME/.docker/bin"
     add_path "$HOME/.local/bin"
     add_path "$HOME/.rd/bin"
@@ -87,16 +86,15 @@ function main() {
     # --- history ---
     # ---------------
     export HISTFILE=${HOME}/.zsh_history
-    export HISTSIZE=10000
+    # Ctrl-R などで検索できるのはメモリ上の HISTSIZE 件だけなので、保存件数と揃える
+    export HISTSIZE=100000
     export SAVEHIST=100000
-    setopt append_history
+    # share_history は追記も行うため inc_append_history は併用しない（zshのドキュメントの指示）
     setopt extended_history
     setopt hist_ignore_all_dups
-    setopt hist_ignore_dups
     setopt hist_ignore_space
     setopt hist_reduce_blanks
     setopt hist_verify
-    setopt inc_append_history
     setopt interactivecomments
     setopt share_history
 
@@ -117,10 +115,19 @@ function main() {
     fi
 
     # fzf-tab requires compinit to have already run before it is loaded via sheldon
-    FPATH="$HOME/.local/share/zsh-completion/completions:$FPATH"
+    # 補完の初期化は、.zcompdump が無いか24時間以上古いときだけ再生成し、それ以外は確認を省いて読み込む
+    autoload -Uz compinit
+    local zcompdump="${ZDOTDIR:-$HOME}/.zcompdump"
+    local stale_zcompdump=( "$zcompdump"(N.mh+24) )
+    if [[ ! -s "$zcompdump" ]] || (( ${#stale_zcompdump} )); then
+        compinit -d "$zcompdump"
+    else
+        compinit -C -d "$zcompdump"
+    fi
     autoload bashcompinit && bashcompinit
-    autoload -Uz compinit && compinit
-    complete -C "$HOME/.local/bin/aws_completer" aws
+    if builtin command -v aws_completer > /dev/null 2>&1; then
+        complete -C aws_completer aws
+    fi
 
     if builtin command -v mise > /dev/null 2>&1; then
         eval "$(mise completion zsh)"
