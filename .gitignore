@@ -7,6 +7,7 @@ data-volume
 lazy-lock.json
 secrets.sh
 build.log
+.ruff_cache
 
 config/pgcli/history
 config/pgcli/log

@@ -8,9 +8,16 @@ glob_matcher: doublestar
 pre-commit:
   parallel: true
   jobs:
+    - name: gitleaks
+      run: gitleaks git --pre-commit --staged --redact --no-banner
+
     - name: hadolint
       glob: "**/Dockerfile"
       run: hadolint {staged_files}
+
+    - name: json
+      glob: "**/*.json"
+      run: for f in {staged_files}; do jq empty "$f" || exit 1; done
 
     - name: markdownlint
       glob: "**/*.md"
@@ -21,6 +28,10 @@ pre-commit:
         - "mise.toml"
         - "config/mise/**"
       run: mise tasks validate
+
+    - name: ruff
+      glob: "**/*.py"
+      run: ruff check {staged_files} && ruff format --check {staged_files}
 
     - name: shellcheck
       glob:
