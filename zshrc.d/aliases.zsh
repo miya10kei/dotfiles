@@ -13,6 +13,11 @@ function alias_if_exists() {
     fi
 }
 
+# ディレクトリ直下のサブディレクトリ名を返す（symlinkのディレクトリも含める）
+function _list_subdirs() {
+  print -rl -- "$1"/*(ND-/:t)
+}
+
 function _fzf_change_directory() {
   selected=$(eval $1 | fzf)
   if [ -n "$selected" ]; then
@@ -47,12 +52,12 @@ function quit() {
 }
 
 alias_if_exists 'claude'    'claude --mcp-config=$HOME/.config/claude/mcp.json' 'claude'
-alias_if_exists 'cdc'       '_fzf_change_directory "ls -1D $HOME/.config" "echo $HOME/.config"'
+alias_if_exists 'cdc'       '_fzf_change_directory "_list_subdirs $HOME/.config" "echo $HOME/.config"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'
 alias_if_exists 'cdot'      'cd $HOME/.dotfiles'
 alias_if_exists 'cdr'       'cd -'
-alias_if_exists 'cdw'       '_fzf_change_directory "ls -1D $HOME/dev/workspaces" "echo $HOME/dev/workspaces"'
+alias_if_exists 'cdw'       '_fzf_change_directory "_list_subdirs $HOME/dev/workspaces" "echo $HOME/dev/workspaces"'
 alias_if_exists 'dk'        'docker'          'docker'
 alias_if_exists 'g'         'git'             'git'
 alias_if_exists 'll'        'eza -al --group-directories-first' 'eza' 'ls -la'
@@ -68,10 +73,8 @@ alias_if_exists 'uuu'       'cd ../../../'
 alias_if_exists 'uuuu'      'cd ../../../../'
 alias_if_exists 'v'         'nvim'            'nvim' 'vim'
 alias_if_exists 'vim'       'nvim'            'nvim'
-alias_if_exists 'pysw'      'pysw'
 alias_if_exists 'epochtime' 'date +%s'
 alias_if_exists 'dive-mine' 'ssh miya10kei@192.168.1.216'
-alias_if_exists 'env'       'env | sort'
 
 # pbcopyがないコンテナ内でも、OSC52でターミナル経由のクリップボードへコピーできるようにする
 if ! (( $+commands[pbcopy] )); then
