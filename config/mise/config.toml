@@ -121,10 +121,6 @@ minimum_release_age    = "7d"
 not_found_auto_install = false
 trusted_config_paths   = ["~/dev/ghq/github.com/miya10kei", "~/dev/ghq/github.com/nealle"]
 
-# github:k1LoW/mo の release attestation が TSA タイムスタンプ検証に失敗するため無効化する (SLSA provenance 検証は維持)
-[settings.github]
-github_attestations = false
-
 [settings.hook_env]
 chpwd_only = true
 
