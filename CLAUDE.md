@@ -48,6 +48,9 @@ OSやアーキの違いは、次の優先順で吸収する。
 ## 検証
 
 - コミット時に lefthook が、ステージしたファイルに lint をかける（対象と内容は `lefthook.yml`）。失敗したらコミットされないので、指摘を直してからコミットし直す
+- GitHub Actions で次を確かめる（`.github/workflows/`）。lintのジョブを足したら、`lint.yml` の `install_args` にツールも足す
+    - `lint.yml`: 全ファイルに lefthook の pre-commit をかけ、gitleaks で全履歴を走査する
+    - `image.yml`: amd64・arm64 の両方でイメージがビルドできるかを確かめる（pushはしない）。latest のツールの更新で壊れることがあるため週1回も実行する
 - dotfiles: `mise dot apply --dry-run` で配置内容とフックのコマンドを、`mise dot status` で適用状態を確認する（dry-runはフックを実行しない）
 - 起動時の配置（`mise.toml`、`.zshrc`）を変えたら、実際のHOMEやdata-volumeでは試さず、リポジトリのコピーと一時HOMEで確かめる
     - `HOME=<一時HOME> mise -C <リポジトリのコピー> dot apply --yes` を2回実行し、origin/mainで同じことをした結果とHOME配下のsymlink・権限を比べる。一時HOMEには、イメージと同じく実体の `~/.config/mise` と `~/.config/nvim` を置いておく

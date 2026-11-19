@@ -1,0 +1,78 @@
+# 開発コンテナのイメージがビルドできるかを確かめる（pushはしない）
+# latest指定のツールが更新で壊れることがあるため、週1回も実行する
+name: image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .dockerignore
+      - .github/workflows/image.yml
+      - Dockerfile
+      - config/dpkg/**
+      - config/mise/**
+      - config/nvim/**
+  pull_request:
+    paths:
+      - .dockerignore
+      - .github/workflows/image.yml
+      - Dockerfile
+      - config/dpkg/**
+      - config/mise/**
+      - config/nvim/**
+  schedule:
+    - cron: "17 18 * * 0" # 毎週月曜 3:17 JST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        # イメージはホストのアーキでビルドされるため、両方で確かめる
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    # 通常は10分以内に終わる。止まったときに早く気づけるよう短めにする
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # イメージは数GBになるため、ランナーに入っている使わないツールを消して空きを作る
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache
+          df -h /
+
+      # UIDなどは、多くのLinuxホストと同じ1000で試す（ベースイメージのubuntuユーザーと衝突しないかも確かめる）
+      - name: Build image
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          docker build \
+            --build-arg DKID=999 \
+            --build-arg GID=1000 \
+            --build-arg GNAME=dev \
+            --build-arg UID=1000 \
+            --build-arg UNAME=dev \
+            --secret id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+            --progress plain \
+            --tag devenv:ci \
+            .
+
+      - name: Check that every mise tool is installed
+        run: |
+          missing=$(docker run --rm --env MISE_OFFLINE=1 devenv:ci mise ls --missing --no-header)
+          if [ -n "$missing" ]; then
+            echo "missing tools:" >&2
+            echo "$missing" >&2
+            exit 1
+          fi

@@ -19,8 +19,10 @@ COPY ./config/dpkg/01_nodoc /etc/dpkg/dpkg.cfg.d/01_nodoc
 RUN sed -i -E 's#http://(archive|security)\.ubuntu\.com/ubuntu/#mirror+http://mirrors.ubuntu.com/mirrors.txt#' \
         /etc/apt/sources.list.d/ubuntu.sources \
     && rm -f /etc/apt/apt.conf.d/docker-clean
+# ubuntu:23.04以降のイメージにはUID/GID 1000のubuntuユーザーがいるため、ホストのUIDと衝突しないよう消す
 # sudoはステージごとにaptで入れるため、ここではsudoersの置き場所だけ作る
-RUN groupadd "${GNAME}" --gid "${GID}" \
+RUN if id ubuntu > /dev/null 2>&1; then userdel --remove ubuntu 2> /dev/null; fi \
+    && groupadd "${GNAME}" --gid "${GID}" \
     && useradd "${UNAME}" --uid "${UID}" --gid "${GID}" \
     && mkdir -p /etc/sudoers.d \
     && echo "${UNAME} ALL=NOPASSWD: ALL" > /etc/sudoers.d/sudoers

@@ -1,0 +1,62 @@
+# lefthookのpre-commitと同じlintを、ステージしたファイルではなく全ファイルにかける
+name: lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # lintツールの版は、コンテナと同じグローバル設定（7日制限を含む）から決める
+      # ファイルタスク（config/mise/tasks）も読ませるため、設定ファイルではなくディレクトリを指す
+      MISE_CONFIG_DIR: ${{ github.workspace }}/config/mise
+      MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # gitleaksで全履歴を走査するため
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install zsh
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends zsh
+
+      # グローバル設定の全ツールではなく、lefthook.ymlのジョブが使うものだけを入れる
+      - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+        with:
+          install_args: >-
+            node
+            python
+            aqua:astral-sh/uv
+            aqua:evilmartians/lefthook
+            aqua:gitleaks/gitleaks
+            aqua:hadolint/hadolint
+            aqua:jqlang/jq
+            aqua:rhysd/actionlint
+            aqua:astral-sh/ruff
+            aqua:koalaman/shellcheck
+            aqua:JohnnyMorganz/StyLua
+            aqua:tamasfe/taplo
+            aqua:crate-ci/typos
+            aqua:google/yamlfmt
+            npm:markdownlint-cli2
+            pipx:yamllint
+
+      - name: Lint all files
+        run: lefthook run pre-commit --all-files --no-auto-install
+
+      # lefthookのgitleaksはステージした変更だけを見るため、CIでは全履歴を走査する
+      - name: Scan history for secrets
+        run: gitleaks git --redact --no-banner

@@ -9,7 +9,10 @@ if not vim.uv.fs_stat(lazypath) then
       { out, "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
-    vim.fn.getchar()
+    -- headless（イメージのビルドなど）ではキー入力を待つと止まってしまうため、待たずに終了する
+    if #vim.api.nvim_list_uis() > 0 then
+      vim.fn.getchar()
+    end
     os.exit(1)
   end
 end
