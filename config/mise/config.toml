@@ -149,15 +149,18 @@ depends     = ["install-claude-code", "install-coderabbit", "install-gh-extensio
 
 [tasks.install-plugins]
 description = "Install neovim plugins via lazy.nvim"
-run         = "nvim --headless -c 'Lazy sync' -c 'qa'"
+# headlessでは同期して待つ Lazy! を使う（lazy.nvimのドキュメントの書き方）
+run = "nvim --headless -c 'Lazy! sync' -c 'qa'"
 
 [tasks.install-treesitter-pkg]
 description = "Install tree-sitter parsers"
-run         = "nvim --headless -c 'lua require(\"lazy\").load({plugins={\"nvim-treesitter\"}})' -c 'TSInstallNeeded' -c 'qa'"
+# 並行して起動すると、両方のnvimがlazy.nvimを同時にcloneして片方が失敗し、止まってしまう
+depends = ["install-plugins"]
+run     = "nvim --headless -c 'lua require(\"lazy\").load({plugins={\"nvim-treesitter\"}})' -c 'TSInstallNeeded' -c 'qa'"
 
 [tasks.setup-nvim]
 description = "Setup neovim plugins and treesitter parsers"
-depends     = ["install-plugins", "install-treesitter-pkg"]
+depends     = ["install-treesitter-pkg"]
 
 [tasks.slim]
 description = "Remove docs/man/caches from mise installs to slim the tree"
