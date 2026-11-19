@@ -8,6 +8,10 @@ glob_matcher: doublestar
 pre-commit:
   parallel: true
   jobs:
+    - name: actionlint
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: actionlint {staged_files}
+
     - name: gitleaks
       run: gitleaks git --pre-commit --staged --redact --no-banner
 
