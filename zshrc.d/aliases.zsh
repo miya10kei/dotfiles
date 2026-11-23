@@ -44,6 +44,20 @@ function mtask() {
   fi
 }
 
+# MCPの設定はdotfilesの mcp.json を --mcp-config で渡す
+# remote-control は、サブコマンドより前のオプションを受け付けず起動を拒否するので付けない
+# （remote-control のセッションでMCPが要るリポジトリは、プロジェクトの .mcp.json で渡す）
+if (( $+commands[claude] )); then
+    unalias claude 2>/dev/null
+    function claude() {
+        if [[ $1 == remote-control ]]; then
+            command claude "$@"
+        else
+            command claude --mcp-config="$HOME/.config/claude/mcp.json" "$@"
+        fi
+    }
+fi
+
 function quit() {
     if builtin command -v gpgconf > /dev/null 2>&1; then
         gpgconf --kill gpg-agent
@@ -51,7 +65,6 @@ function quit() {
     exit
 }
 
-alias_if_exists 'claude'    'claude --mcp-config=$HOME/.config/claude/mcp.json' 'claude'
 alias_if_exists 'cdc'       '_fzf_change_directory "_list_subdirs $HOME/.config" "echo $HOME/.config"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'
