@@ -3,9 +3,6 @@ ASDF_LUA_LUAROCKS_VERSION = "3.13.0"
 # rust(rustup) の実体は既定で ~/.cargo, ~/.rustup に置かれ、devenv イメージの ~/.local 持ち越しから漏れるため ~/.local 配下へ寄せる
 CARGO_HOME  = "{{env.HOME}}/.local/share/cargo"
 RUSTUP_HOME = "{{env.HOME}}/.local/share/rustup"
-# gcloud同梱のPythonはslimで消すため、miseのPython（[tools]のpythonと同じ3.13）を使わせる
-# PATHのpython3に任せると、uv_venv_autoで有効になったプロジェクトのvenvのPythonで動いてしまう
-CLOUDSDK_PYTHON = "{{env.HOME}}/.local/share/mise/installs/python/3.13/bin/python3"
 
 [plugins]
 lua = "https://github.com/mise-plugins/mise-lua.git"
