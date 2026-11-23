@@ -106,6 +106,14 @@ function main() {
         eval "$(mise activate zsh)"
     fi
 
+    # gcloud同梱のPythonはイメージのslimで消すため、miseのPython（[tools]のpythonと同じ3.13）を使わせる
+    # PATHのpython3に任せると、uv_venv_autoで有効になったプロジェクトのvenvのPythonで動いてしまう
+    # miseの[env]に置くと mise install の最中にも効き、3.13 のリンクができる前にgcloudのインストールが失敗する
+    local gcloud_python="$HOME/.local/share/mise/installs/python/3.13/bin/python3"
+    if [[ -x $gcloud_python ]]; then
+        export CLOUDSDK_PYTHON=$gcloud_python
+    fi
+
     # fzf-tab requires compinit to have already run before it is loaded via sheldon
     # 補完の初期化は、.zcompdump が無いか24時間以上古いときだけ再生成し、それ以外は確認を省いて読み込む
     autoload -Uz compinit
