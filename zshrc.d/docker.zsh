@@ -57,6 +57,13 @@ if builtin command -v docker > /dev/null 2>&1; then
       cmd="docker run $opts miya10kei/devenv:$tag"
       echo $cmd
       eval $cmd
+
+      # 作り直しで不要になった旧イメージを消し、Rancher DesktopのVMディスクの空きをホストに返す
+      # （build-dev-envのfstrim時点では旧コンテナが旧イメージを使っているため、ここで回収する）
+      docker image prune --force
+      if (( $+commands[rdctl] )); then
+          rdctl shell sudo fstrim -v /mnt/data
+      fi
   }
 
   function attach_dev_env() {
