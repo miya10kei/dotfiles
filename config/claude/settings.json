@@ -181,7 +181,6 @@
     ]
   },
   "model": "opus",
-  "disableClaudeAiConnectors": true,
   "hooks": {
     "PreToolUse": [
       {
