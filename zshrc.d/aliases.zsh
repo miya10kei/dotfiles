@@ -51,7 +51,11 @@ function quit() {
     exit
 }
 
-alias_if_exists 'claude'    'claude --mcp-config=$HOME/.config/claude/mcp.json' 'claude'
+_claude_args='--mcp-config=$HOME/.config/claude/mcp.json'
+[[ -f $HOME/.config/claude/settings.work.json ]] && _claude_args+=' --settings=$HOME/.config/claude/settings.work.json'
+[[ -f $HOME/.config/claude/mcp.work.json ]] && _claude_args+=' --mcp-config=$HOME/.config/claude/mcp.work.json'
+alias_if_exists 'claude'    "claude $_claude_args" 'claude'
+unset _claude_args
 alias_if_exists 'cdc'       '_fzf_change_directory "_list_subdirs $HOME/.config" "echo $HOME/.config"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'

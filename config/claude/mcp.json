@@ -1,18 +1,9 @@
 {
   "mcpServers": {
-    "aws-knowledge": {
-      "type": "http",
-      "url": "https://knowledge-mcp.global.api.aws"
-    },
     "obsidian-private": {
       "type": "http",
       "url": "http://host.docker.internal:3002/mcp",
       "headersHelper": "printf '{\"Authorization\": \"Bearer %s\"}' \"$(pass mcp/obsidian/private_api_key)\""
-    },
-    "obsidian-work": {
-      "type": "http",
-      "url": "http://host.docker.internal:3001/mcp",
-      "headersHelper": "printf '{\"Authorization\": \"Bearer %s\"}' \"$(pass mcp/obsidian/work_api_key)\""
     }
   }
 }
