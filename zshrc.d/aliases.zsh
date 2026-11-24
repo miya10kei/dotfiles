@@ -44,7 +44,7 @@ function mtask() {
   fi
 }
 
-# MCPの設定はdotfilesの mcp.json を --mcp-config で渡す
+# MCPの設定はdotfilesの mcp.json を --mcp-config で渡す。会社用の設定（git管理外）があれば追加で渡す
 # remote-control は、サブコマンドより前のオプションを受け付けず起動を拒否するので付けない
 # （remote-control のセッションでMCPが要るリポジトリは、プロジェクトの .mcp.json で渡す）
 if (( $+commands[claude] )); then
@@ -52,9 +52,12 @@ if (( $+commands[claude] )); then
     function claude() {
         if [[ $1 == remote-control ]]; then
             command claude "$@"
-        else
-            command claude --mcp-config="$HOME/.config/claude/mcp.json" "$@"
+            return
         fi
+        local -a args=(--mcp-config="$HOME/.config/claude/mcp.json")
+        [[ -f $HOME/.config/claude/settings.work.json ]] && args+=(--settings="$HOME/.config/claude/settings.work.json")
+        [[ -f $HOME/.config/claude/mcp.work.json ]] && args+=(--mcp-config="$HOME/.config/claude/mcp.work.json")
+        command claude "${args[@]}" "$@"
     }
 fi
 
