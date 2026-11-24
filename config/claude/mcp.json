@@ -2,8 +2,7 @@
   "mcpServers": {
     "obsidian-private": {
       "type": "http",
-      "url": "http://host.docker.internal:3002/mcp",
-      "headersHelper": "printf '{\"Authorization\": \"Bearer %s\"}' \"$(pass mcp/obsidian/private_api_key)\""
+      "url": "https://obsidian.tailf4b87d.ts.net/mcp"
     }
   }
 }
