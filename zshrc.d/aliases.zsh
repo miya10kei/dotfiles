@@ -44,6 +44,23 @@ function mtask() {
   fi
 }
 
+# MCPの設定はdotfilesの mcp.json を --mcp-config で渡す。会社用の設定（git管理外）があれば追加で渡す
+# remote-control は、サブコマンドより前のオプションを受け付けず起動を拒否するので付けない
+# （remote-control のセッションでMCPが要るリポジトリは、プロジェクトの .mcp.json で渡す）
+if (( $+commands[claude] )); then
+    unalias claude 2>/dev/null
+    function claude() {
+        if [[ $1 == remote-control ]]; then
+            command claude "$@"
+            return
+        fi
+        local -a args=(--mcp-config="$HOME/.config/claude/mcp.json")
+        [[ -f $HOME/.config/claude/settings.work.json ]] && args+=(--settings="$HOME/.config/claude/settings.work.json")
+        [[ -f $HOME/.config/claude/mcp.work.json ]] && args+=(--mcp-config="$HOME/.config/claude/mcp.work.json")
+        command claude "${args[@]}" "$@"
+    }
+fi
+
 function quit() {
     if builtin command -v gpgconf > /dev/null 2>&1; then
         gpgconf --kill gpg-agent
@@ -51,11 +68,6 @@ function quit() {
     exit
 }
 
-_claude_args='--mcp-config=$HOME/.config/claude/mcp.json'
-[[ -f $HOME/.config/claude/settings.work.json ]] && _claude_args+=' --settings=$HOME/.config/claude/settings.work.json'
-[[ -f $HOME/.config/claude/mcp.work.json ]] && _claude_args+=' --mcp-config=$HOME/.config/claude/mcp.work.json'
-alias_if_exists 'claude'    "claude $_claude_args" 'claude'
-unset _claude_args
 alias_if_exists 'cdc'       '_fzf_change_directory "_list_subdirs $HOME/.config" "echo $HOME/.config"'
 alias_if_exists 'cdf'       'cd $(find . -name "*" -type d | fzf)' 'fzf'
 alias_if_exists 'cdg'       '_fzf_change_directory "ghq list" "ghq root"' 'ghq'
